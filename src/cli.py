@@ -5,6 +5,7 @@ Comandos disponíveis:
   list            Exibe lista consolidada de documentos
   show-incomplete Exibe documentos com campos de cadastro incompletos
   summary         Exibe resumo estatístico do registro
+  extract         Extrai texto bruto dos PDFs cadastrados no registro
 """
 
 import argparse
@@ -13,11 +14,15 @@ from pathlib import Path
 
 from src.services.scanner import varrer_pasta_cct
 from src.services.registry import carregar, salvar, upsert
+from src.services.extractor import processar_extracao
+from src.services.extraction_store import salvar_textos
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
+from src.reports.extraction import imprimir_relatorio_extracao
 from src.services.validator import campos_criticos_ausentes_ou_invalidos, campos_incompletos
 
 DEFAULT_CCT_DIR = "CCT"
 DEFAULT_REGISTRY = "data/registro_documentos.json"
+DEFAULT_EXTRACTION_OUTPUT = "data/textos_extraidos.json"
 
 
 def _raiz_repo() -> Path:
@@ -109,6 +114,28 @@ def cmd_summary(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_extract(args: argparse.Namespace) -> int:
+    raiz = _raiz_repo()
+    registry_path = raiz / args.registry
+    output_path = raiz / args.output
+
+    registro = carregar(registry_path)
+    if not registro:
+        print("Registro vazio. Execute 'scan' primeiro.")
+        return 0
+
+    total = len(registro)
+    print(f"Processando {total} documento(s) do registro...")
+
+    textos = processar_extracao(registro, raiz)
+
+    salvar_textos(output_path, textos)
+    print(f"Textos extraídos salvos em '{output_path}'.")
+
+    imprimir_relatorio_extracao(textos)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -163,6 +190,19 @@ def build_parser() -> argparse.ArgumentParser:
     # summary
     p_sum = sub.add_parser("summary", help="Exibe resumo estatístico do registro")
     p_sum.set_defaults(func=cmd_summary)
+
+    # extract
+    p_ext = sub.add_parser(
+        "extract",
+        help="Extrai texto bruto dos PDFs cadastrados no registro",
+    )
+    p_ext.add_argument(
+        "--output",
+        default=DEFAULT_EXTRACTION_OUTPUT,
+        metavar="PATH",
+        help=f"Caminho do arquivo de saída JSON (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
+    )
+    p_ext.set_defaults(func=cmd_extract)
 
     return parser
 
