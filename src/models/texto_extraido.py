@@ -11,6 +11,12 @@ STATUS_EXTRACAO: frozenset = frozenset([
     "nao_elegivel_para_extracao",
 ])
 
+STATUS_OCR: frozenset = frozenset([
+    "extraido_via_ocr",
+    "ocr_sem_texto_reconhecido",
+    "erro_no_ocr",
+])
+
 
 @dataclass
 class TextoExtraido:

@@ -6,6 +6,7 @@ Comandos disponíveis:
   show-incomplete Exibe documentos com campos de cadastro incompletos
   summary         Exibe resumo estatístico do registro
   extract         Extrai texto bruto dos PDFs cadastrados no registro
+  ocr             Aplica OCR nos PDFs sem texto extraível
 """
 
 import argparse
@@ -15,9 +16,11 @@ from pathlib import Path
 from src.services.scanner import varrer_pasta_cct
 from src.services.registry import carregar, salvar, upsert
 from src.services.extractor import processar_extracao
-from src.services.extraction_store import salvar_textos
+from src.services.extraction_store import salvar_textos, carregar_textos
+from src.services.ocr import processar_ocr
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
 from src.reports.extraction import imprimir_relatorio_extracao
+from src.reports.ocr import imprimir_relatorio_ocr
 from src.services.validator import campos_criticos_ausentes_ou_invalidos, campos_incompletos
 
 DEFAULT_CCT_DIR = "CCT"
@@ -136,6 +139,31 @@ def cmd_extract(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ocr(args: argparse.Namespace) -> int:
+    raiz = _raiz_repo()
+    output_path = raiz / args.output
+
+    textos = carregar_textos(output_path)
+    if not textos:
+        print("Base de textos extraídos vazia. Execute 'extract' primeiro.")
+        return 0
+
+    candidatos = [t for t in textos if t.status == "sem_texto_extraivel"]
+    if not candidatos:
+        print("Nenhum documento com status 'sem_texto_extraivel' encontrado.")
+        return 0
+
+    print(f"Aplicando OCR em {len(candidatos)} documento(s) com status 'sem_texto_extraivel'...")
+
+    processados = processar_ocr(textos, raiz)
+
+    salvar_textos(output_path, textos)
+    print(f"Base de textos atualizada em '{output_path}'.")
+
+    imprimir_relatorio_ocr(processados)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -203,6 +231,19 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Caminho do arquivo de saída JSON (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
     )
     p_ext.set_defaults(func=cmd_extract)
+
+    # ocr
+    p_ocr = sub.add_parser(
+        "ocr",
+        help="Aplica OCR nos PDFs com status 'sem_texto_extraivel'",
+    )
+    p_ocr.add_argument(
+        "--output",
+        default=DEFAULT_EXTRACTION_OUTPUT,
+        metavar="PATH",
+        help=f"Caminho do arquivo de textos extraídos JSON (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
+    )
+    p_ocr.set_defaults(func=cmd_ocr)
 
     return parser
 
