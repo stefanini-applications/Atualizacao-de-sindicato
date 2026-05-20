@@ -23,4 +23,5 @@ class LinhaPreviewPricing:
     vigencia_fim_final: Optional[str]
     fonte_documento: Optional[str]
     status_aplicacao: str
-    observacao_aplicacao: Optional[str]
+    decisao_aplicacao: Optional[str] = None
+    observacao_aplicacao: Optional[str] = None
