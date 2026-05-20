@@ -17,11 +17,13 @@ from pathlib import Path
 from src.services.scanner import varrer_pasta_cct
 from src.services.registry import carregar, salvar, upsert
 from src.services.extractor import processar_extracao
-from src.services.extraction_store import salvar_textos
+from src.services.extraction_store import salvar_textos, carregar_textos
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
 from src.reports.extraction import imprimir_relatorio_extracao
+from src.reports.ocr import imprimir_relatorio_ocr
 from src.services.validator import campos_criticos_ausentes_ou_invalidos, campos_incompletos
 from src.services.env_checker import verificar_ambiente_ocr, imprimir_resultado_verificacao
+from src.models.texto_extraido import TextoExtraido
 
 DEFAULT_CCT_DIR = "CCT"
 DEFAULT_REGISTRY = "data/registro_documentos.json"
@@ -152,7 +154,6 @@ def cmd_ocr(args: argparse.Namespace) -> int:
         imprimir_resultado_verificacao(resultado)
         return 1
 
-    import json
     from datetime import datetime, timezone
     from src.services.ocr import ocr_pdf
 
@@ -168,16 +169,8 @@ def cmd_ocr(args: argparse.Namespace) -> int:
         )
         return 1
 
-    with input_path.open(encoding="utf-8") as fh:
-        dados = json.load(fh)
-
-    # Suporta tanto lista direta quanto o formato {"versao": ..., "textos": [...]}
-    if isinstance(dados, dict):
-        textos = dados.get("textos", [])
-    else:
-        textos = dados
-
-    elegíveis = [d for d in textos if d.get("status") == "sem_texto_extraivel"]
+    todos = carregar_textos(input_path)
+    elegíveis = [t for t in todos if t.status == "sem_texto_extraivel"]
 
     if not elegíveis:
         print("Nenhum documento elegível para OCR (status 'sem_texto_extraivel').")
@@ -185,33 +178,30 @@ def cmd_ocr(args: argparse.Namespace) -> int:
 
     print(f"Executando OCR em {len(elegíveis)} documento(s)...")
 
-    resultados_ocr = []
+    resultados_ocr: list = []
     for doc in elegíveis:
-        pdf_path = raiz / doc["caminho"]
+        pdf_path = raiz / doc.caminho
         texto, status = ocr_pdf(pdf_path)
         agora = datetime.now(tz=timezone.utc).isoformat()
-        resultados_ocr.append({
-            "caminho": doc["caminho"],
-            "nome_arquivo": doc.get("nome_arquivo"),
-            "uf": doc.get("uf"),
-            "sindicato": doc.get("sindicato"),
-            "tipo_documento": doc.get("tipo_documento"),
-            "ano_referencia": doc.get("ano_referencia"),
-            "texto": texto,
-            "num_caracteres": len(texto),
-            "status": status,
-            "data_processamento": agora,
-        })
-        icone = "✔" if status == "extraido_com_sucesso" else "✘"
-        print(f"  {icone} [{status}] {doc.get('nome_arquivo', doc['caminho'])}")
+        resultados_ocr.append(TextoExtraido(
+            caminho=doc.caminho,
+            nome_arquivo=doc.nome_arquivo,
+            uf=doc.uf,
+            sindicato=doc.sindicato,
+            tipo_documento=doc.tipo_documento,
+            ano_referencia=doc.ano_referencia,
+            texto=texto,
+            num_caracteres=len(texto),
+            status=status,
+            data_processamento=agora,
+        ))
+        icone = "✔" if status == "extraido_via_ocr" else "✘"
+        print(f"  {icone} [{status}] {doc.nome_arquivo or doc.caminho}")
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    with output_path.open("w", encoding="utf-8") as fh:
-        json.dump(resultados_ocr, fh, ensure_ascii=False, indent=2)
+    salvar_textos(output_path, resultados_ocr)
+    print(f"\nResultados salvos em '{output_path}'.")
 
-    sucesso = sum(1 for r in resultados_ocr if r["status"] == "extraido_com_sucesso")
-    print(f"\nOCR concluído: {sucesso}/{len(elegíveis)} com texto extraído.")
-    print(f"Resultados salvos em '{output_path}'.")
+    imprimir_relatorio_ocr(resultados_ocr)
     return 0
 
 
