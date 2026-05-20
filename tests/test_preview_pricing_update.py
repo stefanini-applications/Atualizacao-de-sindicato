@@ -349,11 +349,11 @@ def test_ac3_multiplas_ids_candidatos_ordenados():
 # ── AC4: campos adicionados na prévia ────────────────────────────────────────
 
 def test_ac4_oito_colunas_adicionadas():
-    assert len(_COLUNAS_ADICIONADAS) == 8
+    assert len(_COLUNAS_ADICIONADAS) == 9
     esperados = {
         "id_registro_reajuste", "percentual_reajuste_final", "data_base_final",
         "vigencia_inicio_final", "vigencia_fim_final", "fonte_documento",
-        "status_aplicacao", "observacao_aplicacao",
+        "status_aplicacao", "decisao_aplicacao", "observacao_aplicacao",
     }
     assert set(_COLUNAS_ADICIONADAS) == esperados
 

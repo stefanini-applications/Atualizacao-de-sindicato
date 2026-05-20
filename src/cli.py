@@ -8,7 +8,9 @@ Comandos disponíveis:
   extract         Extrai texto bruto dos PDFs cadastrados no registro
   ocr             Executa OCR nos PDFs classificados como sem_texto_extraivel
   check-ocr-env   Verifica se o ambiente possui as dependências necessárias para OCR
-  preview-pricing-update  Gera prévia de correspondência entre reajustes aprovados e base de pricing
+  preview-pricing-update          Gera prévia de correspondência entre reajustes aprovados e base de pricing
+  review-pricing-preview          Exibe estado da prévia e garante coluna decisao_aplicacao
+  generate-pricing-application-base  Gera base de aplicações aprovadas a partir da prévia revisada
 """
 
 import argparse
@@ -38,6 +40,7 @@ DEFAULT_VALIDATION_OUTPUT = "data/reajustes_para_validacao.json"
 DEFAULT_APPROVED_OUTPUT = "data/reajustes_aprovados.json"
 DEFAULT_PRICING_INPUT = "data/base_pricing.xlsx"
 DEFAULT_PREVIEW_OUTPUT = "data/preview_atualizacao_pricing.xlsx"
+DEFAULT_PRICING_APPLICATION_BASE = "data/aplicacoes_pricing_aprovadas.xlsx"
 
 
 def _raiz_repo() -> Path:
@@ -483,6 +486,95 @@ def cmd_preview_pricing_update(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_review_pricing_preview(args: argparse.Namespace) -> int:
+    from src.services.pricing_preview_reviewer import (
+        ler_preview_xlsx,
+        garantir_coluna_decisao_aplicacao,
+    )
+    from src.reports.preview_pricing import imprimir_relatorio_revisao_preview
+
+    raiz = _raiz_repo()
+    preview_path = raiz / args.preview
+
+    if not preview_path.exists():
+        print(
+            f"Erro: arquivo de prévia não encontrado: '{preview_path}'. "
+            "Execute 'preview-pricing-update' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    coluna_adicionada = garantir_coluna_decisao_aplicacao(preview_path)
+
+    linhas, _ = ler_preview_xlsx(preview_path)
+    total_linhas = len(linhas)
+
+    contagens_status: dict = {}
+    contagens_decisao: dict = {}
+    for linha in linhas:
+        status = linha.get("status_aplicacao") or ""
+        contagens_status[status] = contagens_status.get(status, 0) + 1
+
+        decisao = (linha.get("decisao_aplicacao") or "").strip().lower()
+        if decisao not in ("aprovado", "rejeitado"):
+            decisao = ""
+        contagens_decisao[decisao] = contagens_decisao.get(decisao, 0) + 1
+
+    imprimir_relatorio_revisao_preview(
+        total_linhas,
+        contagens_status,
+        contagens_decisao,
+        coluna_adicionada,
+    )
+    return 0
+
+
+def cmd_generate_pricing_application_base(args: argparse.Namespace) -> int:
+    from src.services.pricing_preview_reviewer import (
+        ler_preview_xlsx,
+        filtrar_aprovadas_elegiveis,
+        salvar_base_aplicacoes,
+    )
+
+    raiz = _raiz_repo()
+    preview_path = raiz / args.preview
+    output_path = raiz / args.output
+
+    if not preview_path.exists():
+        print(
+            f"Erro: arquivo de prévia não encontrado: '{preview_path}'. "
+            "Execute 'preview-pricing-update' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    linhas, colunas = ler_preview_xlsx(preview_path)
+    aprovadas, total_inelegiveis = filtrar_aprovadas_elegiveis(linhas)
+
+    salvar_base_aplicacoes(output_path, aprovadas, colunas)
+    print(f"Base de aplicações aprovadas salva em '{output_path}'.")
+    print(f"  Linhas incluídas (aprovado + reajuste_encontrado): {len(aprovadas)}")
+
+    if total_inelegiveis > 0:
+        print(
+            f"Aviso: {total_inelegiveis} linha(s) com 'decisao_aplicacao = aprovado' "
+            "foram ignoradas por 'status_aplicacao' inelegível "
+            "(diferente de 'reajuste_encontrado'). "
+            "Verifique e corrija a decisão ou trate em etapa futura.",
+            file=sys.stderr,
+        )
+
+    if len(aprovadas) == 0:
+        print(
+            "Aviso: nenhuma linha apta encontrada. "
+            "Edite 'decisao_aplicacao' no arquivo de prévia e execute novamente.",
+            file=sys.stderr,
+        )
+        return 1
+
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -727,6 +819,38 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de prévia de saída (.xlsx) (padrão: {DEFAULT_PREVIEW_OUTPUT})",
     )
     p_prev.set_defaults(func=cmd_preview_pricing_update)
+
+    # review-pricing-preview
+    p_rev_prev = sub.add_parser(
+        "review-pricing-preview",
+        help="Exibe estado da prévia de pricing e garante coluna decisao_aplicacao",
+    )
+    p_rev_prev.add_argument(
+        "--preview",
+        default=DEFAULT_PREVIEW_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de prévia de pricing (.xlsx) (padrão: {DEFAULT_PREVIEW_OUTPUT})",
+    )
+    p_rev_prev.set_defaults(func=cmd_review_pricing_preview)
+
+    # generate-pricing-application-base
+    p_gen_base = sub.add_parser(
+        "generate-pricing-application-base",
+        help="Gera base de aplicações aprovadas a partir da prévia revisada",
+    )
+    p_gen_base.add_argument(
+        "--preview",
+        default=DEFAULT_PREVIEW_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de prévia de pricing (.xlsx) (padrão: {DEFAULT_PREVIEW_OUTPUT})",
+    )
+    p_gen_base.add_argument(
+        "--output",
+        default=DEFAULT_PRICING_APPLICATION_BASE,
+        metavar="PATH",
+        help=f"Arquivo de saída (.xlsx) (padrão: {DEFAULT_PRICING_APPLICATION_BASE})",
+    )
+    p_gen_base.set_defaults(func=cmd_generate_pricing_application_base)
 
     return parser
 

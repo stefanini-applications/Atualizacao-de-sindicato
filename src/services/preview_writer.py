@@ -21,6 +21,7 @@ _COLUNAS_ADICIONADAS = [
     "vigencia_fim_final",
     "fonte_documento",
     "status_aplicacao",
+    "decisao_aplicacao",
     "observacao_aplicacao",
 ]
 
@@ -52,6 +53,7 @@ def salvar_preview(
             linha.vigencia_fim_final,
             linha.fonte_documento,
             linha.status_aplicacao,
+            linha.decisao_aplicacao,
             linha.observacao_aplicacao,
         ]
         ws.append(valores_originais + valores_adicionados)
