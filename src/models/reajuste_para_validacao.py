@@ -8,11 +8,18 @@ manual — todos inicializados como ``None`` nesta etapa (AC3).
 from dataclasses import dataclass
 from typing import Optional
 
-STATUS_VALIDACAO: frozenset = frozenset([
+# Status atribuídos automaticamente pela etapa validate-adjustments
+STATUS_VALIDACAO_INICIAL: frozenset = frozenset([
     "sugerido_para_aprovacao",
     "pendente_revisao",
     "sem_dados_para_validar",
     "erro_validacao",
+])
+
+# Conjunto completo de status válidos, incluindo os atribuídos pelo operador
+STATUS_VALIDACAO: frozenset = STATUS_VALIDACAO_INICIAL | frozenset([
+    "aprovado",
+    "rejeitado",
 ])
 
 # Mapeamento de status_extracao_estruturada → status_validacao inicial (AC2)
@@ -54,3 +61,6 @@ class ReajusteParaValidacao:
     data_base_corrigida: Optional[str]
     vigencia_inicio_corrigida: Optional[str]
     vigencia_fim_corrigida: Optional[str]
+
+    # ── identificador único imutável (gerado pelo validate-adjustments) ────────
+    id_registro: Optional[str] = None
