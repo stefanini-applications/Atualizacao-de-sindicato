@@ -34,6 +34,7 @@ DEFAULT_CONSOLIDATION_OUTPUT = "data/textos_consolidados.json"
 DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
 DEFAULT_ADJUSTMENTS_OUTPUT = "data/reajustes_extraidos.json"
 DEFAULT_VALIDATION_OUTPUT = "data/reajustes_para_validacao.json"
+DEFAULT_APPROVED_OUTPUT = "data/reajustes_aprovados.json"
 
 
 def _raiz_repo() -> Path:
@@ -385,6 +386,51 @@ def cmd_review_adjustments(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_generate_approved_adjustments(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
+
+    from src.services.validation_store import carregar_para_validacao
+    from src.services.approval_generator import gerar_reajustes_aprovados
+    from src.services.approved_store import salvar_aprovados
+    from src.reports.approval import imprimir_relatorio_aprovacao
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: arquivo de validação não encontrado: '{input_path}'. "
+            "Execute 'validate-adjustments' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    registros = carregar_para_validacao(input_path)
+    total_avaliados = len(registros)
+
+    timestamp = datetime.now(tz=timezone.utc).isoformat()
+    aprovados, total_com_correcao = gerar_reajustes_aprovados(registros, timestamp)
+
+    total_aprovados = len(aprovados)
+    total_ignorados = total_avaliados - total_aprovados
+
+    salvar_aprovados(output_path, aprovados)
+    print(f"Reajustes aprovados salvos em '{output_path}'.")
+
+    imprimir_relatorio_aprovacao(total_avaliados, total_aprovados, total_ignorados, total_com_correcao)
+
+    if total_aprovados == 0:
+        print(
+            "Aviso: nenhum registro aprovado encontrado. "
+            "Execute 'review-adjustments' para aprovar registros antes de usar esta base.",
+            file=sys.stderr,
+        )
+        return 1
+
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -585,6 +631,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="Nome do responsável pela revisão (preenchido em responsavel_validacao)",
     )
     p_rev.set_defaults(func=cmd_review_adjustments)
+
+    # generate-approved-adjustments
+    p_gen = sub.add_parser(
+        "generate-approved-adjustments",
+        help="Gera a base final de reajustes aprovados para uso no pricing",
+    )
+    p_gen.add_argument(
+        "--input",
+        default=DEFAULT_VALIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de registros para validação (padrão: {DEFAULT_VALIDATION_OUTPUT})",
+    )
+    p_gen.add_argument(
+        "--output",
+        default=DEFAULT_APPROVED_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída JSON com reajustes aprovados (padrão: {DEFAULT_APPROVED_OUTPUT})",
+    )
+    p_gen.set_defaults(func=cmd_generate_approved_adjustments)
 
     return parser
 
