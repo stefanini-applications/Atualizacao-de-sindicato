@@ -8,6 +8,7 @@ Comandos disponíveis:
   extract         Extrai texto bruto dos PDFs cadastrados no registro
   ocr             Executa OCR nos PDFs classificados como sem_texto_extraivel
   check-ocr-env   Verifica se o ambiente possui as dependências necessárias para OCR
+  preview-pricing-update  Gera prévia de correspondência entre reajustes aprovados e base de pricing
 """
 
 import argparse
@@ -35,6 +36,8 @@ DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
 DEFAULT_ADJUSTMENTS_OUTPUT = "data/reajustes_extraidos.json"
 DEFAULT_VALIDATION_OUTPUT = "data/reajustes_para_validacao.json"
 DEFAULT_APPROVED_OUTPUT = "data/reajustes_aprovados.json"
+DEFAULT_PRICING_INPUT = "data/base_pricing.xlsx"
+DEFAULT_PREVIEW_OUTPUT = "data/preview_atualizacao_pricing.xlsx"
 
 
 def _raiz_repo() -> Path:
@@ -431,6 +434,55 @@ def cmd_generate_approved_adjustments(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_preview_pricing_update(args: argparse.Namespace) -> int:
+    from src.services.approved_store import carregar_aprovados
+    from src.services.pricing_reader import carregar_base_pricing
+    from src.services.pricing_preview import gerar_preview
+    from src.services.preview_writer import salvar_preview
+    from src.reports.preview_pricing import imprimir_relatorio_preview
+
+    raiz = _raiz_repo()
+    adjustments_path = raiz / args.adjustments
+    pricing_path = raiz / args.pricing
+    output_path = raiz / args.output
+
+    # AC1: validar existência dos arquivos de entrada
+    ausentes = []
+    if not adjustments_path.exists():
+        ausentes.append(str(adjustments_path))
+    if not pricing_path.exists():
+        ausentes.append(str(pricing_path))
+
+    if ausentes:
+        for arq in ausentes:
+            print(f"Erro: arquivo não encontrado: '{arq}'", file=sys.stderr)
+        return 1
+
+    aprovados = carregar_aprovados(adjustments_path)
+
+    try:
+        linhas, colunas, col_uf, col_sindicato, col_ano = carregar_base_pricing(pricing_path)
+    except ValueError as exc:
+        print(f"Erro ao carregar base de pricing: {exc}", file=sys.stderr)
+        return 1
+
+    total_avaliadas = len(linhas)
+    print(f"Cruzando {total_avaliadas} linha(s) da base de pricing com "
+          f"{len(aprovados)} reajuste(s) aprovado(s)...")
+
+    preview = gerar_preview(linhas, aprovados, col_uf, col_sindicato, col_ano)
+
+    salvar_preview(output_path, preview, colunas)
+    print(f"Prévia salva em '{output_path}'.")
+
+    contagens: dict = {}
+    for linha in preview:
+        contagens[linha.status_aplicacao] = contagens.get(linha.status_aplicacao, 0) + 1
+
+    imprimir_relatorio_preview(total_avaliadas, contagens)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -650,6 +702,31 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída JSON com reajustes aprovados (padrão: {DEFAULT_APPROVED_OUTPUT})",
     )
     p_gen.set_defaults(func=cmd_generate_approved_adjustments)
+
+    # preview-pricing-update
+    p_prev = sub.add_parser(
+        "preview-pricing-update",
+        help="Gera prévia de correspondência entre reajustes aprovados e base de pricing",
+    )
+    p_prev.add_argument(
+        "--pricing",
+        default=DEFAULT_PRICING_INPUT,
+        metavar="PATH",
+        help=f"Base de pricing (.xlsx) de entrada (padrão: {DEFAULT_PRICING_INPUT})",
+    )
+    p_prev.add_argument(
+        "--adjustments",
+        default=DEFAULT_APPROVED_OUTPUT,
+        metavar="PATH",
+        help=f"Reajustes aprovados (.json) de entrada (padrão: {DEFAULT_APPROVED_OUTPUT})",
+    )
+    p_prev.add_argument(
+        "--output",
+        default=DEFAULT_PREVIEW_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de prévia de saída (.xlsx) (padrão: {DEFAULT_PREVIEW_OUTPUT})",
+    )
+    p_prev.set_defaults(func=cmd_preview_pricing_update)
 
     return parser
 
