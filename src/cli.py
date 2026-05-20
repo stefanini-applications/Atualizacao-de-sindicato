@@ -6,6 +6,8 @@ Comandos disponíveis:
   show-incomplete Exibe documentos com campos de cadastro incompletos
   summary         Exibe resumo estatístico do registro
   extract         Extrai texto bruto dos PDFs cadastrados no registro
+  ocr             Executa OCR nos PDFs classificados como sem_texto_extraivel
+  check-ocr-env   Verifica se o ambiente possui as dependências necessárias para OCR
 """
 
 import argparse
@@ -19,10 +21,12 @@ from src.services.extraction_store import salvar_textos
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
 from src.reports.extraction import imprimir_relatorio_extracao
 from src.services.validator import campos_criticos_ausentes_ou_invalidos, campos_incompletos
+from src.services.env_checker import verificar_ambiente_ocr, imprimir_resultado_verificacao
 
 DEFAULT_CCT_DIR = "CCT"
 DEFAULT_REGISTRY = "data/registro_documentos.json"
 DEFAULT_EXTRACTION_OUTPUT = "data/textos_extraidos.json"
+DEFAULT_OCR_OUTPUT = "data/textos_ocr.json"
 
 
 def _raiz_repo() -> Path:
@@ -136,6 +140,81 @@ def cmd_extract(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_check_ocr_env(args: argparse.Namespace) -> int:
+    resultado = verificar_ambiente_ocr()
+    imprimir_resultado_verificacao(resultado)
+    return 0 if resultado.ok else 1
+
+
+def cmd_ocr(args: argparse.Namespace) -> int:
+    resultado = verificar_ambiente_ocr()
+    if not resultado.ok:
+        imprimir_resultado_verificacao(resultado)
+        return 1
+
+    import json
+    from datetime import datetime, timezone
+    from src.services.ocr import ocr_pdf
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Arquivo de extração não encontrado: '{input_path}'. "
+            "Execute 'extract' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    with input_path.open(encoding="utf-8") as fh:
+        dados = json.load(fh)
+
+    # Suporta tanto lista direta quanto o formato {"versao": ..., "textos": [...]}
+    if isinstance(dados, dict):
+        textos = dados.get("textos", [])
+    else:
+        textos = dados
+
+    elegíveis = [d for d in textos if d.get("status") == "sem_texto_extraivel"]
+
+    if not elegíveis:
+        print("Nenhum documento elegível para OCR (status 'sem_texto_extraivel').")
+        return 0
+
+    print(f"Executando OCR em {len(elegíveis)} documento(s)...")
+
+    resultados_ocr = []
+    for doc in elegíveis:
+        pdf_path = raiz / doc["caminho"]
+        texto, status = ocr_pdf(pdf_path)
+        agora = datetime.now(tz=timezone.utc).isoformat()
+        resultados_ocr.append({
+            "caminho": doc["caminho"],
+            "nome_arquivo": doc.get("nome_arquivo"),
+            "uf": doc.get("uf"),
+            "sindicato": doc.get("sindicato"),
+            "tipo_documento": doc.get("tipo_documento"),
+            "ano_referencia": doc.get("ano_referencia"),
+            "texto": texto,
+            "num_caracteres": len(texto),
+            "status": status,
+            "data_processamento": agora,
+        })
+        icone = "✔" if status == "extraido_com_sucesso" else "✘"
+        print(f"  {icone} [{status}] {doc.get('nome_arquivo', doc['caminho'])}")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8") as fh:
+        json.dump(resultados_ocr, fh, ensure_ascii=False, indent=2)
+
+    sucesso = sum(1 for r in resultados_ocr if r["status"] == "extraido_com_sucesso")
+    print(f"\nOCR concluído: {sucesso}/{len(elegíveis)} com texto extraído.")
+    print(f"Resultados salvos em '{output_path}'.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -203,6 +282,32 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Caminho do arquivo de saída JSON (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
     )
     p_ext.set_defaults(func=cmd_extract)
+
+    # ocr
+    p_ocr = sub.add_parser(
+        "ocr",
+        help="Executa OCR nos PDFs classificados como sem_texto_extraivel",
+    )
+    p_ocr.add_argument(
+        "--input",
+        default=DEFAULT_EXTRACTION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de extração gerado pelo comando 'extract' (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
+    )
+    p_ocr.add_argument(
+        "--output",
+        default=DEFAULT_OCR_OUTPUT,
+        metavar="PATH",
+        help=f"Caminho do arquivo de saída JSON com resultados do OCR (padrão: {DEFAULT_OCR_OUTPUT})",
+    )
+    p_ocr.set_defaults(func=cmd_ocr)
+
+    # check-ocr-env
+    p_check = sub.add_parser(
+        "check-ocr-env",
+        help="Verifica se o ambiente possui as dependências necessárias para OCR",
+    )
+    p_check.set_defaults(func=cmd_check_ocr_env)
 
     return parser
 
