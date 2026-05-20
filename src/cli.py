@@ -17,10 +17,11 @@ from pathlib import Path
 from src.services.scanner import varrer_pasta_cct
 from src.services.registry import carregar, salvar, upsert
 from src.services.extractor import processar_extracao
-from src.services.extraction_store import salvar_textos, carregar_textos
+from src.services.extraction_store import salvar_textos, carregar_textos, salvar_consolidados
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
 from src.reports.extraction import imprimir_relatorio_extracao
 from src.reports.ocr import imprimir_relatorio_ocr
+from src.reports.consolidation import imprimir_relatorio_consolidacao
 from src.services.validator import campos_criticos_ausentes_ou_invalidos, campos_incompletos
 from src.services.env_checker import verificar_ambiente_ocr, imprimir_resultado_verificacao
 from src.models.texto_extraido import TextoExtraido
@@ -29,6 +30,7 @@ DEFAULT_CCT_DIR = "CCT"
 DEFAULT_REGISTRY = "data/registro_documentos.json"
 DEFAULT_EXTRACTION_OUTPUT = "data/textos_extraidos.json"
 DEFAULT_OCR_OUTPUT = "data/textos_ocr.json"
+DEFAULT_CONSOLIDATION_OUTPUT = "data/textos_consolidados.json"
 
 
 def _raiz_repo() -> Path:
@@ -205,6 +207,41 @@ def cmd_ocr(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_consolidate_texts(args: argparse.Namespace) -> int:
+    from src.services.consolidator import consolidar_textos
+
+    raiz = _raiz_repo()
+    native_path = raiz / args.input_native
+    ocr_path = raiz / args.input_ocr
+    output_path = raiz / args.output
+
+    if not native_path.exists():
+        print(
+            f"Erro: arquivo de extração nativa não encontrado: '{native_path}'. "
+            "Execute 'extract' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    textos_nativos = carregar_textos(native_path)
+
+    ocr_disponivel = ocr_path.exists()
+    textos_ocr = carregar_textos(ocr_path) if ocr_disponivel else []
+
+    if not ocr_disponivel:
+        print(f"Base OCR não encontrada — complementação via OCR ignorada.")
+
+    print(f"Consolidando {len(textos_nativos)} documento(s)...")
+
+    consolidados = consolidar_textos(textos_nativos, textos_ocr)
+
+    salvar_consolidados(output_path, consolidados)
+    print(f"Base consolidada salva em '{output_path}'.")
+
+    imprimir_relatorio_consolidacao(consolidados, ocr_disponivel=ocr_disponivel)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -298,6 +335,31 @@ def build_parser() -> argparse.ArgumentParser:
         help="Verifica se o ambiente possui as dependências necessárias para OCR",
     )
     p_check.set_defaults(func=cmd_check_ocr_env)
+
+    # consolidate-texts
+    p_cons = sub.add_parser(
+        "consolidate-texts",
+        help="Consolida a base nativa e OCR em uma fonte única rastreável",
+    )
+    p_cons.add_argument(
+        "--input-native",
+        default=DEFAULT_EXTRACTION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de extração nativa (padrão: {DEFAULT_EXTRACTION_OUTPUT})",
+    )
+    p_cons.add_argument(
+        "--input-ocr",
+        default=DEFAULT_OCR_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de resultados OCR (padrão: {DEFAULT_OCR_OUTPUT})",
+    )
+    p_cons.add_argument(
+        "--output",
+        default=DEFAULT_CONSOLIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Caminho do arquivo de saída JSON (padrão: {DEFAULT_CONSOLIDATION_OUTPUT})",
+    )
+    p_cons.set_defaults(func=cmd_consolidate_texts)
 
     return parser
 

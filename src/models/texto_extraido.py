@@ -17,6 +17,13 @@ STATUS_OCR: frozenset = frozenset([
     "erro_no_ocr",
 ])
 
+STATUS_CONSOLIDACAO: frozenset = frozenset([
+    "texto_nativo",
+    "texto_ocr",
+    "sem_texto_final",
+    "erro_consolidacao",
+])
+
 
 @dataclass
 class TextoExtraido:
@@ -32,3 +39,20 @@ class TextoExtraido:
     num_caracteres: int    # len(texto); 0 para status não-sucesso
     status: str            # um dos valores em STATUS_EXTRACAO
     data_processamento: str  # ISO 8601
+
+
+@dataclass
+class TextoConsolidado:
+    """Registro consolidado de texto de um PDF sindical, combinando extração nativa e OCR."""
+
+    caminho: str
+    nome_arquivo: str
+    uf: Optional[str]
+    sindicato: Optional[str]
+    tipo_documento: Optional[str]
+    ano_referencia: Optional[str]
+    texto_final: str          # texto escolhido; "" quando sem_texto_final ou erro_consolidacao
+    num_caracteres: int       # len(texto_final)
+    origem_texto: str         # um dos valores em STATUS_CONSOLIDACAO
+    status_consolidado: str   # um dos valores em STATUS_CONSOLIDACAO
+    data_consolidacao: str    # ISO 8601
