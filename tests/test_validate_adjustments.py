@@ -104,13 +104,19 @@ def test_ac2_extraido_com_sucesso_e_unico_sugerido_para_aprovacao():
 
 
 def test_ac2_todos_os_status_presentes_em_mapeamento():
+    from src.models.reajuste_para_validacao import STATUS_VALIDACAO_INICIAL
     assert set(MAPEAMENTO_STATUS.keys()) == {
         "extraido_com_sucesso",
         "parcialmente_extraido",
         "dados_nao_identificados",
         "erro_extracao",
     }
-    assert set(MAPEAMENTO_STATUS.values()) == STATUS_VALIDACAO
+    # O mapeamento automático cobre apenas os status iniciais (pré-revisão)
+    assert set(MAPEAMENTO_STATUS.values()) == STATUS_VALIDACAO_INICIAL
+    assert set(MAPEAMENTO_STATUS.values()).issubset(STATUS_VALIDACAO)
+    # aprovado e rejeitado só são atribuídos pelo operador, nunca pelo mapeamento
+    assert "aprovado" not in MAPEAMENTO_STATUS.values()
+    assert "rejeitado" not in MAPEAMENTO_STATUS.values()
 
 
 # ── AC3: preservação de campos e inicialização de campos null ─────────────────
@@ -173,7 +179,7 @@ def test_ac3_json_contem_todos_os_campos_obrigatorios(tmp_path):
         "percentual_reajuste_corrigido", "data_base_corrigida",
         "vigencia_inicio_corrigida", "vigencia_fim_corrigida",
     }
-    todos_esperados = campos_obrigatorios_originais | campos_validacao | campos_correcao
+    todos_esperados = campos_obrigatorios_originais | campos_validacao | campos_correcao | {"id_registro"}
 
     registro_json = dados["reajustes"][0]
     assert todos_esperados.issubset(set(registro_json.keys()))
@@ -346,3 +352,50 @@ def test_integracao_cli_validate_adjustments(tmp_path):
     assert "pendente_revisao" in status_set
     assert "sem_dados_para_validar" in status_set
     assert "erro_validacao" in status_set
+
+
+# ── AC6: id_registro gerado pelo validate-adjustments ────────────────────────
+
+def test_ac6_id_registro_presente_em_cada_registro():
+    import uuid
+    resultado = preparar_para_validacao([_reajuste(), _reajuste()])
+    for r in resultado:
+        assert r.id_registro is not None
+        assert r.id_registro != ""
+        # deve ser UUID4 válido
+        parsed = uuid.UUID(r.id_registro, version=4)
+        assert str(parsed) == r.id_registro
+
+
+def test_ac6_id_registro_unico_por_registro():
+    resultado = preparar_para_validacao([_reajuste(), _reajuste(), _reajuste()])
+    ids = [r.id_registro for r in resultado]
+    assert len(ids) == len(set(ids)), "id_registro deve ser único por registro"
+
+
+def test_ac6_id_registro_serializado_no_json(tmp_path):
+    import uuid
+    registros = preparar_para_validacao([_reajuste()])
+    output = tmp_path / "out.json"
+    salvar_para_validacao(output, registros)
+
+    with output.open(encoding="utf-8") as f:
+        dados = json.load(f)
+
+    id_json = dados["reajustes"][0]["id_registro"]
+    assert id_json is not None
+    assert uuid.UUID(id_json, version=4)
+
+
+def test_ac6_id_registro_estavel_apos_re_execucao(tmp_path):
+    """IDs gerados em uma execução não mudam ao re-salvar com salvar_para_validacao."""
+    registros = preparar_para_validacao([_reajuste()])
+    original_id = registros[0].id_registro
+
+    output = tmp_path / "out.json"
+    salvar_para_validacao(output, registros)
+
+    # re-carregar e re-salvar não deve gerar novo ID
+    from src.services.validation_store import carregar_para_validacao
+    recarregados = carregar_para_validacao(output)
+    assert recarregados[0].id_registro == original_id

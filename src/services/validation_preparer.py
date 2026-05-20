@@ -2,9 +2,10 @@
 
 Aplica o mapeamento de status_extracao_estruturada → status_validacao inicial
 e constrói a lista de ReajusteParaValidacao, preservando todos os campos
-originais (AC2, AC3).
+originais (AC2, AC3). Gera id_registro como UUID4 para cada registro (AC6).
 """
 
+import uuid
 from typing import List
 
 from src.models.reajuste_extraido import ReajusteExtraido
@@ -44,6 +45,8 @@ def preparar_para_validacao(
                 data_base_corrigida=None,
                 vigencia_inicio_corrigida=None,
                 vigencia_fim_corrigida=None,
+                # identificador único imutável
+                id_registro=str(uuid.uuid4()),
             )
         )
     return resultado

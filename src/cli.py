@@ -349,6 +349,42 @@ def cmd_validate_adjustments(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_review_adjustments(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
+
+    from src.services.validation_store import carregar_para_validacao, salvar_para_validacao
+    from src.services.manual_review import revisar_registros
+    from src.reports.manual_review import imprimir_relatorio_revisao
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: arquivo de validação não encontrado: '{input_path}'. "
+            "Execute 'validate-adjustments' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    registros = carregar_para_validacao(input_path)
+    print(f"Revisando {len(registros)} registro(s)...")
+
+    timestamp = datetime.now(tz=timezone.utc).isoformat()
+    try:
+        revisados = revisar_registros(registros, args.responsavel, timestamp)
+    except ValueError as exc:
+        print(f"Erro: {exc}", file=sys.stderr)
+        return 1
+
+    salvar_para_validacao(output_path, revisados)
+    print(f"Registros revisados salvos em '{output_path}'.")
+
+    imprimir_relatorio_revisao(revisados)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -524,6 +560,31 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída JSON com registros para validação (padrão: {DEFAULT_VALIDATION_OUTPUT})",
     )
     p_val.set_defaults(func=cmd_validate_adjustments)
+
+    # review-adjustments
+    p_rev = sub.add_parser(
+        "review-adjustments",
+        help="Aplica a revisão manual sobre os registros editados pelo operador",
+    )
+    p_rev.add_argument(
+        "--input",
+        default=DEFAULT_VALIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de registros para validação (padrão: {DEFAULT_VALIDATION_OUTPUT})",
+    )
+    p_rev.add_argument(
+        "--output",
+        default=DEFAULT_VALIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída JSON revisado (padrão: {DEFAULT_VALIDATION_OUTPUT})",
+    )
+    p_rev.add_argument(
+        "--responsavel",
+        required=True,
+        metavar="NOME",
+        help="Nome do responsável pela revisão (preenchido em responsavel_validacao)",
+    )
+    p_rev.set_defaults(func=cmd_review_adjustments)
 
     return parser
 

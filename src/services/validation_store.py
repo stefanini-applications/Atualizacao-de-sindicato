@@ -19,6 +19,8 @@ _STORE_VERSION = 1
 
 def _validacao_para_dict(r: ReajusteParaValidacao) -> dict:
     return {
+        # identificador único imutável
+        "id_registro": r.id_registro,
         # campos originais da extração
         "caminho": r.caminho,
         "nome_arquivo": r.nome_arquivo,
@@ -65,3 +67,37 @@ def salvar_para_validacao(output_path: Path, registros: List[ReajusteParaValidac
     except Exception:
         os.unlink(tmp_path)
         raise
+
+
+def _dict_para_validacao(d: dict) -> ReajusteParaValidacao:
+    return ReajusteParaValidacao(
+        caminho=d["caminho"],
+        nome_arquivo=d["nome_arquivo"],
+        uf=d.get("uf"),
+        sindicato=d.get("sindicato"),
+        tipo_documento=d.get("tipo_documento"),
+        ano_referencia=d.get("ano_referencia"),
+        tipo_clausula=d["tipo_clausula"],
+        trecho_original=d["trecho_original"],
+        percentual_reajuste=d.get("percentual_reajuste"),
+        data_base=d.get("data_base"),
+        vigencia_inicio=d.get("vigencia_inicio"),
+        vigencia_fim=d.get("vigencia_fim"),
+        status_extracao_estruturada=d["status_extracao_estruturada"],
+        status_validacao=d.get("status_validacao"),
+        observacao_validacao=d.get("observacao_validacao"),
+        responsavel_validacao=d.get("responsavel_validacao"),
+        data_hora_validacao=d.get("data_hora_validacao"),
+        percentual_reajuste_corrigido=d.get("percentual_reajuste_corrigido"),
+        data_base_corrigida=d.get("data_base_corrigida"),
+        vigencia_inicio_corrigida=d.get("vigencia_inicio_corrigida"),
+        vigencia_fim_corrigida=d.get("vigencia_fim_corrigida"),
+        id_registro=d.get("id_registro"),
+    )
+
+
+def carregar_para_validacao(input_path: Path) -> List[ReajusteParaValidacao]:
+    """Carrega lista de registros para validação a partir do disco."""
+    with input_path.open(encoding="utf-8") as f:
+        dados = json.load(f)
+    return [_dict_para_validacao(d) for d in dados.get("reajustes", [])]
