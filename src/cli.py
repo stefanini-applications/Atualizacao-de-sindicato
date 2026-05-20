@@ -33,6 +33,7 @@ DEFAULT_OCR_OUTPUT = "data/textos_ocr.json"
 DEFAULT_CONSOLIDATION_OUTPUT = "data/textos_consolidados.json"
 DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
 DEFAULT_ADJUSTMENTS_OUTPUT = "data/reajustes_extraidos.json"
+DEFAULT_VALIDATION_OUTPUT = "data/reajustes_para_validacao.json"
 
 
 def _raiz_repo() -> Path:
@@ -317,6 +318,37 @@ def cmd_extract_adjustments(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_validate_adjustments(args: argparse.Namespace) -> int:
+    from src.services.adjustment_store import carregar_reajustes
+    from src.services.validation_preparer import preparar_para_validacao
+    from src.services.validation_store import salvar_para_validacao
+    from src.reports.validation import imprimir_relatorio_validacao
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: reajustes extraídos não encontrados: '{input_path}'. "
+            "Execute 'extract-adjustments' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    reajustes = carregar_reajustes(input_path)
+
+    print(f"Preparando {len(reajustes)} registro(s) para validação humana...")
+
+    registros = preparar_para_validacao(reajustes)
+
+    salvar_para_validacao(output_path, registros)
+    print(f"Registros para validação salvos em '{output_path}'.")
+
+    imprimir_relatorio_validacao(registros)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -473,6 +505,25 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída JSON com reajustes extraídos (padrão: {DEFAULT_ADJUSTMENTS_OUTPUT})",
     )
     p_adj.set_defaults(func=cmd_extract_adjustments)
+
+    # validate-adjustments
+    p_val = sub.add_parser(
+        "validate-adjustments",
+        help="Classifica cada reajuste extraído com um status de validação inicial",
+    )
+    p_val.add_argument(
+        "--input",
+        default=DEFAULT_ADJUSTMENTS_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de reajustes extraídos (padrão: {DEFAULT_ADJUSTMENTS_OUTPUT})",
+    )
+    p_val.add_argument(
+        "--output",
+        default=DEFAULT_VALIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída JSON com registros para validação (padrão: {DEFAULT_VALIDATION_OUTPUT})",
+    )
+    p_val.set_defaults(func=cmd_validate_adjustments)
 
     return parser
 
