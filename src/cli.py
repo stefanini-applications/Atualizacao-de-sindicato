@@ -35,6 +35,8 @@ DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
 DEFAULT_ADJUSTMENTS_OUTPUT = "data/reajustes_extraidos.json"
 DEFAULT_VALIDATION_OUTPUT = "data/reajustes_para_validacao.json"
 DEFAULT_APPROVED_OUTPUT = "data/reajustes_aprovados.json"
+DEFAULT_PRICING_INPUT = "data/base_pricing.xlsx"
+DEFAULT_PREVIEW_OUTPUT = "data/preview_atualizacao_pricing.xlsx"
 
 
 def _raiz_repo() -> Path:
@@ -431,6 +433,52 @@ def cmd_generate_approved_adjustments(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_preview_pricing_update(args: argparse.Namespace) -> int:
+    from src.services.approved_store import carregar_aprovados
+    from src.services.pricing_reader import ler_base_pricing, ErroCabecalhoPricing
+    from src.services.pricing_preview import gerar_preview
+    from src.services.preview_writer import salvar_preview
+    from src.reports.preview_pricing import imprimir_relatorio_preview
+
+    raiz = _raiz_repo()
+    pricing_path = raiz / args.pricing
+    adjustments_path = raiz / args.adjustments
+    output_path = raiz / args.output
+
+    # AC1 — validação dos arquivos de entrada
+    erros = []
+    if not adjustments_path.exists():
+        erros.append(f"Arquivo de reajustes aprovados não encontrado: '{adjustments_path}'.")
+    if not pricing_path.exists():
+        erros.append(f"Base de pricing não encontrada: '{pricing_path}'.")
+    if erros:
+        for msg in erros:
+            print(f"Erro: {msg}", file=sys.stderr)
+        return 1
+
+    aprovados = carregar_aprovados(adjustments_path)
+
+    try:
+        headers, rows = ler_base_pricing(pricing_path)
+    except ErroCabecalhoPricing as exc:
+        print(f"Erro na planilha de pricing: {exc}", file=sys.stderr)
+        return 1
+
+    if not rows:
+        print("Aviso: base de pricing não contém linhas de dados.", file=sys.stderr)
+        return 1
+
+    print(f"Cruzando {len(rows)} linha(s) de pricing com {len(aprovados)} reajuste(s) aprovado(s)...")
+
+    linhas = gerar_preview(headers, rows, aprovados)
+
+    salvar_preview(output_path, headers, linhas)
+    print(f"Prévia salva em '{output_path}'.")
+
+    imprimir_relatorio_preview(linhas)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -650,6 +698,31 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída JSON com reajustes aprovados (padrão: {DEFAULT_APPROVED_OUTPUT})",
     )
     p_gen.set_defaults(func=cmd_generate_approved_adjustments)
+
+    # preview-pricing-update
+    p_prev = sub.add_parser(
+        "preview-pricing-update",
+        help="Gera prévia de cruzamento dos reajustes aprovados com a base de pricing",
+    )
+    p_prev.add_argument(
+        "--pricing",
+        default=DEFAULT_PRICING_INPUT,
+        metavar="PATH",
+        help=f"Base de pricing XLSX (padrão: {DEFAULT_PRICING_INPUT})",
+    )
+    p_prev.add_argument(
+        "--adjustments",
+        default=DEFAULT_APPROVED_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de reajustes aprovados (padrão: {DEFAULT_APPROVED_OUTPUT})",
+    )
+    p_prev.add_argument(
+        "--output",
+        default=DEFAULT_PREVIEW_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo XLSX de saída da prévia (padrão: {DEFAULT_PREVIEW_OUTPUT})",
+    )
+    p_prev.set_defaults(func=cmd_preview_pricing_update)
 
     return parser
 
