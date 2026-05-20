@@ -32,6 +32,7 @@ DEFAULT_EXTRACTION_OUTPUT = "data/textos_extraidos.json"
 DEFAULT_OCR_OUTPUT = "data/textos_ocr.json"
 DEFAULT_CONSOLIDATION_OUTPUT = "data/textos_consolidados.json"
 DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
+DEFAULT_ADJUSTMENTS_OUTPUT = "data/reajustes_extraidos.json"
 
 
 def _raiz_repo() -> Path:
@@ -279,6 +280,43 @@ def cmd_identify_clauses(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_extract_adjustments(args: argparse.Namespace) -> int:
+    from src.services.adjustment_extractor import extrair_reajustes, _TIPOS_ESCOPO
+    from src.services.adjustment_store import salvar_reajustes
+    from src.services.clause_store import carregar_clausulas
+    from src.reports.adjustments import imprimir_relatorio_reajustes
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: cláusulas candidatas não encontradas: '{input_path}'. "
+            "Execute 'identify-clauses' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    clausulas = carregar_clausulas(input_path)
+
+    total_avaliadas = len(clausulas)
+    total_escopo = sum(1 for c in clausulas if c.tipo_clausula in _TIPOS_ESCOPO)
+    total_ignoradas_categoria = total_avaliadas - total_escopo
+
+    print(f"Extraindo reajustes de {total_escopo} cláusula(s) no escopo...")
+
+    reajustes = extrair_reajustes(clausulas)
+
+    salvar_reajustes(output_path, reajustes)
+    print(f"Reajustes extraídos salvos em '{output_path}'.")
+
+    imprimir_relatorio_reajustes(
+        total_avaliadas, total_escopo, total_ignoradas_categoria, reajustes
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -416,6 +454,25 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída JSON com cláusulas candidatas (padrão: {DEFAULT_CLAUSES_OUTPUT})",
     )
     p_ident.set_defaults(func=cmd_identify_clauses)
+
+    # extract-adjustments
+    p_adj = sub.add_parser(
+        "extract-adjustments",
+        help="Extrai dados estruturados de reajuste salarial e vigência das cláusulas candidatas",
+    )
+    p_adj.add_argument(
+        "--input",
+        default=DEFAULT_CLAUSES_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de cláusulas candidatas (padrão: {DEFAULT_CLAUSES_OUTPUT})",
+    )
+    p_adj.add_argument(
+        "--output",
+        default=DEFAULT_ADJUSTMENTS_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída JSON com reajustes extraídos (padrão: {DEFAULT_ADJUSTMENTS_OUTPUT})",
+    )
+    p_adj.set_defaults(func=cmd_extract_adjustments)
 
     return parser
 
