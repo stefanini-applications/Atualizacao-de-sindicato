@@ -17,7 +17,7 @@ from pathlib import Path
 from src.services.scanner import varrer_pasta_cct
 from src.services.registry import carregar, salvar, upsert
 from src.services.extractor import processar_extracao
-from src.services.extraction_store import salvar_textos, carregar_textos, salvar_consolidados
+from src.services.extraction_store import salvar_textos, carregar_textos, salvar_consolidados, carregar_consolidados
 from src.reports.consolidated import imprimir_lista, imprimir_resumo
 from src.reports.extraction import imprimir_relatorio_extracao
 from src.reports.ocr import imprimir_relatorio_ocr
@@ -31,6 +31,7 @@ DEFAULT_REGISTRY = "data/registro_documentos.json"
 DEFAULT_EXTRACTION_OUTPUT = "data/textos_extraidos.json"
 DEFAULT_OCR_OUTPUT = "data/textos_ocr.json"
 DEFAULT_CONSOLIDATION_OUTPUT = "data/textos_consolidados.json"
+DEFAULT_CLAUSES_OUTPUT = "data/clausulas_candidatas.json"
 
 
 def _raiz_repo() -> Path:
@@ -242,6 +243,42 @@ def cmd_consolidate_texts(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_identify_clauses(args: argparse.Namespace) -> int:
+    from src.services.clause_identifier import identificar_clausulas, _STATUS_ELEGIVEIS
+    from src.services.clause_store import salvar_clausulas
+    from src.reports.clauses import imprimir_relatorio_clausulas
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: base consolidada não encontrada: '{input_path}'. "
+            "Execute 'consolidate-texts' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    consolidados = carregar_consolidados(input_path)
+
+    total_avaliados = len(consolidados)
+    total_analisados = sum(
+        1 for d in consolidados if d.status_consolidado in _STATUS_ELEGIVEIS
+    )
+    total_ignorados = total_avaliados - total_analisados
+
+    print(f"Identificando cláusulas em {total_analisados} documento(s) elegível(is)...")
+
+    clausulas = identificar_clausulas(consolidados)
+
+    salvar_clausulas(output_path, clausulas)
+    print(f"Cláusulas candidatas salvas em '{output_path}'.")
+
+    imprimir_relatorio_clausulas(total_avaliados, total_analisados, total_ignorados, clausulas)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -360,6 +397,25 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Caminho do arquivo de saída JSON (padrão: {DEFAULT_CONSOLIDATION_OUTPUT})",
     )
     p_cons.set_defaults(func=cmd_consolidate_texts)
+
+    # identify-clauses
+    p_ident = sub.add_parser(
+        "identify-clauses",
+        help="Identifica cláusulas salariais e de benefícios na base consolidada",
+    )
+    p_ident.add_argument(
+        "--input",
+        default=DEFAULT_CONSOLIDATION_OUTPUT,
+        metavar="PATH",
+        help=f"Base consolidada de entrada JSON (padrão: {DEFAULT_CONSOLIDATION_OUTPUT})",
+    )
+    p_ident.add_argument(
+        "--output",
+        default=DEFAULT_CLAUSES_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída JSON com cláusulas candidatas (padrão: {DEFAULT_CLAUSES_OUTPUT})",
+    )
+    p_ident.set_defaults(func=cmd_identify_clauses)
 
     return parser
 
