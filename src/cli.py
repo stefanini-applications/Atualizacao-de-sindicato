@@ -11,6 +11,7 @@ Comandos disponíveis:
   preview-pricing-update          Gera prévia de correspondência entre reajustes aprovados e base de pricing
   review-pricing-preview          Exibe estado da prévia e garante coluna decisao_aplicacao
   generate-pricing-application-base  Gera base de aplicações aprovadas a partir da prévia revisada
+  apply-pricing-updates           Aplica reajustes aprovados sobre a base de pricing e gera base atualizada
 """
 
 import argparse
@@ -41,6 +42,7 @@ DEFAULT_APPROVED_OUTPUT = "data/reajustes_aprovados.json"
 DEFAULT_PRICING_INPUT = "data/base_pricing.xlsx"
 DEFAULT_PREVIEW_OUTPUT = "data/preview_atualizacao_pricing.xlsx"
 DEFAULT_PRICING_APPLICATION_BASE = "data/aplicacoes_pricing_aprovadas.xlsx"
+DEFAULT_PRICING_UPDATED_OUTPUT = "data/base_pricing_atualizada.xlsx"
 
 
 def _raiz_repo() -> Path:
@@ -575,6 +577,69 @@ def cmd_generate_pricing_application_base(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_apply_pricing_updates(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
+
+    from src.services.pricing_reader import carregar_base_pricing
+    from src.services.pricing_preview_reviewer import ler_preview_xlsx
+    from src.services.pricing_applier import (
+        aplicar_reajustes,
+        STATUS_ATUALIZADO,
+        STATUS_NAO_ATUALIZADO,
+        STATUS_ERRO,
+    )
+    from src.services.updated_pricing_writer import salvar_base_atualizada
+
+    raiz = _raiz_repo()
+    pricing_path = raiz / args.pricing
+    approvals_path = raiz / args.approvals
+    output_path = raiz / args.output
+
+    ausentes = []
+    if not pricing_path.exists():
+        ausentes.append(str(pricing_path))
+    if not approvals_path.exists():
+        ausentes.append(str(approvals_path))
+
+    if ausentes:
+        for arq in ausentes:
+            print(f"Erro: arquivo não encontrado: '{arq}'", file=sys.stderr)
+        return 1
+
+    try:
+        linhas, colunas, col_uf, col_sindicato, col_ano = carregar_base_pricing(pricing_path)
+    except ValueError as exc:
+        print(f"Erro ao carregar base de pricing: {exc}", file=sys.stderr)
+        return 1
+
+    aprovacoes, _ = ler_preview_xlsx(approvals_path)
+
+    timestamp = datetime.now(tz=timezone.utc).isoformat()
+
+    print(
+        f"Aplicando reajustes em {len(linhas)} linha(s) da base de pricing "
+        f"com {len(aprovacoes)} aplicação(ões) aprovada(s)..."
+    )
+
+    linhas_enriquecidas = aplicar_reajustes(
+        linhas, aprovacoes, col_uf, col_sindicato, col_ano, args.value_column, timestamp
+    )
+
+    salvar_base_atualizada(output_path, linhas_enriquecidas, colunas)
+    print(f"Base de pricing atualizada salva em '{output_path}'.")
+
+    contagens = {STATUS_ATUALIZADO: 0, STATUS_NAO_ATUALIZADO: 0, STATUS_ERRO: 0}
+    for linha in linhas_enriquecidas:
+        status = linha.get("status_atualizacao", STATUS_ERRO)
+        contagens[status] = contagens.get(status, 0) + 1
+
+    print(f"  {STATUS_ATUALIZADO:<20}: {contagens[STATUS_ATUALIZADO]}")
+    print(f"  {STATUS_NAO_ATUALIZADO:<20}: {contagens[STATUS_NAO_ATUALIZADO]}")
+    print(f"  {STATUS_ERRO:<20}: {contagens[STATUS_ERRO]}")
+
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -851,6 +916,37 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída (.xlsx) (padrão: {DEFAULT_PRICING_APPLICATION_BASE})",
     )
     p_gen_base.set_defaults(func=cmd_generate_pricing_application_base)
+
+    # apply-pricing-updates
+    p_apply = sub.add_parser(
+        "apply-pricing-updates",
+        help="Aplica reajustes aprovados sobre a base de pricing e gera base atualizada",
+    )
+    p_apply.add_argument(
+        "--value-column",
+        required=True,
+        metavar="COLUNA",
+        help="Nome da coluna da base de pricing sobre a qual o percentual será aplicado (obrigatório)",
+    )
+    p_apply.add_argument(
+        "--pricing",
+        default=DEFAULT_PRICING_INPUT,
+        metavar="PATH",
+        help=f"Base de pricing (.xlsx) de entrada (padrão: {DEFAULT_PRICING_INPUT})",
+    )
+    p_apply.add_argument(
+        "--approvals",
+        default=DEFAULT_PRICING_APPLICATION_BASE,
+        metavar="PATH",
+        help=f"Base de aplicações aprovadas (.xlsx) (padrão: {DEFAULT_PRICING_APPLICATION_BASE})",
+    )
+    p_apply.add_argument(
+        "--output",
+        default=DEFAULT_PRICING_UPDATED_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo de saída (.xlsx) (padrão: {DEFAULT_PRICING_UPDATED_OUTPUT})",
+    )
+    p_apply.set_defaults(func=cmd_apply_pricing_updates)
 
     return parser
 
