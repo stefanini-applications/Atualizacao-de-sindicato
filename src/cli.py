@@ -12,6 +12,7 @@ Comandos disponíveis:
   review-pricing-preview          Exibe estado da prévia e garante coluna decisao_aplicacao
   generate-pricing-application-base  Gera base de aplicações aprovadas a partir da prévia revisada
   apply-pricing-updates           Aplica reajustes aprovados sobre a base de pricing e gera base atualizada
+  export-params                   Gera base consultável de parâmetros sindicais para o Ratecard
 """
 
 import argparse
@@ -43,6 +44,7 @@ DEFAULT_PRICING_INPUT = "data/base_pricing.xlsx"
 DEFAULT_PREVIEW_OUTPUT = "data/preview_atualizacao_pricing.xlsx"
 DEFAULT_PRICING_APPLICATION_BASE = "data/aplicacoes_pricing_aprovadas.xlsx"
 DEFAULT_PRICING_UPDATED_OUTPUT = "data/base_pricing_atualizada.xlsx"
+DEFAULT_SINDICAL_PARAMS_OUTPUT = "data/base_parametros_sindicais.json"
 
 
 def _raiz_repo() -> Path:
@@ -640,6 +642,38 @@ def cmd_apply_pricing_updates(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_export_params(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
+
+    from src.services.approved_store import carregar_aprovados
+    from src.services.sindical_params_exporter import exportar_parametros, salvar_parametros
+    from src.reports.sindical_params import imprimir_relatorio_exportacao
+
+    raiz = _raiz_repo()
+    input_path = raiz / args.input
+    output_path = raiz / args.output
+
+    if not input_path.exists():
+        print(
+            f"Erro: arquivo de reajustes aprovados não encontrado: '{input_path}'. "
+            "Execute 'generate-approved-adjustments' primeiro.",
+            file=sys.stderr,
+        )
+        return 1
+
+    registros = carregar_aprovados(input_path)
+
+    data_geracao = datetime.now(tz=timezone.utc).isoformat()
+    parametros, total_conflitos = exportar_parametros(registros)
+
+    salvar_parametros(output_path, parametros, data_geracao)
+
+    total_exportados = len(parametros)
+    imprimir_relatorio_exportacao(total_exportados, total_conflitos, str(output_path.resolve()))
+
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m src",
@@ -947,6 +981,25 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Arquivo de saída (.xlsx) (padrão: {DEFAULT_PRICING_UPDATED_OUTPUT})",
     )
     p_apply.set_defaults(func=cmd_apply_pricing_updates)
+
+    # export-params
+    p_export = sub.add_parser(
+        "export-params",
+        help="Gera base consultável de parâmetros sindicais para o Ratecard",
+    )
+    p_export.add_argument(
+        "--input",
+        default=DEFAULT_APPROVED_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de reajustes aprovados (padrão: {DEFAULT_APPROVED_OUTPUT})",
+    )
+    p_export.add_argument(
+        "--output",
+        default=DEFAULT_SINDICAL_PARAMS_OUTPUT,
+        metavar="PATH",
+        help=f"Arquivo JSON de saída (padrão: {DEFAULT_SINDICAL_PARAMS_OUTPUT})",
+    )
+    p_export.set_defaults(func=cmd_export_params)
 
     return parser
 
