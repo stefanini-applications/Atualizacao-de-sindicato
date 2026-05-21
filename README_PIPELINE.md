@@ -50,23 +50,21 @@ O comando imprime um relatório em tela indicando se todas as dependências est�
 
 ## 2. Onde depositar os PDFs das CCTs
 
-Deposite os arquivos PDF na pasta `CCT/`, organizados em subpastas por estado e município:
+Deposite os arquivos PDF na pasta `CCT/`, organizados em subpastas por UF e sindicato:
 
 ```
 CCT/
-├── SP/
-│   └── SaoPaulo/
-│       ├── sindicato_xyz_2024.pdf
-│       └── sindicato_abc_2024.pdf
-├── RJ/
-│   └── RioDeJaneiro/
-│       └── sindicato_def_2024.pdf
-└── MG/
-    └── BeloHorizonte/
-        └── sindicato_ghi_2024.pdf
+├── MG/
+│   ├── Sescon/
+│   │   └── CCT_2025-2026_SESCON_MG.pdf
+│   └── Senalba/
+│       └── CCT_2019-2020_Senalba-MG.pdf
+└── AC/
+    └── SEAC/
+        └── CCT_SEAC_2025.pdf
 ```
 
-> ⚠️ **Atenção:** Depositar PDFs fora da estrutura `CCT/<ESTADO>/<MUNICIPIO>/` pode produzir registros com campos críticos ausentes, impedindo a extração de texto. Execute `python -m src list --invalid-only` para identificar documentos com problemas de cadastro após o `scan`.
+> ⚠️ **Atenção:** Depositar PDFs fora da estrutura `CCT/<UF>/<Sindicato>/` pode produzir registros com campos críticos ausentes, impedindo a extração de texto. Execute `python -m src list --invalid-only` para identificar documentos com problemas de cadastro após o `scan`.
 
 ---
 
@@ -211,7 +209,7 @@ O arquivo final gerado pelo pipeline é `data/base_parametros_sindicais.json`, p
 python -m src export-params
 ```
 
-Este comando lê `data/reajustes_aprovados.json` e consolida os parâmetros sindicais no formato canônico esperado pelo Ratecard, resolvendo automaticamente conflitos de múltiplos reajustes para o mesmo sindicato/período (ver seção 6).
+Este comando lê `data/reajustes_aprovados.json` e consolida os parâmetros sindicais no formato canônico esperado pelo Ratecard. Quando houver conflitos, o arquivo gerado conterá registros com `status_parametro = "conflito"` que precisam de resolução manual antes de ser disponibilizados ao Ratecard (ver seção 6).
 
 Após a execução, verifique que o arquivo `data/base_parametros_sindicais.json` foi gerado e que seu conteúdo é consistente com os reajustes aprovados nas revisões manuais anteriores.
 
@@ -223,40 +221,34 @@ Após a execução, verifique que o arquivo `data/base_parametros_sindicais.json
 
 Um conflito ocorre quando o mesmo sindicato possui **mais de um reajuste aprovado para o mesmo período** (ex.: negociações parciais, aditivos ou reprocessamentos de CCTs com vigências sobrepostas).
 
-### Consolidação automática
+### Comportamento do `export-params`
 
-O comando `export-params` (passo 15) consolida automaticamente os registros conflitantes ao gerar `data/base_parametros_sindicais.json`. A regra padrão de priorização é a seguinte: **o registro mais recente** (maior data de processamento) prevalece sobre registros anteriores para o mesmo sindicato/período.
+O comando `export-params` (passo 15) processa `data/reajustes_aprovados.json` e gera um registro por chave sindicato/período seguindo as seguintes regras:
 
-### Quando intervir manualmente
+- **Registro único aprovado para a chave** → registro gerado com `status_parametro = "valido"`, `conflito = false` e campos de reajuste (`percentual_reajuste`, `data_base`, `vigencia_inicio`, `vigencia_fim`) preenchidos normalmente.
+- **Múltiplos registros aprovados para a mesma chave** → `export-params` gera um único registro consolidado com:
+  - `status_parametro = "conflito"`
+  - `conflito = true`
+  - `percentual_reajuste = null`
+  - `data_base = null`
+  - `vigencia_inicio = null`
+  - `vigencia_fim = null`
+  - `ids_registros_conflitantes` preenchido com os IDs dos registros em conflito
 
-Se a consolidação automática não for suficiente — por exemplo, quando dois reajustes para o mesmo sindicato/período têm datas de processamento idênticas ou quando a regra de prioridade automática não reflete o acordo correto —, o operador deve:
+Conflitos **não são resolvidos automaticamente**. O operador deve intervir antes de disponibilizar o arquivo ao Ratecard.
 
-1. Abrir `data/base_parametros_sindicais.json` em um editor de texto ou JSON.
-2. Identificar os registros duplicados (mesmo `sindicato` e mesmo `periodo_vigencia`).
-3. Remover ou corrigir manualmente o registro incorreto, mantendo apenas o registro que reflete o acordo sindical vigente.
-4. Salvar o arquivo antes de disponibilizá-lo ao Ratecard.
+### O que o Ratecard consome
 
-> ⚠️ **Atenção:** Edite **apenas** `data/base_parametros_sindicais.json`. Nunca edite arquivos intermediários como `data/reajustes_aprovados.json` para resolver conflitos na saída final, pois isso pode reintroduzir os conflitos em execuções futuras do pipeline.
+O Ratecard filtra e consome **apenas** registros com `status_parametro = "valido"` e `conflito = false`. Registros com `conflito = true` são ignorados pelo Ratecard.
 
-### Como identificar conflitos
+### Como resolver conflitos
 
-Para verificar se existem conflitos antes de disponibilizar o arquivo ao Ratecard, execute:
+1. Após executar `export-params`, identifique os registros com `status_parametro = "conflito"` em `data/base_parametros_sindicais.json` e consulte o campo `ids_registros_conflitantes` para localizar os registros de origem.
+2. Abra `data/reajustes_aprovados.json` e corrija ou remova os registros conflitantes, mantendo apenas o registro que reflete o acordo sindical vigente.
+3. Reexecute `export-params` para regenerar `data/base_parametros_sindicais.json` com os conflitos resolvidos.
+4. Verifique que não há mais registros com `status_parametro = "conflito"` antes de disponibilizar o arquivo ao Ratecard.
 
-```bash
-python -c "
-import json, collections
-with open('data/base_parametros_sindicais.json') as f:
-    registros = json.load(f)
-chaves = [(r['sindicato'], r['periodo_vigencia']) for r in registros]
-duplicados = [c for c, n in collections.Counter(chaves).items() if n > 1]
-if duplicados:
-    print(f'{len(duplicados)} conflito(s) encontrado(s):')
-    for s, p in duplicados:
-        print(f'  Sindicato: {s} | Período: {p}')
-else:
-    print('Nenhum conflito encontrado.')
-"
-```
+> ⚠️ **Atenção:** A resolução de conflitos deve ser feita em `data/reajustes_aprovados.json` seguida de nova execução de `export-params`. **Nunca edite `data/base_parametros_sindicais.json` diretamente**, pois as alterações serão sobrescritas na próxima execução do `export-params`.
 
 ---
 
@@ -268,7 +260,7 @@ O Ratecard deve consumir **exclusivamente**:
 data/base_parametros_sindicais.json
 ```
 
-Este é o único arquivo final do pipeline, consolidado e validado, gerado pelo comando `export-params`.
+Este é o único arquivo final do pipeline, gerado pelo comando `export-params`. O Ratecard deve filtrar e consumir **apenas** registros com `status_parametro = "valido"` e `conflito = false`. Registros com `conflito = true` indicam conflitos pendentes de resolução manual e devem ser ignorados pelo Ratecard.
 
 > ⛔ **Nunca forneça ao Ratecard arquivos intermediários**, como:
 > - `data/reajustes_aprovados.json` — pode conter registros não consolidados ou com conflitos não resolvidos.
