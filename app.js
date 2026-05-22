@@ -25,7 +25,9 @@ let detailModal = null;
 // ── Bootstrap date the app ──────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  detailModal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  if (window.bootstrap) {
+    detailModal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  }
   loadData();
 });
 
@@ -203,7 +205,9 @@ function openDetail(record) {
     `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
 
   document.getElementById('detail-modal-body').innerHTML = buildDetailHtml(record, isConflict);
-  detailModal.show();
+  if (detailModal) {
+    detailModal.show();
+  }
 }
 
 function buildDetailHtml(r, isConflict) {
