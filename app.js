@@ -182,22 +182,31 @@ async function loadData() {
   let dataGeracao = null;
   let demoMessage = null;
 
-  try {
-    const result = await tryFetch(DATA_URL);
+  // Prefer inline data injected by export_inline_data.py (works with file:// protocol)
+  if (window.BASE_PARAMETROS_SINDICAIS) {
+    const inlineData = window.BASE_PARAMETROS_SINDICAIS;
+    records = Array.isArray(inlineData) ? inlineData : inlineData.registros;
+    dataGeracao = inlineData.data_geracao ?? null;
+  }
 
-    records = result.records;
-    dataGeracao = result.data.data_geracao ?? null;
-  } catch {
+  if (!Array.isArray(records)) {
     try {
-      const result = await tryFetch(EXAMPLE_DATA_URL);
+      const result = await tryFetch(DATA_URL);
 
       records = result.records;
       dataGeracao = result.data.data_geracao ?? null;
-      demoMessage = 'Ambiente de demonstração — usando base de exemplo';
     } catch {
-      records = EMBEDDED_DEMO.registros;
-      dataGeracao = EMBEDDED_DEMO.data_geracao;
-      demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+      try {
+        const result = await tryFetch(EXAMPLE_DATA_URL);
+
+        records = result.records;
+        dataGeracao = result.data.data_geracao ?? null;
+        demoMessage = 'Ambiente de demonstração — usando base de exemplo';
+      } catch {
+        records = EMBEDDED_DEMO.registros;
+        dataGeracao = EMBEDDED_DEMO.data_geracao;
+        demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+      }
     }
   }
 
