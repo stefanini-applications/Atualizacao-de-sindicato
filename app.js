@@ -6,6 +6,61 @@
 const DATA_URL = 'data/base_parametros_sindicais.json';
 const EXAMPLE_DATA_URL = 'data/base_parametros_sindicais.example.json';
 
+const EMBEDDED_DEMO = {
+  data_geracao: null,
+  registros: [
+    {
+      id_registro_reajuste: 'DEMO-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SESCON-MG',
+      uf: 'MG',
+      categoria: 'Técnicos em Contabilidade',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 5.5,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: 'DEMO-002',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINTTEL-SP',
+      uf: 'SP',
+      categoria: 'Telecomunicações',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 6.0,
+      data_base: '2025-04-01',
+      vigencia_inicio: '2025-04-01',
+      vigencia_fim: '2026-03-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: null,
+      ids_registros_conflitantes: ['DEMO-003', 'DEMO-004'],
+      sindicato: 'SENALBA-RJ',
+      uf: 'RJ',
+      categoria: 'Trabalhadores em Empresas de Asseio e Conservação',
+      ano_referencia: 2025,
+      status_parametro: 'conflito',
+      conflito: true,
+      percentual_reajuste: null,
+      data_base: null,
+      vigencia_inicio: null,
+      vigencia_fim: null,
+      fonte_documento: null,
+      observacao:
+        'Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: DEMO-003, DEMO-004.',
+    },
+  ],
+};
+
 const elLoading = document.getElementById('state-loading');
 const elUnavailable = document.getElementById('state-unavailable');
 const elApp = document.getElementById('app');
@@ -45,29 +100,41 @@ async function tryFetch(url) {
 }
 
 async function loadData() {
-  let result = null;
-  let isDemo = false;
+  let records = null;
+  let dataGeracao = null;
+  let demoMessage = null;
 
   try {
-    result = await tryFetch(DATA_URL);
+    const result = await tryFetch(DATA_URL);
+    records = result.records;
+    dataGeracao = result.data.data_geracao ?? null;
   } catch {
     try {
-      result = await tryFetch(EXAMPLE_DATA_URL);
-      isDemo = true;
+      const result = await tryFetch(EXAMPLE_DATA_URL);
+      records = result.records;
+      dataGeracao = result.data.data_geracao ?? null;
+      demoMessage = 'Ambiente de demonstração — usando base de exemplo';
     } catch {
-      // both failed
+      // both fetches failed — use embedded demo (e.g. file:// protocol)
+      records = EMBEDDED_DEMO.registros;
+      dataGeracao = null;
+      demoMessage = 'Ambiente de demonstração — base embutida para teste local';
     }
   }
 
-  if (!result) {
+  if (!records) {
     showUnavailable();
     return;
   }
 
-  allRecords = result.records;
-  showApp(result.data.data_geracao ?? null, isDemo);
-  populateFilterOptions();
-  renderTable();
+  try {
+    allRecords = records;
+    showApp(dataGeracao, demoMessage);
+    populateFilterOptions();
+    renderTable();
+  } catch {
+    showUnavailable();
+  }
 }
 
 function showUnavailable() {
@@ -75,20 +142,20 @@ function showUnavailable() {
   elUnavailable.classList.remove('d-none');
 }
 
-function showApp(dataGeracao, isDemo = false) {
+function showApp(dataGeracao, demoMessage = null) {
   elLoading.classList.add('d-none');
   elApp.classList.remove('d-none');
 
-  if (isDemo) {
+  if (demoMessage) {
     let demoBanner = document.getElementById('demo-banner');
     if (!demoBanner) {
       demoBanner = document.createElement('div');
       demoBanner.id = 'demo-banner';
       demoBanner.className = 'alert alert-warning text-center mb-3';
       demoBanner.setAttribute('role', 'alert');
-      demoBanner.textContent = 'Ambiente de demonstração — usando base de exemplo';
       elApp.insertAdjacentElement('afterbegin', demoBanner);
     }
+    demoBanner.textContent = demoMessage;
   }
 
   if (dataGeracao) {
