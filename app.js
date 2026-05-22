@@ -1,274 +1,522 @@
-/**
- * Parâmetros Sindicais — consulta somente leitura
- * Carrega data/base_parametros_sindicais.json e renderiza a listagem com filtros.
- */
+/* app.js - Tela de Consulta de Parâmetros Sindicais */
 
 const DATA_URL = 'data/base_parametros_sindicais.json';
+const EXAMPLE_DATA_URL = 'data/base_parametros_sindicais.example.json';
 
-const elLoading = document.getElementById('state-loading');
-const elUnavailable = document.getElementById('state-unavailable');
-const elApp = document.getElementById('app');
-const elDataGeracao = document.getElementById('data-geracao-badge');
-const elFilterUf = document.getElementById('filter-uf');
-const elFilterSindicato = document.getElementById('filter-sindicato');
-const elFilterAno = document.getElementById('filter-ano');
-const elFilterStatus = document.getElementById('filter-status');
-const elBtnClear = document.getElementById('btn-clear-filters');
-const elTbody = document.getElementById('params-tbody');
-const elNoResults = document.getElementById('no-results');
-const elResultCount = document.getElementById('result-count');
+const EMBEDDED_DEMO = {
+  data_geracao: null,
+  registros: [
+    {
+      id_registro_reajuste: 'DEMO-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SESCON-MG',
+      uf: 'MG',
+      categoria: 'Técnicos em Contabilidade',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 5.5,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: 'DEMO-002',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINTTEL-SP',
+      uf: 'SP',
+      categoria: 'Telecomunicações',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 6.0,
+      data_base: '2025-04-01',
+      vigencia_inicio: '2025-04-01',
+      vigencia_fim: '2026-03-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: null,
+      ids_registros_conflitantes: ['DEMO-003', 'DEMO-004'],
+      sindicato: 'SENALBA-RJ',
+      uf: 'RJ',
+      categoria: 'Trabalhadores em Empresas de Asseio e Conservação',
+      ano_referencia: 2025,
+      status_parametro: 'conflito',
+      conflito: true,
+      percentual_reajuste: null,
+      data_base: null,
+      vigencia_inicio: null,
+      vigencia_fim: null,
+      fonte_documento: null,
+      observacao:
+        'Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: DEMO-003, DEMO-004.',
+    },
+  ],
+};
 
 let allRecords = [];
+let filteredRecords = [];
 let detailModal = null;
 
-// ── Bootstrap date the app ──────────────────────────────────────────
+let elLoading;
+let elUnavailable;
+let elApp;
+let elDataGeracao;
+let elTableBody;
+let elEmptyState;
+let elTotalRecords;
+
+let filterUf;
+let filterSindicato;
+let filterAno;
+let filterStatus;
+let searchInput;
 
 document.addEventListener('DOMContentLoaded', () => {
-  detailModal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  bindElements();
+  bindEvents();
+
+  const modalElement = document.getElementById('detail-modal');
+
+  if (window.bootstrap && modalElement) {
+    detailModal = new bootstrap.Modal(modalElement);
+  }
+
   loadData();
 });
 
-// ── Data loading ────────────────────────────────────────────────────
+function bindElements() {
+  elLoading = document.getElementById('state-loading');
+  elUnavailable = document.getElementById('state-unavailable');
+  elApp = document.getElementById('app');
+  elDataGeracao = document.getElementById('data-geracao');
+
+  elTableBody =
+    document.getElementById('table-body') ||
+    document.getElementById('parametros-table-body') ||
+    document.getElementById('registros-tbody') ||
+    document.querySelector('tbody');
+
+  elEmptyState =
+    document.getElementById('empty-state') ||
+    document.getElementById('state-empty');
+
+  elTotalRecords =
+    document.getElementById('total-records') ||
+    document.getElementById('records-count') ||
+    document.getElementById('contador-registros');
+
+  filterUf =
+    document.getElementById('filter-uf') ||
+    document.getElementById('uf-filter') ||
+    document.getElementById('uf');
+
+  filterSindicato =
+    document.getElementById('filter-sindicato') ||
+    document.getElementById('sindicato-filter') ||
+    document.getElementById('sindicato');
+
+  filterAno =
+    document.getElementById('filter-ano') ||
+    document.getElementById('ano-filter') ||
+    document.getElementById('ano-referencia');
+
+  filterStatus =
+    document.getElementById('filter-status') ||
+    document.getElementById('status-filter') ||
+    document.getElementById('status');
+
+  searchInput =
+    document.getElementById('search-input') ||
+    document.getElementById('busca') ||
+    document.getElementById('search');
+}
+
+function bindEvents() {
+  const filterElements = [
+    filterUf,
+    filterSindicato,
+    filterAno,
+    filterStatus,
+    searchInput,
+  ].filter(Boolean);
+
+  filterElements.forEach((element) => {
+    element.addEventListener('input', applyFilters);
+    element.addEventListener('change', applyFilters);
+  });
+}
+
+async function tryFetch(url) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  const text = await response.text();
+
+  if (!text.trim()) {
+    throw new Error('Empty file');
+  }
+
+  const data = JSON.parse(text);
+  const records = Array.isArray(data) ? data : data.registros;
+
+  if (!Array.isArray(records)) {
+    throw new Error('Invalid structure');
+  }
+
+  return {
+    data,
+    records,
+  };
+}
 
 async function loadData() {
+  let records = null;
+  let dataGeracao = null;
+  let demoMessage = null;
+
   try {
-    const response = await fetch(DATA_URL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const result = await tryFetch(DATA_URL);
 
-    const text = await response.text();
-    if (!text.trim()) throw new Error('Empty file');
-
-    const data = JSON.parse(text);
-
-    const records = Array.isArray(data) ? data : data.registros;
-    if (!Array.isArray(records)) throw new Error('Invalid structure');
-
-    allRecords = records;
-
-    showApp(data.data_geracao ?? null);
-    populateFilterOptions();
-    renderTable();
+    records = result.records;
+    dataGeracao = result.data.data_geracao ?? null;
   } catch {
+    try {
+      const result = await tryFetch(EXAMPLE_DATA_URL);
+
+      records = result.records;
+      dataGeracao = result.data.data_geracao ?? null;
+      demoMessage = 'Ambiente de demonstração — usando base de exemplo';
+    } catch {
+      records = EMBEDDED_DEMO.registros;
+      dataGeracao = EMBEDDED_DEMO.data_geracao;
+      demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+    }
+  }
+
+  if (!Array.isArray(records)) {
     showUnavailable();
-  }
-}
-
-function showUnavailable() {
-  elLoading.classList.add('d-none');
-  elUnavailable.classList.remove('d-none');
-}
-
-function showApp(dataGeracao) {
-  elLoading.classList.add('d-none');
-  elApp.classList.remove('d-none');
-
-  if (dataGeracao) {
-    elDataGeracao.textContent = `Data de atualização da base: ${formatDateTime(dataGeracao)}`;
-    elDataGeracao.classList.remove('d-none');
-  }
-}
-
-// ── Filter option population ────────────────────────────────────────
-
-function populateFilterOptions() {
-  const ufs = [...new Set(allRecords.map((r) => r.uf).filter(Boolean))].sort();
-  ufs.forEach((uf) => {
-    const opt = document.createElement('option');
-    opt.value = uf;
-    opt.textContent = uf;
-    elFilterUf.appendChild(opt);
-  });
-
-  const anos = [...new Set(allRecords.map((r) => r.ano_referencia).filter(Boolean))].sort(
-    (a, b) => b - a,
-  );
-  anos.forEach((ano) => {
-    const opt = document.createElement('option');
-    opt.value = ano;
-    opt.textContent = ano;
-    elFilterAno.appendChild(opt);
-  });
-}
-
-// ── Filter listeners ────────────────────────────────────────────────
-
-[elFilterUf, elFilterAno, elFilterStatus].forEach((el) =>
-  el.addEventListener('change', renderTable),
-);
-elFilterSindicato.addEventListener('input', renderTable);
-elBtnClear.addEventListener('click', () => {
-  elFilterUf.value = '';
-  elFilterSindicato.value = '';
-  elFilterAno.value = '';
-  elFilterStatus.value = '';
-  renderTable();
-});
-
-// ── Table rendering ─────────────────────────────────────────────────
-
-function applyFilters() {
-  const uf = elFilterUf.value;
-  const sindicato = elFilterSindicato.value.trim().toLowerCase();
-  const ano = elFilterAno.value;
-  const status = elFilterStatus.value;
-
-  return allRecords.filter((r) => {
-    if (uf && r.uf !== uf) return false;
-    if (sindicato && !(r.sindicato ?? '').toLowerCase().includes(sindicato)) return false;
-    if (ano && String(r.ano_referencia) !== ano) return false;
-    if (status && r.status_parametro !== status) return false;
-    return true;
-  });
-}
-
-function renderTable() {
-  const filtered = applyFilters();
-
-  elTbody.innerHTML = '';
-
-  if (filtered.length === 0) {
-    elNoResults.classList.remove('d-none');
-    elResultCount.textContent = '';
     return;
   }
 
-  elNoResults.classList.add('d-none');
-  elResultCount.textContent = `${filtered.length} registro${filtered.length !== 1 ? 's' : ''}`;
+  allRecords = records;
+  filteredRecords = [...allRecords];
 
-  filtered.forEach((record, idx) => {
-    const isConflict = record.status_parametro === 'conflito' || record.conflito === true;
-    const tr = document.createElement('tr');
-    if (isConflict) tr.classList.add('row-conflito');
-    tr.setAttribute('role', 'button');
-    tr.setAttribute('tabindex', '0');
-    tr.setAttribute('aria-label', `Ver detalhes: ${record.sindicato ?? ''} ${record.uf ?? ''}`);
+  showApp(dataGeracao, demoMessage);
+  populateFilterOptions();
+  renderTable();
+}
 
-    tr.innerHTML = `
-      <td>${escHtml(record.uf ?? '—')}</td>
-      <td>${escHtml(record.sindicato ?? '—')}</td>
-      <td>${escHtml(String(record.ano_referencia ?? '—'))}</td>
+function showUnavailable() {
+  if (elLoading) elLoading.classList.add('d-none');
+  if (elApp) elApp.classList.add('d-none');
+  if (elUnavailable) elUnavailable.classList.remove('d-none');
+}
+
+function showApp(dataGeracao, demoMessage = null) {
+  if (elLoading) elLoading.classList.add('d-none');
+  if (elUnavailable) elUnavailable.classList.add('d-none');
+  if (elApp) elApp.classList.remove('d-none');
+
+  const existingBanner = document.getElementById('demo-banner');
+
+  if (demoMessage && elApp) {
+    let demoBanner = existingBanner;
+
+    if (!demoBanner) {
+      demoBanner = document.createElement('div');
+      demoBanner.id = 'demo-banner';
+      demoBanner.className = 'alert alert-warning text-center mb-3';
+      demoBanner.setAttribute('role', 'alert');
+      elApp.insertAdjacentElement('afterbegin', demoBanner);
+    }
+
+    demoBanner.textContent = demoMessage;
+  } else if (existingBanner) {
+    existingBanner.remove();
+  }
+
+  if (elDataGeracao && dataGeracao) {
+    elDataGeracao.textContent = `Data de atualização da base: ${formatDateTime(dataGeracao)}`;
+    elDataGeracao.classList.remove('d-none');
+  } else if (elDataGeracao) {
+    elDataGeracao.classList.add('d-none');
+  }
+}
+
+function populateFilterOptions() {
+  populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
+  populateSelect(filterSindicato, uniqueValues(allRecords, 'sindicato'), 'Todos os sindicatos');
+  populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
+  populateSelect(filterStatus, ['valido', 'conflito'], 'Todos os status');
+}
+
+function populateSelect(selectElement, values, defaultLabel) {
+  if (!selectElement) return;
+
+  const currentValue = selectElement.value;
+
+  selectElement.innerHTML = '';
+
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = defaultLabel;
+  selectElement.appendChild(defaultOption);
+
+  values.forEach((value) => {
+    if (value === null || value === undefined || value === '') return;
+
+    const option = document.createElement('option');
+    option.value = String(value);
+    option.textContent = formatSelectLabel(value);
+    selectElement.appendChild(option);
+  });
+
+  selectElement.value = currentValue;
+}
+
+function uniqueValues(records, fieldName) {
+  return [...new Set(records.map((record) => record[fieldName]))]
+    .filter((value) => value !== null && value !== undefined && value !== '')
+    .sort((a, b) => String(a).localeCompare(String(b), 'pt-BR'));
+}
+
+function formatSelectLabel(value) {
+  if (value === 'valido') return 'Válido';
+  if (value === 'conflito') return 'Conflito';
+  return String(value);
+}
+
+function applyFilters() {
+  const ufValue = filterUf?.value ?? '';
+  const sindicatoValue = filterSindicato?.value ?? '';
+  const anoValue = filterAno?.value ?? '';
+  const statusValue = filterStatus?.value ?? '';
+  const searchValue = normalizeText(searchInput?.value ?? '');
+
+  filteredRecords = allRecords.filter((record) => {
+    const isConflict = isConflictRecord(record);
+    const status = isConflict ? 'conflito' : 'valido';
+
+    const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
+    const matchesSindicato =
+      !sindicatoValue || String(record.sindicato ?? '') === sindicatoValue;
+    const matchesAno =
+      !anoValue || String(record.ano_referencia ?? '') === anoValue;
+    const matchesStatus = !statusValue || status === statusValue;
+
+    const searchableText = normalizeText(
+      [
+        record.sindicato,
+        record.uf,
+        record.categoria,
+        record.ano_referencia,
+        record.status_parametro,
+        record.fonte_documento,
+        record.observacao,
+      ].join(' ')
+    );
+
+    const matchesSearch = !searchValue || searchableText.includes(searchValue);
+
+    return (
+      matchesUf &&
+      matchesSindicato &&
+      matchesAno &&
+      matchesStatus &&
+      matchesSearch
+    );
+  });
+
+  renderTable();
+}
+
+function renderTable() {
+  if (!elTableBody) return;
+
+  elTableBody.innerHTML = '';
+
+  if (elTotalRecords) {
+    elTotalRecords.textContent = String(filteredRecords.length);
+  }
+
+  if (elEmptyState) {
+    elEmptyState.classList.toggle('d-none', filteredRecords.length > 0);
+  }
+
+  filteredRecords.forEach((record, index) => {
+    const isConflict = isConflictRecord(record);
+    const row = document.createElement('tr');
+
+    if (isConflict) {
+      row.classList.add('row-conflito');
+    }
+
+    row.innerHTML = `
+      <td>${escapeHtml(record.uf ?? '—')}</td>
+      <td>${escapeHtml(record.sindicato ?? '—')}</td>
+      <td>${escapeHtml(record.categoria ?? '—')}</td>
+      <td>${escapeHtml(record.ano_referencia ?? '—')}</td>
       <td>${formatPercent(record.percentual_reajuste)}</td>
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
-      <td>${statusBadge(record)}</td>
-      <td class="fonte-cell" title="${escAttr(record.fonte_documento ?? '')}">${escHtml(record.fonte_documento ?? '—')}</td>
+      <td>${buildStatusBadge(isConflict)}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
+          Detalhes
+        </button>
+      </td>
     `;
 
-    tr.addEventListener('click', () => openDetail(record));
-    tr.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openDetail(record);
-      }
-    });
+    const detailButton = row.querySelector('button[data-index]');
+    detailButton.addEventListener('click', () => openDetail(record));
 
-    elTbody.appendChild(tr);
+    elTableBody.appendChild(row);
   });
 }
 
-// ── Detail modal ────────────────────────────────────────────────────
+function isConflictRecord(record) {
+  return record.status_parametro === 'conflito' || record.conflito === true;
+}
+
+function buildStatusBadge(isConflict) {
+  if (isConflict) {
+    return '<span class="badge badge-conflito">⚠ Conflito</span>';
+  }
+
+  return '<span class="badge badge-valido">✔ Válido</span>';
+}
 
 function openDetail(record) {
-  const isConflict = record.status_parametro === 'conflito' || record.conflito === true;
+  const isConflict = isConflictRecord(record);
+  const modalBody = document.getElementById('detail-modal-body');
+  const modalTitle = document.getElementById('detail-modal-title');
 
-  document.getElementById('detail-modal-label').textContent =
-    `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
+  if (modalTitle) {
+    modalTitle.textContent = `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
+  }
 
-  document.getElementById('detail-modal-body').innerHTML = buildDetailHtml(record, isConflict);
-  detailModal.show();
+  if (modalBody) {
+    modalBody.innerHTML = buildDetailHtml(record, isConflict);
+  }
+
+  if (detailModal) {
+    detailModal.show();
+  }
 }
 
-function buildDetailHtml(r, isConflict) {
-  const fields = [
-    ['UF', r.uf],
-    ['Sindicato', r.sindicato],
-    ['Ano de referência', r.ano_referencia],
-    ['Percentual de reajuste', formatPercent(r.percentual_reajuste)],
-    ['Data-base', formatDate(r.data_base)],
-    ['Vigência início', formatDate(r.vigencia_inicio)],
-    ['Vigência fim', formatDate(r.vigencia_fim)],
-    ['Status', statusBadge(r)],
-    ['Conflito', r.conflito ? 'Sim' : 'Não'],
-  ];
+function buildDetailHtml(record, isConflict) {
+  const conflictIds = Array.isArray(record.ids_registros_conflitantes)
+    ? record.ids_registros_conflitantes.join(', ')
+    : record.ids_registros_conflitantes ?? '—';
 
-  if (r.id_registro_reajuste != null) {
-    fields.push(['ID do registro', r.id_registro_reajuste]);
-  }
+  return `
+    <div class="mb-3">
+      ${buildStatusBadge(isConflict)}
+    </div>
 
-  fields.push(['Fonte do documento', r.fonte_documento ?? '—']);
+    <dl class="row">
+      <dt class="col-sm-4">ID do registro</dt>
+      <dd class="col-sm-8">${escapeHtml(record.id_registro_reajuste ?? '—')}</dd>
 
-  if (r.observacao != null) {
-    fields.push(['Observação', r.observacao]);
-  }
+      <dt class="col-sm-4">Sindicato</dt>
+      <dd class="col-sm-8">${escapeHtml(record.sindicato ?? '—')}</dd>
 
-  let html = '<div class="row g-3">';
-  fields.forEach(([label, value]) => {
-    html += `
-      <div class="col-12 col-sm-6">
-        <div class="detail-field-label">${escHtml(label)}</div>
-        <div class="detail-field-value">${value ?? '—'}</div>
-      </div>`;
-  });
-  html += '</div>';
+      <dt class="col-sm-4">UF</dt>
+      <dd class="col-sm-8">${escapeHtml(record.uf ?? '—')}</dd>
 
-  if (isConflict && Array.isArray(r.ids_registros_conflitantes) && r.ids_registros_conflitantes.length > 0) {
-    const ids = r.ids_registros_conflitantes
-      .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
-      .join('');
-    html += `
-      <hr class="my-3"/>
-      <div class="detail-conflict-box">
-        <div class="detail-field-label mb-1">⚠ Registros conflitantes</div>
-        <div>${ids}</div>
-        <p class="mb-0 mt-2 small text-warning-emphasis">
-          Este parâmetro está em conflito e requer resolução manual. Nenhum parâmetro é sugerido ou priorizado automaticamente.
-        </p>
-      </div>`;
-  }
+      <dt class="col-sm-4">Categoria</dt>
+      <dd class="col-sm-8">${escapeHtml(record.categoria ?? '—')}</dd>
 
-  return html;
+      <dt class="col-sm-4">Ano de referência</dt>
+      <dd class="col-sm-8">${escapeHtml(record.ano_referencia ?? '—')}</dd>
+
+      <dt class="col-sm-4">Percentual de reajuste</dt>
+      <dd class="col-sm-8">${formatPercent(record.percentual_reajuste)}</dd>
+
+      <dt class="col-sm-4">Data-base</dt>
+      <dd class="col-sm-8">${formatDate(record.data_base)}</dd>
+
+      <dt class="col-sm-4">Vigência início</dt>
+      <dd class="col-sm-8">${formatDate(record.vigencia_inicio)}</dd>
+
+      <dt class="col-sm-4">Vigência fim</dt>
+      <dd class="col-sm-8">${formatDate(record.vigencia_fim)}</dd>
+
+      <dt class="col-sm-4">Fonte do documento</dt>
+      <dd class="col-sm-8">${escapeHtml(record.fonte_documento ?? '—')}</dd>
+
+      <dt class="col-sm-4">IDs conflitantes</dt>
+      <dd class="col-sm-8">${escapeHtml(conflictIds)}</dd>
+
+      <dt class="col-sm-4">Observação</dt>
+      <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
+    </dl>
+  `;
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────
-
-function statusBadge(record) {
-  const isConflict = record.status_parametro === 'conflito' || record.conflito === true;
-  if (isConflict) {
-    return '<span class="badge-conflito">⚠ Conflito</span>';
+function formatPercent(value) {
+  if (value === null || value === undefined || value === '') {
+    return '—';
   }
-  return '<span class="badge-valido">✔ Válido</span>';
+
+  const numericValue = Number(value);
+
+  if (Number.isNaN(numericValue)) {
+    return '—';
+  }
+
+  return `${numericValue.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}%`;
 }
 
 function formatDate(value) {
   if (!value) return '—';
-  // Accept ISO date strings (YYYY-MM-DD or full ISO)
-  const d = new Date(value.length === 10 ? value + 'T00:00:00' : value);
-  if (isNaN(d.getTime())) return escHtml(String(value));
-  return d.toLocaleDateString('pt-BR');
+
+  const date = new Date(`${value}T00:00:00`);
+
+  if (Number.isNaN(date.getTime())) {
+    return '—';
+  }
+
+  return date.toLocaleDateString('pt-BR');
 }
 
 function formatDateTime(value) {
-  if (!value) return '';
-  const d = new Date(value);
-  if (isNaN(d.getTime())) return String(value);
-  return d.toLocaleString('pt-BR');
+  if (!value) return '—';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return '—';
+  }
+
+  return date.toLocaleString('pt-BR');
 }
 
-function formatPercent(value) {
-  if (value == null) return '—';
-  return `${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+function normalizeText(value) {
+  return String(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function escAttr(str) {
-  return escHtml(str);
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
