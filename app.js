@@ -4,6 +4,62 @@
  */
 
 const DATA_URL = 'data/base_parametros_sindicais.json';
+const EXAMPLE_DATA_URL = 'data/base_parametros_sindicais.example.json';
+
+const EMBEDDED_DEMO = {
+  data_geracao: null,
+  registros: [
+    {
+      id_registro_reajuste: 'DEMO-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SESCON-MG',
+      uf: 'MG',
+      categoria: 'Técnicos em Contabilidade',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 5.5,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: 'DEMO-002',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINTTEL-SP',
+      uf: 'SP',
+      categoria: 'Telecomunicações',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 6.0,
+      data_base: '2025-04-01',
+      vigencia_inicio: '2025-04-01',
+      vigencia_fim: '2026-03-31',
+      fonte_documento: 'CCT 2025',
+      observacao: null,
+    },
+    {
+      id_registro_reajuste: null,
+      ids_registros_conflitantes: ['DEMO-003', 'DEMO-004'],
+      sindicato: 'SENALBA-RJ',
+      uf: 'RJ',
+      categoria: 'Trabalhadores em Empresas de Asseio e Conservação',
+      ano_referencia: 2025,
+      status_parametro: 'conflito',
+      conflito: true,
+      percentual_reajuste: null,
+      data_base: null,
+      vigencia_inicio: null,
+      vigencia_fim: null,
+      fonte_documento: null,
+      observacao:
+        'Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: DEMO-003, DEMO-004.',
+    },
+  ],
+};
 
 const elLoading = document.getElementById('state-loading');
 const elUnavailable = document.getElementById('state-unavailable');
@@ -24,28 +80,56 @@ let detailModal = null;
 // ── Bootstrap date the app ──────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  detailModal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  if (window.bootstrap) {
+    detailModal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  }
   loadData();
 });
 
 // ── Data loading ────────────────────────────────────────────────────
 
+async function tryFetch(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const text = await response.text();
+  if (!text.trim()) throw new Error('Empty file');
+  const data = JSON.parse(text);
+  const records = Array.isArray(data) ? data : data.registros;
+  if (!Array.isArray(records)) throw new Error('Invalid structure');
+  return { data, records };
+}
+
 async function loadData() {
+  let records = null;
+  let dataGeracao = null;
+  let demoMessage = null;
+
   try {
-    const response = await fetch(DATA_URL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const result = await tryFetch(DATA_URL);
+    records = result.records;
+    dataGeracao = result.data.data_geracao ?? null;
+  } catch {
+    try {
+      const result = await tryFetch(EXAMPLE_DATA_URL);
+      records = result.records;
+      dataGeracao = result.data.data_geracao ?? null;
+      demoMessage = 'Ambiente de demonstração — usando base de exemplo';
+    } catch {
+      // both fetches failed — use embedded demo (e.g. file:// protocol)
+      records = EMBEDDED_DEMO.registros;
+      dataGeracao = null;
+      demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+    }
+  }
 
-    const text = await response.text();
-    if (!text.trim()) throw new Error('Empty file');
+  if (!records) {
+    showUnavailable();
+    return;
+  }
 
-    const data = JSON.parse(text);
-
-    const records = Array.isArray(data) ? data : data.registros;
-    if (!Array.isArray(records)) throw new Error('Invalid structure');
-
+  try {
     allRecords = records;
-
-    showApp(data.data_geracao ?? null);
+    showApp(dataGeracao, demoMessage);
     populateFilterOptions();
     renderTable();
   } catch {
@@ -58,9 +142,21 @@ function showUnavailable() {
   elUnavailable.classList.remove('d-none');
 }
 
-function showApp(dataGeracao) {
+function showApp(dataGeracao, demoMessage = null) {
   elLoading.classList.add('d-none');
   elApp.classList.remove('d-none');
+
+  if (demoMessage) {
+    let demoBanner = document.getElementById('demo-banner');
+    if (!demoBanner) {
+      demoBanner = document.createElement('div');
+      demoBanner.id = 'demo-banner';
+      demoBanner.className = 'alert alert-warning text-center mb-3';
+      demoBanner.setAttribute('role', 'alert');
+      elApp.insertAdjacentElement('afterbegin', demoBanner);
+    }
+    demoBanner.textContent = demoMessage;
+  }
 
   if (dataGeracao) {
     elDataGeracao.textContent = `Data de atualização da base: ${formatDateTime(dataGeracao)}`;
@@ -176,7 +272,9 @@ function openDetail(record) {
     `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
 
   document.getElementById('detail-modal-body').innerHTML = buildDetailHtml(record, isConflict);
-  detailModal.show();
+  if (detailModal) {
+    detailModal.show();
+  }
 }
 
 function buildDetailHtml(r, isConflict) {
