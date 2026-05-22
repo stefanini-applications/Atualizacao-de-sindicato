@@ -4,6 +4,7 @@
  */
 
 const DATA_URL = 'data/base_parametros_sindicais.json';
+const EXAMPLE_DATA_URL = 'data/base_parametros_sindicais.example.json';
 
 const elLoading = document.getElementById('state-loading');
 const elUnavailable = document.getElementById('state-unavailable');
@@ -30,27 +31,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Data loading ────────────────────────────────────────────────────
 
+async function tryFetch(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const text = await response.text();
+  if (!text.trim()) throw new Error('Empty file');
+  const data = JSON.parse(text);
+  const records = Array.isArray(data) ? data : data.registros;
+  if (!Array.isArray(records)) throw new Error('Invalid structure');
+  return { data, records };
+}
+
 async function loadData() {
+  let result = null;
+  let isDemo = false;
+
   try {
-    const response = await fetch(DATA_URL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-    const text = await response.text();
-    if (!text.trim()) throw new Error('Empty file');
-
-    const data = JSON.parse(text);
-
-    const records = Array.isArray(data) ? data : data.registros;
-    if (!Array.isArray(records)) throw new Error('Invalid structure');
-
-    allRecords = records;
-
-    showApp(data.data_geracao ?? null);
-    populateFilterOptions();
-    renderTable();
+    result = await tryFetch(DATA_URL);
   } catch {
-    showUnavailable();
+    try {
+      result = await tryFetch(EXAMPLE_DATA_URL);
+      isDemo = true;
+    } catch {
+      // both failed
+    }
   }
+
+  if (!result) {
+    showUnavailable();
+    return;
+  }
+
+  allRecords = result.records;
+  showApp(result.data.data_geracao ?? null, isDemo);
+  populateFilterOptions();
+  renderTable();
 }
 
 function showUnavailable() {
@@ -58,9 +73,21 @@ function showUnavailable() {
   elUnavailable.classList.remove('d-none');
 }
 
-function showApp(dataGeracao) {
+function showApp(dataGeracao, isDemo = false) {
   elLoading.classList.add('d-none');
   elApp.classList.remove('d-none');
+
+  if (isDemo) {
+    let demoBanner = document.getElementById('demo-banner');
+    if (!demoBanner) {
+      demoBanner = document.createElement('div');
+      demoBanner.id = 'demo-banner';
+      demoBanner.className = 'alert alert-warning text-center mb-3';
+      demoBanner.setAttribute('role', 'alert');
+      demoBanner.textContent = 'Ambiente de demonstração — usando base de exemplo';
+      elApp.insertAdjacentElement('afterbegin', demoBanner);
+    }
+  }
 
   if (dataGeracao) {
     elDataGeracao.textContent = `Data de atualização da base: ${formatDateTime(dataGeracao)}`;
