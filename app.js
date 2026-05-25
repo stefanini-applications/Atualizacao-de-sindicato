@@ -93,19 +93,24 @@ function bindElements() {
   elLoading = document.getElementById('state-loading');
   elUnavailable = document.getElementById('state-unavailable');
   elApp = document.getElementById('app');
-  elDataGeracao = document.getElementById('data-geracao');
+  elDataGeracao =
+    document.getElementById('data-geracao-badge') ||
+    document.getElementById('data-geracao');
 
   elTableBody =
+    document.getElementById('params-tbody') ||
     document.getElementById('table-body') ||
     document.getElementById('parametros-table-body') ||
     document.getElementById('registros-tbody') ||
     document.querySelector('tbody');
 
   elEmptyState =
+    document.getElementById('no-results') ||
     document.getElementById('empty-state') ||
     document.getElementById('state-empty');
 
   elTotalRecords =
+    document.getElementById('result-count') ||
     document.getElementById('total-records') ||
     document.getElementById('records-count') ||
     document.getElementById('contador-registros');
@@ -149,6 +154,11 @@ function bindEvents() {
     element.addEventListener('input', applyFilters);
     element.addEventListener('change', applyFilters);
   });
+
+  const btnClear = document.getElementById('btn-clear-filters');
+  if (btnClear) {
+    btnClear.addEventListener('click', clearFilters);
+  }
 }
 
 async function tryFetch(url) {
@@ -304,6 +314,15 @@ function formatSelectLabel(value) {
   return String(value);
 }
 
+function clearFilters() {
+  if (filterUf) filterUf.value = '';
+  if (filterSindicato) filterSindicato.value = '';
+  if (filterAno) filterAno.value = '';
+  if (filterStatus) filterStatus.value = '';
+  if (searchInput) searchInput.value = '';
+  applyFilters();
+}
+
 function applyFilters() {
   const ufValue = filterUf?.value ?? '';
   const sindicatoValue = filterSindicato?.value ?? '';
@@ -319,7 +338,7 @@ function applyFilters() {
 
     const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
     const matchesSindicato =
-      !sindicatoValue || String(record.sindicato ?? '') === sindicatoValue;
+      !sindicatoValue || normalizeText(record.sindicato ?? '').includes(normalizeText(sindicatoValue));
     const matchesAno =
       !anoValue || String(record.ano_referencia ?? '') === anoValue;
     const matchesStatus = !statusValue || status === statusValue;
@@ -381,6 +400,7 @@ function renderTable() {
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       <td>${buildStatusBadge(record)}</td>
+      <td>${escapeHtml(record.fonte_documento ?? '—')}</td>
       <td>
         <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
           Detalhes
@@ -412,7 +432,7 @@ function buildStatusBadge(record) {
 function openDetail(record) {
   const isConflict = isConflictRecord(record);
   const modalBody = document.getElementById('detail-modal-body');
-  const modalTitle = document.getElementById('detail-modal-title');
+  const modalTitle = document.getElementById('detail-modal-label');
 
   if (modalTitle) {
     modalTitle.textContent = `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
@@ -467,6 +487,9 @@ function buildDetailHtml(record, isConflict) {
 
       <dt class="col-sm-4">Fonte do documento</dt>
       <dd class="col-sm-8">${escapeHtml(record.fonte_documento ?? '—')}</dd>
+
+      <dt class="col-sm-4">Conflito</dt>
+      <dd class="col-sm-8">${record.conflito ? 'Sim' : 'Não'}</dd>
 
       <dt class="col-sm-4">IDs conflitantes</dt>
       <dd class="col-sm-8">${escapeHtml(conflictIds)}</dd>
