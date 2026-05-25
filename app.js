@@ -8,6 +8,7 @@ const OVERRIDES_KEY = 'parametros_sindicais_overrides';
 const OVERRIDE_FIELDS = [
   'status_parametro', 'conflito', 'percentual_reajuste', 'data_base',
   'vigencia_inicio', 'vigencia_fim', 'observacao', 'ano_referencia', 'aplicado_em',
+  'origem_atualizacao', 'data_hora_aplicacao_manual',
 ];
 
 const EMBEDDED_DEMO = {
@@ -84,6 +85,7 @@ const EMBEDDED_DEMO = {
 let allRecords = [];
 let filteredRecords = [];
 let detailModal = null;
+let baseDataGeracao = null;
 
 let elLoading;
 let elUnavailable;
@@ -92,6 +94,9 @@ let elDataGeracao;
 let elTableBody;
 let elEmptyState;
 let elTotalRecords;
+let elLocalChangesNotice;
+let btnExportBase;
+let btnDiscardLocal;
 
 let filterUf;
 let filterSindicato;
@@ -117,6 +122,9 @@ function bindElements() {
   elUnavailable = document.getElementById('state-unavailable');
   elApp = document.getElementById('app');
   elDataGeracao = document.getElementById('data-geracao');
+  elLocalChangesNotice = document.getElementById('local-changes-notice');
+  btnExportBase = document.getElementById('btn-export-base');
+  btnDiscardLocal = document.getElementById('btn-discard-local');
 
   elTableBody =
     document.getElementById('table-body') ||
@@ -172,6 +180,9 @@ function bindEvents() {
     element.addEventListener('input', applyFilters);
     element.addEventListener('change', applyFilters);
   });
+
+  if (btnExportBase) btnExportBase.addEventListener('click', exportLocalBase);
+  if (btnDiscardLocal) btnDiscardLocal.addEventListener('click', discardLocalChanges);
 }
 
 async function tryFetch(url) {
@@ -239,12 +250,14 @@ async function loadData() {
   }
 
   allRecords = records;
+  baseDataGeracao = dataGeracao;
   loadLocalOverrides(allRecords);
   filteredRecords = [...allRecords];
 
   showApp(dataGeracao, demoMessage);
   populateFilterOptions();
   renderTable();
+  updateGovernanceUI();
 }
 
 function showUnavailable() {
@@ -639,12 +652,13 @@ function buildPendingSection(record) {
             <input type="date" class="form-control form-control-sm" id="apply-vigencia-fim" />
           </div>
           <div class="col-12">
-            <label for="apply-observacao" class="form-label form-label-sm">Observação</label>
+            <label for="apply-observacao" class="form-label form-label-sm">Observação <span class="text-danger">*</span></label>
             <textarea
               class="form-control form-control-sm"
               id="apply-observacao"
               rows="2"
-              placeholder="Observações sobre a aplicação manual do parâmetro"
+              placeholder="Obrigatório: cláusula consultada, página do PDF, trecho relevante ou motivo da decisão"
+              required
             ></textarea>
           </div>
         </div>
@@ -675,6 +689,11 @@ function applyParameter(record) {
   if (!vigenciaInicioEl?.value?.trim()) missing.push('Vigência início');
   if (!vigenciaFimEl?.value?.trim()) missing.push('Vigência fim');
 
+  const observacaoRaw = observacaoEl?.value?.trim();
+  if (!observacaoRaw) {
+    missing.push('Observação (justificativa obrigatória: cláusula consultada, página do PDF, trecho relevante ou motivo da decisão)');
+  }
+
   if (
     vigenciaInicioEl?.value && vigenciaFimEl?.value &&
     vigenciaFimEl.value < vigenciaInicioEl.value
@@ -696,6 +715,8 @@ function applyParameter(record) {
     ? new Date(`${dataBaseEl.value}T00:00:00`).getFullYear()
     : (vigenciaInicioEl.value ? new Date(`${vigenciaInicioEl.value}T00:00:00`).getFullYear() : null);
 
+  const now = new Date().toISOString();
+
   const updates = {
     status_parametro: 'valido',
     conflito: false,
@@ -703,9 +724,11 @@ function applyParameter(record) {
     data_base: dataBaseEl.value,
     vigencia_inicio: vigenciaInicioEl.value,
     vigencia_fim: vigenciaFimEl.value,
-    observacao: observacaoEl?.value?.trim() || record.observacao,
+    observacao: observacaoRaw,
     ano_referencia: anoReferencia,
-    aplicado_em: new Date().toISOString(),
+    aplicado_em: now,
+    origem_atualizacao: 'aplicacao_manual_tela',
+    data_hora_aplicacao_manual: now,
   };
 
   Object.assign(record, updates);
@@ -714,6 +737,7 @@ function applyParameter(record) {
   // Refresh filter options (e.g. the new ano_referencia may be new)
   populateFilterOptions();
   applyFilters();
+  updateGovernanceUI();
 
   if (detailModal) detailModal.hide();
 }
@@ -795,4 +819,34 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function updateGovernanceUI() {
+  const hasLocalChanges = !!localStorage.getItem(OVERRIDES_KEY);
+  if (elLocalChangesNotice) elLocalChangesNotice.classList.toggle('d-none', !hasLocalChanges);
+  if (btnDiscardLocal) btnDiscardLocal.classList.toggle('d-none', !hasLocalChanges);
+}
+
+function exportLocalBase() {
+  const exported = {
+    data_geracao: new Date().toISOString(),
+    registros: allRecords,
+  };
+  const json = JSON.stringify(exported, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `base_parametros_sindicais_${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function discardLocalChanges() {
+  if (!confirm('Deseja descartar todas as alterações locais? A base original será restaurada e todas as alterações aplicadas nesta sessão serão perdidas.')) return;
+  localStorage.removeItem(OVERRIDES_KEY);
+  location.reload();
 }
