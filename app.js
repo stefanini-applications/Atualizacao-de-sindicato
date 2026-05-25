@@ -2,6 +2,19 @@
 
 const DATA_URL = 'data/base_parametros_sindicais.json';
 const EXAMPLE_DATA_URL = 'data/base_parametros_sindicais.example.json';
+const STORAGE_KEY = 'parametros_sindicais_aplicados';
+
+const OVERRIDE_ALLOWED_FIELDS = [
+  'percentual_reajuste',
+  'data_base',
+  'vigencia_inicio',
+  'vigencia_fim',
+  'ano_referencia',
+  'status_parametro',
+  'conflito',
+  'observacao',
+  'aplicado_manualmente_em',
+];
 
 const EMBEDDED_DEMO = {
   data_geracao: null,
@@ -37,6 +50,22 @@ const EMBEDDED_DEMO = {
       vigencia_fim: '2026-03-31',
       fonte_documento: 'CCT 2025',
       observacao: null,
+    },
+    {
+      id_registro_reajuste: 'DEMO-PEND-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINDTEST-SP',
+      uf: 'SP',
+      categoria: null,
+      ano_referencia: null,
+      status_parametro: 'pendente_revisao',
+      conflito: false,
+      percentual_reajuste: null,
+      data_base: null,
+      vigencia_inicio: null,
+      vigencia_fim: null,
+      fonte_documento: 'CCT/SP/SINDTEST/CCT_2025_SINDTEST-SP.pdf',
+      observacao: 'Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível',
     },
     {
       id_registro_reajuste: null,
@@ -216,6 +245,7 @@ async function loadData() {
   }
 
   allRecords = records;
+  loadAppliedOverrides();
   filteredRecords = [...allRecords];
 
   showApp(dataGeracao, demoMessage);
@@ -227,6 +257,43 @@ function showUnavailable() {
   if (elLoading) elLoading.classList.add('d-none');
   if (elApp) elApp.classList.add('d-none');
   if (elUnavailable) elUnavailable.classList.remove('d-none');
+}
+
+function loadAppliedOverrides() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const overrides = JSON.parse(raw);
+    if (!overrides || typeof overrides !== 'object' || Array.isArray(overrides)) return;
+    allRecords.forEach((record) => {
+      const id = record.id_registro_reajuste;
+      if (!id || !overrides[id] || typeof overrides[id] !== 'object') return;
+      const safe = {};
+      OVERRIDE_ALLOWED_FIELDS.forEach((field) => {
+        if (Object.prototype.hasOwnProperty.call(overrides[id], field)) {
+          safe[field] = overrides[id][field];
+        }
+      });
+      Object.assign(record, safe);
+    });
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function saveAppliedOverride(record) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const overrides = raw ? JSON.parse(raw) : {};
+    const stored = {};
+    OVERRIDE_ALLOWED_FIELDS.forEach((field) => {
+      stored[field] = record[field] ?? null;
+    });
+    overrides[record.id_registro_reajuste] = stored;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+  } catch {
+    // ignore storage errors (private browsing, quota exceeded, etc.)
+  }
 }
 
 function showApp(dataGeracao, demoMessage = null) {
@@ -369,6 +436,8 @@ function renderTable() {
 
     if (isConflict) {
       row.classList.add('row-conflito');
+    } else if (record.status_parametro === 'pendente_revisao') {
+      row.classList.add('row-pendente');
     }
 
     row.innerHTML = `
@@ -413,7 +482,7 @@ function buildStatusBadge(record) {
 function openDetail(record) {
   const isConflict = isConflictRecord(record);
   const modalBody = document.getElementById('detail-modal-body');
-  const modalTitle = document.getElementById('detail-modal-title');
+  const modalTitle = document.getElementById('detail-modal-label');
 
   if (modalTitle) {
     modalTitle.textContent = `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
@@ -421,6 +490,7 @@ function openDetail(record) {
 
   if (modalBody) {
     modalBody.innerHTML = buildDetailHtml(record, isConflict);
+    bindDetailModalEvents(record, modalBody);
   }
 
   if (detailModal) {
@@ -429,14 +499,20 @@ function openDetail(record) {
 }
 
 function buildDetailHtml(record, isConflict) {
-  const conflictSection = isConflict ? buildConflictSection(record) : '';
+  const isPending = record.status_parametro === 'pendente_revisao';
+  let specialSection = '';
+  if (isPending) {
+    specialSection = buildPendingSection(record);
+  } else if (isConflict) {
+    specialSection = buildConflictSection(record);
+  }
 
   return `
     <div class="mb-3">
       ${buildStatusBadge(record)}
     </div>
 
-    ${conflictSection}
+    ${specialSection}
 
     <dl class="row">
       <dt class="col-sm-4">ID do registro</dt>
@@ -468,6 +544,16 @@ function buildDetailHtml(record, isConflict) {
 
       <dt class="col-sm-4">Fonte do documento</dt>
       <dd class="col-sm-8">${buildFonteLink(record.fonte_documento)}</dd>
+
+      ${record.observacao ? `
+      <dt class="col-sm-4">Observação</dt>
+      <dd class="col-sm-8"><span class="text-secondary small">${escapeHtml(record.observacao)}</span></dd>
+      ` : ''}
+
+      ${record.aplicado_manualmente_em ? `
+      <dt class="col-sm-4">Aplicado manualmente em</dt>
+      <dd class="col-sm-8"><span class="text-secondary small">${escapeHtml(formatDateTime(record.aplicado_manualmente_em))}</span></dd>
+      ` : ''}
     </dl>
   `;
 }
@@ -504,6 +590,185 @@ function buildConflictSection(record) {
     </div>
   `;
 }
+
+function buildPendingSection(record) {
+  const pdfButton = isPdfPath(record.fonte_documento)
+    ? `<a href="${escapeHtml(record.fonte_documento)}" target="_blank" rel="noopener noreferrer"
+         class="btn btn-sm btn-outline-secondary me-2">
+         📄 Abrir PDF
+       </a>`
+    : '';
+
+  const observacaoEscapada = escapeHtml(record.observacao ?? '');
+
+  return `
+    <div class="detail-pending-box mb-3" role="note" aria-label="Sindicato pendente de revisão">
+      <h3 class="pending-section-title">⏳ Sindicato pendente de revisão</h3>
+      <p class="pending-info-msg">
+        Este sindicato existe na pasta CCT, mas ainda não possui parâmetro aprovado disponível.
+        Consulte o documento de origem, analise manualmente a CCT e aplique o parâmetro correto.
+      </p>
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        ${pdfButton}
+        <button type="button" id="btn-mostrar-aplicar" class="btn btn-sm btn-warning">
+          Aplicar parâmetro
+        </button>
+      </div>
+    </div>
+
+    <div id="apply-form-section" class="d-none border rounded p-3 mb-3 bg-light">
+      <h4 class="fs-6 fw-semibold mb-3">Aplicar parâmetro manualmente</h4>
+      <div id="apply-form-error" class="alert alert-danger d-none small" role="alert"></div>
+      <form id="apply-param-form" novalidate>
+        <div class="row g-2 mb-3">
+          <div class="col-sm-6">
+            <label for="apply-percentual" class="form-label form-label-sm fw-semibold">
+              Percentual de reajuste (%) <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="number" id="apply-percentual" name="percentual_reajuste"
+              class="form-control form-control-sm" step="0.01" min="-100" max="1000"
+              placeholder="Ex.: 5.50" autocomplete="off" />
+          </div>
+          <div class="col-sm-6">
+            <label for="apply-data-base" class="form-label form-label-sm fw-semibold">
+              Data-base <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="date" id="apply-data-base" name="data_base"
+              class="form-control form-control-sm" />
+          </div>
+          <div class="col-sm-6">
+            <label for="apply-vigencia-inicio" class="form-label form-label-sm fw-semibold">
+              Vigência início <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="date" id="apply-vigencia-inicio" name="vigencia_inicio"
+              class="form-control form-control-sm" />
+          </div>
+          <div class="col-sm-6">
+            <label for="apply-vigencia-fim" class="form-label form-label-sm fw-semibold">
+              Vigência fim <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="date" id="apply-vigencia-fim" name="vigencia_fim"
+              class="form-control form-control-sm" />
+          </div>
+          <div class="col-12">
+            <label for="apply-observacao" class="form-label form-label-sm fw-semibold">
+              Observação
+            </label>
+            <textarea id="apply-observacao" name="observacao"
+              class="form-control form-control-sm" rows="2">${observacaoEscapada}</textarea>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-sm btn-warning">Confirmar aplicação</button>
+          <button type="button" id="btn-cancelar-aplicar" class="btn btn-sm btn-outline-secondary">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+
+function bindDetailModalEvents(record, modalBody) {
+  if (record.status_parametro !== 'pendente_revisao') return;
+
+  const btnMostrar = modalBody.querySelector('#btn-mostrar-aplicar');
+  const formSection = modalBody.querySelector('#apply-form-section');
+
+  if (btnMostrar && formSection) {
+    btnMostrar.addEventListener('click', () => {
+      formSection.classList.remove('d-none');
+      btnMostrar.classList.add('d-none');
+    });
+  }
+
+  const btnCancelar = modalBody.querySelector('#btn-cancelar-aplicar');
+  if (btnCancelar && formSection && btnMostrar) {
+    btnCancelar.addEventListener('click', () => {
+      formSection.classList.add('d-none');
+      btnMostrar.classList.remove('d-none');
+      const errorEl = formSection.querySelector('#apply-form-error');
+      if (errorEl) errorEl.classList.add('d-none');
+    });
+  }
+
+  const applyForm = modalBody.querySelector('#apply-param-form');
+  if (applyForm) {
+    applyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      applyParameter(record, applyForm, modalBody);
+    });
+  }
+}
+
+function applyParameter(record, form, modalBody) {
+  const percentualRaw = form.querySelector('[name="percentual_reajuste"]').value.trim().replace(',', '.');
+  const dataBase = form.querySelector('[name="data_base"]').value.trim();
+  const vigInicio = form.querySelector('[name="vigencia_inicio"]').value.trim();
+  const vigFim = form.querySelector('[name="vigencia_fim"]').value.trim();
+  const observacao = form.querySelector('[name="observacao"]').value.trim();
+
+  const errorEl = modalBody.querySelector('#apply-form-error');
+
+  const missing = [];
+  if (!percentualRaw) missing.push('Percentual de reajuste');
+  if (!dataBase) missing.push('Data-base');
+  if (!vigInicio) missing.push('Vigência início');
+  if (!vigFim) missing.push('Vigência fim');
+
+  if (missing.length > 0) {
+    if (errorEl) {
+      errorEl.textContent = `Campos obrigatórios não preenchidos: ${missing.join(', ')}.`;
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+
+  const percentual = parseFloat(percentualRaw);
+  if (Number.isNaN(percentual)) {
+    if (errorEl) {
+      errorEl.textContent = 'Percentual de reajuste inválido. Use um número (ex.: 5.50).';
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+
+  if (vigFim < vigInicio) {
+    if (errorEl) {
+      errorEl.textContent = 'Vigência fim não pode ser anterior à vigência início.';
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+
+  if (errorEl) errorEl.classList.add('d-none');
+
+  // Update record in-place (reference shared with allRecords and filteredRecords)
+  record.percentual_reajuste = percentual;
+  record.data_base = dataBase;
+  record.vigencia_inicio = vigInicio;
+  record.vigencia_fim = vigFim;
+  record.observacao = observacao || null;
+  record.status_parametro = 'valido';
+  record.conflito = false;
+  record.ano_referencia = new Date(`${vigInicio}T00:00:00`).getFullYear();
+  record.aplicado_manualmente_em = new Date().toISOString();
+
+  saveAppliedOverride(record);
+
+  // Refresh year filter options to include the newly set year
+  populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
+  applyFilters();
+
+  // Refresh modal body to show updated (now valid) record
+  modalBody.innerHTML = buildDetailHtml(record, isConflictRecord(record));
+  bindDetailModalEvents(record, modalBody);
+
+  // Update modal title with new year
+  const modalTitle = document.getElementById('detail-modal-label');
+  if (modalTitle) {
+    modalTitle.textContent = `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
+  }
+}
+
 
 function isPdfPath(value) {
   return typeof value === 'string' && value.trim().toLowerCase().endsWith('.pdf');

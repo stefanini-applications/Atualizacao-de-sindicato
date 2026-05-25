@@ -89,6 +89,15 @@ body {
   color: #6c757d;
 }
 
+/* Pending row highlight */
+#params-tbody tr.row-pendente {
+  --bs-table-bg: #fffde7;
+}
+
+#params-tbody tr.row-pendente:hover {
+  --bs-table-bg: #fff9c4;
+}
+
 /* ── Detail modal ────────────────────────────────────────────────── */
 .detail-field-label {
   font-size: 0.75rem;
@@ -147,6 +156,31 @@ body {
 .conflict-pdf-link:hover {
   text-decoration: underline;
   background-color: #ffc94d;
+}
+
+/* ── Pending section in modal ────────────────────────────────────── */
+.detail-pending-box {
+  background-color: #fffde7;
+  border: 1px solid #fff176;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.pending-section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #5a4a00;
+  margin-bottom: 0.4rem;
+}
+
+.pending-info-msg {
+  font-size: 0.875rem;
+  color: #5a4a00;
+  background-color: #fff9c4;
+  border-left: 3px solid #fff176;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
 }
 
 /* ── Fonte links ─────────────────────────────────────────────────── */
