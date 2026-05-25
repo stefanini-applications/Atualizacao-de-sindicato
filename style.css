@@ -199,3 +199,11 @@ body {
 .fonte-link:hover {
   text-decoration: underline;
 }
+
+/* ── Governance notice ───────────────────────────────────────────── */
+#local-changes-notice code {
+  font-size: 0.8rem;
+  background-color: #ffeeba;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2rem;
+}
