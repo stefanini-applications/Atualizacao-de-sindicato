@@ -264,7 +264,7 @@ function populateFilterOptions() {
   populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
   populateSelect(filterSindicato, uniqueValues(allRecords, 'sindicato'), 'Todos os sindicatos');
   populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
-  populateSelect(filterStatus, ['valido', 'conflito'], 'Todos os status');
+  populateSelect(filterStatus, ['valido', 'conflito', 'pendente_revisao'], 'Todos os status');
 }
 
 function populateSelect(selectElement, values, defaultLabel) {
@@ -300,6 +300,7 @@ function uniqueValues(records, fieldName) {
 function formatSelectLabel(value) {
   if (value === 'valido') return 'Válido';
   if (value === 'conflito') return 'Conflito';
+  if (value === 'pendente_revisao') return 'Pendente revisão';
   return String(value);
 }
 
@@ -312,7 +313,9 @@ function applyFilters() {
 
   filteredRecords = allRecords.filter((record) => {
     const isConflict = isConflictRecord(record);
-    const status = isConflict ? 'conflito' : 'valido';
+    const status = record.status_parametro === 'pendente_revisao'
+      ? 'pendente_revisao'
+      : isConflict ? 'conflito' : 'valido';
 
     const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
     const matchesSindicato =
@@ -377,7 +380,7 @@ function renderTable() {
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
-      <td>${buildStatusBadge(isConflict)}</td>
+      <td>${buildStatusBadge(record)}</td>
       <td>
         <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
           Detalhes
@@ -396,11 +399,13 @@ function isConflictRecord(record) {
   return record.status_parametro === 'conflito' || record.conflito === true;
 }
 
-function buildStatusBadge(isConflict) {
-  if (isConflict) {
+function buildStatusBadge(record) {
+  if (record.status_parametro === 'pendente_revisao') {
+    return '<span class="badge badge-pendente">⏳ Pendente revisão</span>';
+  }
+  if (isConflictRecord(record)) {
     return '<span class="badge badge-conflito">⚠ Conflito</span>';
   }
-
   return '<span class="badge badge-valido">✔ Válido</span>';
 }
 
@@ -429,7 +434,7 @@ function buildDetailHtml(record, isConflict) {
 
   return `
     <div class="mb-3">
-      ${buildStatusBadge(isConflict)}
+      ${buildStatusBadge(record)}
     </div>
 
     <dl class="row">
