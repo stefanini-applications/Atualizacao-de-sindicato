@@ -122,3 +122,41 @@ body {
   margin: 0.15rem;
   font-family: var(--bs-font-monospace, monospace);
 }
+
+.conflict-section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #7a4100;
+  margin-bottom: 0.4rem;
+}
+
+.conflict-warning-msg {
+  font-size: 0.875rem;
+  color: #5a3300;
+  background-color: #fff3cd;
+  border-left: 3px solid #ffe0a3;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.conflict-pdf-link {
+  text-decoration: none;
+}
+
+.conflict-pdf-link:hover {
+  text-decoration: underline;
+  background-color: #ffc94d;
+}
+
+/* ── Fonte links ─────────────────────────────────────────────────── */
+.fonte-link {
+  font-size: 0.75rem;
+  color: #0d6efd;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.fonte-link:hover {
+  text-decoration: underline;
+}

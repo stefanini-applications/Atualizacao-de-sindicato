@@ -381,6 +381,7 @@ function renderTable() {
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       <td>${buildStatusBadge(record)}</td>
+      <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
         <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
           Detalhes
@@ -428,14 +429,14 @@ function openDetail(record) {
 }
 
 function buildDetailHtml(record, isConflict) {
-  const conflictIds = Array.isArray(record.ids_registros_conflitantes)
-    ? record.ids_registros_conflitantes.join(', ')
-    : record.ids_registros_conflitantes ?? '—';
+  const conflictSection = isConflict ? buildConflictSection(record) : '';
 
   return `
     <div class="mb-3">
       ${buildStatusBadge(record)}
     </div>
+
+    ${conflictSection}
 
     <dl class="row">
       <dt class="col-sm-4">ID do registro</dt>
@@ -454,27 +455,75 @@ function buildDetailHtml(record, isConflict) {
       <dd class="col-sm-8">${escapeHtml(record.ano_referencia ?? '—')}</dd>
 
       <dt class="col-sm-4">Percentual de reajuste</dt>
-      <dd class="col-sm-8">${formatPercent(record.percentual_reajuste)}</dd>
+      <dd class="col-sm-8">${isConflict ? '—' : formatPercent(record.percentual_reajuste)}</dd>
 
       <dt class="col-sm-4">Data-base</dt>
-      <dd class="col-sm-8">${formatDate(record.data_base)}</dd>
+      <dd class="col-sm-8">${isConflict ? '—' : formatDate(record.data_base)}</dd>
 
       <dt class="col-sm-4">Vigência início</dt>
-      <dd class="col-sm-8">${formatDate(record.vigencia_inicio)}</dd>
+      <dd class="col-sm-8">${isConflict ? '—' : formatDate(record.vigencia_inicio)}</dd>
 
       <dt class="col-sm-4">Vigência fim</dt>
-      <dd class="col-sm-8">${formatDate(record.vigencia_fim)}</dd>
+      <dd class="col-sm-8">${isConflict ? '—' : formatDate(record.vigencia_fim)}</dd>
 
       <dt class="col-sm-4">Fonte do documento</dt>
-      <dd class="col-sm-8">${escapeHtml(record.fonte_documento ?? '—')}</dd>
-
-      <dt class="col-sm-4">IDs conflitantes</dt>
-      <dd class="col-sm-8">${escapeHtml(conflictIds)}</dd>
-
-      <dt class="col-sm-4">Observação</dt>
-      <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
+      <dd class="col-sm-8">${buildFonteLink(record.fonte_documento)}</dd>
     </dl>
   `;
+}
+
+function buildConflictSection(record) {
+  const conflictingIds = Array.isArray(record.ids_registros_conflitantes)
+    ? record.ids_registros_conflitantes
+    : (record.ids_registros_conflitantes ? [record.ids_registros_conflitantes] : []);
+
+  const idBadges = conflictingIds.length > 0
+    ? conflictingIds.map((id) => {
+        if (isPdfPath(id)) {
+          return `<a href="${escapeHtml(id)}" target="_blank" rel="noopener noreferrer" class="conflicting-id conflict-pdf-link">${escapeHtml(pdfLabel(id))}</a>`;
+        }
+        return `<span class="conflicting-id">${escapeHtml(id)}</span>`;
+      }).join(' ')
+    : '<span class="text-secondary">—</span>';
+
+  const observacao = record.observacao
+    ? `<p class="mb-0 small">${escapeHtml(record.observacao)}</p>`
+    : '';
+
+  return `
+    <div class="detail-conflict-box mb-3" role="alert" aria-label="Informações do conflito">
+      <h3 class="conflict-section-title">⚠ Informações do conflito</h3>
+      <p class="conflict-warning-msg">
+        Este parâmetro possui conflito e não deve ser usado para precificação até revisão manual.
+      </p>
+      <div class="mb-2">
+        <span class="detail-field-label">Registros/documentos conflitantes:</span>
+        <div class="mt-1">${idBadges}</div>
+      </div>
+      ${observacao ? `<div><span class="detail-field-label">Observação:</span><br />${observacao}</div>` : ''}
+    </div>
+  `;
+}
+
+function isPdfPath(value) {
+  return typeof value === 'string' && value.trim().toLowerCase().endsWith('.pdf');
+}
+
+function pdfLabel(path) {
+  const parts = path.split('/');
+  return parts[parts.length - 1] || path;
+}
+
+function buildFonteLink(value) {
+  if (!value || typeof value !== 'string' || !value.trim()) {
+    return '—';
+  }
+
+  if (isPdfPath(value)) {
+    return `<a href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer" class="fonte-link">${escapeHtml(pdfLabel(value))}</a>`;
+  }
+
+  return `<span class="text-secondary">${escapeHtml(value)}</span>`;
 }
 
 function formatPercent(value) {
