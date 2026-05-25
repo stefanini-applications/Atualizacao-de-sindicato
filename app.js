@@ -381,6 +381,7 @@ function renderTable() {
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       <td>${buildStatusBadge(record)}</td>
+      <td class="fonte-cell">${buildFonteLink(record.fonte_documento, true)}</td>
       <td>
         <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
           Detalhes
@@ -432,10 +433,27 @@ function buildDetailHtml(record, isConflict) {
     ? record.ids_registros_conflitantes.join(', ')
     : record.ids_registros_conflitantes ?? '—';
 
+  const conflictSection = isConflict
+    ? `
+    <div class="detail-conflict-box mb-3" role="alert">
+      <div class="fw-bold mb-1" style="color:#7a4100;">⚠ Informações do conflito</div>
+      <dl class="row mb-1 small">
+        <dt class="col-sm-4">IDs conflitantes</dt>
+        <dd class="col-sm-8 font-monospace">${escapeHtml(conflictIds)}</dd>
+        ${record.observacao ? `<dt class="col-sm-4">Observação</dt><dd class="col-sm-8">${escapeHtml(record.observacao)}</dd>` : ''}
+      </dl>
+      <p class="mb-0 small fw-semibold" style="color:#842029;">
+        Este parâmetro possui conflito e não deve ser usado para precificação até revisão manual.
+      </p>
+    </div>`
+    : '';
+
   return `
     <div class="mb-3">
       ${buildStatusBadge(record)}
     </div>
+
+    ${conflictSection}
 
     <dl class="row">
       <dt class="col-sm-4">ID do registro</dt>
@@ -466,15 +484,32 @@ function buildDetailHtml(record, isConflict) {
       <dd class="col-sm-8">${formatDate(record.vigencia_fim)}</dd>
 
       <dt class="col-sm-4">Fonte do documento</dt>
-      <dd class="col-sm-8">${escapeHtml(record.fonte_documento ?? '—')}</dd>
-
-      <dt class="col-sm-4">IDs conflitantes</dt>
-      <dd class="col-sm-8">${escapeHtml(conflictIds)}</dd>
+      <dd class="col-sm-8">${buildFonteLink(record.fonte_documento, false)}</dd>
 
       <dt class="col-sm-4">Observação</dt>
       <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
     </dl>
   `;
+}
+
+function buildFonteLink(fonte, isTableCell) {
+  if (!fonte || typeof fonte !== 'string' || !fonte.trim()) {
+    return '—';
+  }
+
+  const trimmed = fonte.trim();
+  const isPdf = /\.pdf$/i.test(trimmed);
+
+  if (!isPdf) {
+    return escapeHtml(trimmed);
+  }
+
+  const href = encodeURI(trimmed);
+  const label = isTableCell
+    ? escapeHtml(trimmed.split('/').pop() || 'Abrir PDF')
+    : escapeHtml(trimmed);
+
+  return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 }
 
 function formatPercent(value) {
