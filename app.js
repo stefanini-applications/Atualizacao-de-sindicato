@@ -381,6 +381,7 @@ function renderTable() {
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       <td>${buildStatusBadge(record)}</td>
+      <td>${buildFonteCell(record.fonte_documento)}</td>
       <td>
         <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
           Detalhes
@@ -427,15 +428,67 @@ function openDetail(record) {
   }
 }
 
-function buildDetailHtml(record, isConflict) {
-  const conflictIds = Array.isArray(record.ids_registros_conflitantes)
-    ? record.ids_registros_conflitantes.join(', ')
-    : record.ids_registros_conflitantes ?? '—';
+function isPdfPath(value) {
+  return typeof value === 'string' && value.trim().toLowerCase().endsWith('.pdf');
+}
 
+function buildFonteCell(value) {
+  if (!value || typeof value !== 'string' || !value.trim()) {
+    return '<span class="text-secondary">—</span>';
+  }
+  const trimmed = value.trim();
+  if (isPdfPath(trimmed)) {
+    const filename = trimmed.split('/').pop();
+    return `<a href="${escapeHtml(trimmed)}" target="_blank" rel="noopener noreferrer" class="fonte-link" title="${escapeHtml(trimmed)}">${escapeHtml(filename)}</a>`;
+  }
+  return `<span class="fonte-cell" title="${escapeHtml(trimmed)}">${escapeHtml(trimmed)}</span>`;
+}
+
+function buildFonteLink(value) {
+  if (!value || typeof value !== 'string' || !value.trim()) {
+    return 'Fonte não disponível';
+  }
+  const trimmed = value.trim();
+  if (isPdfPath(trimmed)) {
+    const filename = trimmed.split('/').pop();
+    return `<a href="${escapeHtml(trimmed)}" target="_blank" rel="noopener noreferrer">${escapeHtml(filename)}</a>`;
+  }
+  return escapeHtml(trimmed);
+}
+
+function buildConflictSection(record) {
+  let idsHtml;
+  if (Array.isArray(record.ids_registros_conflitantes) && record.ids_registros_conflitantes.length > 0) {
+    idsHtml = record.ids_registros_conflitantes
+      .map((id) => `<span class="conflicting-id">${escapeHtml(String(id))}</span>`)
+      .join(' ');
+  } else {
+    idsHtml = escapeHtml(String(record.ids_registros_conflitantes ?? '—'));
+  }
+
+  return `
+    <div class="detail-conflict-box mb-3" role="alert">
+      <h3 class="fs-6 fw-bold mb-2">⚠ Informações do conflito</h3>
+      <dl class="row mb-2">
+        <dt class="col-sm-4">IDs conflitantes</dt>
+        <dd class="col-sm-8">${idsHtml}</dd>
+        <dt class="col-sm-4">Observação</dt>
+        <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
+      </dl>
+      <p class="mb-0 small fw-semibold">
+        Este parâmetro possui conflito e não deve ser usado para precificação até revisão manual.
+      </p>
+    </div>
+  `;
+}
+
+function buildDetailHtml(record, isConflict) {
   return `
     <div class="mb-3">
       ${buildStatusBadge(record)}
     </div>
+
+    ${isConflict ? buildConflictSection(record) : ''}
 
     <dl class="row">
       <dt class="col-sm-4">ID do registro</dt>
@@ -466,13 +519,12 @@ function buildDetailHtml(record, isConflict) {
       <dd class="col-sm-8">${formatDate(record.vigencia_fim)}</dd>
 
       <dt class="col-sm-4">Fonte do documento</dt>
-      <dd class="col-sm-8">${escapeHtml(record.fonte_documento ?? '—')}</dd>
+      <dd class="col-sm-8">${buildFonteLink(record.fonte_documento)}</dd>
 
-      <dt class="col-sm-4">IDs conflitantes</dt>
-      <dd class="col-sm-8">${escapeHtml(conflictIds)}</dd>
-
-      <dt class="col-sm-4">Observação</dt>
-      <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
+      ${!isConflict ? `
+        <dt class="col-sm-4">Observação</dt>
+        <dd class="col-sm-8">${escapeHtml(record.observacao ?? '—')}</dd>
+      ` : ''}
     </dl>
   `;
 }

@@ -89,6 +89,16 @@ body {
   color: #6c757d;
 }
 
+.fonte-link {
+  font-size: 0.75rem;
+  max-width: 160px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
 /* ── Detail modal ────────────────────────────────────────────────── */
 .detail-field-label {
   font-size: 0.75rem;
