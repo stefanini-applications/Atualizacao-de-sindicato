@@ -170,3 +170,29 @@ body {
 .cct-item-obs {
   font-style: italic;
 }
+
+.cct-item-conflict-alert {
+  background-color: #fff8e1;
+  border: 1px solid #ffe0a3;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8125rem;
+  color: #7a4100;
+}
+
+.cct-item-pending-notice {
+  background-color: #fffbf0;
+  border-left: 3px solid #ffc107;
+  border-radius: 0 0.25rem 0.25rem 0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8125rem;
+  color: #664d03;
+}
+
+.cct-pdf-link {
+  font-size: 0.75rem;
+}
+
+.cct-pdf-link:hover {
+  text-decoration: underline;
+}

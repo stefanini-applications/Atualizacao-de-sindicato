@@ -435,44 +435,77 @@ function buildDetailHtml(r, isConflict) {
 }
 
 function buildCctItemsHtml(itens) {
-  const entries = Object.entries(itens);
-  if (entries.length === 0) return '';
+  // Render items in the canonical order defined by AC2
+  const CCT_ITEM_ORDER = ['reajuste_salarial', 'auxilio_alimentacao', 'adicional_noturno', 'hora_extra', 'plr'];
+  const orderedKeys = [
+    ...CCT_ITEM_ORDER.filter((k) => k in itens),
+    ...Object.keys(itens).filter((k) => !CCT_ITEM_ORDER.includes(k)),
+  ];
+
+  if (orderedKeys.length === 0) return '';
 
   let html = `
     <hr class="my-3"/>
     <h3 class="cct-section-title">Itens da CCT</h3>
     <div class="row g-3">`;
 
-  entries.forEach(([key, item]) => {
+  orderedKeys.forEach((key) => {
+    const item = itens[key];
     const label = CCT_ITEM_LABELS[key] ?? key;
     const valorDisplay = formatCctValor(item);
     const badge = statusBadgeItem(item);
-    const fonte = item.fonte_documento ?? '—';
-    const obs = item.observacao ?? null;
-    const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
-    const origem = item.origem_atualizacao ?? null;
 
-    let metaHtml = '';
-    if (fonte !== '—') {
-      metaHtml += `<div class="cct-item-meta">Fonte: ${escHtml(fonte)}</div>`;
-    }
-    if (obs) {
-      metaHtml += `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`;
-    }
-    if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
-    }
-    if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+    // Tipo / unidade
+    let tipoUnidadeHtml = '';
+    if (item.tipo || item.unidade) {
+      const parts = [item.tipo, item.unidade].filter(Boolean).join(' | ');
+      tipoUnidadeHtml = `<div class="cct-item-meta">Tipo: ${escHtml(parts)}</div>`;
     }
 
-    let conflictIds = '';
-    if (item.conflito && Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
-      const ids = item.ids_registros_conflitantes
-        .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
-        .join('');
-      conflictIds = `<div class="mt-1">${ids}</div>`;
+    // Observação
+    const obsHtml = item.observacao
+      ? `<div class="cct-item-meta cct-item-obs">${escHtml(item.observacao)}</div>`
+      : '';
+
+    // Fonte do documento — always shown; PDF becomes an "Abrir PDF" link (AC7)
+    let fonteHtml;
+    if (item.fonte_documento) {
+      fonteHtml = `<div class="cct-item-meta">Fonte:&nbsp;<a href="/${escAttr(item.fonte_documento)}" target="_blank" rel="noopener" class="cct-pdf-link">Abrir PDF</a></div>`;
+    } else {
+      fonteHtml = `<div class="cct-item-meta">Fonte: <span class="text-secondary">—</span></div>`;
     }
+
+    // Validation metadata
+    let extraMeta = '';
+    if (item.data_validacao) {
+      extraMeta += `<div class="cct-item-meta">Validado em: ${escHtml(formatDateTime(item.data_validacao))}</div>`;
+    }
+    if (item.origem_atualizacao) {
+      extraMeta += `<div class="cct-item-meta">Origem: ${escHtml(item.origem_atualizacao)}</div>`;
+    }
+
+    // Conflict block — AC8: conflicting IDs + alert that item must not be used
+    let conflictHtml = '';
+    if (item.status_parametro === 'conflito' || item.conflito === true) {
+      let idsHtml = '';
+      if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+        const ids = item.ids_registros_conflitantes
+          .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
+          .join('');
+        idsHtml = `<div class="mt-1">${ids}</div>`;
+      }
+      conflictHtml = `
+        <div class="cct-item-conflict-alert mt-2">
+          <div class="fw-semibold mb-1">⚠ Conflito detectado</div>
+          ${idsHtml}
+          <div class="mt-1 small">Este item não deve ser utilizado até a resolução manual do conflito.</div>
+        </div>`;
+    }
+
+    // Pending notice — AC9: clear indication that item needs review
+    const pendingHtml = item.status_parametro === 'pendente_revisao'
+      ? `<div class="cct-item-pending-notice mt-2">⏳ Este item ainda precisa de revisão antes de ser utilizado.</div>`
+      : '';
 
     html += `
       <div class="col-12 col-sm-6">
@@ -482,8 +515,12 @@ function buildCctItemsHtml(itens) {
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
-          ${metaHtml}
-          ${conflictIds}
+          ${tipoUnidadeHtml}
+          ${obsHtml}
+          ${fonteHtml}
+          ${extraMeta}
+          ${conflictHtml}
+          ${pendingHtml}
         </div>
       </div>`;
   });
