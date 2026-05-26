@@ -5,13 +5,77 @@
     "sindicato": "SESCON-MG",
     "uf": "MG",
     "categoria": "Técnicos em Contabilidade",
+    "ano_referencia": 2025,
     "status_parametro": "valido",
     "conflito": false,
     "percentual_reajuste": 5.5,
     "data_base": "2025-01-01",
     "vigencia_inicio": "2025-01-01",
     "vigencia_fim": "2025-12-31",
-    "observacao": null
+    "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+    "observacao": null,
+    "itens_cct": {
+      "reajuste_salarial": {
+        "valor": 5.5,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": null,
+        "data_validacao": "2025-03-01T10:00:00",
+        "origem_atualizacao": "importacao_pdf"
+      },
+      "auxilio_alimentacao": {
+        "valor": null,
+        "tipo": "valor_mensal",
+        "unidade": "BRL",
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": "Item ainda não validado",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "adicional_noturno": {
+        "valor": null,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": null,
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "hora_extra": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": null,
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "plr": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": null,
+        "data_validacao": null,
+        "origem_atualizacao": null
+      }
+    }
   },
   {
     "id_registro_reajuste": "REG-002",
@@ -19,13 +83,77 @@
     "sindicato": "SINTTEL-MG",
     "uf": "MG",
     "categoria": "Telecomunicações",
+    "ano_referencia": 2025,
     "status_parametro": "valido",
     "conflito": false,
     "percentual_reajuste": 6.0,
     "data_base": "2025-04-01",
     "vigencia_inicio": "2025-04-01",
     "vigencia_fim": "2026-03-31",
-    "observacao": null
+    "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+    "observacao": null,
+    "itens_cct": {
+      "reajuste_salarial": {
+        "valor": 6.0,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": null,
+        "data_validacao": "2025-04-10T09:30:00",
+        "origem_atualizacao": "importacao_pdf"
+      },
+      "auxilio_alimentacao": {
+        "valor": 880.00,
+        "tipo": "valor_mensal",
+        "unidade": "BRL",
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": null,
+        "data_validacao": "2025-04-10T09:35:00",
+        "origem_atualizacao": "importacao_pdf"
+      },
+      "adicional_noturno": {
+        "valor": 35,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": null,
+        "data_validacao": "2025-04-10T09:40:00",
+        "origem_atualizacao": "importacao_pdf"
+      },
+      "hora_extra": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": "Regra não extraída do PDF — requer revisão manual",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "plr": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "pendente_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": null,
+        "data_validacao": null,
+        "origem_atualizacao": null
+      }
+    }
   },
   {
     "id_registro_reajuste": null,
@@ -33,12 +161,76 @@
     "sindicato": "SENALBA-SP",
     "uf": "SP",
     "categoria": "Trabalhadores em Empresas de Asseio e Conservação",
+    "ano_referencia": 2025,
     "status_parametro": "conflito",
     "conflito": true,
     "percentual_reajuste": null,
     "data_base": null,
     "vigencia_inicio": null,
     "vigencia_fim": null,
-    "observacao": "Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: REG-003, REG-004."
+    "fonte_documento": null,
+    "observacao": "Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: REG-003, REG-004.",
+    "itens_cct": {
+      "reajuste_salarial": {
+        "valor": null,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "conflito",
+        "conflito": true,
+        "ids_registros_conflitantes": ["REG-003", "REG-004"],
+        "fonte_documento": null,
+        "observacao": "Conflito não resolvido — nenhum valor aprovado.",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "auxilio_alimentacao": {
+        "valor": null,
+        "tipo": "valor_mensal",
+        "unidade": "BRL",
+        "status_parametro": "conflito",
+        "conflito": true,
+        "ids_registros_conflitantes": ["REG-003", "REG-004"],
+        "fonte_documento": null,
+        "observacao": "Conflito não resolvido — nenhum valor aprovado.",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "adicional_noturno": {
+        "valor": null,
+        "tipo": "percentual",
+        "unidade": "%",
+        "status_parametro": "conflito",
+        "conflito": true,
+        "ids_registros_conflitantes": ["REG-003", "REG-004"],
+        "fonte_documento": null,
+        "observacao": "Conflito não resolvido — nenhum valor aprovado.",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "hora_extra": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "conflito",
+        "conflito": true,
+        "ids_registros_conflitantes": ["REG-003", "REG-004"],
+        "fonte_documento": null,
+        "observacao": "Conflito não resolvido — nenhum valor aprovado.",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      },
+      "plr": {
+        "valor": null,
+        "tipo": "regra_textual",
+        "unidade": null,
+        "status_parametro": "conflito",
+        "conflito": true,
+        "ids_registros_conflitantes": ["REG-003", "REG-004"],
+        "fonte_documento": null,
+        "observacao": "Conflito não resolvido — nenhum valor aprovado.",
+        "data_validacao": null,
+        "origem_atualizacao": null
+      }
+    }
   }
 ]
