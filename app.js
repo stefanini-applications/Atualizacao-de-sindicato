@@ -120,6 +120,7 @@ const EMBEDDED_DEMO = {
 let allRecords = [];
 let filteredRecords = [];
 let detailModal = null;
+let modalFallbackHandlers = [];
 
 let elLoading;
 let elUnavailable;
@@ -547,9 +548,100 @@ function openDetail(record) {
     }
   }
 
+  showDetailModal();
+}
+
+function showDetailModal() {
   if (detailModal) {
-    detailModal.show();
+    try {
+      detailModal.show();
+      return;
+    } catch (_) {
+      // fall through to manual fallback
+    }
   }
+
+  const modalEl = document.getElementById('detail-modal');
+  if (!modalEl) {
+    showModalError('Não foi possível abrir o painel de revisão.');
+    return;
+  }
+
+  // Clean up any previous fallback listeners before attaching new ones
+  modalFallbackHandlers.forEach(({ el, fn, evt }) => el.removeEventListener(evt, fn));
+  modalFallbackHandlers = [];
+
+  // Show the modal with inline styles so it works even if Bootstrap CSS is unavailable
+  modalEl.style.display = 'block';
+  modalEl.style.position = 'fixed';
+  modalEl.style.inset = '0';
+  modalEl.style.zIndex = '1055';
+  modalEl.style.overflowX = 'hidden';
+  modalEl.style.overflowY = 'auto';
+  modalEl.style.background = 'rgba(0,0,0,0.5)';
+  modalEl.classList.add('show');
+  document.body.classList.add('modal-open');
+  document.body.style.overflow = 'hidden';
+
+  // Escape key
+  const keyHandler = (e) => { if (e.key === 'Escape') hideDetailModal(); };
+  document.addEventListener('keydown', keyHandler);
+  modalFallbackHandlers.push({ el: document, fn: keyHandler, evt: 'keydown' });
+
+  // Backdrop click — only close when the click is directly on the modal overlay
+  const backdropHandler = (e) => { if (e.target === modalEl) hideDetailModal(); };
+  modalEl.addEventListener('click', backdropHandler);
+  modalFallbackHandlers.push({ el: modalEl, fn: backdropHandler, evt: 'click' });
+
+  // Close buttons
+  modalEl.querySelectorAll('[data-bs-dismiss="modal"], .btn-close').forEach((btn) => {
+    btn.addEventListener('click', hideDetailModal);
+    modalFallbackHandlers.push({ el: btn, fn: hideDetailModal, evt: 'click' });
+  });
+}
+
+function hideDetailModal() {
+  if (detailModal) {
+    try {
+      detailModal.hide();
+      return;
+    } catch (_) {
+      // fall through to manual fallback
+    }
+  }
+
+  const modalEl = document.getElementById('detail-modal');
+  if (modalEl) {
+    modalEl.style.display = '';
+    modalEl.style.position = '';
+    modalEl.style.inset = '';
+    modalEl.style.zIndex = '';
+    modalEl.style.overflowX = '';
+    modalEl.style.overflowY = '';
+    modalEl.style.background = '';
+    modalEl.classList.remove('show');
+  }
+
+  document.body.classList.remove('modal-open');
+  document.body.style.overflow = '';
+
+  modalFallbackHandlers.forEach(({ el, fn, evt }) => el.removeEventListener(evt, fn));
+  modalFallbackHandlers = [];
+}
+
+function showModalError(message) {
+  let errEl = document.getElementById('modal-open-error');
+  if (!errEl) {
+    errEl = document.createElement('div');
+    errEl.id = 'modal-open-error';
+    errEl.className = 'alert alert-danger';
+    errEl.style.cssText =
+      'position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:9999;min-width:20rem;text-align:center;';
+    document.body.appendChild(errEl);
+  }
+  errEl.textContent = message;
+  errEl.style.display = 'block';
+  setTimeout(() => { if (errEl) errEl.style.display = 'none'; }, 6000);
 }
 
 function buildDetailHtml(record, isConflict) {
@@ -579,10 +671,10 @@ function buildDetailHtml(record, isConflict) {
       <dt class="col-sm-4">Categoria</dt>
       <dd class="col-sm-8">${escapeHtml(record.categoria ?? '—')}</dd>
 
+      ${!isReviewable ? `
       <dt class="col-sm-4">Ano de referência</dt>
       <dd class="col-sm-8">${escapeHtml(record.ano_referencia ?? '—')}</dd>
 
-      ${!isReviewable ? `
       <dt class="col-sm-4">Percentual de reajuste</dt>
       <dd class="col-sm-8">${formatPercent(record.percentual_reajuste)}</dd>
 
@@ -671,6 +763,9 @@ function buildReviewSection(record) {
   const dataBaseValue = record.data_base ? escapeHtml(record.data_base) : '';
   const vigenciaInicioValue = record.vigencia_inicio ? escapeHtml(record.vigencia_inicio) : '';
   const vigenciaFimValue = record.vigencia_fim ? escapeHtml(record.vigencia_fim) : '';
+  const anoReferenciaValue = (record.ano_referencia !== null && record.ano_referencia !== undefined)
+    ? escapeHtml(String(record.ano_referencia))
+    : '';
 
   return `
     <div class="detail-review-box mb-3" role="region" aria-label="Conferência de dados extraídos">
@@ -733,6 +828,20 @@ function buildReviewSection(record) {
             value="${vigenciaFimValue}"
           />
         </div>
+        <div class="col-sm-6">
+          <label for="review-input-ano-referencia" class="form-label form-label-sm fw-semibold">
+            Ano de referência
+          </label>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            id="review-input-ano-referencia"
+            step="1"
+            min="2000"
+            placeholder="Ex: 2025"
+            value="${anoReferenciaValue}"
+          />
+        </div>
       </div>
 
       <hr class="my-3" />
@@ -786,6 +895,7 @@ function validateRecord(record) {
   const dataBaseEl = document.getElementById('review-input-data-base');
   const vigenciaInicioEl = document.getElementById('review-input-vigencia-inicio');
   const vigenciaFimEl = document.getElementById('review-input-vigencia-fim');
+  const anoReferenciaEl = document.getElementById('review-input-ano-referencia');
   const errorEl = document.getElementById('review-action-error');
 
   const observacao = observacaoEl?.value?.trim() ?? '';
@@ -793,6 +903,7 @@ function validateRecord(record) {
   const dataBase = dataBaseEl?.value?.trim() ?? '';
   const vigenciaInicio = vigenciaInicioEl?.value?.trim() ?? '';
   const vigenciaFim = vigenciaFimEl?.value?.trim() ?? '';
+  const anoReferenciaStr = anoReferenciaEl?.value?.trim() ?? '';
 
   const missingData = [];
   if (!percentualStr) missingData.push('Percentual de reajuste');
@@ -816,6 +927,14 @@ function validateRecord(record) {
   const statusAnterior = record.status_parametro;
   const percentualNum = parseFloat(percentualStr);
 
+  let anoReferencia;
+  if (anoReferenciaStr === '') {
+    anoReferencia = null;
+  } else {
+    const parsedAno = Number(anoReferenciaStr);
+    anoReferencia = Number.isInteger(parsedAno) && parsedAno >= 2000 ? parsedAno : (record.ano_referencia ?? null);
+  }
+
   const overrideFields = {
     status_parametro: 'valido',
     conflito: false,
@@ -828,16 +947,19 @@ function validateRecord(record) {
     data_base: dataBase,
     vigencia_inicio: vigenciaInicio,
     vigencia_fim: vigenciaFim,
+    ano_referencia: anoReferencia,
   };
 
+  // Capture stable key BEFORE mutating the record (composite key may include ano_referencia)
+  const recordKey = getRecordKey(record);
   Object.assign(record, overrideFields);
-  saveLocalOverride(getRecordKey(record), overrideFields);
+  saveLocalOverride(recordKey, overrideFields);
 
   updateLocalChangesBanner();
   populateFilterOptions();
   applyFilters();
 
-  if (detailModal) detailModal.hide();
+  hideDetailModal();
 }
 
 function rejectRecord(record) {
