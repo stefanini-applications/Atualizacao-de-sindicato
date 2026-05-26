@@ -447,18 +447,19 @@ function buildCctItemsHtml(itens) {
     const label = CCT_ITEM_LABELS[key] ?? key;
     const valorDisplay = formatCctValor(item);
     const badge = statusBadgeItem(item);
-    const fonte = item.fonte_documento ?? '—';
+    const isConflito = item.status_parametro === 'conflito' || item.conflito === true;
+    const isPendente = item.status_parametro === 'pendente_revisao';
+    const fonteRaw = item.fonte_documento ?? null;
     const obs = item.observacao ?? null;
     const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
     const origem = item.origem_atualizacao ?? null;
 
-    let metaHtml = '';
-    if (fonte !== '—') {
-      metaHtml += `<div class="cct-item-meta">Fonte: ${escHtml(fonte)}</div>`;
-    }
-    if (obs) {
-      metaHtml += `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`;
-    }
+    const fonteHtml = fonteRaw
+      ? `<a href="${escAttr(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta">Abrir PDF</a>`
+      : `<span class="cct-item-meta">Fonte: —</span>`;
+
+    let metaHtml = `<div>${fonteHtml}</div>`;
+    metaHtml += `<div class="cct-item-meta cct-item-obs">${obs ? escHtml(obs) : '—'}</div>`;
     if (dataVal) {
       metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
     }
@@ -466,12 +467,25 @@ function buildCctItemsHtml(itens) {
       metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
     }
 
-    let conflictIds = '';
-    if (item.conflito && Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
-      const ids = item.ids_registros_conflitantes
-        .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
-        .join('');
-      conflictIds = `<div class="mt-1">${ids}</div>`;
+    let statusAlertHtml = '';
+    if (isConflito) {
+      let conflictIdsHtml = '';
+      if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+        const ids = item.ids_registros_conflitantes
+          .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
+          .join('');
+        conflictIdsHtml = `<div class="mt-1">${ids}</div>`;
+      }
+      statusAlertHtml = `
+        <div class="cct-item-alert cct-item-alert-conflito mt-2">
+          ⚠ Este item não deve ser utilizado até revisão manual.
+          ${conflictIdsHtml}
+        </div>`;
+    } else if (isPendente) {
+      statusAlertHtml = `
+        <div class="cct-item-alert cct-item-alert-pendente mt-2">
+          ⏳ Este item aguarda revisão.
+        </div>`;
     }
 
     html += `
@@ -483,7 +497,7 @@ function buildCctItemsHtml(itens) {
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
           ${metaHtml}
-          ${conflictIds}
+          ${statusAlertHtml}
         </div>
       </div>`;
   });
