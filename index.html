@@ -72,6 +72,7 @@
                 <option value="">Todos</option>
                 <option value="valido">Válido</option>
                 <option value="conflito">Conflito</option>
+                <option value="pendente_revisao">Pendente revisão</option>
               </select>
             </div>
             <div class="col-6 col-md-2 d-flex align-items-end">
@@ -82,6 +83,24 @@
           </div>
         </div>
       </section>
+
+      <!-- Local changes banner + action toolbar -->
+      <div id="action-toolbar" class="mb-3">
+        <div id="local-changes-banner" class="alert alert-warning d-none mb-2" role="alert">
+          <strong>Alteração aplicada localmente.</strong>
+          Para tornar definitiva, exporte a base atualizada e submeta para validação/commit.
+          <br /><small class="text-warning-emphasis">Esta validação <strong>não</strong> altera automaticamente
+          <code>data/base_parametros_sindicais.json</code>, o repositório GitHub ou o pipeline.</small>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <button id="btn-export-json" class="btn btn-outline-primary btn-sm">
+            ⬇ Exportar base atualizada
+          </button>
+          <button id="btn-discard-local" class="btn btn-outline-danger btn-sm">
+            ✖ Descartar alterações locais
+          </button>
+        </div>
+      </div>
 
       <!-- Result count -->
       <div class="d-flex align-items-center justify-content-between mb-2 px-1">
@@ -133,6 +152,7 @@
         <div class="modal-body" id="detail-modal-body"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-success d-none" id="btn-validar">✔ Validar</button>
         </div>
       </div>
     </div>
