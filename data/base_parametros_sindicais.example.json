@@ -5,12 +5,14 @@
     "sindicato": "SESCON-MG",
     "uf": "MG",
     "categoria": "Técnicos em Contabilidade",
+    "ano_referencia": 2025,
     "status_parametro": "valido",
     "conflito": false,
     "percentual_reajuste": 5.5,
     "data_base": "2025-01-01",
     "vigencia_inicio": "2025-01-01",
     "vigencia_fim": "2025-12-31",
+    "fonte_documento": null,
     "observacao": null
   },
   {
@@ -19,12 +21,14 @@
     "sindicato": "SINTTEL-MG",
     "uf": "MG",
     "categoria": "Telecomunicações",
+    "ano_referencia": 2025,
     "status_parametro": "valido",
     "conflito": false,
     "percentual_reajuste": 6.0,
     "data_base": "2025-04-01",
     "vigencia_inicio": "2025-04-01",
     "vigencia_fim": "2026-03-31",
+    "fonte_documento": null,
     "observacao": null
   },
   {
@@ -33,12 +37,30 @@
     "sindicato": "SENALBA-SP",
     "uf": "SP",
     "categoria": "Trabalhadores em Empresas de Asseio e Conservação",
+    "ano_referencia": 2025,
     "status_parametro": "conflito",
     "conflito": true,
     "percentual_reajuste": null,
     "data_base": null,
     "vigencia_inicio": null,
     "vigencia_fim": null,
+    "fonte_documento": null,
     "observacao": "Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: REG-003, REG-004."
+  },
+  {
+    "id_registro_reajuste": null,
+    "ids_registros_conflitantes": null,
+    "sindicato": "SINDPREV-RS",
+    "uf": "RS",
+    "categoria": "Previdência Social",
+    "ano_referencia": 2025,
+    "status_parametro": "pendente_revisao",
+    "conflito": false,
+    "percentual_reajuste": null,
+    "data_base": null,
+    "vigencia_inicio": null,
+    "vigencia_fim": null,
+    "fonte_documento": null,
+    "observacao": null
   }
 ]

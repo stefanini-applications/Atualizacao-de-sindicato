@@ -34,12 +34,27 @@
       <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
           <h1 class="app-title mb-0">Parâmetros Sindicais</h1>
-          <span id="data-geracao-badge" class="badge text-bg-secondary d-none"></span>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span id="data-geracao-badge" class="badge text-bg-secondary d-none"></span>
+            <button id="btn-export-json" class="btn btn-outline-success btn-sm" disabled title="Exporte a base atualizada com as validações locais">
+              ⬇ Exportar base atualizada
+            </button>
+            <button id="btn-discard-local" class="btn btn-outline-danger btn-sm" disabled title="Descarta todas as alterações locais e restaura a base original">
+              ✕ Descartar alterações locais
+            </button>
+          </div>
         </div>
       </div>
     </header>
 
     <main class="container-fluid py-3">
+      <!-- Local changes banner -->
+      <div id="local-changes-banner" class="alert alert-warning d-none mb-3" role="alert">
+        <strong>⚠ Alteração aplicada localmente.</strong>
+        Para tornar definitiva, exporte a base atualizada e submeta para validação/commit.
+        Esta validação manual <strong>não altera automaticamente</strong>
+        <code>data/base_parametros_sindicais.json</code>, o repositório GitHub ou o pipeline.
+      </div>
       <!-- Filters -->
       <section class="card mb-3" aria-label="Filtros">
         <div class="card-body">
@@ -72,6 +87,7 @@
                 <option value="">Todos</option>
                 <option value="valido">Válido</option>
                 <option value="conflito">Conflito</option>
+                <option value="pendente_revisao">Pendente revisão</option>
               </select>
             </div>
             <div class="col-6 col-md-2 d-flex align-items-end">
