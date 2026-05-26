@@ -474,6 +474,10 @@ function renderTable() {
       row.classList.add('row-pendente');
     }
 
+    const isReviewable = isConflict || record.status_parametro === 'pendente_revisao';
+    const btnClass = isReviewable ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-primary';
+    const btnLabel = isReviewable ? '🔍 Revisar' : 'Detalhes';
+
     row.innerHTML = `
       <td>${escapeHtml(record.uf ?? '—')}</td>
       <td>${escapeHtml(record.sindicato ?? '—')}</td>
@@ -486,14 +490,24 @@ function renderTable() {
       <td>${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
-        <button type="button" class="btn btn-sm btn-outline-primary" data-index="${index}">
-          Detalhes
+        <button type="button" class="${btnClass}" data-index="${index}">
+          ${btnLabel}
         </button>
       </td>
     `;
 
     const detailButton = row.querySelector('button[data-index]');
-    detailButton.addEventListener('click', () => openDetail(record));
+    detailButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDetail(record);
+    });
+
+    if (isReviewable) {
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('.fonte-cell a')) return;
+        openDetail(record);
+      });
+    }
 
     elTableBody.appendChild(row);
   });
@@ -521,7 +535,8 @@ function openDetail(record) {
   const modalTitle = document.getElementById('detail-modal-label');
 
   if (modalTitle) {
-    modalTitle.textContent = `${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
+    const titlePrefix = isReviewable ? 'Revisão' : 'Detalhe do parâmetro';
+    modalTitle.textContent = `${titlePrefix} — ${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
   }
 
   if (modalBody) {
