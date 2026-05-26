@@ -176,10 +176,8 @@ const EMBEDDED_DEMO = {
       data_base: null,
       vigencia_inicio: null,
       vigencia_fim: null,
- story/prj-43
-      fonte_documento: null,
-      observacao:
-        'Conflito: múltiplos registros aprovados para a mesma chave sindicato/UF/categoria. IDs conflitantes: DEMO-003, DEMO-004.',
+      fonte_documento: 'CCT/SP/Sindtest-Vazio/CCT_2025_Sindtest_Vazio.pdf',
+      observacao: 'Sindicato encontrado na pasta CCT, mas sem parâmetros extraídos disponíveis',
       itens_cct: {
         reajuste_salarial: {
           valor: null, tipo: 'percentual', unidade: '%',
@@ -217,10 +215,6 @@ const EMBEDDED_DEMO = {
           data_validacao: null, origem_atualizacao: null,
         },
       },
-
-      fonte_documento: 'CCT/SP/Sindtest-Vazio/CCT_2025_Sindtest_Vazio.pdf',
-      observacao: 'Sindicato encontrado na pasta CCT, mas sem parâmetros extraídos disponíveis',
- task/prj-38
     },
   ],
 };
@@ -587,20 +581,12 @@ function renderTable() {
     const btnClass = isReviewable ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-primary';
     const btnLabel = isReviewable ? '🔍 Revisar' : 'Detalhes';
 
- story/prj-43
-    tr.innerHTML = `
-      <td>${escHtml(record.uf ?? '—')}</td>
-      <td>${escHtml(record.sindicato ?? '—')}</td>
-      <td>${escHtml(String(record.ano_referencia ?? '—'))}</td>
-      <td>${formatPercent(getReajusteValor(record))}</td>
-
     row.innerHTML = `
       <td>${escapeHtml(record.uf ?? '—')}</td>
       <td>${escapeHtml(record.sindicato ?? '—')}</td>
       <td>${escapeHtml(record.categoria ?? '—')}</td>
       <td>${escapeHtml(record.ano_referencia ?? '—')}</td>
       <td>${formatPercent(record.percentual_reajuste)}</td>
- task/prj-38
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
@@ -716,20 +702,6 @@ function showDetailModal() {
   });
 }
 
-story/prj-43
-function buildDetailHtml(r, isConflict) {
-  const fields = [
-    ['UF', r.uf],
-    ['Sindicato', r.sindicato],
-    ['Ano de referência', r.ano_referencia],
-    ['Percentual de reajuste', formatPercent(getReajusteValor(r))],
-    ['Data-base', formatDate(r.data_base)],
-    ['Vigência início', formatDate(r.vigencia_inicio)],
-    ['Vigência fim', formatDate(r.vigencia_fim)],
-    ['Status', statusBadge(r)],
-    ['Conflito', r.conflito ? 'Sim' : 'Não'],
-  ];
-
 function hideDetailModal() {
   if (detailModal) {
     try {
@@ -739,7 +711,6 @@ function hideDetailModal() {
       // fall through to manual fallback
     }
   }
- task/prj-38
 
   const modalEl = document.getElementById('detail-modal');
   if (modalEl) {
@@ -862,12 +833,25 @@ function buildPdfViewer(record) {
     return `<p class="text-secondary small mb-0">Fonte: ${escapeHtml(record.fonte_documento)}</p>`;
   }
 
- story/prj-43
-  if (r.itens_cct && typeof r.itens_cct === 'object') {
-    html += buildCctItemsHtml(r.itens_cct);
-  }
+  const fonteUrl = escapeHtml(record.fonte_documento);
+  const fonteLbl = escapeHtml(pdfLabel(record.fonte_documento));
 
-  return html;
+  return `
+    <div class="pdf-viewer-container mb-2">
+      <div class="d-flex align-items-center justify-content-between mb-1">
+        <span class="detail-field-label">Documento de origem</span>
+        <a href="${fonteUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary py-0 px-2">
+          📄 Abrir PDF em nova aba
+        </a>
+      </div>
+      <iframe
+        src="${fonteUrl}"
+        class="pdf-iframe"
+        title="PDF de origem: ${fonteLbl}"
+        aria-label="PDF de origem: ${fonteLbl}"
+      ></iframe>
+    </div>
+  `;
 }
 
 function buildCctItemsHtml(itens) {
@@ -891,16 +875,16 @@ function buildCctItemsHtml(itens) {
     const origem = item.origem_atualizacao ?? null;
 
     const fonteHtml = fonteRaw
-      ? `<a href="${escAttr(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta">Abrir PDF</a>`
+      ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta">Abrir PDF</a>`
       : `<span class="cct-item-meta">Fonte: —</span>`;
 
     let metaHtml = `<div>${fonteHtml}</div>`;
-    metaHtml += `<div class="cct-item-meta cct-item-obs">${obs ? escHtml(obs) : '—'}</div>`;
+    metaHtml += `<div class="cct-item-meta cct-item-obs">${obs ? escapeHtml(obs) : '—'}</div>`;
     if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
+      metaHtml += `<div class="cct-item-meta">Validado em: ${escapeHtml(dataVal)}</div>`;
     }
     if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+      metaHtml += `<div class="cct-item-meta">Origem: ${escapeHtml(origem)}</div>`;
     }
 
     let statusAlertHtml = '';
@@ -908,7 +892,7 @@ function buildCctItemsHtml(itens) {
       let conflictIdsHtml = '';
       if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
         const ids = item.ids_registros_conflitantes
-          .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
+          .map((id) => `<span class="conflicting-id">${escapeHtml(String(id))}</span>`)
           .join('');
         conflictIdsHtml = `<div class="mt-1">${ids}</div>`;
       }
@@ -928,7 +912,7 @@ function buildCctItemsHtml(itens) {
       <div class="col-12 col-sm-6">
         <div class="cct-item-card">
           <div class="cct-item-header">
-            <span class="cct-item-label">${escHtml(label)}</span>
+            <span class="cct-item-label">${escapeHtml(label)}</span>
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
@@ -944,12 +928,12 @@ function buildCctItemsHtml(itens) {
 
 function formatCctValor(item) {
   if (item.valor == null) return '<span class="text-secondary">—</span>';
-  if (typeof item.valor === 'string') return escHtml(item.valor);
+  if (typeof item.valor === 'string') return escapeHtml(item.valor);
   if (item.tipo === 'percentual') return `${Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
   if (item.unidade === 'BRL') {
     return Number(item.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
-  return escHtml(String(item.valor));
+  return escapeHtml(String(item.valor));
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -991,26 +975,6 @@ function statusBadgeItem(item) {
     return '<span class="badge-pendente">⏳ Pendente</span>';
   }
   return '<span class="badge-valido">✔ Válido</span>';
-=======
-  const fonteUrl = escapeHtml(record.fonte_documento);
-  const fonteLbl = escapeHtml(pdfLabel(record.fonte_documento));
-
-  return `
-    <div class="pdf-viewer-container mb-2">
-      <div class="d-flex align-items-center justify-content-between mb-1">
-        <span class="detail-field-label">Documento de origem</span>
-        <a href="${fonteUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary py-0 px-2">
-          📄 Abrir PDF em nova aba
-        </a>
-      </div>
-      <iframe
-        src="${fonteUrl}"
-        class="pdf-iframe"
-        title="PDF de origem: ${fonteLbl}"
-        aria-label="PDF de origem: ${fonteLbl}"
-      ></iframe>
-    </div>
-  `;
 }
 
 function buildReviewSection(record) {
@@ -1350,7 +1314,6 @@ function formatPercent(value) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}%`;
- task/prj-38
 }
 
 function formatDate(value) {
