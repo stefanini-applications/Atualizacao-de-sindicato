@@ -646,55 +646,79 @@ function buildPdfViewer(record) {
 }
 
 function buildReviewSection(record) {
-  const missingForValidation = [];
-  if (record.percentual_reajuste === null || record.percentual_reajuste === undefined) {
-    missingForValidation.push('Percentual de reajuste');
-  }
-  if (!record.data_base) missingForValidation.push('Data-base');
-  if (!record.vigencia_inicio) missingForValidation.push('Vigência início');
-  if (!record.vigencia_fim) missingForValidation.push('Vigência fim');
-
-  const dataWarningHtml = missingForValidation.length > 0
-    ? `<div class="alert alert-warning py-2 small mb-3" role="alert">
-        ⚠ Campos ausentes: <strong>${missingForValidation.join(', ')}</strong>.
-        Não será possível promover para <em>válido</em> sem esses dados — apenas rejeição disponível.
-       </div>`
-    : '';
-
   const isPending = record.status_parametro === 'pendente_revisao';
   const titleIcon = isPending ? '⏳' : '🔍';
   const titleText = isPending ? 'Conferência — pendente de revisão' : 'Conferência — conflito';
+
+  const percentualValue = (record.percentual_reajuste !== null && record.percentual_reajuste !== undefined)
+    ? escapeHtml(String(record.percentual_reajuste))
+    : '';
+  const dataBaseValue = record.data_base ? escapeHtml(record.data_base) : '';
+  const vigenciaInicioValue = record.vigencia_inicio ? escapeHtml(record.vigencia_inicio) : '';
+  const vigenciaFimValue = record.vigencia_fim ? escapeHtml(record.vigencia_fim) : '';
 
   return `
     <div class="detail-review-box mb-3" role="region" aria-label="Conferência de dados extraídos">
       <h3 class="review-section-title">${titleIcon} ${escapeHtml(titleText)}</h3>
       <p class="review-info-msg">
-        Confira os dados extraídos abaixo com o documento de origem. Marque o checkbox e preencha
-        a observação para habilitar as ações de validação ou rejeição.
+        Confira os dados abaixo com o documento de origem. Preencha ou corrija os campos
+        necessários, marque o checkbox e preencha a observação para habilitar a validação.
       </p>
 
       ${buildPdfViewer(record)}
 
       <hr class="my-3" />
 
-      <h4 class="review-data-title">Dados extraídos para conferência</h4>
-      ${dataWarningHtml}
-      <dl class="row review-data-list">
-        <dt class="col-sm-5">Ano de referência</dt>
-        <dd class="col-sm-7">${escapeHtml(record.ano_referencia ?? '—')}</dd>
-
-        <dt class="col-sm-5">Percentual de reajuste</dt>
-        <dd class="col-sm-7">${formatPercent(record.percentual_reajuste)}</dd>
-
-        <dt class="col-sm-5">Data-base</dt>
-        <dd class="col-sm-7">${formatDate(record.data_base)}</dd>
-
-        <dt class="col-sm-5">Vigência início</dt>
-        <dd class="col-sm-7">${formatDate(record.vigencia_inicio)}</dd>
-
-        <dt class="col-sm-5">Vigência fim</dt>
-        <dd class="col-sm-7">${formatDate(record.vigencia_fim)}</dd>
-      </dl>
+      <h4 class="review-data-title">Dados para conferência</h4>
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6">
+          <label for="review-input-percentual" class="form-label form-label-sm fw-semibold">
+            Percentual de reajuste (%) <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            id="review-input-percentual"
+            step="0.01"
+            min="0"
+            placeholder="Ex: 5.50"
+            value="${percentualValue}"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="review-input-data-base" class="form-label form-label-sm fw-semibold">
+            Data-base <span class="text-danger">*</span>
+          </label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="review-input-data-base"
+            value="${dataBaseValue}"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="review-input-vigencia-inicio" class="form-label form-label-sm fw-semibold">
+            Vigência início <span class="text-danger">*</span>
+          </label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="review-input-vigencia-inicio"
+            value="${vigenciaInicioValue}"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="review-input-vigencia-fim" class="form-label form-label-sm fw-semibold">
+            Vigência fim <span class="text-danger">*</span>
+          </label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            id="review-input-vigencia-fim"
+            value="${vigenciaFimValue}"
+          />
+        </div>
+      </div>
 
       <hr class="my-3" />
 
@@ -714,7 +738,7 @@ function buildReviewSection(record) {
           id="review-observacao"
           rows="3"
           placeholder="Ex: cláusula consultada, página do PDF, trecho relevante, motivo da decisão"
-        ></textarea>
+        >${escapeHtml(record.observacao ?? '')}</textarea>
         <div class="form-text">Obrigatório. Descreva a evidência consultada e o motivo da decisão.</div>
       </div>
 
@@ -761,22 +785,28 @@ function bindReviewControls(record) {
 
 function validateRecord(record) {
   const observacaoEl = document.getElementById('review-observacao');
+  const percentualEl = document.getElementById('review-input-percentual');
+  const dataBaseEl = document.getElementById('review-input-data-base');
+  const vigenciaInicioEl = document.getElementById('review-input-vigencia-inicio');
+  const vigenciaFimEl = document.getElementById('review-input-vigencia-fim');
   const errorEl = document.getElementById('review-action-error');
+
   const observacao = observacaoEl?.value?.trim() ?? '';
+  const percentualStr = percentualEl?.value?.trim() ?? '';
+  const dataBase = dataBaseEl?.value?.trim() ?? '';
+  const vigenciaInicio = vigenciaInicioEl?.value?.trim() ?? '';
+  const vigenciaFim = vigenciaFimEl?.value?.trim() ?? '';
 
   const missingData = [];
-  if (record.percentual_reajuste === null || record.percentual_reajuste === undefined) {
-    missingData.push('Percentual de reajuste');
-  }
-  if (!record.data_base) missingData.push('Data-base');
-  if (!record.vigencia_inicio) missingData.push('Vigência início');
-  if (!record.vigencia_fim) missingData.push('Vigência fim');
+  if (!percentualStr) missingData.push('Percentual de reajuste');
+  if (!dataBase) missingData.push('Data-base');
+  if (!vigenciaInicio) missingData.push('Vigência início');
+  if (!vigenciaFim) missingData.push('Vigência fim');
 
   if (missingData.length > 0) {
     if (errorEl) {
       errorEl.textContent =
-        `Não é possível validar: dados insuficientes — ${missingData.join(', ')} ausente(s). ` +
-        'O registro permanece no status atual.';
+        `Não é possível validar: campos obrigatórios ausentes — ${missingData.join(', ')}.`;
       errorEl.classList.remove('d-none');
     }
     return;
@@ -786,6 +816,7 @@ function validateRecord(record) {
 
   const now = new Date().toISOString();
   const statusAnterior = record.status_parametro;
+  const percentualNum = parseFloat(percentualStr);
 
   const overrideFields = {
     status_parametro: 'valido',
@@ -795,6 +826,10 @@ function validateRecord(record) {
     data_hora_validacao_manual: now,
     status_anterior: statusAnterior,
     observacao: observacao,
+    percentual_reajuste: Number.isNaN(percentualNum) ? null : percentualNum,
+    data_base: dataBase,
+    vigencia_inicio: vigenciaInicio,
+    vigencia_fim: vigenciaFim,
   };
 
   Object.assign(record, overrideFields);
