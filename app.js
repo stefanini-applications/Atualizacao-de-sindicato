@@ -206,21 +206,28 @@ async function loadData() {
   let dataGeracao = null;
   let demoMessage = null;
 
-  try {
-    const result = await tryFetch(DATA_URL);
-    records = result.records;
-    dataGeracao = result.data.data_geracao ?? null;
-  } catch {
+  // Prefer window.BASE_PARAMETROS_SINDICAIS (inline .js) — works under file:// protocol
+  if (window.BASE_PARAMETROS_SINDICAIS) {
+    const inline = window.BASE_PARAMETROS_SINDICAIS;
+    records = Array.isArray(inline) ? inline : inline.registros;
+    dataGeracao = inline.data_geracao ?? null;
+  } else {
     try {
-      const result = await tryFetch(EXAMPLE_DATA_URL);
+      const result = await tryFetch(DATA_URL);
       records = result.records;
       dataGeracao = result.data.data_geracao ?? null;
-      demoMessage = 'Ambiente de demonstração — usando base de exemplo';
     } catch {
-      // both fetches failed — use embedded demo (e.g. file:// protocol)
-      records = EMBEDDED_DEMO.registros;
-      dataGeracao = null;
-      demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+      try {
+        const result = await tryFetch(EXAMPLE_DATA_URL);
+        records = result.records;
+        dataGeracao = result.data.data_geracao ?? null;
+        demoMessage = 'Ambiente de demonstração — usando base de exemplo';
+      } catch {
+        // all sources failed — use embedded demo as last resort
+        records = EMBEDDED_DEMO.registros;
+        dataGeracao = null;
+        demoMessage = 'Ambiente de demonstração — base embutida para teste local';
+      }
     }
   }
 

@@ -1,0 +1,1208 @@
+{
+  "data_geracao": "2025-05-26T00:00:00",
+  "registros": [
+    {
+      "id_registro_reajuste": "REG-001",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SESCON-MG",
+      "uf": "MG",
+      "categoria": "Técnicos em Contabilidade",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.5,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf", "observacao": null,
+          "data_validacao": "2025-03-01T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf", "observacao": "Item ainda não validado",
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-002",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-MG",
+      "uf": "MG",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 6.0,
+      "data_base": "2025-04-01",
+      "vigencia_inicio": "2025-04-01",
+      "vigencia_fim": "2026-03-31",
+      "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 6.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf", "observacao": null,
+          "data_validacao": "2025-04-10T09:30:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 880.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf", "observacao": null,
+          "data_validacao": "2025-04-10T09:35:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 35, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf", "observacao": null,
+          "data_validacao": "2025-04-10T09:40:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
+          "observacao": "Regra não extraída do PDF — requer revisão manual",
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-003",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SESCON-DF",
+      "uf": "DF",
+      "categoria": "Técnicos em Contabilidade",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.0,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf", "observacao": null,
+          "data_validacao": "2025-02-15T11:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 950.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf", "observacao": null,
+          "data_validacao": "2025-02-15T11:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 20, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf", "observacao": null,
+          "data_validacao": "2025-02-15T11:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-004",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-DF",
+      "uf": "DF",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.5,
+      "data_base": "2025-05-01",
+      "vigencia_inicio": "2025-05-01",
+      "vigencia_fim": "2026-04-30",
+      "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf", "observacao": null,
+          "data_validacao": "2025-05-10T08:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-005",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-DF",
+      "uf": "DF",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 4.5,
+      "data_base": "2025-06-01",
+      "vigencia_inicio": "2025-06-01",
+      "vigencia_fim": "2026-05-31",
+      "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 4.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf", "observacao": null,
+          "data_validacao": "2025-06-12T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1200.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf", "observacao": null,
+          "data_validacao": "2025-06-12T10:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 25, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf", "observacao": null,
+          "data_validacao": "2025-06-12T10:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": 50, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf", "observacao": null,
+          "data_validacao": "2025-06-12T10:15:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-006",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SESCON-GO",
+      "uf": "GO",
+      "categoria": "Técnicos em Contabilidade",
+      "ano_referencia": 2024,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 4.8,
+      "data_base": "2024-01-01",
+      "vigencia_inicio": "2024-01-01",
+      "vigencia_fim": "2024-12-31",
+      "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 4.8, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf", "observacao": null,
+          "data_validacao": "2024-02-10T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-007",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-GO",
+      "uf": "GO",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.2,
+      "data_base": "2025-03-01",
+      "vigencia_inicio": "2025-03-01",
+      "vigencia_fim": "2026-02-28",
+      "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.2, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf", "observacao": null,
+          "data_validacao": "2025-03-15T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1100.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf", "observacao": null,
+          "data_validacao": "2025-03-15T10:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 20, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf", "observacao": null,
+          "data_validacao": "2025-03-15T10:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-008",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-GO",
+      "uf": "GO",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 6.0,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 6.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf", "observacao": null,
+          "data_validacao": "2025-01-20T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-009",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SESCON-RS",
+      "uf": "RS",
+      "categoria": "Técnicos em Contabilidade",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.8,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.8, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf", "observacao": null,
+          "data_validacao": "2025-02-01T08:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1050.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf", "observacao": null,
+          "data_validacao": "2025-02-01T08:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 20, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf", "observacao": null,
+          "data_validacao": "2025-02-01T08:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": 50, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf", "observacao": null,
+          "data_validacao": "2025-02-01T08:15:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-010",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-RS",
+      "uf": "RS",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.0,
+      "data_base": "2025-06-01",
+      "vigencia_inicio": "2025-06-01",
+      "vigencia_fim": "2026-05-31",
+      "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf", "observacao": null,
+          "data_validacao": "2025-06-15T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-011",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-SC",
+      "uf": "SC",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 4.5,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 4.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf", "observacao": null,
+          "data_validacao": "2025-01-25T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-012",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-RS",
+      "uf": "RS",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.5,
+      "data_base": "2025-05-01",
+      "vigencia_inicio": "2025-05-01",
+      "vigencia_fim": "2026-04-30",
+      "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf", "observacao": null,
+          "data_validacao": "2025-05-15T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 900.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf", "observacao": null,
+          "data_validacao": "2025-05-15T10:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 30, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf", "observacao": null,
+          "data_validacao": "2025-05-15T10:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-013",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTETEL-SP",
+      "uf": "SP",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2024,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.0,
+      "data_base": "2024-07-01",
+      "vigencia_inicio": "2024-07-01",
+      "vigencia_fim": "2025-06-30",
+      "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf", "observacao": null,
+          "data_validacao": "2024-07-20T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1350.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf", "observacao": null,
+          "data_validacao": "2024-07-20T09:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 20, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf", "observacao": null,
+          "data_validacao": "2024-07-20T09:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": 50, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf", "observacao": null,
+          "data_validacao": "2024-07-20T09:15:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-014",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-SP",
+      "uf": "SP",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2024,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 4.5,
+      "data_base": "2024-09-01",
+      "vigencia_inicio": "2024-09-01",
+      "vigencia_fim": "2025-08-31",
+      "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 4.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf", "observacao": null,
+          "data_validacao": "2024-09-20T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1500.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf", "observacao": null,
+          "data_validacao": "2024-09-20T09:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 20, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf", "observacao": null,
+          "data_validacao": "2024-09-20T09:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": 50, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf", "observacao": null,
+          "data_validacao": "2024-09-20T09:15:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-015",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-RJ",
+      "uf": "RJ",
+      "categoria": "Telecomunicaeeeees",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 6.5,
+      "data_base": "2025-04-01",
+      "vigencia_inicio": "2025-04-01",
+      "vigencia_fim": "2026-03-31",
+      "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 6.5, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf", "observacao": null,
+          "data_validacao": "2025-04-15T10:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": 1200.0, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf", "observacao": null,
+          "data_validacao": "2025-04-15T10:05:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "adicional_noturno": {
+          "valor": 35, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf", "observacao": null,
+          "data_validacao": "2025-04-15T10:10:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-016",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-PR",
+      "uf": "PR",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 5.0,
+      "data_base": "2025-01-01",
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 5.0, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf", "observacao": null,
+          "data_validacao": "2025-01-20T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-017",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-BA",
+      "uf": "BA",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2026-12-31",
+      "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf", "observacao": "Aguardando extração",
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-018",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINTTEL-BA",
+      "uf": "BA",
+      "categoria": "Telecomunicações",
+      "ano_referencia": 2025,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-019",
+      "ids_registros_conflitantes": ["REG-020"],
+      "sindicato": "SINDPD-PE",
+      "uf": "PE",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "conflito",
+      "conflito": true,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+      "observacao": "Conflito com SINTAPPI-PE na definição de categoria base",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "conflito", "conflito": true, "ids_registros_conflitantes": ["REG-020"],
+          "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+          "observacao": "Percentual conflitante com outra CCT da mesma base territorial",
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-020",
+      "ids_registros_conflitantes": ["REG-019"],
+      "sindicato": "SINTAPPI-PE",
+      "uf": "PE",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "conflito",
+      "conflito": true,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2023-01-01",
+      "vigencia_fim": "2024-12-31",
+      "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
+      "observacao": "Conflito com SINDPD-PE na definição de categoria base",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "conflito", "conflito": true, "ids_registros_conflitantes": ["REG-019"],
+          "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
+          "observacao": "Percentual conflitante com outra CCT da mesma base territorial",
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-021",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-CE",
+      "uf": "CE",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2024,
+      "status_parametro": "valido",
+      "conflito": false,
+      "percentual_reajuste": 4.8,
+      "data_base": "2024-01-01",
+      "vigencia_inicio": "2024-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
+      "observacao": null,
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": 4.8, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "valido", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf", "observacao": null,
+          "data_validacao": "2024-02-01T09:00:00", "origem_atualizacao": "importacao_pdf"
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-022",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-ES",
+      "uf": "ES",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2024,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2024-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/ES/Sindpd/CCT_2024-2026_Sindpd - ES.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-023",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SINDPD-PA",
+      "uf": "PA",
+      "categoria": "Processamento de Dados",
+      "ano_referencia": 2025,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-024",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SEAC-AC",
+      "uf": "AC",
+      "categoria": "Asseio e Conservação",
+      "ano_referencia": 2025,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": "2025-01-01",
+      "vigencia_fim": "2025-12-31",
+      "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    },
+    {
+      "id_registro_reajuste": "REG-025",
+      "ids_registros_conflitantes": null,
+      "sindicato": "SESCON-PB",
+      "uf": "PB",
+      "categoria": "Técnicos em Contabilidade",
+      "ano_referencia": 2025,
+      "status_parametro": "pendente_revisao",
+      "conflito": false,
+      "percentual_reajuste": null,
+      "data_base": null,
+      "vigencia_inicio": null,
+      "vigencia_fim": null,
+      "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
+      "observacao": "Aguardando extração de parâmetros do PDF",
+      "itens_cct": {
+        "reajuste_salarial": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "auxilio_alimentacao": {
+          "valor": null, "tipo": "valor_mensal", "unidade": "BRL",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "adicional_noturno": {
+          "valor": null, "tipo": "percentual", "unidade": "%",
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "hora_extra": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        },
+        "plr": {
+          "valor": null, "tipo": "regra_textual", "unidade": null,
+          "status_parametro": "pendente_revisao", "conflito": false, "ids_registros_conflitantes": null,
+          "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf", "observacao": null,
+          "data_validacao": null, "origem_atualizacao": null
+        }
+      }
+    }
+  ]
+}
