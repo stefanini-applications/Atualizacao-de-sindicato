@@ -737,13 +737,6 @@ function buildReviewSection(record) {
 
       <hr class="my-3" />
 
-      <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="review-confirm-checkbox" />
-        <label class="form-check-label fw-semibold" for="review-confirm-checkbox">
-          Li o documento de origem e conferi as informações
-        </label>
-      </div>
-
       <div class="mb-3">
         <label for="review-observacao" class="form-label form-label-sm fw-semibold">
           Observação <span class="text-danger">*</span>
@@ -760,10 +753,10 @@ function buildReviewSection(record) {
       <div id="review-action-error" class="alert alert-danger py-2 small d-none mb-2" role="alert"></div>
 
       <div class="d-flex gap-2 flex-wrap">
-        <button type="button" class="btn btn-success btn-sm" id="btn-validate-info" disabled>
-          ✔ Validar informações
+        <button type="button" class="btn btn-success btn-sm" id="btn-aplicar">
+          ✔ Aplicar
         </button>
-        <button type="button" class="btn btn-outline-warning btn-sm" id="btn-reject-pending" disabled>
+        <button type="button" class="btn btn-outline-warning btn-sm" id="btn-reject-pending">
           ✗ Rejeitar / manter pendente
         </button>
       </div>
@@ -776,22 +769,11 @@ function buildReviewSection(record) {
 }
 
 function bindReviewControls(record) {
-  const checkbox = document.getElementById('review-confirm-checkbox');
-  const observacaoEl = document.getElementById('review-observacao');
-  const btnValidate = document.getElementById('btn-validate-info');
+  const btnAplicar = document.getElementById('btn-aplicar');
   const btnReject = document.getElementById('btn-reject-pending');
 
-  function updateButtonsState() {
-    const canAct = checkbox?.checked && (observacaoEl?.value?.trim().length ?? 0) > 0;
-    if (btnValidate) btnValidate.disabled = !canAct;
-    if (btnReject) btnReject.disabled = !canAct;
-  }
-
-  if (checkbox) checkbox.addEventListener('change', updateButtonsState);
-  if (observacaoEl) observacaoEl.addEventListener('input', updateButtonsState);
-
-  if (btnValidate) {
-    btnValidate.addEventListener('click', () => validateRecord(record));
+  if (btnAplicar) {
+    btnAplicar.addEventListener('click', () => validateRecord(record));
   }
   if (btnReject) {
     btnReject.addEventListener('click', () => rejectRecord(record));
@@ -817,6 +799,7 @@ function validateRecord(record) {
   if (!dataBase) missingData.push('Data-base');
   if (!vigenciaInicio) missingData.push('Vigência início');
   if (!vigenciaFim) missingData.push('Vigência fim');
+  if (!observacao) missingData.push('Observação');
 
   if (missingData.length > 0) {
     if (errorEl) {
