@@ -170,3 +170,22 @@ body {
 .cct-item-obs {
   font-style: italic;
 }
+
+/* ── CCT Item alert boxes ────────────────────────────────────────── */
+.cct-item-alert {
+  font-size: 0.8125rem;
+  border-radius: 0.375rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.cct-item-alert-pending {
+  background-color: #fff3cd;
+  color: #664d03;
+  border: 1px solid #ffe69c;
+}
+
+.cct-item-alert-conflict {
+  background-color: #fff8e1;
+  color: #7a4100;
+  border: 1px solid #ffe0a3;
+}

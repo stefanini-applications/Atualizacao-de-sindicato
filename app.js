@@ -434,44 +434,73 @@ function buildDetailHtml(r, isConflict) {
   return html;
 }
 
+const CCT_ITEM_ORDER = ['reajuste_salarial', 'auxilio_alimentacao', 'adicional_noturno', 'hora_extra', 'plr'];
+
 function buildCctItemsHtml(itens) {
-  const entries = Object.entries(itens);
-  if (entries.length === 0) return '';
+  // Render canonical keys in order first, then any extra keys present in data
+  const keys = [
+    ...CCT_ITEM_ORDER.filter((k) => k in itens),
+    ...Object.keys(itens).filter((k) => !CCT_ITEM_ORDER.includes(k)),
+  ];
+  if (keys.length === 0) return '';
 
   let html = `
     <hr class="my-3"/>
     <h3 class="cct-section-title">Itens da CCT</h3>
     <div class="row g-3">`;
 
-  entries.forEach(([key, item]) => {
+  keys.forEach((key) => {
+    const item = itens[key];
     const label = CCT_ITEM_LABELS[key] ?? key;
     const valorDisplay = formatCctValor(item);
     const badge = statusBadgeItem(item);
-    const fonte = item.fonte_documento ?? '—';
-    const obs = item.observacao ?? null;
-    const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
-    const origem = item.origem_atualizacao ?? null;
+    const isItemConflict = item.status_parametro === 'conflito' || item.conflito === true;
+    const isItemPending = item.status_parametro === 'pendente_revisao';
 
-    let metaHtml = '';
-    if (fonte !== '—') {
-      metaHtml += `<div class="cct-item-meta">Fonte: ${escHtml(fonte)}</div>`;
-    }
-    if (obs) {
-      metaHtml += `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`;
-    }
-    if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
-    }
-    if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+    // tipo / unidade
+    let tipoHtml = '';
+    if (item.tipo || item.unidade) {
+      const parts = [item.tipo, item.unidade].filter(Boolean);
+      tipoHtml = `<div class="cct-item-meta">Tipo: ${escHtml(parts.join(' / '))}</div>`;
     }
 
-    let conflictIds = '';
-    if (item.conflito && Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+    // fonte — link when present, dash when absent
+    const fonteHtml = item.fonte_documento
+      ? `<div class="cct-item-meta">Fonte: <a href="${escAttr(item.fonte_documento)}" target="_blank" rel="noopener noreferrer">Abrir PDF</a></div>`
+      : `<div class="cct-item-meta">Fonte: —</div>`;
+
+    const obsHtml = item.observacao
+      ? `<div class="cct-item-meta cct-item-obs">${escHtml(item.observacao)}</div>`
+      : '';
+    const dataValHtml = item.data_validacao
+      ? `<div class="cct-item-meta">Validado em: ${escHtml(formatDateTime(item.data_validacao))}</div>`
+      : '';
+    const origemHtml = item.origem_atualizacao
+      ? `<div class="cct-item-meta">Origem: ${escHtml(item.origem_atualizacao)}</div>`
+      : '';
+
+    // conflicting IDs (shown inside alert when in conflict)
+    let conflictIdsHtml = '';
+    if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
       const ids = item.ids_registros_conflitantes
         .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
         .join('');
-      conflictIds = `<div class="mt-1">${ids}</div>`;
+      conflictIdsHtml = `<div class="mt-1">${ids}</div>`;
+    }
+
+    // status alert box
+    let alertHtml = '';
+    if (isItemConflict) {
+      alertHtml = `
+        <div class="cct-item-alert cct-item-alert-conflict mt-2">
+          <strong>⚠ Conflito:</strong> Este item possui registros conflitantes e não deve ser utilizado até que seja resolvido manualmente.
+          ${conflictIdsHtml}
+        </div>`;
+    } else if (isItemPending) {
+      alertHtml = `
+        <div class="cct-item-alert cct-item-alert-pending mt-2">
+          <strong>⏳ Pendente de revisão:</strong> Este item ainda não foi revisado e pode estar incompleto ou desatualizado.
+        </div>`;
     }
 
     html += `
@@ -482,8 +511,12 @@ function buildCctItemsHtml(itens) {
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
-          ${metaHtml}
-          ${conflictIds}
+          ${tipoHtml}
+          ${fonteHtml}
+          ${obsHtml}
+          ${dataValHtml}
+          ${origemHtml}
+          ${alertHtml}
         </div>
       </div>`;
   });
