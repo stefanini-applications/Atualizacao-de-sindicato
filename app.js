@@ -435,55 +435,92 @@ function buildDetailHtml(r, isConflict) {
 }
 
 function buildCctItemsHtml(itens) {
-  const entries = Object.entries(itens);
-  if (entries.length === 0) return '';
+  // Render canonical items in defined order, then any extra keys
+  const orderedKeys = CCT_ITEM_ORDER.filter((k) => k in itens);
+  const extraKeys = Object.keys(itens).filter((k) => !CCT_ITEM_ORDER.includes(k));
+  const keys = [...orderedKeys, ...extraKeys];
+
+  if (keys.length === 0) return '';
 
   let html = `
     <hr class="my-3"/>
     <h3 class="cct-section-title">Itens da CCT</h3>
     <div class="row g-3">`;
 
-  entries.forEach(([key, item]) => {
+  keys.forEach((key) => {
+    const item = itens[key];
     const label = CCT_ITEM_LABELS[key] ?? key;
     const valorDisplay = formatCctValor(item);
     const badge = statusBadgeItem(item);
-    const fonte = item.fonte_documento ?? '—';
+    const fonte = item.fonte_documento ?? null;
     const obs = item.observacao ?? null;
     const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
     const origem = item.origem_atualizacao ?? null;
+    const isItemConflict = item.conflito === true || item.status_parametro === 'conflito';
+    const isPending = item.status_parametro === 'pendente_revisao';
 
-    let metaHtml = '';
-    if (fonte !== '—') {
-      metaHtml += `<div class="cct-item-meta">Fonte: ${escHtml(fonte)}</div>`;
-    }
-    if (obs) {
-      metaHtml += `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`;
-    }
-    if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
-    }
-    if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+    // tipo / unidade (AC4)
+    let tipoHtml = '';
+    if (item.tipo || item.unidade) {
+      const parts = [item.tipo, item.unidade].filter(Boolean);
+      tipoHtml = `<div class="cct-item-meta">Tipo: ${escHtml(parts.join(' · '))}</div>`;
     }
 
-    let conflictIds = '';
-    if (item.conflito && Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
-      const ids = item.ids_registros_conflitantes
-        .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
-        .join('');
-      conflictIds = `<div class="mt-1">${ids}</div>`;
+    // fonte with "Abrir PDF" link (AC7) or dash when absent (AC6)
+    let fonteHtml = `<div class="cct-item-meta">Fonte: `;
+    if (fonte) {
+      fonteHtml += `<a href="${escAttr(fonte)}" target="_blank" rel="noopener noreferrer" class="cct-pdf-link">Abrir PDF</a>`;
+    } else {
+      fonteHtml += '—';
     }
+    fonteHtml += '</div>';
+
+    // observação
+    const obsHtml = obs
+      ? `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`
+      : '';
+
+    // validation date and origin
+    let extraMeta = '';
+    if (dataVal) extraMeta += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
+    if (origem) extraMeta += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+
+    // conflict IDs + warning alert (AC8)
+    let conflictHtml = '';
+    if (isItemConflict) {
+      let idsHtml = '';
+      if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+        const ids = item.ids_registros_conflitantes
+          .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
+          .join('');
+        idsHtml = `<div class="mb-1">${ids}</div>`;
+      }
+      conflictHtml = `
+        <div class="cct-item-conflict-alert mt-2">
+          ${idsHtml}
+          <div class="cct-item-conflict-msg">⚠ Este item não deve ser usado até revisão manual.</div>
+        </div>`;
+    }
+
+    // pending revision notice (AC9)
+    const pendingHtml = isPending
+      ? `<div class="cct-item-pending-notice mt-1">⏳ Aguardando revisão — item ainda não validado.</div>`
+      : '';
 
     html += `
       <div class="col-12 col-sm-6">
-        <div class="cct-item-card">
+        <div class="cct-item-card${isItemConflict ? ' cct-item-card--conflito' : ''}">
           <div class="cct-item-header">
             <span class="cct-item-label">${escHtml(label)}</span>
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
-          ${metaHtml}
-          ${conflictIds}
+          ${tipoHtml}
+          ${fonteHtml}
+          ${obsHtml}
+          ${extraMeta}
+          ${conflictHtml}
+          ${pendingHtml}
         </div>
       </div>`;
   });
@@ -512,6 +549,15 @@ const CCT_ITEM_LABELS = {
   hora_extra: 'Hora Extra',
   plr: 'PLR',
 };
+
+/** Canonical display order for itens_cct */
+const CCT_ITEM_ORDER = [
+  'reajuste_salarial',
+  'auxilio_alimentacao',
+  'adicional_noturno',
+  'hora_extra',
+  'plr',
+];
 
 /**
  * Returns the reajuste valor using itens_cct as the canonical source,
