@@ -39,6 +39,25 @@
       </div>
     </header>
 
+    <!-- Local changes banner (shown when localStorage has unsaved decisions) -->
+    <div id="local-changes-banner" class="local-changes-banner d-none" role="region" aria-label="Alterações locais pendentes">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <span class="local-changes-msg">
+            ⚠ Há alterações aplicadas localmente. Para tornar definitivas, exporte e submeta para validação/commit.
+          </span>
+          <div class="d-flex gap-2">
+            <button type="button" id="btn-export-data" class="btn btn-sm btn-success">
+              ⬇ Exportar base atualizada
+            </button>
+            <button type="button" id="btn-discard-changes" class="btn btn-sm btn-outline-danger">
+              🗑 Descartar alterações locais
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <main class="container-fluid py-3">
       <!-- Filters -->
       <section class="card mb-3" aria-label="Filtros">
@@ -126,7 +145,7 @@
     aria-modal="true"
     role="dialog"
   >
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title fs-5" id="detail-modal-label">Detalhe do parâmetro</h2>
