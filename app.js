@@ -447,31 +447,54 @@ function buildCctItemsHtml(itens) {
     const label = CCT_ITEM_LABELS[key] ?? key;
     const valorDisplay = formatCctValor(item);
     const badge = statusBadgeItem(item);
-    const fonte = item.fonte_documento ?? '—';
-    const obs = item.observacao ?? null;
-    const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
-    const origem = item.origem_atualizacao ?? null;
+    const isConflict = item.status_parametro === 'conflito' || item.conflito === true;
+    const isPending = item.status_parametro === 'pendente_revisao';
 
-    let metaHtml = '';
-    if (fonte !== '—') {
-      metaHtml += `<div class="cct-item-meta">Fonte: ${escHtml(fonte)}</div>`;
-    }
-    if (obs) {
-      metaHtml += `<div class="cct-item-meta cct-item-obs">${escHtml(obs)}</div>`;
-    }
-    if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escHtml(dataVal)}</div>`;
-    }
-    if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escHtml(origem)}</div>`;
+    // tipo/unidade
+    let tipoUnidadeHtml = '';
+    if (item.tipo || item.unidade) {
+      const parts = [item.tipo, item.unidade].filter(Boolean);
+      tipoUnidadeHtml = `<div class="cct-item-meta">Tipo/unidade: ${escHtml(parts.join(' | '))}</div>`;
     }
 
-    let conflictIds = '';
-    if (item.conflito && Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
-      const ids = item.ids_registros_conflitantes
-        .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
-        .join('');
-      conflictIds = `<div class="mt-1">${ids}</div>`;
+    // fonte sempre exibida, "—" quando ausente
+    const fonteText = item.fonte_documento ?? '—';
+    const fonteHtml = `<div class="cct-item-meta">Fonte: ${escHtml(fonteText)}</div>`;
+
+    // observação sempre exibida, "—" quando ausente
+    const obsText = item.observacao ?? '—';
+    const obsHtml = `<div class="cct-item-meta cct-item-obs">Observação: ${escHtml(obsText)}</div>`;
+
+    // data_validacao e origem (somente quando presentes)
+    let metaExtra = '';
+    if (item.data_validacao) {
+      metaExtra += `<div class="cct-item-meta">Validado em: ${escHtml(formatDateTime(item.data_validacao))}</div>`;
+    }
+    if (item.origem_atualizacao) {
+      metaExtra += `<div class="cct-item-meta">Origem: ${escHtml(item.origem_atualizacao)}</div>`;
+    }
+
+    // alerta de pendência
+    let pendingAlert = '';
+    if (isPending) {
+      pendingAlert = `<div class="cct-item-alert cct-item-alert-pendente">⏳ Este item aguarda revisão.</div>`;
+    }
+
+    // alerta de conflito + IDs conflitantes
+    let conflictAlert = '';
+    if (isConflict) {
+      let idsHtml = '';
+      if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+        const ids = item.ids_registros_conflitantes
+          .map((id) => `<span class="conflicting-id">${escHtml(String(id))}</span>`)
+          .join('');
+        idsHtml = `<div class="mt-1">${ids}</div>`;
+      }
+      conflictAlert = `
+        <div class="cct-item-alert cct-item-alert-conflito">
+          ⚠ Este item está em conflito e não deve ser utilizado até revisão manual.
+          ${idsHtml}
+        </div>`;
     }
 
     html += `
@@ -482,8 +505,12 @@ function buildCctItemsHtml(itens) {
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
-          ${metaHtml}
-          ${conflictIds}
+          ${tipoUnidadeHtml}
+          ${fonteHtml}
+          ${obsHtml}
+          ${metaExtra}
+          ${pendingAlert}
+          ${conflictAlert}
         </div>
       </div>`;
   });
