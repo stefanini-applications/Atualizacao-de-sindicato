@@ -72,6 +72,7 @@
                 <option value="">Todos</option>
                 <option value="valido">Válido</option>
                 <option value="conflito">Conflito</option>
+                <option value="pendente_revisao">Pendente revisão</option>
               </select>
             </div>
             <div class="col-6 col-md-2 d-flex align-items-end">
@@ -83,9 +84,19 @@
         </div>
       </section>
 
-      <!-- Result count -->
-      <div class="d-flex align-items-center justify-content-between mb-2 px-1">
+      <!-- Local changes banner (shown after manual validation) -->
+      <div id="local-changes-banner" class="alert alert-info mb-3 d-none" role="alert">
+        <strong>⚠ Alteração aplicada localmente.</strong> Para tornar definitiva, exporte a base atualizada e submeta para validação/commit.
+        <div class="small mt-1">Esta validação manual não altera automaticamente <code>data/base_parametros_sindicais.json</code>, o repositório GitHub ou o pipeline.</div>
+      </div>
+
+      <!-- Result count + action buttons -->
+      <div class="d-flex align-items-center justify-content-between mb-2 px-1 flex-wrap gap-2">
         <span id="result-count" class="text-secondary small"></span>
+        <div class="d-flex gap-2">
+          <button id="btn-export-json" class="btn btn-outline-primary btn-sm">⬇ Exportar base atualizada</button>
+          <button id="btn-discard-local" class="btn btn-outline-danger btn-sm">✕ Descartar alterações locais</button>
+        </div>
       </div>
 
       <!-- Table -->

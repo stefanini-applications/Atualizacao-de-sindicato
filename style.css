@@ -51,6 +51,15 @@ body {
   --bs-table-bg: #fff0c2;
 }
 
+/* Pending review row highlight */
+#params-tbody tr.row-pendente {
+  --bs-table-bg: #e8f4fd;
+}
+
+#params-tbody tr.row-pendente:hover {
+  --bs-table-bg: #cce5f8;
+}
+
 /* ── Status badges ───────────────────────────────────────────────── */
 .badge-valido {
   background-color: #d1e7dd;
@@ -64,6 +73,15 @@ body {
 .badge-conflito {
   background-color: #ffe0a3;
   color: #7a4100;
+  font-size: 0.75rem;
+  padding: 0.25em 0.55em;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+}
+
+.badge-pendente {
+  background-color: #cfe2ff;
+  color: #084298;
   font-size: 0.75rem;
   padding: 0.25em 0.55em;
   border-radius: 0.375rem;
@@ -112,4 +130,55 @@ body {
   border-radius: 0.375rem;
   margin: 0.15rem;
   font-family: var(--bs-font-monospace, monospace);
+}
+
+/* ── Review sections ─────────────────────────────────────────────── */
+.review-section {
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+}
+
+.review-section-pendente {
+  background-color: #e8f4fd;
+  border: 1px solid #9ec5fe;
+}
+
+.review-section-conflito {
+  background-color: #fff8e1;
+  border: 1px solid #ffe0a3;
+}
+
+.review-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+}
+
+.review-icon {
+  font-size: 1.1rem;
+}
+
+.review-checklist {
+  padding-left: 1.25rem;
+  margin-bottom: 0;
+  color: #495057;
+}
+
+.review-checklist li {
+  margin-bottom: 0.25rem;
+}
+
+/* ── Validation form ─────────────────────────────────────────────── */
+.validation-form {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.btn-open-pdf {
+  font-size: 0.75rem;
+  padding: 0.15em 0.6em;
+  line-height: 1.5;
 }
