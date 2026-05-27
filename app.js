@@ -162,6 +162,35 @@ const EMBEDDED_DEMO = {
       vigencia_fim: '2026-02-28',
       fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
       observacao: 'Parâmetros extraídos automaticamente — aguardando conferência manual',
+      itens_cct: {
+        piso_salarial: {
+          valor: 1540.47, percentual: null, valor_textual: null,
+          regra_textual: 'O piso salarial para a categoria é de R$ 1.540,47 mensais conforme cláusula terceira.',
+          tipo: 'piso_unico', unidade: 'BRL',
+          clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        adicional_noturno: {
+          valor: 35, percentual: 35, valor_textual: null,
+          regra_textual: 'O adicional noturno é de 35% sobre a hora normal para trabalhos realizados entre 22h e 5h.',
+          tipo: 'percentual', unidade: '%',
+          clausula: 'CLÁUSULA DÉCIMA SEGUNDA - ADICIONAL NOTURNO',
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        auxilio_alimentacao: {
+          valor: null, percentual: null, valor_textual: null,
+          regra_textual: null,
+          tipo: 'valor_mensal', unidade: 'BRL',
+          clausula: null,
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: 'Valor não identificado no documento.',
+          status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+      },
     },
     {
       id_registro_reajuste: 'PEND-DEMO-002',
@@ -751,6 +780,9 @@ function buildDetailHtml(record, isConflict) {
   const isReviewable = isPending || isConflict;
   const conflictSection = isConflict ? buildConflictSection(record) : '';
   const reviewSection = isReviewable ? buildReviewSection(record) : '';
+  const itensCctSection = (record.itens_cct && Object.keys(record.itens_cct).length > 0)
+    ? buildCctItemsHtml(record.itens_cct)
+    : '';
 
   return `
     <div class="mb-3">
@@ -793,6 +825,8 @@ function buildDetailHtml(record, isConflict) {
       <dd class="col-sm-8">${buildFonteLink(record.fonte_documento)}</dd>
       ` : ''}
     </dl>
+
+    ${itensCctSection}
   `;
 }
 
@@ -869,24 +903,46 @@ function buildCctItemsHtml(itens) {
     const badge = statusBadgeItem(item);
     const isConflito = item.status_parametro === 'conflito' || item.conflito === true;
     const isPendente = item.status_parametro === 'pendente_revisao';
+    const isExtraido = item.status_parametro === 'extraido_para_revisao';
     const fonteRaw = item.fonte_documento ?? null;
-    const obs = item.observacao ?? null;
-    const dataVal = item.data_validacao ? formatDateTime(item.data_validacao) : null;
-    const origem = item.origem_atualizacao ?? null;
 
     const fonteHtml = fonteRaw
       ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta">Abrir PDF</a>`
       : `<span class="cct-item-meta">Fonte: —</span>`;
 
-    let metaHtml = `<div>${fonteHtml}</div>`;
-    metaHtml += `<div class="cct-item-meta cct-item-obs">${obs ? escapeHtml(obs) : '—'}</div>`;
-    if (dataVal) {
-      metaHtml += `<div class="cct-item-meta">Validado em: ${escapeHtml(dataVal)}</div>`;
+    // Build metadata fields (AC9)
+    const fieldRows = [];
+
+    if (item.percentual != null) {
+      fieldRows.push(`<dt class="col-5">Percentual</dt><dd class="col-7">${escapeHtml(String(item.percentual))}%</dd>`);
     }
-    if (origem) {
-      metaHtml += `<div class="cct-item-meta">Origem: ${escapeHtml(origem)}</div>`;
+    if (item.tipo != null && item.tipo !== '') {
+      fieldRows.push(`<dt class="col-5">Tipo</dt><dd class="col-7">${escapeHtml(String(item.tipo))}</dd>`);
+    }
+    if (item.unidade != null && item.unidade !== '') {
+      fieldRows.push(`<dt class="col-5">Unidade</dt><dd class="col-7">${escapeHtml(String(item.unidade))}</dd>`);
+    }
+    if (item.clausula != null && item.clausula !== '') {
+      fieldRows.push(`<dt class="col-5">Cláusula</dt><dd class="col-7">${escapeHtml(String(item.clausula))}</dd>`);
+    }
+    if (item.observacao != null && item.observacao !== '') {
+      fieldRows.push(`<dt class="col-5">Observação</dt><dd class="col-7 fst-italic">${escapeHtml(String(item.observacao))}</dd>`);
+    }
+    if (item.status_parametro != null) {
+      fieldRows.push(`<dt class="col-5">Status</dt><dd class="col-7">${badge}</dd>`);
     }
 
+    const fieldsHtml = fieldRows.length > 0
+      ? `<dl class="row cct-item-fields">${fieldRows.join('')}</dl>`
+      : '';
+
+    const fonteRowHtml = `<div class="mt-1">${fonteHtml}</div>`;
+
+    const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
+      ? `<div class="cct-item-regra">${escapeHtml(String(item.regra_textual))}</div>`
+      : '';
+
+    // Status alerts
     let statusAlertHtml = '';
     if (isConflito) {
       let conflictIdsHtml = '';
@@ -906,6 +962,11 @@ function buildCctItemsHtml(itens) {
         <div class="cct-item-alert cct-item-alert-pendente mt-2">
           ⏳ Este item aguarda revisão.
         </div>`;
+    } else if (isExtraido) {
+      statusAlertHtml = `
+        <div class="cct-item-alert cct-item-alert-extraido mt-2">
+          🔎 Informação extraída automaticamente. Necessita conferência humana antes de uso.
+        </div>`;
     }
 
     html += `
@@ -916,7 +977,9 @@ function buildCctItemsHtml(itens) {
             ${badge}
           </div>
           <div class="cct-item-valor">${valorDisplay}</div>
-          ${metaHtml}
+          ${fieldsHtml}
+          ${fonteRowHtml}
+          ${regraHtml}
           ${statusAlertHtml}
         </div>
       </div>`;
@@ -927,13 +990,18 @@ function buildCctItemsHtml(itens) {
 }
 
 function formatCctValor(item) {
-  if (item.valor == null) return '<span class="text-secondary">—</span>';
-  if (typeof item.valor === 'string') return escapeHtml(item.valor);
-  if (item.tipo === 'percentual') return `${Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
-  if (item.unidade === 'BRL') {
-    return Number(item.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  if (item.valor != null) {
+    if (typeof item.valor === 'string') return escapeHtml(item.valor);
+    if (item.tipo === 'percentual') return `${Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+    if (item.unidade === 'BRL') {
+      return Number(item.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    return escapeHtml(String(item.valor));
   }
-  return escapeHtml(String(item.valor));
+  if (item.valor_textual != null && item.valor_textual !== '') {
+    return escapeHtml(String(item.valor_textual));
+  }
+  return '<span class="text-secondary">—</span>';
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -941,10 +1009,13 @@ function formatCctValor(item) {
 /** Labels for itens_cct keys */
 const CCT_ITEM_LABELS = {
   reajuste_salarial: 'Reajuste Salarial',
-  auxilio_alimentacao: 'Auxílio Alimentação/Refeição',
+  piso_salarial: 'Piso Salarial',
   adicional_noturno: 'Adicional Noturno',
-  hora_extra: 'Hora Extra',
+  auxilio_alimentacao: 'Auxílio Alimentação/Refeição',
   plr: 'PLR',
+  hora_extra: 'Hora Extra',
+  sobreaviso: 'Sobreaviso',
+  jornada: 'Jornada',
 };
 
 /**
@@ -973,6 +1044,9 @@ function statusBadgeItem(item) {
   }
   if (item.status_parametro === 'pendente_revisao') {
     return '<span class="badge-pendente">⏳ Pendente</span>';
+  }
+  if (item.status_parametro === 'extraido_para_revisao') {
+    return '<span class="badge-extraido">🔎 Extraído para revisão</span>';
   }
   return '<span class="badge-valido">✔ Válido</span>';
 }
