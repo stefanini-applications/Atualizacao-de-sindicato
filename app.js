@@ -320,6 +320,9 @@ let filterUf;
 let filterSindicato;
 let filterAno;
 let filterStatus;
+let filterCctItem;
+let filterItemStatus;
+let filterItemPreenchimento;
 let searchInput;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -351,6 +354,9 @@ function bindElements() {
   filterSindicato = document.getElementById('filter-sindicato');
   filterAno = document.getElementById('filter-ano');
   filterStatus = document.getElementById('filter-status');
+  filterCctItem = document.getElementById('filter-cct-item');
+  filterItemStatus = document.getElementById('filter-item-status');
+  filterItemPreenchimento = document.getElementById('filter-item-preenchimento');
 
   searchInput =
     document.getElementById('search-input') ||
@@ -364,6 +370,9 @@ function bindEvents() {
     filterSindicato,
     filterAno,
     filterStatus,
+    filterCctItem,
+    filterItemStatus,
+    filterItemPreenchimento,
     searchInput,
   ].filter(Boolean);
 
@@ -624,6 +633,9 @@ function applyFilters() {
   const anoValue = filterAno?.value ?? '';
   const statusValue = filterStatus?.value ?? '';
   const searchValue = normalizeText(searchInput?.value ?? '');
+  const cctItemValue = filterCctItem?.value ?? '';
+  const itemStatusValue = filterItemStatus?.value ?? '';
+  const itemPreenchimentoValue = filterItemPreenchimento?.value ?? '';
 
   filteredRecords = allRecords.filter((record) => {
     const isConflict = isConflictRecord(record);
@@ -652,12 +664,59 @@ function applyFilters() {
 
     const matchesSearch = !searchValue || searchableText.includes(searchValue);
 
+    // CCT item filters (AC11, AC12, AC13)
+    let matchesCctFilters = true;
+    if (cctItemValue || itemStatusValue || itemPreenchimentoValue) {
+      matchesCctFilters = false;
+      const itens = record.itens_cct || {};
+
+      if (cctItemValue) {
+        const item = itens[cctItemValue];
+        if (item) {
+          const effectiveStatus = getItemEffectiveStatus(item);
+          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          let fillOk = true;
+          if (itemPreenchimentoValue === 'preenchido') {
+            fillOk = isCctItemPreenchido(cctItemValue, item);
+          } else if (itemPreenchimentoValue === 'nao_preenchido') {
+            fillOk = !isCctItemPreenchido(cctItemValue, item);
+          }
+          matchesCctFilters = statusOk && fillOk;
+        } else {
+          // Item is absent from this record
+          // "item X + sem valor" includes records where the item doesn't exist at all
+          if (itemPreenchimentoValue === 'nao_preenchido' && !itemStatusValue) {
+            matchesCctFilters = true;
+          }
+        }
+      } else {
+        // No specific item — match if ANY item satisfies the conditions
+        const allItems = Object.entries(itens);
+        matchesCctFilters = allItems.some(([itemKey, item]) => {
+          const effectiveStatus = getItemEffectiveStatus(item);
+          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          let fillOk = true;
+          if (itemPreenchimentoValue === 'preenchido') {
+            fillOk = isCctItemPreenchido(itemKey, item);
+          } else if (itemPreenchimentoValue === 'nao_preenchido') {
+            fillOk = !isCctItemPreenchido(itemKey, item);
+          }
+          return statusOk && fillOk;
+        });
+        // Records with no CCT items at all: match only "sem valor" without a status requirement
+        if (!matchesCctFilters && allItems.length === 0 && itemPreenchimentoValue === 'nao_preenchido' && !itemStatusValue) {
+          matchesCctFilters = true;
+        }
+      }
+    }
+
     return (
       matchesUf &&
       matchesSindicato &&
       matchesAno &&
       matchesStatus &&
-      matchesSearch
+      matchesSearch &&
+      matchesCctFilters
     );
   });
 
@@ -1016,7 +1075,8 @@ function buildCctItemsContent(record) {
 function buildCctItemCard(itemKey, item) {
   const label = CCT_ITEM_LABELS[itemKey] ?? itemKey;
   const badge = statusBadgeItem(item);
-  const isValido = item.status_parametro === 'valido' && item.conflito !== true;
+  const effectiveStatus = getItemEffectiveStatus(item);
+  const isValido = effectiveStatus === 'valido' && item.conflito !== true;
 
   if (isValido) {
     return buildCctItemReadOnlyCard(itemKey, item, label, badge);
@@ -1067,8 +1127,9 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
 
 function buildCctItemEditCard(itemKey, item, label, badge) {
   const isConflito = item.status_parametro === 'conflito' || item.conflito === true;
-  const isPendente = item.status_parametro === 'pendente_revisao';
-  const isExtraido = item.status_parametro === 'extraido_para_revisao';
+  const effectiveStatus = getItemEffectiveStatus(item);
+  const isPendente = effectiveStatus === 'pendente_revisao' || effectiveStatus === 'pendente_avaliacao';
+  const isExtraido = effectiveStatus === 'extraido_para_revisao';
 
   const fonteRaw = item.fonte_documento ?? null;
   const fonteHtml = fonteRaw
@@ -1297,13 +1358,42 @@ function getReajusteValor(r) {
 function hasReviewableCctItems(record) {
   const itens = record.itens_cct;
   if (!itens) return false;
-  return Object.values(itens).some(
-    (item) =>
-      item.status_parametro === 'extraido_para_revisao' ||
-      item.status_parametro === 'pendente_revisao' ||
-      item.status_parametro === 'conflito' ||
-      item.conflito === true
-  );
+  return Object.values(itens).some((item) => {
+    const effectiveStatus = getItemEffectiveStatus(item);
+    return effectiveStatus === 'extraido_para_revisao' ||
+      effectiveStatus === 'pendente_revisao' ||
+      effectiveStatus === 'pendente_avaliacao' ||
+      effectiveStatus === 'conflito' ||
+      item.conflito === true;
+  });
+}
+
+/**
+ * Returns the effective display status of a CCT item, applying governance rules (AC14).
+ * Items that were not manually validated must never appear as 'valido'.
+ */
+function getItemEffectiveStatus(item) {
+  if (!item) return null;
+  if (item.status_parametro === 'valido' && item.origem_atualizacao !== 'validacao_manual_item_cct') {
+    return 'extraido_para_revisao';
+  }
+  return item.status_parametro;
+}
+
+/**
+ * Returns true when a CCT item has a meaningful value that counts as "preenchido".
+ * Uses CCT_ITEM_MIN_FIELDS + getItemFieldValue for schema compatibility, with a
+ * generic `valor`/`valor_textual` fallback for real-data items that use those fields.
+ */
+function isCctItemPreenchido(itemKey, item) {
+  if (!item) return false;
+  const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
+  if (minKeys.some((k) => {
+    const v = getItemFieldValue(itemKey, k, item);
+    return v != null && v !== '';
+  })) return true;
+  return (item.valor != null && item.valor !== '') ||
+         (item.valor_textual != null && item.valor_textual !== '');
 }
 
 /** Generates 12 CCT item columns for the main table row */
@@ -1351,13 +1441,13 @@ function buildCctTableCells(record) {
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
 
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
-  const vr = cellGet('auxilio_alimentacao', 'valor');
+  const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
   const plrVal = cellGet('plr', 'valor', 'percentual', 'regra_textual');
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
   const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
   const sob = cellGet('sobreaviso', 'percentual', 'regra_textual');
-  const jornada = cellGet('jornada', 'horas_semanais', 'opcoes_identificadas');
+  const jornadaItem = record.itens_cct?.jornada ?? null;
 
   const adNoturnoFmt = adNoturno != null
     ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
@@ -1372,13 +1462,13 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
     `<td class="cct-col">${adNoturnoFmt}</td>`,
-    `<td class="cct-col">${fmtBRL(vr)}</td>`,
+    `<td class="cct-col">${fmtVR(vrItem)}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
     `<td class="cct-col">${heP != null ? fmtPct(heP) : '—'}</td>`,
     `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
     `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
     `<td class="cct-col">${sobFmt}</td>`,
-    `<td class="cct-col">${jornada != null ? fmtShort(String(jornada)) : '—'}</td>`,
+    `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
   ].join('');
 }
 
@@ -1508,13 +1598,14 @@ function statusBadge(record) {
 
 function statusBadgeItem(item) {
   if (!item) return '';
-  if (item.status_parametro === 'conflito' || item.conflito === true) {
+  const effectiveStatus = getItemEffectiveStatus(item);
+  if (effectiveStatus === 'conflito' || item.conflito === true) {
     return '<span class="badge-conflito">⚠ Conflito</span>';
   }
-  if (item.status_parametro === 'pendente_revisao') {
+  if (effectiveStatus === 'pendente_revisao' || effectiveStatus === 'pendente_avaliacao') {
     return '<span class="badge-pendente">⏳ Pendente</span>';
   }
-  if (item.status_parametro === 'extraido_para_revisao') {
+  if (effectiveStatus === 'extraido_para_revisao') {
     return '<span class="badge-extraido">🔎 Extraído para revisão</span>';
   }
   return '<span class="badge-valido">✔ Válido</span>';
@@ -1817,6 +1908,9 @@ function clearFilters() {
   if (filterSindicato) filterSindicato.value = '';
   if (filterAno) filterAno.value = '';
   if (filterStatus) filterStatus.value = '';
+  if (filterCctItem) filterCctItem.value = '';
+  if (filterItemStatus) filterItemStatus.value = '';
+  if (filterItemPreenchimento) filterItemPreenchimento.value = '';
   if (searchInput) searchInput.value = '';
   applyFilters();
 }
@@ -1840,6 +1934,61 @@ function buildFonteLink(value) {
   }
 
   return `<span class="text-secondary">${escapeHtml(value)}</span>`;
+}
+
+/**
+ * Formats VR / auxílio alimentação with BRL and periodicity (AC5).
+ * Supports real-data schema (unidade: 'BRL/mes', 'BRL/dia') and
+ * demo-data schema (tipo: 'valor_mensal', 'valor_diario').
+ */
+function fmtVR(vrItem) {
+  if (!vrItem) return '—';
+  const v = vrItem.valor;
+  if (v == null || v === '') return '—';
+  const n = Number(v);
+  if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+  const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const unidade = (vrItem.unidade ?? '').toLowerCase();
+  const tipo = vrItem.tipo ?? '';
+  if (unidade.includes('/mes') || unidade.includes('/mês') || tipo === 'valor_mensal') {
+    return `${brl}/mês`;
+  }
+  if (unidade.includes('/dia') || tipo === 'valor_diario' || tipo === 'vale_refeicao') {
+    return `${brl}/dia`;
+  }
+  return brl;
+}
+
+/**
+ * Formats jornada for table display (AC7).
+ * Supports real-data schema (valor_textual: '44h/semana', unidade: 'h/semana') and
+ * demo-data schema (horas_semanais, tipo: 'horas_semanais').
+ */
+function fmtJornada(jornadaItem) {
+  if (!jornadaItem) return '—';
+  // Pre-formatted textual value (real-data schema)
+  const vt = jornadaItem.valor_textual;
+  if (vt != null && vt !== '') return escapeHtml(String(vt).slice(0, 22));
+  // Numeric value with unit
+  const v = jornadaItem.valor ?? jornadaItem.horas_semanais;
+  if (v != null) {
+    const n = Number(v);
+    if (!isNaN(n)) {
+      const unidade = jornadaItem.unidade ?? '';
+      if (unidade === 'h/semana' || unidade === 'horas' || jornadaItem.tipo === 'horas_semanais') {
+        return `${n}h semanais`;
+      }
+      if (unidade === 'h/mes' || jornadaItem.tipo === 'horas_mensais') {
+        return `${n}h mensais`;
+      }
+      return `${n}h`;
+    }
+  }
+  if (jornadaItem.horas_mensais != null) return `${jornadaItem.horas_mensais}h mensais`;
+  if (jornadaItem.opcoes_identificadas != null) {
+    return escapeHtml(String(jornadaItem.opcoes_identificadas).slice(0, 22));
+  }
+  return '—';
 }
 
 function formatPercent(value) {
