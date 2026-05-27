@@ -320,6 +320,9 @@ let filterUf;
 let filterSindicato;
 let filterAno;
 let filterStatus;
+let filterCctItem;
+let filterItemStatus;
+let filterItemPreenchimento;
 let searchInput;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -351,6 +354,9 @@ function bindElements() {
   filterSindicato = document.getElementById('filter-sindicato');
   filterAno = document.getElementById('filter-ano');
   filterStatus = document.getElementById('filter-status');
+  filterCctItem = document.getElementById('filter-cct-item');
+  filterItemStatus = document.getElementById('filter-item-status');
+  filterItemPreenchimento = document.getElementById('filter-item-preenchimento');
 
   searchInput =
     document.getElementById('search-input') ||
@@ -364,6 +370,9 @@ function bindEvents() {
     filterSindicato,
     filterAno,
     filterStatus,
+    filterCctItem,
+    filterItemStatus,
+    filterItemPreenchimento,
     searchInput,
   ].filter(Boolean);
 
@@ -624,6 +633,9 @@ function applyFilters() {
   const anoValue = filterAno?.value ?? '';
   const statusValue = filterStatus?.value ?? '';
   const searchValue = normalizeText(searchInput?.value ?? '');
+  const cctItemValue = filterCctItem?.value ?? '';
+  const itemStatusValue = filterItemStatus?.value ?? '';
+  const itemPreenchimentoValue = filterItemPreenchimento?.value ?? '';
 
   filteredRecords = allRecords.filter((record) => {
     const isConflict = isConflictRecord(record);
@@ -652,12 +664,41 @@ function applyFilters() {
 
     const matchesSearch = !searchValue || searchableText.includes(searchValue);
 
+    // CCT item / status / fill filters (AC11, AC12, AC13)
+    let matchesCctFilters = true;
+
+    if (cctItemValue && itemStatusValue) {
+      const item = record.itens_cct?.[cctItemValue] ?? null;
+      matchesCctFilters = item != null && item.status_parametro === itemStatusValue;
+    }
+
+    if (matchesCctFilters && cctItemValue && itemPreenchimentoValue) {
+      const item = record.itens_cct?.[cctItemValue] ?? null;
+      if (itemPreenchimentoValue === 'preenchido') {
+        matchesCctFilters = item != null && cctItemHasValue(cctItemValue, item);
+      } else if (itemPreenchimentoValue === 'nao_preenchido') {
+        matchesCctFilters = !item || !cctItemHasValue(cctItemValue, item);
+      }
+    }
+
+    if (matchesCctFilters && !cctItemValue && itemStatusValue) {
+      const itens = record.itens_cct;
+      if (!itens || Object.keys(itens).length === 0) {
+        matchesCctFilters = false;
+      } else {
+        matchesCctFilters = Object.values(itens).some(
+          (it) => it.status_parametro === itemStatusValue
+        );
+      }
+    }
+
     return (
       matchesUf &&
       matchesSindicato &&
       matchesAno &&
       matchesStatus &&
-      matchesSearch
+      matchesSearch &&
+      matchesCctFilters
     );
   });
 
@@ -1306,6 +1347,33 @@ function hasReviewableCctItems(record) {
   );
 }
 
+/** Returns true when the CCT item has at least one meaningful filled value */
+function cctItemHasValue(itemKey, item) {
+  if (!item) return false;
+  const notEmpty = (v) => v != null && v !== '';
+  switch (itemKey) {
+    case 'piso_salarial':
+      return notEmpty(item.valor_piso_cct) || notEmpty(item.piso_tecnico) ||
+             notEmpty(item.piso_administrativo) || notEmpty(item.piso_unico) ||
+             notEmpty(item.valor);
+    case 'auxilio_alimentacao':
+      return notEmpty(item.valor) || notEmpty(item.regra_textual);
+    case 'adicional_noturno':
+      return notEmpty(item.percentual) || notEmpty(item.valor);
+    case 'hora_extra':
+      return notEmpty(item.percentual_padrao) || notEmpty(item.percentual_sabado) ||
+             notEmpty(item.percentual_domingo_feriado) || notEmpty(item.regra_textual);
+    case 'plr':
+      return notEmpty(item.valor) || notEmpty(item.percentual) || notEmpty(item.regra_textual);
+    case 'sobreaviso':
+      return notEmpty(item.percentual) || notEmpty(item.regra_textual);
+    case 'jornada':
+      return notEmpty(item.horas_semanais) || notEmpty(item.opcoes_identificadas);
+    default:
+      return notEmpty(item.valor);
+  }
+}
+
 /** Generates 12 CCT item columns for the main table row */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
@@ -1329,13 +1397,39 @@ function buildCctTableCells(record) {
     if (v == null) return '—';
     const n = Number(v);
     if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
-    return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
   }
 
   function fmtShort(v) {
     if (v == null) return '—';
     const s = String(v);
     return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
+  }
+
+  // VR with periodicidade (AC5)
+  function fmtVR(item) {
+    if (!item) return '—';
+    const v = item.valor;
+    if (v == null || v === '') return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (item.tipo === 'valor_diario') return `${brl}/dia`;
+    if (item.tipo === 'valor_mensal') return `${brl}/mês`;
+    return brl;
+  }
+
+  // Jornada formatted as "44h semanais" / "220h mensais" (AC7)
+  function fmtJornada(item) {
+    if (!item) return '—';
+    const hs = item.horas_semanais;
+    if (hs != null && hs !== '') {
+      if (item.tipo === 'horas_mensais') return `${hs}h mensais`;
+      return `${hs}h semanais`;
+    }
+    const opc = item.opcoes_identificadas;
+    if (opc != null && opc !== '') return fmtShort(String(opc));
+    return '—';
   }
 
   // Backward compat: derive piso columns from tipo+valor when specific fields absent
@@ -1351,13 +1445,13 @@ function buildCctTableCells(record) {
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
 
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
-  const vr = cellGet('auxilio_alimentacao', 'valor');
+  const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
   const plrVal = cellGet('plr', 'valor', 'percentual', 'regra_textual');
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
   const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
   const sob = cellGet('sobreaviso', 'percentual', 'regra_textual');
-  const jornada = cellGet('jornada', 'horas_semanais', 'opcoes_identificadas');
+  const jornadaItem = record.itens_cct?.jornada ?? null;
 
   const adNoturnoFmt = adNoturno != null
     ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
@@ -1372,13 +1466,13 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
     `<td class="cct-col">${adNoturnoFmt}</td>`,
-    `<td class="cct-col">${fmtBRL(vr)}</td>`,
+    `<td class="cct-col">${fmtVR(vrItem)}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
     `<td class="cct-col">${heP != null ? fmtPct(heP) : '—'}</td>`,
     `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
     `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
     `<td class="cct-col">${sobFmt}</td>`,
-    `<td class="cct-col">${jornada != null ? fmtShort(String(jornada)) : '—'}</td>`,
+    `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
   ].join('');
 }
 
@@ -1817,6 +1911,9 @@ function clearFilters() {
   if (filterSindicato) filterSindicato.value = '';
   if (filterAno) filterAno.value = '';
   if (filterStatus) filterStatus.value = '';
+  if (filterCctItem) filterCctItem.value = '';
+  if (filterItemStatus) filterItemStatus.value = '';
+  if (filterItemPreenchimento) filterItemPreenchimento.value = '';
   if (searchInput) searchInput.value = '';
   applyFilters();
 }

@@ -100,6 +100,41 @@
               </button>
             </div>
           </div>
+
+          <!-- CCT item filters (AC11 / AC12 / AC13) -->
+          <div class="row g-2 align-items-end mt-1">
+            <div class="col-6 col-md-3">
+              <label for="filter-cct-item" class="form-label mb-1">Item da CCT</label>
+              <select id="filter-cct-item" class="form-select form-select-sm">
+                <option value="">Todos os itens</option>
+                <option value="piso_salarial">Piso salarial</option>
+                <option value="auxilio_alimentacao">VR / Auxílio alimentação</option>
+                <option value="adicional_noturno">Adicional noturno</option>
+                <option value="hora_extra">Hora extra</option>
+                <option value="plr">PLR</option>
+                <option value="sobreaviso">Sobreaviso</option>
+                <option value="jornada">Jornada</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-item-status" class="form-label mb-1">Status do item</label>
+              <select id="filter-item-status" class="form-select form-select-sm">
+                <option value="">Todos os status</option>
+                <option value="valido">Válido</option>
+                <option value="extraido_para_revisao">Extraído para revisão</option>
+                <option value="pendente_revisao">Pendente revisão</option>
+                <option value="conflito">Conflito</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-item-preenchimento" class="form-label mb-1">Preenchimento do item</label>
+              <select id="filter-item-preenchimento" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                <option value="preenchido">Preenchido</option>
+                <option value="nao_preenchido">Não preenchido</option>
+              </select>
+            </div>
+          </div>
         </div>
       </section>
 
