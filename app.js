@@ -99,16 +99,34 @@ const EMBEDDED_DEMO = {
           data_validacao: '2025-04-10T09:40:00', origem_atualizacao: 'importacao_pdf',
         },
         hora_extra: {
-          valor: null, tipo: 'regra_textual', unidade: null,
-          status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
-          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf',
-          observacao: 'Regra não extraída do PDF — requer revisão manual',
-          data_validacao: null, origem_atualizacao: null,
+          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo_feriado: 100,
+          valor: null, tipo: 'percentual', unidade: '%',
+          regra_textual: 'Hora extra: 50% dias úteis, 75% sábados, 100% domingos/feriados.',
+          status_parametro: 'valido', conflito: false, ids_registros_conflitantes: null,
+          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf', observacao: null,
+          data_validacao: '2025-04-10T09:45:00', origem_atualizacao: 'importacao_pdf',
+        },
+        sobreaviso: {
+          percentual: 33.33, valor: null,
+          regra_textual: 'Sobreaviso de 33,33% sobre a hora normal.',
+          tipo: 'percentual', unidade: '%',
+          status_parametro: 'valido', conflito: false, ids_registros_conflitantes: null,
+          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf', observacao: null,
+          data_validacao: '2025-04-10T09:50:00', origem_atualizacao: 'importacao_pdf',
+        },
+        jornada: {
+          horas_semanais: 44, opcoes_identificadas: '44h',
+          regra_textual: 'Jornada de 44 horas semanais.',
+          tipo: 'horas_semanais', unidade: 'horas',
+          status_parametro: 'valido', conflito: false, ids_registros_conflitantes: null,
+          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf', observacao: null,
+          data_validacao: '2025-04-10T09:52:00', origem_atualizacao: 'importacao_pdf',
         },
         plr: {
           valor: null, tipo: 'regra_textual', unidade: null,
           status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
-          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf', observacao: null,
+          fonte_documento: 'CCT/SP/SINTTEL/2025.pdf',
+          observacao: 'Regra não extraída do PDF — requer revisão manual',
           data_validacao: null, origem_atualizacao: null,
         },
       },
@@ -164,7 +182,9 @@ const EMBEDDED_DEMO = {
       observacao: 'Parâmetros extraídos automaticamente — aguardando conferência manual',
       itens_cct: {
         piso_salarial: {
-          valor: 1540.47, percentual: null, valor_textual: null,
+          valor: 1540.47, piso_unico: 1540.47, piso_tecnico: null,
+          piso_administrativo: null, valor_piso_cct: null,
+          percentual: null, valor_textual: null,
           regra_textual: 'O piso salarial para a categoria é de R$ 1.540,47 mensais conforme cláusula terceira.',
           tipo: 'piso_unico', unidade: 'BRL',
           clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
@@ -188,6 +208,41 @@ const EMBEDDED_DEMO = {
           clausula: null,
           fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
           observacao: 'Valor não identificado no documento.',
+          status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        hora_extra: {
+          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo_feriado: 100,
+          valor: null, tipo: 'percentual', unidade: '%',
+          regra_textual: 'Hora extra: 50% dias úteis, 75% sábados, 100% domingos/feriados.',
+          clausula: 'CLÁUSULA VIGÉSIMA - HORAS EXTRAS',
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        sobreaviso: {
+          percentual: 33.33, valor: null,
+          regra_textual: 'Sobreaviso de 33,33% sobre a hora normal.',
+          tipo: 'percentual', unidade: '%',
+          clausula: null,
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        jornada: {
+          horas_semanais: 44, opcoes_identificadas: '44h',
+          regra_textual: 'Jornada de trabalho de 44 horas semanais.',
+          tipo: 'horas_semanais', unidade: 'horas',
+          clausula: null,
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        plr: {
+          valor: null, percentual: null, valor_textual: null,
+          regra_textual: null, tipo: 'regra_textual', unidade: null,
+          clausula: null,
+          fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+          observacao: 'Regra de PLR não identificada no documento.',
           status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
         },
       },
@@ -423,17 +478,32 @@ function loadLocalOverrides(records) {
     if (!raw) return;
     const overrides = JSON.parse(raw);
     records.forEach((record) => {
+      const key = getRecordKey(record);
+      if (!key || !overrides[key]) return;
+
+      // Apply record-level overrides only for reviewable records
       const isReviewable =
         record.status_parametro === 'pendente_revisao' ||
         record.status_parametro === 'conflito' ||
         record.conflito === true;
-      const key = getRecordKey(record);
-      if (key && overrides[key] && isReviewable) {
+      if (isReviewable) {
         const safe = {};
         OVERRIDE_FIELDS.forEach((field) => {
           if (field in overrides[key]) safe[field] = overrides[key][field];
         });
         Object.assign(record, safe);
+      }
+
+      // Apply itens_cct item-level overrides unconditionally
+      // (a parent-valid record may still have reviewable items)
+      if (overrides[key].itens_cct) {
+        record.itens_cct = record.itens_cct || {};
+        Object.entries(overrides[key].itens_cct).forEach(([itemKey, itemData]) => {
+          record.itens_cct[itemKey] = {
+            ...(record.itens_cct[itemKey] || {}),
+            ...itemData,
+          };
+        });
       }
     });
   } catch {
@@ -450,10 +520,24 @@ function saveLocalOverride(key, fields) {
     OVERRIDE_FIELDS.forEach((field) => {
       if (field in fields) safe[field] = fields[field];
     });
-    overrides[key] = safe;
+    // Merge with existing record override (preserve itens_cct and other keys)
+    overrides[key] = { ...(overrides[key] || {}), ...safe };
     localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
   } catch {
     // ignore localStorage errors (e.g. private mode, quota exceeded)
+  }
+}
+
+function saveItemCctOverride(recordKey, itemKey, itemData) {
+  try {
+    const raw = localStorage.getItem(OVERRIDES_KEY) || '{}';
+    const overrides = JSON.parse(raw);
+    if (!overrides[recordKey]) overrides[recordKey] = {};
+    if (!overrides[recordKey].itens_cct) overrides[recordKey].itens_cct = {};
+    overrides[recordKey].itens_cct[itemKey] = itemData;
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
+  } catch {
+    // ignore localStorage errors
   }
 }
 
@@ -607,8 +691,19 @@ function renderTable() {
     }
 
     const isReviewable = isConflict || record.status_parametro === 'pendente_revisao';
-    const btnClass = isReviewable ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-primary';
-    const btnLabel = isReviewable ? '🔍 Revisar' : 'Detalhes';
+    const hasCctReview = hasReviewableCctItems(record);
+
+    let btnClass, btnLabel;
+    if (isReviewable) {
+      btnClass = 'btn btn-sm btn-warning';
+      btnLabel = '🔍 Revisar';
+    } else if (hasCctReview) {
+      btnClass = 'btn btn-sm btn-outline-warning';
+      btnLabel = '🔍 Revisar itens';
+    } else {
+      btnClass = 'btn btn-sm btn-outline-primary';
+      btnLabel = 'Detalhes';
+    }
 
     row.innerHTML = `
       <td>${escapeHtml(record.uf ?? '—')}</td>
@@ -619,6 +714,7 @@ function renderTable() {
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
+      ${buildCctTableCells(record)}
       <td>${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
@@ -634,7 +730,7 @@ function renderTable() {
       openDetail(record);
     });
 
-    if (isReviewable) {
+    if (isReviewable || hasCctReview) {
       row.addEventListener('click', (e) => {
         if (e.target.closest('a') || e.target.closest('.fonte-cell a')) return;
         openDetail(record);
@@ -663,11 +759,19 @@ function openDetail(record) {
   const isPending = record.status_parametro === 'pendente_revisao';
   const isConflict = isConflictRecord(record);
   const isReviewable = isPending || isConflict;
+  const hasCctReview = hasReviewableCctItems(record);
   const modalBody = document.getElementById('detail-modal-body');
   const modalTitle = document.getElementById('detail-modal-label');
 
   if (modalTitle) {
-    const titlePrefix = isReviewable ? 'Revisão' : 'Detalhe do parâmetro';
+    let titlePrefix;
+    if (isReviewable) {
+      titlePrefix = 'Revisão';
+    } else if (hasCctReview) {
+      titlePrefix = 'Revisar itens CCT';
+    } else {
+      titlePrefix = 'Detalhe do parâmetro';
+    }
     modalTitle.textContent = `${titlePrefix} — ${record.sindicato ?? '—'} — ${record.uf ?? '—'} (${record.ano_referencia ?? '—'})`;
   }
 
@@ -677,6 +781,8 @@ function openDetail(record) {
     if (isReviewable) {
       bindReviewControls(record);
     }
+    // Always bind CCT item controls — parent may be valid but items may be reviewable
+    bindCctItemControls(record);
   }
 
   showDetailModal();
@@ -780,9 +886,11 @@ function buildDetailHtml(record, isConflict) {
   const isReviewable = isPending || isConflict;
   const conflictSection = isConflict ? buildConflictSection(record) : '';
   const reviewSection = isReviewable ? buildReviewSection(record) : '';
-  const itensCctSection = (record.itens_cct && Object.keys(record.itens_cct).length > 0)
-    ? buildCctItemsHtml(record.itens_cct)
-    : '';
+  const itensCctSection = `<div id="cct-items-section">${
+    (record.itens_cct && Object.keys(record.itens_cct).length > 0)
+      ? buildCctItemsContent(record)
+      : ''
+  }</div>`;
 
   return `
     <div class="mb-3">
@@ -888,105 +996,209 @@ function buildPdfViewer(record) {
   `;
 }
 
-function buildCctItemsHtml(itens) {
-  const entries = Object.entries(itens);
-  if (entries.length === 0) return '';
+function buildCctItemsContent(record) {
+  const itens = record.itens_cct;
+  if (!itens || Object.keys(itens).length === 0) return '';
 
   let html = `
     <hr class="my-3"/>
     <h3 class="cct-section-title">Itens da CCT</h3>
     <div class="row g-3">`;
 
-  entries.forEach(([key, item]) => {
-    const label = CCT_ITEM_LABELS[key] ?? key;
-    const valorDisplay = formatCctValor(item);
-    const badge = statusBadgeItem(item);
-    const isConflito = item.status_parametro === 'conflito' || item.conflito === true;
-    const isPendente = item.status_parametro === 'pendente_revisao';
-    const isExtraido = item.status_parametro === 'extraido_para_revisao';
-    const fonteRaw = item.fonte_documento ?? null;
-
-    const fonteHtml = fonteRaw
-      ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta">Abrir PDF</a>`
-      : `<span class="cct-item-meta">Fonte: —</span>`;
-
-    // Build metadata fields (AC9)
-    const fieldRows = [];
-
-    if (item.percentual != null) {
-      fieldRows.push(`<dt class="col-5">Percentual</dt><dd class="col-7">${escapeHtml(String(item.percentual))}%</dd>`);
-    }
-    if (item.tipo != null && item.tipo !== '') {
-      fieldRows.push(`<dt class="col-5">Tipo</dt><dd class="col-7">${escapeHtml(String(item.tipo))}</dd>`);
-    }
-    if (item.unidade != null && item.unidade !== '') {
-      fieldRows.push(`<dt class="col-5">Unidade</dt><dd class="col-7">${escapeHtml(String(item.unidade))}</dd>`);
-    }
-    if (item.clausula != null && item.clausula !== '') {
-      fieldRows.push(`<dt class="col-5">Cláusula</dt><dd class="col-7">${escapeHtml(String(item.clausula))}</dd>`);
-    }
-    if (item.observacao != null && item.observacao !== '') {
-      fieldRows.push(`<dt class="col-5">Observação</dt><dd class="col-7 fst-italic">${escapeHtml(String(item.observacao))}</dd>`);
-    }
-    if (item.status_parametro != null) {
-      fieldRows.push(`<dt class="col-5">Status</dt><dd class="col-7">${badge}</dd>`);
-    }
-
-    const fieldsHtml = fieldRows.length > 0
-      ? `<dl class="row cct-item-fields">${fieldRows.join('')}</dl>`
-      : '';
-
-    const fonteRowHtml = `<div class="mt-1">${fonteHtml}</div>`;
-
-    const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
-      ? `<div class="cct-item-regra">${escapeHtml(String(item.regra_textual))}</div>`
-      : '';
-
-    // Status alerts
-    let statusAlertHtml = '';
-    if (isConflito) {
-      let conflictIdsHtml = '';
-      if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
-        const ids = item.ids_registros_conflitantes
-          .map((id) => `<span class="conflicting-id">${escapeHtml(String(id))}</span>`)
-          .join('');
-        conflictIdsHtml = `<div class="mt-1">${ids}</div>`;
-      }
-      statusAlertHtml = `
-        <div class="cct-item-alert cct-item-alert-conflito mt-2">
-          ⚠ Este item não deve ser utilizado até revisão manual.
-          ${conflictIdsHtml}
-        </div>`;
-    } else if (isPendente) {
-      statusAlertHtml = `
-        <div class="cct-item-alert cct-item-alert-pendente mt-2">
-          ⏳ Este item aguarda revisão.
-        </div>`;
-    } else if (isExtraido) {
-      statusAlertHtml = `
-        <div class="cct-item-alert cct-item-alert-extraido mt-2">
-          🔎 Informação extraída automaticamente. Necessita conferência humana antes de uso.
-        </div>`;
-    }
-
-    html += `
-      <div class="col-12 col-sm-6">
-        <div class="cct-item-card">
-          <div class="cct-item-header">
-            <span class="cct-item-label">${escapeHtml(label)}</span>
-            ${badge}
-          </div>
-          <div class="cct-item-valor">${valorDisplay}</div>
-          ${fieldsHtml}
-          ${fonteRowHtml}
-          ${regraHtml}
-          ${statusAlertHtml}
-        </div>
-      </div>`;
+  Object.entries(itens).forEach(([itemKey, item]) => {
+    html += buildCctItemCard(itemKey, item);
   });
 
   html += '</div>';
   return html;
+}
+
+function buildCctItemCard(itemKey, item) {
+  const label = CCT_ITEM_LABELS[itemKey] ?? itemKey;
+  const badge = statusBadgeItem(item);
+  const isValido = item.status_parametro === 'valido' && item.conflito !== true;
+
+  if (isValido) {
+    return buildCctItemReadOnlyCard(itemKey, item, label, badge);
+  }
+  return buildCctItemEditCard(itemKey, item, label, badge);
+}
+
+function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
+  const valorDisplay = formatCctValor(item);
+  const fonteRaw = item.fonte_documento ?? null;
+  const fonteHtml = fonteRaw
+    ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta fonte-link">📄 Abrir PDF</a>`
+    : `<span class="cct-item-meta text-secondary">Fonte: —</span>`;
+
+  const specFieldRows = buildItemSpecificFieldsDisplay(itemKey, item);
+  const specFieldsHtml = specFieldRows.length > 0
+    ? `<dl class="row cct-item-fields">${specFieldRows.join('')}</dl>`
+    : '';
+
+  const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
+    ? `<div class="cct-item-regra">${escapeHtml(String(item.regra_textual))}</div>`
+    : '';
+
+  const obsHtml = (item.observacao != null && item.observacao !== '')
+    ? `<div class="cct-item-regra fst-italic mt-1">${escapeHtml(String(item.observacao))}</div>`
+    : '';
+
+  const clausulaHtml = (item.clausula != null && item.clausula !== '')
+    ? `<div class="cct-item-meta mt-1">${escapeHtml(String(item.clausula))}</div>`
+    : '';
+
+  return `
+    <div class="col-12 col-sm-6">
+      <div class="cct-item-card cct-item-card-valido">
+        <div class="cct-item-header">
+          <span class="cct-item-label">${escapeHtml(label)}</span>
+          ${badge}
+        </div>
+        <div class="cct-item-valor">${valorDisplay}</div>
+        ${specFieldsHtml}
+        ${clausulaHtml}
+        ${regraHtml}
+        ${obsHtml}
+        <div class="mt-1">${fonteHtml}</div>
+      </div>
+    </div>`;
+}
+
+function buildCctItemEditCard(itemKey, item, label, badge) {
+  const isConflito = item.status_parametro === 'conflito' || item.conflito === true;
+  const isPendente = item.status_parametro === 'pendente_revisao';
+  const isExtraido = item.status_parametro === 'extraido_para_revisao';
+
+  const fonteRaw = item.fonte_documento ?? null;
+  const fonteHtml = fonteRaw
+    ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm py-0 px-2 mb-2">📄 Abrir PDF</a>`
+    : '';
+
+  let statusAlertHtml = '';
+  if (isConflito) {
+    let conflictIdsHtml = '';
+    if (Array.isArray(item.ids_registros_conflitantes) && item.ids_registros_conflitantes.length > 0) {
+      conflictIdsHtml = '<div class="mt-1">' + item.ids_registros_conflitantes
+        .map((id) => `<span class="conflicting-id">${escapeHtml(String(id))}</span>`)
+        .join('') + '</div>';
+    }
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-conflito mb-2">⚠ Em conflito — não usar até revisão.${conflictIdsHtml}</div>`;
+  } else if (isPendente) {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-pendente mb-2">⏳ Aguardando revisão.</div>`;
+  } else if (isExtraido) {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-extraido mb-2">🔎 Extraído automaticamente — conferir antes de validar.</div>`;
+  }
+
+  const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
+    ? `<div class="cct-item-regra mb-2">${escapeHtml(String(item.regra_textual))}</div>`
+    : '';
+
+  const clausulaHtml = (item.clausula != null && item.clausula !== '')
+    ? `<div class="cct-item-meta mb-1">${escapeHtml(String(item.clausula))}</div>`
+    : '';
+
+  const fieldDefs = CCT_ITEM_FIELDS[itemKey] ?? [];
+  const inputsHtml = fieldDefs.map((fd) => {
+    const currentVal = getItemFieldValue(itemKey, fd.key, item);
+    const valStr = currentVal != null ? escapeHtml(String(currentVal)) : '';
+    const inputId = `cct-item-${itemKey}-${fd.key}`;
+
+    if (fd.type === 'text') {
+      return `
+        <div class="mb-2">
+          <label for="${inputId}" class="form-label form-label-sm mb-1">${escapeHtml(fd.label)}</label>
+          <textarea class="form-control form-control-sm" id="${inputId}" rows="2">${valStr}</textarea>
+        </div>`;
+    }
+    return `
+      <div class="mb-2">
+        <label for="${inputId}" class="form-label form-label-sm mb-1">${escapeHtml(fd.label)}</label>
+        <input type="number" class="form-control form-control-sm" id="${inputId}" step="0.01" value="${valStr}" placeholder="—" />
+      </div>`;
+  }).join('');
+
+  const obsVal = escapeHtml(item.observacao ?? '');
+  const obsId = `cct-item-${itemKey}-obs`;
+
+  return `
+    <div class="col-12 col-sm-6">
+      <div class="cct-item-card">
+        <div class="cct-item-header">
+          <span class="cct-item-label">${escapeHtml(label)}</span>
+          ${badge}
+        </div>
+        ${statusAlertHtml}
+        ${fonteHtml}
+        ${clausulaHtml}
+        ${regraHtml}
+        <div class="cct-item-edit-form">
+          ${inputsHtml}
+          <div class="mb-2">
+            <label for="${obsId}" class="form-label form-label-sm mb-1">
+              Observação <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control form-control-sm" id="${obsId}" rows="2"
+              placeholder="Descreva evidência consultada e motivo da decisão.">${obsVal}</textarea>
+          </div>
+          <div id="cct-item-${itemKey}-error" class="alert alert-danger py-1 small d-none mb-2" role="alert"></div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-success btn-sm" id="btn-cct-val-${itemKey}">
+              ✔ Validar item
+            </button>
+            <button type="button" class="btn btn-outline-warning btn-sm" id="btn-cct-rej-${itemKey}">
+              ✗ Rejeitar / manter em revisão
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/**
+ * Gets the display/edit value for a specific field of a CCT item.
+ * Handles backward compatibility for older data structures that used
+ * generic `valor` + `tipo` instead of named sub-fields.
+ */
+function getItemFieldValue(itemKey, fieldKey, item) {
+  const direct = item[fieldKey];
+  if (direct != null && direct !== '') return direct;
+
+  // Backward compat for piso_salarial
+  if (itemKey === 'piso_salarial' && item.valor != null) {
+    if (fieldKey === 'piso_unico' && item.tipo === 'piso_unico') return item.valor;
+    if (fieldKey === 'piso_tecnico' && item.tipo === 'piso_tecnico') return item.valor;
+    if (fieldKey === 'piso_administrativo' && item.tipo === 'piso_administrativo') return item.valor;
+    if (fieldKey === 'valor_piso_cct' && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(item.tipo)) {
+      return item.valor;
+    }
+  }
+  return null;
+}
+
+function buildItemSpecificFieldsDisplay(itemKey, item) {
+  const fieldDefs = CCT_ITEM_FIELDS[itemKey] ?? [];
+  const rows = [];
+  fieldDefs.forEach((fd) => {
+    const v = getItemFieldValue(itemKey, fd.key, item);
+    if (v == null || v === '') return;
+
+    let display;
+    if (fd.type === 'number' && fd.unit === '%') {
+      const n = Number(v);
+      display = isNaN(n) ? escapeHtml(String(v)) : `${n.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%`;
+    } else if (fd.type === 'number' && fd.unit === 'BRL') {
+      const n = Number(v);
+      display = isNaN(n) ? escapeHtml(String(v)) : n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    } else if (fd.type === 'number') {
+      display = escapeHtml(String(v));
+    } else {
+      const s = String(v);
+      display = escapeHtml(s.length > 80 ? s.slice(0, 78) + '…' : s);
+    }
+    rows.push(`<dt class="col-5">${escapeHtml(fd.label)}</dt><dd class="col-7">${display}</dd>`);
+  });
+  return rows;
 }
 
 function formatCctValor(item) {
@@ -1018,12 +1230,269 @@ const CCT_ITEM_LABELS = {
   jornada: 'Jornada',
 };
 
+/** Editable field definitions for each CCT item type */
+const CCT_ITEM_FIELDS = {
+  reajuste_salarial: [
+    { key: 'valor', label: 'Percentual (%)', type: 'number', unit: '%' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  piso_salarial: [
+    { key: 'valor_piso_cct', label: 'Piso CCT (R$)', type: 'number', unit: 'BRL' },
+    { key: 'piso_tecnico', label: 'Piso técnico (R$)', type: 'number', unit: 'BRL' },
+    { key: 'piso_administrativo', label: 'Piso adm. (R$)', type: 'number', unit: 'BRL' },
+    { key: 'piso_unico', label: 'Piso único (R$)', type: 'number', unit: 'BRL' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  adicional_noturno: [
+    { key: 'percentual', label: 'Percentual (%)', type: 'number', unit: '%' },
+    { key: 'valor', label: 'Valor (R$)', type: 'number', unit: 'BRL' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  auxilio_alimentacao: [
+    { key: 'valor', label: 'Valor (R$)', type: 'number', unit: 'BRL' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  plr: [
+    { key: 'valor', label: 'Valor (R$)', type: 'number', unit: 'BRL' },
+    { key: 'percentual', label: 'Percentual (%)', type: 'number', unit: '%' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  hora_extra: [
+    { key: 'percentual_padrao', label: 'H.E. padrão (%)', type: 'number', unit: '%' },
+    { key: 'percentual_sabado', label: 'H.E. sábado (%)', type: 'number', unit: '%' },
+    { key: 'percentual_domingo_feriado', label: 'H.E. dom./feriado (%)', type: 'number', unit: '%' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  sobreaviso: [
+    { key: 'percentual', label: 'Percentual (%)', type: 'number', unit: '%' },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+  jornada: [
+    { key: 'horas_semanais', label: 'Horas semanais', type: 'number', unit: null },
+    { key: 'opcoes_identificadas', label: 'Opções identificadas', type: 'text', unit: null },
+    { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
+  ],
+};
+
+/** Minimum fields required (at least one) before allowing item validation */
+const CCT_ITEM_MIN_FIELDS = {
+  reajuste_salarial: ['valor'],
+  piso_salarial: ['valor_piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico', 'regra_textual'],
+  adicional_noturno: ['percentual', 'valor', 'regra_textual'],
+  auxilio_alimentacao: ['valor', 'regra_textual'],
+  plr: ['valor', 'percentual', 'regra_textual'],
+  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'regra_textual'],
+  sobreaviso: ['percentual', 'regra_textual'],
+  jornada: ['horas_semanais', 'opcoes_identificadas', 'regra_textual'],
+};
+
 /**
  * Returns the reajuste valor using itens_cct as the canonical source,
  * falling back to the legacy flat field for backward compatibility.
  */
 function getReajusteValor(r) {
   return r.itens_cct?.reajuste_salarial?.valor ?? r.percentual_reajuste ?? null;
+}
+
+function hasReviewableCctItems(record) {
+  const itens = record.itens_cct;
+  if (!itens) return false;
+  return Object.values(itens).some(
+    (item) =>
+      item.status_parametro === 'extraido_para_revisao' ||
+      item.status_parametro === 'pendente_revisao' ||
+      item.status_parametro === 'conflito' ||
+      item.conflito === true
+  );
+}
+
+/** Generates 12 CCT item columns for the main table row */
+function buildCctTableCells(record) {
+  function cellGet(itemKey, ...fields) {
+    const item = record.itens_cct?.[itemKey];
+    if (!item) return null;
+    for (const f of fields) {
+      const v = item[f];
+      if (v != null && v !== '') return v;
+    }
+    return null;
+  }
+
+  function fmtBRL(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function fmtPct(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+  }
+
+  function fmtShort(v) {
+    if (v == null) return '—';
+    const s = String(v);
+    return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
+  }
+
+  // Backward compat: derive piso columns from tipo+valor when specific fields absent
+  const pisoItem = record.itens_cct?.piso_salarial;
+  const pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
+    ?? (pisoItem?.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(pisoItem.tipo)
+      ? pisoItem.valor : null);
+  const pisoTec = cellGet('piso_salarial', 'piso_tecnico')
+    ?? (pisoItem?.tipo === 'piso_tecnico' ? pisoItem?.valor ?? null : null);
+  const pisoAdm = cellGet('piso_salarial', 'piso_administrativo')
+    ?? (pisoItem?.tipo === 'piso_administrativo' ? pisoItem?.valor ?? null : null);
+  const pisoUnico = cellGet('piso_salarial', 'piso_unico')
+    ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
+
+  const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  const vr = cellGet('auxilio_alimentacao', 'valor');
+  const plrVal = cellGet('plr', 'valor', 'percentual', 'regra_textual');
+  const heP = cellGet('hora_extra', 'percentual_padrao');
+  const heSab = cellGet('hora_extra', 'percentual_sabado');
+  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+  const sob = cellGet('sobreaviso', 'percentual', 'regra_textual');
+  const jornada = cellGet('jornada', 'horas_semanais', 'opcoes_identificadas');
+
+  const adNoturnoFmt = adNoturno != null
+    ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
+    : '—';
+  const sobFmt = sob != null
+    ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
+    : '—';
+
+  return [
+    `<td class="cct-col">${fmtBRL(pisoCct)}</td>`,
+    `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
+    `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
+    `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
+    `<td class="cct-col">${adNoturnoFmt}</td>`,
+    `<td class="cct-col">${fmtBRL(vr)}</td>`,
+    `<td class="cct-col">${fmtShort(plrVal)}</td>`,
+    `<td class="cct-col">${heP != null ? fmtPct(heP) : '—'}</td>`,
+    `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
+    `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
+    `<td class="cct-col">${sobFmt}</td>`,
+    `<td class="cct-col">${jornada != null ? fmtShort(String(jornada)) : '—'}</td>`,
+  ].join('');
+}
+
+function bindCctItemControls(record) {
+  if (!record.itens_cct) return;
+  Object.keys(record.itens_cct).forEach((itemKey) => {
+    const btnVal = document.getElementById(`btn-cct-val-${itemKey}`);
+    const btnRej = document.getElementById(`btn-cct-rej-${itemKey}`);
+    if (btnVal) btnVal.addEventListener('click', () => validateCctItem(record, itemKey));
+    if (btnRej) btnRej.addEventListener('click', () => rejectCctItem(record, itemKey));
+  });
+}
+
+function validateCctItem(record, itemKey) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+
+  const errorEl = document.getElementById(`cct-item-${itemKey}-error`);
+  const obsEl = document.getElementById(`cct-item-${itemKey}-obs`);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  // Collect field values from form inputs
+  const fields = {};
+  (CCT_ITEM_FIELDS[itemKey] ?? []).forEach((fd) => {
+    const el = document.getElementById(`cct-item-${itemKey}-${fd.key}`);
+    if (!el) return;
+    const val = el.value.trim();
+    if (val === '') return;
+    if (fd.type === 'number') {
+      const n = parseFloat(val);
+      if (!isNaN(n)) fields[fd.key] = n;
+    } else {
+      fields[fd.key] = val;
+    }
+  });
+
+  // Validate minimum fields (AC15): combine form values with pre-existing item values
+  const effectiveValues = { ...item, ...fields };
+  const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
+  const hasMin = minKeys.length === 0
+    || minKeys.some((k) => effectiveValues[k] != null && effectiveValues[k] !== '');
+
+  if (!hasMin) {
+    if (errorEl) {
+      errorEl.textContent = `Preencha ao menos um campo: ${minKeys.join(', ')}.`;
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+
+  if (!observacao) {
+    if (errorEl) {
+      errorEl.textContent = 'Observação obrigatória.';
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+
+  if (errorEl) errorEl.classList.add('d-none');
+
+  const now = new Date().toISOString();
+  record.itens_cct[itemKey] = {
+    ...item,
+    ...fields,
+    status_parametro: 'valido',
+    conflito: false,
+    ids_registros_conflitantes: null,
+    observacao,
+    origem_atualizacao: 'validacao_manual_item_cct',
+    data_hora_validacao_manual: now,
+    status_anterior: item.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, record.itens_cct[itemKey]);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
+}
+
+function rejectCctItem(record, itemKey) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+
+  const obsEl = document.getElementById(`cct-item-${itemKey}-obs`);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  const now = new Date().toISOString();
+  const wasConflito = item.conflito === true || item.status_parametro === 'conflito';
+
+  record.itens_cct[itemKey] = {
+    ...item,
+    status_parametro: wasConflito ? 'conflito' : 'pendente_revisao',
+    conflito: wasConflito,
+    observacao: observacao || item.observacao || null,
+    origem_atualizacao: 'rejeicao_manual_item_cct',
+    data_hora_rejeicao_manual: now,
+    status_anterior: item.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, record.itens_cct[itemKey]);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
+}
+
+/** Targeted re-render of just the CCT items section — preserves record-level form values */
+function refreshCctItemsSection(record) {
+  const section = document.getElementById('cct-items-section');
+  if (!section) return;
+  const itens = record.itens_cct;
+  section.innerHTML = (itens && Object.keys(itens).length > 0)
+    ? buildCctItemsContent(record)
+    : '';
+  bindCctItemControls(record);
 }
 
 function statusBadge(record) {
