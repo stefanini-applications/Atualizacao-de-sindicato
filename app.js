@@ -182,14 +182,37 @@ const EMBEDDED_DEMO = {
       observacao: 'Parâmetros extraídos automaticamente — aguardando conferência manual',
       itens_cct: {
         piso_salarial: {
-          valor: 1540.47, piso_unico: 1540.47, piso_tecnico: null,
-          piso_administrativo: null, valor_piso_cct: null,
-          percentual: null, valor_textual: null,
-          regra_textual: 'O piso salarial para a categoria é de R$ 1.540,47 mensais conforme cláusula terceira.',
-          tipo: 'piso_unico', unidade: 'BRL',
+          valor_piso_cct: null,
+          piso_tecnico: 2800.00,
+          piso_administrativo: 1540.47,
+          piso_unico: null,
+          por_cargo: [
+            {
+              cargo_ou_funcao: 'Técnico',
+              valor: 2800.00,
+              jornada: '44h semanais',
+              fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+              clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+              status_parametro: 'extraido_para_revisao',
+            },
+            {
+              cargo_ou_funcao: 'Administrativo',
+              valor: 1540.47,
+              jornada: null,
+              fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
+              clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+              status_parametro: 'extraido_para_revisao',
+            },
+          ],
+          valor: null,
+          percentual: null,
+          valor_textual: null,
+          regra_textual: 'O piso técnico é de R$ 2.800,00 e o piso administrativo é de R$ 1.540,47 mensais conforme cláusula terceira.',
+          tipo: 'piso_tecnico',
+          unidade: 'BRL',
           clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
           fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
-          observacao: null,
+          observacao: 'Múltiplos pisos identificados: piso técnico: R$ 2.800,00; piso administrativo: R$ 1.540,47',
           status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
         },
         adicional_noturno: {
@@ -1085,7 +1108,7 @@ function buildCctItemCard(itemKey, item) {
 }
 
 function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
-  const valorDisplay = formatCctValor(item);
+  const valorDisplay = formatCctValor(item, itemKey);
   const fonteRaw = item.fonte_documento ?? null;
   const fonteHtml = fonteRaw
     ? `<a href="${escapeHtml(fonteRaw)}" target="_blank" rel="noopener noreferrer" class="cct-item-meta fonte-link">📄 Abrir PDF</a>`
@@ -1108,6 +1131,8 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
     ? `<div class="cct-item-meta mt-1">${escapeHtml(String(item.clausula))}</div>`
     : '';
 
+  const porCargoHtml = itemKey === 'piso_salarial' ? buildPorCargoHtml(item.por_cargo) : '';
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card cct-item-card-valido">
@@ -1117,6 +1142,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         </div>
         <div class="cct-item-valor">${valorDisplay}</div>
         ${specFieldsHtml}
+        ${porCargoHtml}
         ${clausulaHtml}
         ${regraHtml}
         ${obsHtml}
@@ -1159,6 +1185,8 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
     ? `<div class="cct-item-meta mb-1">${escapeHtml(String(item.clausula))}</div>`
     : '';
 
+  const porCargoHtml = itemKey === 'piso_salarial' ? buildPorCargoHtml(item.por_cargo) : '';
+
   const fieldDefs = CCT_ITEM_FIELDS[itemKey] ?? [];
   const inputsHtml = fieldDefs.map((fd) => {
     const currentVal = getItemFieldValue(itemKey, fd.key, item);
@@ -1193,6 +1221,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         ${fonteHtml}
         ${clausulaHtml}
         ${regraHtml}
+        ${porCargoHtml}
         <div class="cct-item-edit-form">
           ${inputsHtml}
           <div class="mb-2">
@@ -1262,7 +1291,25 @@ function buildItemSpecificFieldsDisplay(itemKey, item) {
   return rows;
 }
 
-function formatCctValor(item) {
+function formatCctValor(item, itemKey) {
+  // For piso_salarial, show a structured summary when multiple named fields exist
+  if (itemKey === 'piso_salarial') {
+    const namedFields = ['piso_tecnico', 'piso_administrativo', 'piso_unico', 'valor_piso_cct'];
+    const populated = namedFields.filter((k) => item[k] != null && item[k] !== '');
+    if (populated.length > 1) {
+      return '<span class="text-secondary fst-italic">Estruturado por cargo/função</span>';
+    }
+    if (populated.length === 1) {
+      const n = Number(item[populated[0]]);
+      return isNaN(n)
+        ? escapeHtml(String(item[populated[0]]))
+        : n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    if (Array.isArray(item.por_cargo) && item.por_cargo.length > 0) {
+      return `<span class="text-secondary fst-italic">${item.por_cargo.length} cargo(s) identificado(s)</span>`;
+    }
+  }
+
   if (item.valor != null) {
     if (typeof item.valor === 'string') return escapeHtml(item.valor);
     if (item.tipo === 'percentual') return `${Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
@@ -1275,6 +1322,41 @@ function formatCctValor(item) {
     return escapeHtml(String(item.valor_textual));
   }
   return '<span class="text-secondary">—</span>';
+}
+
+/**
+ * Renders the por_cargo preview table for piso_salarial.
+ * Marked as display-only preview — not part of the validation flow.
+ */
+function buildPorCargoHtml(porCargo) {
+  if (!Array.isArray(porCargo) || porCargo.length === 0) return '';
+
+  const rows = porCargo.map((entry) => {
+    const cargo = escapeHtml(entry.cargo_ou_funcao ?? '—');
+    const valor = entry.valor != null
+      ? Number(entry.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+      : '—';
+    const jornada = entry.jornada ? escapeHtml(String(entry.jornada)) : '—';
+    return `<tr><td>${cargo}</td><td class="text-end">${valor}</td><td>${jornada}</td></tr>`;
+  }).join('');
+
+  return `
+    <div class="por-cargo-preview mt-2">
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="por-cargo-title">Prévia por cargo/função/jornada</span>
+        <span class="badge text-bg-secondary" style="font-size:0.7rem">prévia — não validado</span>
+      </div>
+      <table class="table table-sm table-bordered mb-0" style="font-size:0.82rem">
+        <thead class="table-light">
+          <tr>
+            <th>Cargo / Função / Modalidade</th>
+            <th class="text-end">Piso (R$)</th>
+            <th>Jornada</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -1392,6 +1474,10 @@ function isCctItemPreenchido(itemKey, item) {
     const v = getItemFieldValue(itemKey, k, item);
     return v != null && v !== '';
   })) return true;
+  // For piso_salarial, a non-empty por_cargo preview also counts as preenchido
+  if (itemKey === 'piso_salarial' && Array.isArray(item.por_cargo) && item.por_cargo.length > 0) {
+    return true;
+  }
   return (item.valor != null && item.valor !== '') ||
          (item.valor_textual != null && item.valor_textual !== '');
 }

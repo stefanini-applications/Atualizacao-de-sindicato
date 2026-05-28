@@ -305,12 +305,154 @@ def has_negative_clause(text: str) -> bool:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Piso salarial helpers — per-cargo/função extraction
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Named piso patterns (normalized text): (pattern, named_field_key)
+_NAMED_PISO_PAT: list[tuple[re.Pattern, str]] = [
+    (re.compile(r"\bpiso\s+tecnico\b"), "piso_tecnico"),
+    (re.compile(r"\bpiso\s+administrativo\b"), "piso_administrativo"),
+    (re.compile(r"\bpiso\s+unico\b"), "piso_unico"),
+    (re.compile(r"\bpiso\s+(?:geral|base|cct|minimo)\b"), "valor_piso_cct"),
+]
+
+# Pattern for a colon/dash-separated label–value pair on a single line.
+# Captures: group(1) = label (3–60 chars), group(2) = BRL raw value
+_LINE_LABEL_VALUE_PAT = re.compile(
+    r"^(.{3,60}?)\s*[:–—-]\s*R\$\s*([\d.,]+)",
+    re.MULTILINE | re.IGNORECASE,
+)
+
+# Jornada hint pattern (normalised text)
+_JORNADA_HINT_PAT = re.compile(
+    r"(\d+)\s*(?:horas?\s+semanais|horas?\s+mensais|h(?:oras?)?\s*/\s*semana"
+    r"|h(?:oras?)?\s*/\s*mes|h\s+semanais|h\s+mensais)",
+)
+
+
+def _jornada_hint(line_n: str) -> str | None:
+    """Extract a human-readable jornada string from a normalised line."""
+    m = _JORNADA_HINT_PAT.search(line_n)
+    if not m:
+        return None
+    return m.group(0).strip()
+
+
+def _extract_named_piso_fields(full_text: str) -> dict[str, float | None]:
+    """
+    Search each line of the clause for known named piso patterns adjacent to
+    a BRL value (same line). Returns a dict with four keys.
+    """
+    named: dict[str, float | None] = {
+        "valor_piso_cct": None,
+        "piso_tecnico": None,
+        "piso_administrativo": None,
+        "piso_unico": None,
+    }
+    for line in full_text.split("\n"):
+        line_n = normalize(line)
+        brl = first_brl_values(line)
+        if not brl:
+            continue
+        for pat, field in _NAMED_PISO_PAT:
+            if pat.search(line_n) and named[field] is None:
+                named[field] = brl[0]
+    return named
+
+
+def _extract_por_cargo_entries(
+    full_text: str, fonte: str, clausula_heading: str
+) -> list[dict]:
+    """
+    Extract per-cargo/função/jornada piso entries from clause text.
+
+    Uses two strategies:
+    1. Explicit label–value patterns: lines matching "<label>: R$ <value>" or
+       "<label> — R$ <value>" (colon/dash separated, same line).
+    2. Named-piso-keyword lines: "piso técnico" or "piso administrativo" etc.
+       where the role keyword acts as the cargo_ou_funcao.
+
+    Only high-confidence same-line matches are included.
+    """
+    entries: list[dict] = []
+    seen: set[tuple[str, float]] = set()
+
+    for line in full_text.split("\n"):
+        line_stripped = line.strip()
+        if not line_stripped:
+            continue
+
+        brl_vals = first_brl_values(line_stripped)
+        if not brl_vals:
+            continue
+
+        line_n = normalize(line_stripped)
+        val = brl_vals[0]
+        val_key = round(val, 2)
+
+        # Strategy 1: "label: R$ value" or "label – R$ value" patterns
+        m = _LINE_LABEL_VALUE_PAT.match(line_stripped)
+        if m:
+            label_raw = m.group(1).strip(" \t:–—-")
+            label_n = normalize(label_raw)
+            # Skip very generic headings that aren't cargo names
+            if label_n and not re.search(
+                r"^(?:valor|salario|remuneracao|empregado|trabalhador"
+                r"|empresa|nos\s+termos|conforme|apos|durante|exceto"
+                r"|exclusive|nao\s+se\s+aplica)\b",
+                label_n,
+            ):
+                key = (label_n, val_key)
+                if key not in seen:
+                    seen.add(key)
+                    entries.append({
+                        "cargo_ou_funcao": label_raw,
+                        "valor": val,
+                        "jornada": _jornada_hint(line_n),
+                        "fonte_documento": fonte,
+                        "clausula": _truncate(clausula_heading, 200),
+                        "status_parametro": "extraido_para_revisao",
+                    })
+            continue
+
+        # Strategy 2: named-piso-keyword lines
+        for pat, _ in _NAMED_PISO_PAT:
+            if pat.search(line_n):
+                # Use the matched keyword as cargo name
+                m2 = pat.search(line_n)
+                if m2:
+                    cargo_label = m2.group(0).replace("\t", " ").strip().title()
+                    key = (normalize(cargo_label), val_key)
+                    if key not in seen:
+                        seen.add(key)
+                        entries.append({
+                            "cargo_ou_funcao": cargo_label,
+                            "valor": val,
+                            "jornada": _jornada_hint(line_n),
+                            "fonte_documento": fonte,
+                            "clausula": _truncate(clausula_heading, 200),
+                            "status_parametro": "extraido_para_revisao",
+                        })
+                break
+
+    return entries
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Per-item extractors
 # ──────────────────────────────────────────────────────────────────────────────
 
 
 def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
-    """Extract piso salarial (salary floor)."""
+    """
+    Extract piso salarial (salary floor) with per-cargo/função/modalidade breakdown.
+
+    Returns a dict with:
+    - Named piso fields: valor_piso_cct, piso_tecnico, piso_administrativo, piso_unico
+    - por_cargo: list of per-cargo entries (display-only preview, not canonical)
+    - Legacy fields (valor, tipo) for backward compatibility — only set when a
+      single unambiguous piso exists
+    """
     matched = find_clauses(
         clauses,
         r"piso\s+salarial",
@@ -325,34 +467,95 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
     full_text = clause["heading"] + "\n" + clause["body"]
 
     if has_negative_clause(full_text):
-        return _item_not_found(
+        item = _item_not_found(
             fonte,
             trecho_fonte=_truncate(full_text, 600),
             observacao="Cláusula encontrada, mas indica negação ou remissão",
         )
+        item.update({
+            "valor_piso_cct": None,
+            "piso_tecnico": None,
+            "piso_administrativo": None,
+            "piso_unico": None,
+            "por_cargo": [],
+        })
+        return item
 
-    values = first_brl_values(full_text)
+    all_values = first_brl_values(full_text)
+    named = _extract_named_piso_fields(full_text)
+    por_cargo = _extract_por_cargo_entries(full_text, fonte, clause["heading"])
 
-    # Detect piso type hints
-    text_n = normalize(full_text)
-    if re.search(r"piso\s+tecnico", text_n):
-        tipo = "piso_tecnico"
-    elif re.search(r"piso\s+administrativo", text_n):
-        tipo = "piso_administrativo"
-    elif len(values) == 1:
+    # ── Determine legacy tipo + valor (only when one unambiguous piso exists) ──
+    named_nonull = {k: v for k, v in named.items() if v is not None}
+    named_count = len(named_nonull)
+
+    if named_count == 1:
+        field_name = next(iter(named_nonull))
+        valor_legacy = named_nonull[field_name]
+        tipo = {
+            "piso_tecnico": "piso_tecnico",
+            "piso_administrativo": "piso_administrativo",
+            "piso_unico": "piso_unico",
+            "valor_piso_cct": "piso_cct",
+        }.get(field_name, "piso_cct")
+    elif named_count == 0 and len(all_values) == 1:
+        # Single value with no named-field match → piso único
+        named["piso_unico"] = all_values[0]
+        valor_legacy = all_values[0]
         tipo = "piso_unico"
     else:
-        tipo = "piso_cct"
+        # Multiple pisos or zero values — no single legacy value
+        valor_legacy = None
+        tipo = "piso_cct" if all_values else None
 
-    return build_item(
-        values=values,
-        regra_textual=full_text,
-        tipo=tipo,
-        unidade="BRL",
-        fonte_documento=fonte,
-        clausula_heading=clause["heading"],
-        trecho_fonte=full_text,
-    )
+    # ── Status ────────────────────────────────────────────────────────────────
+    if not all_values and not por_cargo:
+        obs = "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
+        item = _item_not_found(fonte, _truncate(full_text, 600), obs)
+        item.update({
+            "valor_piso_cct": None,
+            "piso_tecnico": None,
+            "piso_administrativo": None,
+            "piso_unico": None,
+            "por_cargo": [],
+        })
+        return item
+
+    if named_count > 1:
+        status = "extraido_para_revisao"
+        obs_parts = [
+            f"{k.replace('_', ' ')}: R$ {v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            for k, v in named_nonull.items()
+        ]
+        obs = f"Múltiplos pisos identificados: {'; '.join(obs_parts)}"
+    elif named_count == 0 and len(all_values) > 1:
+        status = "conflito"
+        obs = f"Múltiplos valores identificados: {', '.join(str(v) for v in all_values)}"
+    else:
+        status = "extraido_para_revisao"
+        obs = None
+
+    return {
+        # Named piso fields (structured breakdown)
+        "valor_piso_cct": named["valor_piso_cct"],
+        "piso_tecnico": named["piso_tecnico"],
+        "piso_administrativo": named["piso_administrativo"],
+        "piso_unico": named["piso_unico"],
+        # Per-cargo preview (display-only, non-canonical)
+        "por_cargo": por_cargo,
+        # Legacy/backward-compat fields
+        "valor": valor_legacy,
+        "percentual": None,
+        "valor_textual": None,
+        "regra_textual": _truncate(full_text, 800),
+        "tipo": tipo,
+        "unidade": "BRL",
+        "fonte_documento": fonte,
+        "clausula": _truncate(clause["heading"], 200),
+        "trecho_fonte": _truncate(full_text, 600),
+        "observacao": obs,
+        "status_parametro": status,
+    }
 
 
 def extract_adicional_noturno(clauses: list[dict], fonte: str) -> dict:
@@ -843,7 +1046,24 @@ def main():
         # Summarize items
         for key, item in merged.items():
             s = item.get("status_parametro", "?")
-            v = item.get("valor") or item.get("percentual") or item.get("valor_textual") or "—"
+            # For piso_salarial, show a structured summary of named fields
+            if key == "piso_salarial":
+                named_parts = [
+                    f"{k.replace('piso_', 'tec=' if k == 'piso_tecnico' else 'adm=' if k == 'piso_administrativo' else 'único=' if k == 'piso_unico' else 'cct=')}{v:,.2f}"
+                    for k, v in {
+                        "piso_tecnico": item.get("piso_tecnico"),
+                        "piso_administrativo": item.get("piso_administrativo"),
+                        "piso_unico": item.get("piso_unico"),
+                        "valor_piso_cct": item.get("valor_piso_cct"),
+                    }.items()
+                    if v is not None
+                ]
+                n_cargo = len(item.get("por_cargo") or [])
+                v = " | ".join(named_parts) if named_parts else (item.get("valor") or "—")
+                if n_cargo:
+                    v = f"{v} [{n_cargo} cargo(s)]" if named_parts else f"[{n_cargo} cargo(s)]"
+            else:
+                v = item.get("valor") or item.get("percentual") or item.get("valor_textual") or "—"
             marker = {"valido": "✓ valido", "extraido_para_revisao": "↗ extraído", "conflito": "⚡ conflito", "pendente_revisao": "· pendente"}.get(s, s)
             print(f"     {key:<25} {marker:<22} {v}")
             if s == "valido":
