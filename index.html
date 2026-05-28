@@ -100,6 +100,45 @@
               </button>
             </div>
           </div>
+
+          <!-- CCT item filters -->
+          <div class="row g-2 align-items-end mt-2 pt-2 border-top">
+            <div class="col-12">
+              <small class="text-muted fw-semibold">Filtros por item CCT</small>
+            </div>
+            <div class="col-12 col-md-4">
+              <label for="filter-cct-item" class="form-label mb-1">Item CCT</label>
+              <select id="filter-cct-item" class="form-select form-select-sm">
+                <option value="">Todos os itens</option>
+                <option value="piso_salarial">Piso salarial</option>
+                <option value="auxilio_alimentacao">VR / Auxílio alimentação</option>
+                <option value="adicional_noturno">Adicional noturno</option>
+                <option value="hora_extra">Hora extra</option>
+                <option value="plr">PLR</option>
+                <option value="sobreaviso">Sobreaviso</option>
+                <option value="jornada">Jornada</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-item-status" class="form-label mb-1">Status do item</label>
+              <select id="filter-item-status" class="form-select form-select-sm">
+                <option value="">Todos os status</option>
+                <option value="extraido_para_revisao">Extraído para revisão</option>
+                <option value="pendente_revisao">Pendente revisão</option>
+                <option value="pendente_avaliacao">Pendente avaliação</option>
+                <option value="conflito">Conflito</option>
+                <option value="valido">Válido (validado manualmente)</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-item-preenchimento" class="form-label mb-1">Preenchimento</label>
+              <select id="filter-item-preenchimento" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                <option value="preenchido">Com valor identificado</option>
+                <option value="nao_preenchido">Sem valor identificado</option>
+              </select>
+            </div>
+          </div>
         </div>
       </section>
 
