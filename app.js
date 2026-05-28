@@ -300,6 +300,78 @@ const EMBEDDED_DEMO = {
         },
       },
     },
+    {
+      id_registro_reajuste: 'DEMO-POR-CARGO-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'Sintec-Demo',
+      uf: 'SP',
+      categoria: 'Tecnologia da Informação',
+      ano_referencia: 2025,
+      status_parametro: 'valido',
+      conflito: false,
+      percentual_reajuste: 5.0,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT/SP/Sintec-Demo/CCT_2025_por_cargo.pdf',
+      observacao: 'Parâmetros com variação por cargo/função/jornada — demonstração',
+      itens_cct: {
+        piso_salarial: {
+          valor: null, valor_piso_cct: null, piso_tecnico: null,
+          piso_administrativo: null, piso_unico: null,
+          tipo: 'por_cargo', unidade: 'BRL',
+          por_cargo: [
+            { descricao: 'Técnico', valor: 2200.00, unidade: 'BRL' },
+            { descricao: 'Administrativo', valor: 1900.00, unidade: 'BRL' },
+            { descricao: 'Operacional', valor: 1700.00, unidade: 'BRL' },
+          ],
+          por_jornada: [],
+          por_modalidade: [],
+          regra_textual: 'Pisos salariais diferenciados por função conforme tabela em anexo.',
+          clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+          fonte_documento: 'CCT/SP/Sintec-Demo/CCT_2025_por_cargo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao',
+        },
+        auxilio_alimentacao: {
+          valor: null, tipo: 'por_jornada', unidade: 'BRL',
+          por_cargo: [],
+          por_jornada: [
+            { descricao: '200–220h/mês (44h/sem)', valor: 25.00, unidade: 'BRL/DIA' },
+            { descricao: '180h/mês (40h/sem)', valor: 20.00, unidade: 'BRL/DIA' },
+          ],
+          por_modalidade: [],
+          regra_textual: 'Vale refeição diferenciado por jornada contratada.',
+          clausula: 'CLÁUSULA DÉCIMA - VR',
+          fonte_documento: 'CCT/SP/Sintec-Demo/CCT_2025_por_cargo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao',
+        },
+        jornada: {
+          horas_semanais: null, valor: null, tipo: 'por_jornada', unidade: 'horas',
+          por_cargo: [],
+          por_jornada: [
+            { descricao: '44h/semana', valor: 44, unidade: 'horas' },
+            { descricao: '40h/semana', valor: 40, unidade: 'horas' },
+          ],
+          por_modalidade: [],
+          regra_textual: 'Jornada de 44h ou 40h semanais conforme enquadramento.',
+          clausula: 'CLÁUSULA DÉCIMA SEXTA - JORNADA',
+          fonte_documento: 'CCT/SP/Sintec-Demo/CCT_2025_por_cargo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao',
+        },
+        adicional_noturno: {
+          percentual: 35, valor: null, tipo: 'percentual', unidade: '%',
+          por_cargo: [], por_jornada: [], por_modalidade: [],
+          regra_textual: 'Adicional noturno de 35% sobre a hora normal.',
+          clausula: 'CLÁUSULA DÉCIMA SEGUNDA - ADICIONAL NOTURNO',
+          fonte_documento: 'CCT/SP/Sintec-Demo/CCT_2025_por_cargo.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao',
+        },
+      },
+    },
   ],
 };
 
@@ -585,7 +657,7 @@ function showApp(dataGeracao, demoMessage = null) {
 
 function populateFilterOptions() {
   populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
-  populateSelect(filterSindicato, uniqueValues(allRecords, 'sindicato'), 'Todos os sindicatos');
+  // filterSindicato is a free-text input; no select options to populate
   populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
   populateSelect(filterStatus, ['valido', 'conflito', 'pendente_revisao'], 'Todos os status');
 }
@@ -645,7 +717,7 @@ function applyFilters() {
 
     const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
     const matchesSindicato =
-      !sindicatoValue || String(record.sindicato ?? '') === sindicatoValue;
+      !sindicatoValue || normalizeText(String(record.sindicato ?? '')).includes(normalizeText(sindicatoValue));
     const matchesAno =
       !anoValue || String(record.ano_referencia ?? '') === anoValue;
     const matchesStatus = !statusValue || status === statusValue;
@@ -1096,6 +1168,8 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
     ? `<dl class="row cct-item-fields">${specFieldRows.join('')}</dl>`
     : '';
 
+  const subItemsHtml = buildSubItemsSection(item);
+
   const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
     ? `<div class="cct-item-regra">${escapeHtml(String(item.regra_textual))}</div>`
     : '';
@@ -1117,6 +1191,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         </div>
         <div class="cct-item-valor">${valorDisplay}</div>
         ${specFieldsHtml}
+        ${subItemsHtml}
         ${clausulaHtml}
         ${regraHtml}
         ${obsHtml}
@@ -1153,6 +1228,11 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
 
   const regraHtml = (item.regra_textual != null && item.regra_textual !== '')
     ? `<div class="cct-item-regra mb-2">${escapeHtml(String(item.regra_textual))}</div>`
+    : '';
+
+  const subItemsHtml = buildSubItemsSection(item);
+  const subItemsSection = subItemsHtml
+    ? `<div class="mb-2">${subItemsHtml}</div>`
     : '';
 
   const clausulaHtml = (item.clausula != null && item.clausula !== '')
@@ -1193,6 +1273,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         ${fonteHtml}
         ${clausulaHtml}
         ${regraHtml}
+        ${subItemsSection}
         <div class="cct-item-edit-form">
           ${inputsHtml}
           <div class="mb-2">
@@ -1392,9 +1473,68 @@ function isCctItemPreenchido(itemKey, item) {
     const v = getItemFieldValue(itemKey, k, item);
     return v != null && v !== '';
   })) return true;
-  return (item.valor != null && item.valor !== '') ||
-         (item.valor_textual != null && item.valor_textual !== '');
+  if ((item.valor != null && item.valor !== '') ||
+         (item.valor_textual != null && item.valor_textual !== '')) return true;
+  // Sub-item arrays (por_cargo / por_jornada / por_modalidade) also count as preenchido
+  return (Array.isArray(item.por_cargo) && item.por_cargo.length > 0) ||
+         (Array.isArray(item.por_jornada) && item.por_jornada.length > 0) ||
+         (Array.isArray(item.por_modalidade) && item.por_modalidade.length > 0);
 }
+
+/** Renders sub-item arrays (por_cargo / por_jornada / por_modalidade) as small tables */
+function buildSubItemsSection(item) {
+  const groups = [
+    { key: 'por_cargo', label: 'Por cargo / função' },
+    { key: 'por_jornada', label: 'Por jornada' },
+    { key: 'por_modalidade', label: 'Por modalidade / grupo' },
+  ];
+
+  let html = '';
+  groups.forEach(({ key, label }) => {
+    const arr = item[key];
+    if (!Array.isArray(arr) || arr.length === 0) return;
+
+    const rows = arr.map((sub) => {
+      const descricao = sub.descricao ?? sub.cargo ?? sub.funcao ?? sub.jornada
+        ?? sub.modalidade ?? sub.grupo ?? sub.categoria ?? '—';
+      let valorDisplay = '—';
+      if (sub.valor != null) {
+        const n = Number(sub.valor);
+        if (!isNaN(n)) {
+          const unidade = (sub.unidade ?? '').toUpperCase();
+          if (unidade === 'BRL' || unidade.startsWith('BRL/')) {
+            const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            valorDisplay = unidade.includes('/DIA') ? `${brl}/dia`
+              : unidade.includes('/MES') || unidade.includes('/MÊS') ? `${brl}/mês`
+              : brl;
+          } else if (unidade === '%') {
+            valorDisplay = n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+          } else if (unidade === 'HORAS' || unidade === 'H/SEMANA') {
+            valorDisplay = `${n}h semanais`;
+          } else {
+            valorDisplay = escapeHtml(String(sub.valor));
+          }
+        } else {
+          valorDisplay = escapeHtml(String(sub.valor));
+        }
+      } else if (sub.valor_textual != null && sub.valor_textual !== '') {
+        valorDisplay = escapeHtml(String(sub.valor_textual));
+      }
+      return `<tr><td>${escapeHtml(String(descricao))}</td><td>${valorDisplay}</td></tr>`;
+    }).join('');
+
+    html += `
+      <div class="cct-subitems">
+        <div class="cct-subitems-label">${escapeHtml(label)}</div>
+        <table class="cct-subitems-table">
+          <thead><tr><th>Descrição</th><th>Valor</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  });
+  return html;
+}
+
 
 /** Generates 12 CCT item columns for the main table row */
 function buildCctTableCells(record) {
@@ -1440,6 +1580,19 @@ function buildCctTableCells(record) {
   const pisoUnico = cellGet('piso_salarial', 'piso_unico')
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
 
+  // Sub-item array indicators for piso columns
+  function pisoSubItemSummary(pisoIt) {
+    if (!pisoIt) return null;
+    const nCargo = Array.isArray(pisoIt.por_cargo) ? pisoIt.por_cargo.length : 0;
+    const nJornada = Array.isArray(pisoIt.por_jornada) ? pisoIt.por_jornada.length : 0;
+    const nModal = Array.isArray(pisoIt.por_modalidade) ? pisoIt.por_modalidade.length : 0;
+    if (nCargo > 0) return `(${nCargo} cargo${nCargo > 1 ? 's' : ''})`;
+    if (nJornada > 0) return `(${nJornada} jornada${nJornada > 1 ? 's' : ''})`;
+    if (nModal > 0) return `(${nModal} modal.)`;
+    return null;
+  }
+  const pisoSubSummary = pisoSubItemSummary(pisoItem);
+
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
   const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
   const plrVal = cellGet('plr', 'valor', 'percentual', 'regra_textual');
@@ -1457,7 +1610,7 @@ function buildCctTableCells(record) {
     : '—';
 
   return [
-    `<td class="cct-col">${fmtBRL(pisoCct)}</td>`,
+    `<td class="cct-col">${pisoCct != null ? fmtBRL(pisoCct) : (pisoSubSummary ?? '—')}</td>`,
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
@@ -1944,7 +2097,16 @@ function buildFonteLink(value) {
 function fmtVR(vrItem) {
   if (!vrItem) return '—';
   const v = vrItem.valor;
-  if (v == null || v === '') return '—';
+  if (v == null || v === '') {
+    // Sub-item fallback: show array indicator
+    if (Array.isArray(vrItem.por_jornada) && vrItem.por_jornada.length > 0) {
+      return `(${vrItem.por_jornada.length} jornada${vrItem.por_jornada.length > 1 ? 's' : ''})`;
+    }
+    if (Array.isArray(vrItem.por_cargo) && vrItem.por_cargo.length > 0) {
+      return `(${vrItem.por_cargo.length} cargo${vrItem.por_cargo.length > 1 ? 's' : ''})`;
+    }
+    return '—';
+  }
   const n = Number(v);
   if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
   const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1987,6 +2149,10 @@ function fmtJornada(jornadaItem) {
   if (jornadaItem.horas_mensais != null) return `${jornadaItem.horas_mensais}h mensais`;
   if (jornadaItem.opcoes_identificadas != null) {
     return escapeHtml(String(jornadaItem.opcoes_identificadas).slice(0, 22));
+  }
+  // Sub-item fallback
+  if (Array.isArray(jornadaItem.por_jornada) && jornadaItem.por_jornada.length > 0) {
+    return `(${jornadaItem.por_jornada.length} jornada${jornadaItem.por_jornada.length > 1 ? 's' : ''})`;
   }
   return '—';
 }
