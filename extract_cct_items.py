@@ -309,8 +309,155 @@ def has_negative_clause(text: str) -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 
 
+def _piso_salarial_not_found(
+    fonte: str,
+    trecho_fonte: str | None = None,
+    observacao: str | None = None,
+) -> dict:
+    """Return an empty piso_salarial structure when the clause is absent or unusable."""
+    return {
+        "valor_piso_cct": None,
+        "piso_tecnico": None,
+        "piso_administrativo": None,
+        "piso_unico": None,
+        "por_cargo": [],
+        "valor": None,
+        "percentual": None,
+        "valor_textual": None,
+        "regra_textual": None,
+        "tipo": None,
+        "unidade": None,
+        "fonte_documento": fonte,
+        "clausula": None,
+        "trecho_fonte": trecho_fonte,
+        "observacao": observacao,
+        "status_parametro": "pendente_revisao",
+    }
+
+
+def _parse_brl_str(raw: str) -> float | None:
+    """Parse a Brazilian-format BRL string (e.g. '1.540,47') to float."""
+    try:
+        return round(float(raw.replace(".", "").replace(",", ".")), 2)
+    except ValueError:
+        return None
+
+
+def extract_por_cargo_pisos(full_text: str, fonte: str, clausula_heading: str) -> list[dict]:
+    """
+    Extract per-cargo/function salary floors from a piso salarial clause body.
+
+    Uses a multi-stage approach:
+      Stage 1 — lettered/numbered list items with an explicit value indicator phrase.
+      Stage 2 — explicit named-piso keyword lines (e.g. "Piso Técnico: R$ X").
+
+    Returns a list of dicts. Only entries with unambiguous cargo context are included.
+    """
+    entries: list[dict] = []
+    seen_values: set[float] = set()
+    clausula_trunc = _truncate(clausula_heading, 200)
+
+    # ── Stage 1: lettered/numbered list items ────────────────────────────────
+    # Handles patterns like:
+    #   a) Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21
+    #   b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48
+    #   1) Analista de Suporte: R$ 2.434,07
+    list_item_re = re.compile(
+        r"(?:^|\n)\s*[a-zA-Z0-9]\)\s*\.?\s*"
+        r"(?:Aplic[aá]vel\s+exclusivamente\s+(?:ao?\s+)?)?"
+        r"([\w\s,/+&()-]{4,120}?)\s+"
+        r"(?:"
+        r"o\s+valor\s*(?:de\s*|correspondente\s+a\s*)?"  # "o valor de", "o valor correspondente a"
+        r"|valor(?:\s+de)?\s*:"                           # "valor de:", "valor:"
+        r"|:\s*"                                           # plain ":"
+        r")"
+        r"R\$\s*([\d.,]+)",
+        re.IGNORECASE,
+    )
+
+    for m in list_item_re.finditer(full_text):
+        cargo_raw = m.group(1).strip().strip(".,;:")
+
+        # Strip known preamble phrases and leading articles from the cargo name
+        _cargo_preamble_re = re.compile(
+            r"^(?:aplic[aá]vel\s+exclusivamente\s+(?:ao?\s+)?"
+            r"|para\s+(?:o\s+)?(?:cargo\s+de\s+|fun[cç][aã]o\s+(?:de\s+)?)?"
+            r"|ao?\s+)",
+            re.IGNORECASE,
+        )
+        cargo_raw = _cargo_preamble_re.sub("", cargo_raw).strip().strip(".,;:")
+
+        value_str = m.group(2)
+
+        # Skip generic "catch-all" phrases that are not cargo names
+        cargo_n = normalize(cargo_raw)
+        if re.match(
+            r"^(?:os\s+trabalhadores|os\s+empregados|a\s+empresa|as\s+empresas|demais\s+func)",
+            cargo_n,
+        ):
+            continue
+
+        valor = _parse_brl_str(value_str)
+        if valor is None or valor < 300:
+            continue
+
+        if valor in seen_values:
+            continue
+        seen_values.add(valor)
+
+        # Extract a jornada hint from the cargo description if present
+        jornada: str | None = None
+        jornada_m = re.search(
+            r"(\d+)\s*(?:\([^)]*\)\s*)?horas?\s+(?:semanais|mensais)",
+            cargo_raw,
+            re.IGNORECASE,
+        )
+        if jornada_m:
+            jornada = jornada_m.group(0).strip()
+
+        entries.append({
+            "cargo_ou_funcao": _truncate(cargo_raw, 100),
+            "valor": valor,
+            "jornada": jornada,
+            "fonte_documento": fonte,
+            "clausula": clausula_trunc,
+            "status_parametro": "extraido_para_revisao",
+        })
+
+    # ── Stage 2: explicit named-piso keyword lines ───────────────────────────
+    # Handles: "Piso Técnico: R$ 2.500,00" / "Piso Administrativo – R$ 1.800,00"
+    named_piso_re = re.compile(
+        r"piso\s+(t[eé]cnico|administrativo|operacional|geral|[a-z]+(?:\s+[a-z]+)?)"
+        r"\s*[:\-–]\s*R\$\s*([\d.,]+)",
+        re.IGNORECASE,
+    )
+    for m in named_piso_re.finditer(full_text):
+        cargo_raw = f"Piso {m.group(1).strip()}"
+        valor = _parse_brl_str(m.group(2))
+        if valor is None or valor < 300:
+            continue
+        if valor in seen_values:
+            continue
+        seen_values.add(valor)
+        entries.append({
+            "cargo_ou_funcao": cargo_raw,
+            "valor": valor,
+            "jornada": None,
+            "fonte_documento": fonte,
+            "clausula": clausula_trunc,
+            "status_parametro": "extraido_para_revisao",
+        })
+
+    return entries
+
+
 def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
-    """Extract piso salarial (salary floor)."""
+    """
+    Extract piso salarial (salary floor) with per-cargo/function/jornada support.
+
+    Returns an extended structure with named piso fields and a `por_cargo` list.
+    Backward-compatible `valor` and `tipo` fields are preserved.
+    """
     matched = find_clauses(
         clauses,
         r"piso\s+salarial",
@@ -319,40 +466,123 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         r"pisos?\s+salariais",
     )
     if not matched:
-        return _item_not_found(fonte, observacao="Cláusula de piso salarial não localizada no PDF")
+        return _piso_salarial_not_found(
+            fonte, observacao="Cláusula de piso salarial não localizada no PDF"
+        )
 
     clause = matched[0]
     full_text = clause["heading"] + "\n" + clause["body"]
 
     if has_negative_clause(full_text):
-        return _item_not_found(
+        return _piso_salarial_not_found(
             fonte,
             trecho_fonte=_truncate(full_text, 600),
             observacao="Cláusula encontrada, mas indica negação ou remissão",
         )
 
-    values = first_brl_values(full_text)
+    all_brl_values = first_brl_values(full_text)
+    if not all_brl_values:
+        return _piso_salarial_not_found(
+            fonte,
+            trecho_fonte=_truncate(full_text, 600),
+            observacao="Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
+        )
 
-    # Detect piso type hints
     text_n = normalize(full_text)
-    if re.search(r"piso\s+tecnico", text_n):
-        tipo = "piso_tecnico"
-    elif re.search(r"piso\s+administrativo", text_n):
-        tipo = "piso_administrativo"
-    elif len(values) == 1:
+
+    # ── Try to extract per-cargo entries ─────────────────────────────────────
+    por_cargo = extract_por_cargo_pisos(full_text, fonte, clause["heading"])
+
+    # ── Named piso fields ────────────────────────────────────────────────────
+    piso_tecnico: float | None = None
+    piso_administrativo: float | None = None
+    piso_unico: float | None = None
+    valor_piso_cct: float | None = None
+
+    # Explicit keyword extraction for named pisos from normalized text.
+    # Only match patterns like "Piso Técnico: R$ X" or "piso técnico R$ X".
+    # Do NOT backfill from generic cargo entries to avoid misclassification.
+    m_tec = re.search(r"piso\s+tecnico\D{0,40}?r\$\s*([\d.,]+)", text_n)
+    if m_tec:
+        piso_tecnico = _parse_brl_str(m_tec.group(1))
+
+    m_adm = re.search(r"piso\s+administrativo\D{0,40}?r\$\s*([\d.,]+)", text_n)
+    if m_adm:
+        piso_administrativo = _parse_brl_str(m_adm.group(1))
+
+    # Determine tipo and remaining named fields
+    if len(all_brl_values) == 1 and not por_cargo:
+        piso_unico = all_brl_values[0]
         tipo = "piso_unico"
+    elif piso_tecnico is not None and piso_administrativo is not None:
+        tipo = "piso_por_cargo"
+    elif piso_tecnico is not None:
+        tipo = "piso_tecnico"
+    elif piso_administrativo is not None:
+        tipo = "piso_administrativo"
+    elif por_cargo:
+        tipo = "piso_por_cargo"
     else:
         tipo = "piso_cct"
+        valor_piso_cct = all_brl_values[0]
 
-    return build_item(
-        values=values,
-        regra_textual=full_text,
-        tipo=tipo,
-        unidade="BRL",
-        fonte_documento=fonte,
-        clausula_heading=clause["heading"],
-        trecho_fonte=full_text,
+    # ── Status determination ──────────────────────────────────────────────────
+    # Only downgrade from "conflito" when every BRL value in the clause is
+    # accounted for in por_cargo or a named piso field.
+    accounted_values: set[float] = set()
+    if piso_unico is not None:
+        accounted_values.add(round(piso_unico, 0))
+    if piso_tecnico is not None:
+        accounted_values.add(round(piso_tecnico, 0))
+    if piso_administrativo is not None:
+        accounted_values.add(round(piso_administrativo, 0))
+    if valor_piso_cct is not None:
+        accounted_values.add(round(valor_piso_cct, 0))
+    for entry in por_cargo:
+        accounted_values.add(round(entry["valor"], 0))
+
+    unmatched = [
+        v for v in all_brl_values if round(v, 0) not in accounted_values
+    ]
+
+    if len(all_brl_values) > 1 and unmatched:
+        status = "conflito"
+        distinct = list(dict.fromkeys(str(v) for v in all_brl_values))
+        obs = f"Múltiplos valores identificados: {', '.join(distinct)}"
+        if por_cargo:
+            obs += f"; {len(por_cargo)} entradas por cargo extraídas, mas há valores sem contexto de cargo"
+    else:
+        status = "extraido_para_revisao"
+        obs = None
+
+    # ── Primary value for backward compat ────────────────────────────────────
+    primary_valor = (
+        piso_unico
+        or piso_tecnico
+        or piso_administrativo
+        or valor_piso_cct
+        or (por_cargo[0]["valor"] if por_cargo else None)
+        or all_brl_values[0]
     )
+
+    return {
+        "valor_piso_cct": valor_piso_cct,
+        "piso_tecnico": piso_tecnico,
+        "piso_administrativo": piso_administrativo,
+        "piso_unico": piso_unico,
+        "por_cargo": por_cargo,
+        "valor": primary_valor,
+        "percentual": None,
+        "valor_textual": None,
+        "regra_textual": _truncate(full_text, 800),
+        "tipo": tipo,
+        "unidade": "BRL",
+        "fonte_documento": fonte,
+        "clausula": _truncate(clause["heading"], 200),
+        "trecho_fonte": _truncate(full_text, 600),
+        "observacao": obs,
+        "status_parametro": status,
+    }
 
 
 def extract_adicional_noturno(clauses: list[dict], fonte: str) -> dict:
@@ -747,6 +977,10 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
                     fonte,
                     observacao=f"{obs_prefix}. {existing.get('observacao') or ''}".strip(". ") or obs_prefix,
                 )
+                # Migrate piso_salarial to new schema even without PDF, so that
+                # existing extracted data adopts the extended structure.
+                if key == "piso_salarial" and existing:
+                    item = migrate_piso_salarial(existing)
                 itens[key] = item
         return itens, status
 
@@ -765,6 +999,47 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
         itens[key] = extracted
 
     return itens, status
+
+
+def migrate_piso_salarial(item: dict) -> dict:
+    """
+    Convert a piso_salarial item from the old flat format to the new extended format.
+
+    Old format: {valor, tipo, percentual, valor_textual, ...}
+    New format: adds valor_piso_cct, piso_tecnico, piso_administrativo, piso_unico, por_cargo
+
+    Only non-valido items should be migrated; validated items must never be mutated.
+    Already-migrated items (containing new keys) are returned unchanged.
+    """
+    if not item:
+        return item
+
+    # Already in new format — skip migration
+    if "por_cargo" in item:
+        return item
+
+    valor = item.get("valor")
+    tipo = item.get("tipo")
+
+    new_fields: dict = {
+        "valor_piso_cct": None,
+        "piso_tecnico": None,
+        "piso_administrativo": None,
+        "piso_unico": None,
+        "por_cargo": [],
+    }
+
+    if tipo == "piso_unico":
+        new_fields["piso_unico"] = valor
+    elif tipo == "piso_tecnico":
+        new_fields["piso_tecnico"] = valor
+    elif tipo == "piso_administrativo":
+        new_fields["piso_administrativo"] = valor
+    elif valor is not None:
+        new_fields["valor_piso_cct"] = valor
+
+    # Merge new fields at the start so named fields are visible alongside existing ones
+    return {**new_fields, **item}
 
 
 def merge_itens_cct(existing: dict | None, new_itens: dict) -> dict:

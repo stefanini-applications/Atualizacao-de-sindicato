@@ -184,6 +184,7 @@ const EMBEDDED_DEMO = {
         piso_salarial: {
           valor: 1540.47, piso_unico: 1540.47, piso_tecnico: null,
           piso_administrativo: null, valor_piso_cct: null,
+          por_cargo: [],
           percentual: null, valor_textual: null,
           regra_textual: 'O piso salarial para a categoria é de R$ 1.540,47 mensais conforme cláusula terceira.',
           tipo: 'piso_unico', unidade: 'BRL',
@@ -244,6 +245,105 @@ const EMBEDDED_DEMO = {
           fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
           observacao: 'Regra de PLR não identificada no documento.',
           status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+      },
+    },
+    {
+      id_registro_reajuste: 'PEND-DEMO-003',
+      ids_registros_conflitantes: null,
+      sindicato: 'Sindpd-Demo-TI',
+      uf: 'SP',
+      categoria: 'Tecnologia da Informação',
+      ano_referencia: 2025,
+      status_parametro: 'pendente_revisao',
+      conflito: false,
+      percentual_reajuste: 6.0,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+      observacao: 'Registro com múltiplos pisos por cargo — aguardando conferência manual',
+      itens_cct: {
+        piso_salarial: {
+          valor: 1479.21,
+          valor_piso_cct: null,
+          piso_tecnico: 2434.07,
+          piso_administrativo: null,
+          piso_unico: null,
+          por_cargo: [
+            {
+              cargo_ou_funcao: 'Técnico de atendimento, Auxiliar de Processamento',
+              valor: 1479.21,
+              jornada: null,
+              fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+              clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+              status_parametro: 'extraido_para_revisao',
+            },
+            {
+              cargo_ou_funcao: 'Técnico de Suporte',
+              valor: 1487.48,
+              jornada: null,
+              fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+              clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+              status_parametro: 'extraido_para_revisao',
+            },
+            {
+              cargo_ou_funcao: 'Analista de Suporte',
+              valor: 2434.07,
+              jornada: null,
+              fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+              clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+              status_parametro: 'extraido_para_revisao',
+            },
+          ],
+          percentual: null,
+          valor_textual: null,
+          regra_textual: 'CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 01/05/2024 nenhum trabalhador poderá ser admitido, ou continuar trabalhando com salário inferior às faixas abaixo: a) Técnico de atendimento, Auxiliar de Processamento o valor de R$1.479,21; b). Técnico de Suporte o valor correspondente a R$ 1.487,48; c). Analista de Suporte o valor correspondente a R$ 2.434,07.',
+          tipo: 'piso_por_cargo',
+          unidade: 'BRL',
+          clausula: 'CLÁUSULA TERCEIRA - PISO SALARIAL',
+          trecho_fonte: null,
+          fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao',
+          conflito: false,
+          ids_registros_conflitantes: null,
+        },
+        adicional_noturno: {
+          valor: null, percentual: 35, valor_textual: null,
+          regra_textual: 'Adicional noturno de 35% sobre a hora normal.',
+          tipo: 'adicional_noturno', unidade: '%',
+          clausula: 'CLÁUSULA DÉCIMA SEGUNDA - ADICIONAL NOTURNO',
+          fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        auxilio_alimentacao: {
+          valor: 950.00, percentual: null, valor_textual: null,
+          regra_textual: 'Vale-refeição de R$ 950,00 mensais para jornada de 44h semanais.',
+          tipo: 'auxilio_alimentacao', unidade: 'BRL/mes',
+          clausula: 'CLÁUSULA DÉCIMA - AUXÍLIO ALIMENTAÇÃO',
+          fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        hora_extra: {
+          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo_feriado: 100,
+          valor: null, tipo: 'percentual', unidade: '%',
+          regra_textual: 'Hora extra: 50% dias úteis, 75% sábados, 100% domingos/feriados.',
+          clausula: 'CLÁUSULA VIGÉSIMA - HORAS EXTRAS',
+          fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+        },
+        jornada: {
+          horas_semanais: 44, valor: 44, valor_textual: '44h/semana', opcoes_identificadas: '44h',
+          regra_textual: 'Jornada de trabalho de 44 horas semanais.',
+          tipo: 'jornada', unidade: 'h/semana',
+          clausula: 'CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO',
+          fonte_documento: 'CCT/SP/Sindpd-Demo-TI/CCT_2025.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
         },
       },
     },
@@ -1179,6 +1279,19 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
       </div>`;
   }).join('');
 
+  // Read-only por_cargo evidence shown in review form for piso_salarial
+  const porCargoEditHtml = (itemKey === 'piso_salarial')
+    ? (() => {
+        const table = buildPorCargoTable(item.por_cargo);
+        return table
+          ? `<div class="mb-2">
+               <span class="form-label form-label-sm mb-1 d-block">Por cargo / função (extraído)</span>
+               ${table}
+             </div>`
+          : '';
+      })()
+    : '';
+
   const obsVal = escapeHtml(item.observacao ?? '');
   const obsId = `cct-item-${itemKey}-obs`;
 
@@ -1194,6 +1307,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         ${clausulaHtml}
         ${regraHtml}
         <div class="cct-item-edit-form">
+          ${porCargoEditHtml}
           ${inputsHtml}
           <div class="mb-2">
             <label for="${obsId}" class="form-label form-label-sm mb-1">
@@ -1259,10 +1373,84 @@ function buildItemSpecificFieldsDisplay(itemKey, item) {
     }
     rows.push(`<dt class="col-5">${escapeHtml(fd.label)}</dt><dd class="col-7">${display}</dd>`);
   });
+
+  // Render por_cargo table for piso_salarial
+  if (itemKey === 'piso_salarial') {
+    const porCargoHtml = buildPorCargoTable(item.por_cargo);
+    if (porCargoHtml) {
+      rows.push(`<dt class="col-12 mt-2">Por cargo / função</dt><dd class="col-12">${porCargoHtml}</dd>`);
+    }
+  }
+
   return rows;
 }
 
+/**
+ * Renders a compact table for the `por_cargo` array of a piso_salarial item.
+ * Returns an HTML string, or empty string when there are no entries.
+ */
+function buildPorCargoTable(porCargo) {
+  if (!Array.isArray(porCargo) || porCargo.length === 0) return '';
+
+  const rows = porCargo.map((entry) => {
+    const cargo = escapeHtml(entry.cargo_ou_funcao ?? '—');
+    const valor = entry.valor != null
+      ? Number(entry.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+      : '—';
+    const jornada = entry.jornada ? escapeHtml(entry.jornada) : '—';
+    const badge = entry.status_parametro === 'extraido_para_revisao'
+      ? '<span class="badge-extraido" style="font-size:0.65rem;">🔎 Extraído</span>'
+      : entry.status_parametro === 'valido'
+        ? '<span class="badge-valido" style="font-size:0.65rem;">✔ Válido</span>'
+        : '<span class="badge-pendente" style="font-size:0.65rem;">⏳ Pendente</span>';
+
+    return `<tr>
+      <td class="small">${cargo}</td>
+      <td class="small text-end">${valor}</td>
+      <td class="small">${jornada}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <table class="table table-sm table-bordered mb-0" style="font-size:0.8rem;">
+      <thead class="table-light">
+        <tr>
+          <th>Cargo / Função</th>
+          <th class="text-end">Valor</th>
+          <th>Jornada</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+
 function formatCctValor(item) {
+  // piso_salarial: prefer named fields and por_cargo summary over generic valor
+  if (item.piso_unico != null) {
+    return Number(item.piso_unico).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  if (item.piso_tecnico != null && item.piso_administrativo != null) {
+    const tec = Number(item.piso_tecnico).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const adm = Number(item.piso_administrativo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return `Téc: ${tec} / Adm: ${adm}`;
+  }
+  if (item.piso_tecnico != null) {
+    return `Téc: ${Number(item.piso_tecnico).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+  }
+  if (item.piso_administrativo != null) {
+    return `Adm: ${Number(item.piso_administrativo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+  }
+  if (item.valor_piso_cct != null) {
+    return Number(item.valor_piso_cct).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  const porCargo = Array.isArray(item.por_cargo) ? item.por_cargo : [];
+  if (porCargo.length > 0) {
+    return `<span class="badge bg-info text-dark">${porCargo.length} piso${porCargo.length > 1 ? 's' : ''} por cargo</span>`;
+  }
+
   if (item.valor != null) {
     if (typeof item.valor === 'string') return escapeHtml(item.valor);
     if (item.tipo === 'percentual') return `${Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
@@ -1392,6 +1580,10 @@ function isCctItemPreenchido(itemKey, item) {
     const v = getItemFieldValue(itemKey, k, item);
     return v != null && v !== '';
   })) return true;
+  // por_cargo array with entries counts as preenchido for piso_salarial
+  if (itemKey === 'piso_salarial' && Array.isArray(item.por_cargo) && item.por_cargo.length > 0) {
+    return true;
+  }
   return (item.valor != null && item.valor !== '') ||
          (item.valor_textual != null && item.valor_textual !== '');
 }
@@ -1428,14 +1620,29 @@ function buildCctTableCells(record) {
     return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
   }
 
-  // Backward compat: derive piso columns from tipo+valor when specific fields absent
+  // Backward compat: derive piso columns from tipo+valor when specific fields absent.
+  // For por_cargo, only derive named fields via explicit "piso técnico/administrativo"
+  // keyword match (cargo_ou_funcao starts with "Piso Técnico" / "Piso Administrativo").
   const pisoItem = record.itens_cct?.piso_salarial;
+  const porCargoArr = Array.isArray(pisoItem?.por_cargo) ? pisoItem.por_cargo : [];
+
+  function pisoFromPorCargoExplicit(keyword) {
+    // Only match entries explicitly named "Piso <keyword>" — not generic cargo job titles
+    const entry = porCargoArr.find((e) => {
+      const n = normalizeText(e.cargo_ou_funcao ?? '');
+      return n.startsWith('piso') && n.includes(keyword);
+    });
+    return entry?.valor ?? null;
+  }
+
   const pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
     ?? (pisoItem?.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(pisoItem.tipo)
       ? pisoItem.valor : null);
   const pisoTec = cellGet('piso_salarial', 'piso_tecnico')
+    ?? pisoFromPorCargoExplicit('tecnic')
     ?? (pisoItem?.tipo === 'piso_tecnico' ? pisoItem?.valor ?? null : null);
   const pisoAdm = cellGet('piso_salarial', 'piso_administrativo')
+    ?? pisoFromPorCargoExplicit('administrativ')
     ?? (pisoItem?.tipo === 'piso_administrativo' ? pisoItem?.valor ?? null : null);
   const pisoUnico = cellGet('piso_salarial', 'piso_unico')
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
