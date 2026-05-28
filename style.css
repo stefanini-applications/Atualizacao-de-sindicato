@@ -394,7 +394,45 @@ body {
   border-color: #b7dfc5;
 }
 
-/* ── CCT item edit form ──────────────────────────────────────────── */
+/* ── CCT sub-items (por_cargo / por_jornada / por_modalidade) ────── */
+.cct-subitems {
+  border-top: 1px solid #dee2e6;
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.cct-subitems-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  margin-bottom: 0.2rem;
+}
+
+.cct-subitems-table {
+  width: 100%;
+  font-size: 0.75rem;
+  border-collapse: collapse;
+}
+
+.cct-subitems-table th {
+  font-weight: 600;
+  color: #6c757d;
+  padding: 0.1rem 0.3rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cct-subitems-table td {
+  padding: 0.1rem 0.3rem;
+  color: #495057;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cct-subitems-table tr:last-child td {
+  border-bottom: none;
+}
+
 .cct-item-edit-form {
   margin-top: 0.5rem;
   padding-top: 0.5rem;
