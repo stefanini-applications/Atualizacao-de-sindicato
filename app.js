@@ -585,7 +585,6 @@ function showApp(dataGeracao, demoMessage = null) {
 
 function populateFilterOptions() {
   populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
-  populateSelect(filterSindicato, uniqueValues(allRecords, 'sindicato'), 'Todos os sindicatos');
   populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
   populateSelect(filterStatus, ['valido', 'conflito', 'pendente_revisao'], 'Todos os status');
 }
@@ -645,7 +644,8 @@ function applyFilters() {
 
     const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
     const matchesSindicato =
-      !sindicatoValue || String(record.sindicato ?? '') === sindicatoValue;
+      !sindicatoValue ||
+      normalizeText(String(record.sindicato ?? '')).includes(normalizeText(sindicatoValue));
     const matchesAno =
       !anoValue || String(record.ano_referencia ?? '') === anoValue;
     const matchesStatus = !statusValue || status === statusValue;
@@ -659,6 +659,7 @@ function applyFilters() {
         record.status_parametro,
         record.fonte_documento,
         record.observacao,
+        getCctSearchText(record),
       ].join(' ')
     );
 
@@ -774,7 +775,7 @@ function renderTable() {
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       ${buildCctTableCells(record)}
-      <td>${buildStatusBadge(record)}</td>
+      <td class="col-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
         <button type="button" class="${btnClass}" data-index="${index}">
@@ -1381,19 +1382,96 @@ function getItemEffectiveStatus(item) {
 }
 
 /**
- * Returns true when a CCT item has a meaningful value that counts as "preenchido".
- * Uses CCT_ITEM_MIN_FIELDS + getItemFieldValue for schema compatibility, with a
- * generic `valor`/`valor_textual` fallback for real-data items that use those fields.
+ * Scalar fields that count as "filled" for any CCT item (AC5).
+ * Includes all named sub-fields plus legacy `valor` and backward-compat variants.
+ */
+const CCT_ITEM_SCALAR_FIELDS = [
+  'valor', 'percentual', 'regra', 'regra_textual', 'valor_textual',
+  'valor_piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico',
+  'percentual_padrao', 'percentual_dia_util', 'percentual_sabado',
+  'percentual_domingo', 'percentual_domingo_feriado', 'percentual_feriado',
+  'horas_semanais', 'horas_mensais', 'valor_mensal', 'valor_dia_util',
+];
+
+/** List fields that count as "filled" when non-empty (AC5). */
+const CCT_ITEM_LIST_FIELDS = ['por_cargo', 'por_jornada', 'por_modalidade', 'opcoes_identificadas'];
+
+/**
+ * Returns true when a CCT item has a meaningful value that counts as "preenchido" (AC5).
+ * Checks all AC5 scalar fields, backward-compat piso_salarial fallbacks, and list fields.
  */
 function isCctItemPreenchido(itemKey, item) {
   if (!item) return false;
-  const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
-  if (minKeys.some((k) => {
+
+  // Check all AC5 scalar fields (uses getItemFieldValue for backward compat on piso_salarial)
+  if (CCT_ITEM_SCALAR_FIELDS.some((k) => {
     const v = getItemFieldValue(itemKey, k, item);
     return v != null && v !== '';
   })) return true;
-  return (item.valor != null && item.valor !== '') ||
-         (item.valor_textual != null && item.valor_textual !== '');
+
+  // Check list fields
+  if (CCT_ITEM_LIST_FIELDS.some((k) => {
+    const v = item[k];
+    if (Array.isArray(v)) return v.length > 0;
+    return v != null && v !== '';
+  })) return true;
+
+  return false;
+}
+
+/**
+ * Builds a flat searchable string from all itens_cct text and numeric fields (AC7).
+ */
+function getCctSearchText(record) {
+  const itens = record.itens_cct;
+  if (!itens || typeof itens !== 'object') return '';
+
+  const parts = [];
+
+  Object.entries(itens).forEach(([itemKey, item]) => {
+    if (!item || typeof item !== 'object') return;
+
+    // Include the item label (e.g. "Jornada", "Hora Extra")
+    const label = CCT_ITEM_LABELS[itemKey];
+    if (label) parts.push(label);
+
+    // Text fields
+    const textFields = [
+      'valor_textual', 'regra_textual', 'regra', 'observacao',
+      'clausula', 'fonte_documento', 'trecho_fonte', 'opcoes_identificadas',
+      'tipo', 'unidade',
+    ];
+    textFields.forEach((f) => {
+      if (item[f] != null && item[f] !== '') parts.push(String(item[f]));
+    });
+
+    // Numeric values — useful to search by "44h", "50%", "1850" etc.
+    const numericFields = [
+      'valor', 'percentual', 'horas_semanais', 'horas_mensais',
+      'percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado',
+      'piso_unico', 'piso_tecnico', 'piso_administrativo', 'valor_piso_cct',
+    ];
+    numericFields.forEach((f) => {
+      if (item[f] != null && item[f] !== '') parts.push(String(item[f]));
+    });
+
+    // List fields — flatten entries
+    ['por_cargo', 'por_jornada', 'por_modalidade'].forEach((f) => {
+      const v = item[f];
+      if (Array.isArray(v)) {
+        v.forEach((entry) => {
+          if (!entry) return;
+          if (typeof entry === 'object') {
+            Object.values(entry).forEach((val) => { if (val != null) parts.push(String(val)); });
+          } else {
+            parts.push(String(entry));
+          }
+        });
+      }
+    });
+  });
+
+  return parts.join(' ');
 }
 
 /** Generates 12 CCT item columns for the main table row */
@@ -1457,7 +1535,7 @@ function buildCctTableCells(record) {
     : '—';
 
   return [
-    `<td class="cct-col">${fmtBRL(pisoCct)}</td>`,
+    `<td class="cct-col col-group-start">${fmtBRL(pisoCct)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,

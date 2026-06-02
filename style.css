@@ -384,8 +384,48 @@ body {
   white-space: nowrap;
   font-size: 0.75rem;
   color: #495057;
-  min-width: 80px;
-  max-width: 120px;
+  min-width: 85px;
+  max-width: 130px;
+}
+
+/* ── Column group separators ─────────────────────────────────────── */
+.col-group-start,
+#params-table thead th.col-group-start {
+  border-left: 2px solid #adb5bd !important;
+}
+
+/* Main data column min-widths */
+.col-main {
+  white-space: nowrap;
+}
+
+#params-table thead th:nth-child(1),
+#params-table tbody td:nth-child(1) { min-width: 40px; }
+
+#params-table thead th:nth-child(2),
+#params-table tbody td:nth-child(2) { min-width: 160px; }
+
+#params-table thead th:nth-child(3),
+#params-table tbody td:nth-child(3) { min-width: 120px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+#params-table thead th:nth-child(4),
+#params-table tbody td:nth-child(4) { min-width: 50px; }
+
+/* Reajuste/vigência group */
+#params-table thead th:nth-child(5),
+#params-table thead th:nth-child(6),
+#params-table thead th:nth-child(7),
+#params-table thead th:nth-child(8) { white-space: nowrap; }
+
+/* ── Scroll hint ─────────────────────────────────────────────────── */
+.table-scroll-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  user-select: none;
+  pointer-events: none;
 }
 
 /* ── CCT item card — validated state ────────────────────────────── */
