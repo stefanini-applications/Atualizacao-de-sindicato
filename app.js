@@ -315,6 +315,8 @@ let elDataGeracao;
 let elTableBody;
 let elEmptyState;
 let elTotalRecords;
+let elTableContainer;
+let elScrollHint;
 
 let filterUf;
 let filterSindicato;
@@ -345,7 +347,8 @@ function bindElements() {
   elDataGeracao = document.getElementById('data-geracao-badge');
 
   elTableBody = document.getElementById('params-tbody') || document.querySelector('tbody');
-
+  elTableContainer = document.getElementById('table-responsive-container');
+  elScrollHint = document.getElementById('table-scroll-hint');
   elEmptyState = document.getElementById('no-results');
 
   elTotalRecords = document.getElementById('result-count');
@@ -389,6 +392,11 @@ function bindEvents() {
 
   const btnDiscard = document.getElementById('btn-discard-changes');
   if (btnDiscard) btnDiscard.addEventListener('click', discardLocalChanges);
+
+  if (elTableContainer) {
+    elTableContainer.addEventListener('scroll', updateScrollHint, { passive: true });
+    window.addEventListener('resize', updateScrollHint, { passive: true });
+  }
 }
 
 async function tryFetch(url) {
@@ -585,7 +593,6 @@ function showApp(dataGeracao, demoMessage = null) {
 
 function populateFilterOptions() {
   populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
-  populateSelect(filterSindicato, uniqueValues(allRecords, 'sindicato'), 'Todos os sindicatos');
   populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
   populateSelect(filterStatus, ['valido', 'conflito', 'pendente_revisao'], 'Todos os status');
 }
@@ -645,7 +652,8 @@ function applyFilters() {
 
     const matchesUf = !ufValue || String(record.uf ?? '') === ufValue;
     const matchesSindicato =
-      !sindicatoValue || String(record.sindicato ?? '') === sindicatoValue;
+      !sindicatoValue ||
+      normalizeText(record.sindicato ?? '').includes(normalizeText(sindicatoValue));
     const matchesAno =
       !anoValue || String(record.ano_referencia ?? '') === anoValue;
     const matchesStatus = !statusValue || status === statusValue;
@@ -659,6 +667,7 @@ function applyFilters() {
         record.status_parametro,
         record.fonte_documento,
         record.observacao,
+        ...buildCctSearchTokens(record),
       ].join(' ')
     );
 
@@ -723,6 +732,14 @@ function applyFilters() {
   renderTable();
 }
 
+function updateScrollHint() {
+  if (!elTableContainer || !elScrollHint) return;
+  const isScrollable = elTableContainer.scrollWidth > elTableContainer.clientWidth + 2;
+  const isScrolledRight =
+    elTableContainer.scrollLeft + elTableContainer.clientWidth >= elTableContainer.scrollWidth - 4;
+  elScrollHint.classList.toggle('d-none', !isScrollable || isScrolledRight);
+}
+
 function renderTable() {
   if (!elTableBody) return;
 
@@ -768,13 +785,13 @@ function renderTable() {
       <td>${escapeHtml(record.uf ?? '—')}</td>
       <td>${escapeHtml(record.sindicato ?? '—')}</td>
       <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td>${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td>${formatPercent(record.percentual_reajuste)}</td>
+      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
+      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
       ${buildCctTableCells(record)}
-      <td>${buildStatusBadge(record)}</td>
+      <td class="status-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
         <button type="button" class="${btnClass}" data-index="${index}">
@@ -798,6 +815,9 @@ function renderTable() {
 
     elTableBody.appendChild(row);
   });
+
+  // Update scroll hint after DOM update (defer so layout is computed)
+  setTimeout(updateScrollHint, 0);
 }
 
 function isConflictRecord(record) {
@@ -1381,19 +1401,70 @@ function getItemEffectiveStatus(item) {
 }
 
 /**
- * Returns true when a CCT item has a meaningful value that counts as "preenchido".
- * Uses CCT_ITEM_MIN_FIELDS + getItemFieldValue for schema compatibility, with a
- * generic `valor`/`valor_textual` fallback for real-data items that use those fields.
+ * Collects searchable text tokens from all itens_cct entries (AC7).
+ * Includes item labels, values, rules, observations, clauses, and cargo/jornada info.
+ */
+function buildCctSearchTokens(record) {
+  const itens = record.itens_cct;
+  if (!itens) return [];
+  const tokens = [];
+  Object.entries(itens).forEach(([itemKey, item]) => {
+    if (!item) return;
+    tokens.push(CCT_ITEM_LABELS[itemKey] ?? itemKey);
+    [
+      item.valor_textual,
+      item.regra_textual,
+      item.observacao,
+      item.clausula,
+      item.fonte_documento,
+      item.opcoes_identificadas,
+    ].forEach((v) => { if (v != null && v !== '') tokens.push(String(v)); });
+    // Numeric values (e.g. "40", "44h")
+    ['valor', 'percentual', 'horas_semanais', 'horas_mensais'].forEach((f) => {
+      if (item[f] != null) tokens.push(String(item[f]));
+    });
+    // Lists
+    ['por_cargo', 'por_jornada', 'por_modalidade'].forEach((f) => {
+      if (Array.isArray(item[f])) {
+        item[f].forEach((entry) => {
+          if (typeof entry === 'object' && entry !== null) {
+            Object.values(entry).forEach((v) => { if (v != null) tokens.push(String(v)); });
+          } else if (entry != null) {
+            tokens.push(String(entry));
+          }
+        });
+      }
+    });
+  });
+  return tokens;
+}
+
+/**
+ * Returns true when a CCT item has a meaningful value that counts as "preenchido" (AC5).
  */
 function isCctItemPreenchido(itemKey, item) {
   if (!item) return false;
-  const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
-  if (minKeys.some((k) => {
-    const v = getItemFieldValue(itemKey, k, item);
-    return v != null && v !== '';
-  })) return true;
-  return (item.valor != null && item.valor !== '') ||
-         (item.valor_textual != null && item.valor_textual !== '');
+
+  // Scalar fields that count as "preenchido" per AC5
+  const scalarFields = [
+    'valor', 'percentual', 'regra', 'regra_textual', 'valor_textual',
+    'valor_piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico',
+    'percentual_padrao', 'percentual_dia_util', 'percentual_sabado',
+    'percentual_domingo', 'percentual_domingo_feriado', 'percentual_feriado',
+    'horas_semanais', 'horas_mensais', 'valor_mensal', 'valor_dia_util',
+  ];
+  if (scalarFields.some((k) => item[k] != null && item[k] !== '')) return true;
+
+  // Backward-compat: derive from tipo+valor for piso_salarial
+  if (itemKey === 'piso_salarial' && item.valor != null && item.valor !== '') return true;
+
+  // List fields
+  const listFields = ['por_cargo', 'por_jornada', 'por_modalidade', 'opcoes_identificadas'];
+  if (listFields.some((k) => Array.isArray(item[k]) && item[k].length > 0)) return true;
+  // opcoes_identificadas may also be a string
+  if (item.opcoes_identificadas != null && item.opcoes_identificadas !== '') return true;
+
+  return false;
 }
 
 /** Generates 12 CCT item columns for the main table row */
@@ -1457,7 +1528,7 @@ function buildCctTableCells(record) {
     : '—';
 
   return [
-    `<td class="cct-col">${fmtBRL(pisoCct)}</td>`,
+    `<td class="cct-col cct-group-start">${fmtBRL(pisoCct)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
