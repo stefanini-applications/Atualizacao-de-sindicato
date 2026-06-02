@@ -378,14 +378,76 @@ body {
   font-weight: 600;
   color: #6c757d;
   background-color: #f8f9fa;
+  min-width: 90px;
 }
 
 .cct-col {
   white-space: nowrap;
   font-size: 0.75rem;
   color: #495057;
-  min-width: 80px;
-  max-width: 120px;
+  min-width: 90px;
+  max-width: 130px;
+  text-align: right;
+}
+
+/* Column group visual separators */
+.cct-group-start {
+  border-left: 2px solid #dee2e6 !important;
+}
+
+.status-group-start {
+  border-left: 2px solid #dee2e6 !important;
+}
+
+/* Fixed column widths for non-CCT columns */
+.col-uf    { min-width: 45px;  white-space: nowrap; }
+.col-sindicato { min-width: 160px; }
+.col-categoria { min-width: 160px; }
+.col-ano   { min-width: 50px;  white-space: nowrap; }
+.col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
+.col-data  { min-width: 90px;  white-space: nowrap; }
+.col-status { min-width: 120px; white-space: nowrap; }
+.col-fonte  { min-width: 100px; }
+.col-acao   { min-width: 100px; white-space: nowrap; }
+
+/* Monetary and percent cells right-aligned */
+#params-tbody td.cct-col {
+  text-align: right;
+}
+
+/* ── Scroll indicator ─────────────────────────────────────────────── */
+.table-scroll-wrapper {
+  position: relative;
+}
+
+.table-scroll-hint {
+  text-align: center;
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+  color: #6c757d;
+  background: linear-gradient(to right, transparent, #f8f9fa 30%, #f8f9fa 70%, transparent);
+  user-select: none;
+  letter-spacing: 0.03em;
+}
+
+#table-responsive-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #adb5bd #f1f3f5;
+}
+
+#table-responsive-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+#table-responsive-container::-webkit-scrollbar-track {
+  background: #f1f3f5;
+}
+
+#table-responsive-container::-webkit-scrollbar-thumb {
+  background-color: #adb5bd;
+  border-radius: 3px;
 }
 
 /* ── CCT item card — validated state ────────────────────────────── */
