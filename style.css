@@ -388,6 +388,49 @@ body {
   max-width: 120px;
 }
 
+/* ── Column group visual separators ─────────────────────────────── */
+.table-group-header th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+  background-color: #f0f2f5;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.group-th {
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+.group-border {
+  border-left: 2px solid #dee2e6 !important;
+}
+
+/* ── Main data column widths ─────────────────────────────────────── */
+.col-dados {
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.col-reajuste {
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+/* ── Table scroll hint ───────────────────────────────────────────── */
+.table-scroll-hint {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  user-select: none;
+}
+
 /* ── CCT item card — validated state ────────────────────────────── */
 .cct-item-card-valido {
   background-color: #f0faf4;

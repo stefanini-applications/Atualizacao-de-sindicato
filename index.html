@@ -104,12 +104,23 @@
           <!-- CCT item filters -->
           <div class="row g-2 align-items-end mt-2 pt-2 border-top">
             <div class="col-12">
-              <small class="text-muted fw-semibold">Filtros por item CCT</small>
+              <small class="text-muted fw-semibold">Filtros avançados</small>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
+              <label for="filter-busca" class="form-label mb-1">Busca textual</label>
+              <input
+                id="filter-busca"
+                type="search"
+                class="form-control form-control-sm"
+                placeholder="Sindicato, jornada, valor, regra, cláusula…"
+                autocomplete="off"
+              />
+            </div>
+            <div class="col-12 col-md-3">
               <label for="filter-cct-item" class="form-label mb-1">Item CCT</label>
               <select id="filter-cct-item" class="form-select form-select-sm">
                 <option value="">Todos os itens</option>
+                <option value="reajuste_salarial">Reajuste salarial</option>
                 <option value="piso_salarial">Piso salarial</option>
                 <option value="auxilio_alimentacao">VR / Auxílio alimentação</option>
                 <option value="adicional_noturno">Adicional noturno</option>
@@ -128,6 +139,7 @@
                 <option value="pendente_avaliacao">Pendente avaliação</option>
                 <option value="conflito">Conflito</option>
                 <option value="valido">Válido (validado manualmente)</option>
+                <option value="premissa_aplicada">Premissa aplicada</option>
               </select>
             </div>
             <div class="col-6 col-md-3">
@@ -148,19 +160,25 @@
       </div>
 
       <!-- Table -->
-      <div class="table-responsive">
+      <div class="table-responsive" id="table-container">
         <table class="table table-hover table-sm align-middle" id="params-table">
           <thead class="table-light">
+            <tr class="table-group-header">
+              <th colspan="4" scope="colgroup" class="group-th">Dados principais</th>
+              <th colspan="4" scope="colgroup" class="group-th group-border">Reajuste e vigência</th>
+              <th colspan="12" scope="colgroup" class="group-th group-border">Itens CCT</th>
+              <th colspan="3" scope="colgroup" class="group-th group-border">Status e ações</th>
+            </tr>
             <tr>
-              <th scope="col">UF</th>
-              <th scope="col">Sindicato</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Ano</th>
-              <th scope="col">Reajuste (%)</th>
-              <th scope="col">Data-base</th>
-              <th scope="col">Vigência início</th>
-              <th scope="col">Vigência fim</th>
-              <th scope="col" class="cct-th">Piso CCT</th>
+              <th scope="col" class="col-dados">UF</th>
+              <th scope="col" class="col-dados">Sindicato</th>
+              <th scope="col" class="col-dados">Categoria</th>
+              <th scope="col" class="col-dados">Ano</th>
+              <th scope="col" class="col-reajuste group-border">Reajuste (%)</th>
+              <th scope="col" class="col-reajuste">Data-base</th>
+              <th scope="col" class="col-reajuste">Vigência início</th>
+              <th scope="col" class="col-reajuste">Vigência fim</th>
+              <th scope="col" class="cct-th group-border">Piso CCT</th>
               <th scope="col" class="cct-th">Piso Téc.</th>
               <th scope="col" class="cct-th">Piso Adm.</th>
               <th scope="col" class="cct-th">Piso Único</th>
@@ -172,7 +190,7 @@
               <th scope="col" class="cct-th">H.E. Dom/Fer.</th>
               <th scope="col" class="cct-th">Sobreaviso</th>
               <th scope="col" class="cct-th">Jornada</th>
-              <th scope="col">Status</th>
+              <th scope="col" class="group-border">Status</th>
               <th scope="col">Fonte</th>
               <th scope="col"></th>
             </tr>
@@ -180,6 +198,9 @@
           <tbody id="params-tbody"></tbody>
         </table>
       </div>
+      <p class="table-scroll-hint text-muted small text-center mt-1 mb-2" aria-hidden="true">
+        ← Arraste para ver mais colunas →
+      </p>
 
       <!-- No results -->
       <div id="no-results" class="text-center text-secondary py-4 d-none">
