@@ -300,6 +300,75 @@ const EMBEDDED_DEMO = {
         },
       },
     },
+    // PRJ-52: Demo record with variation lists (por_cargo, por_jornada, por_escala, por_modalidade)
+    {
+      id_registro_reajuste: 'DEMO-VARI-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINDTEST-VARIAÇÕES',
+      uf: 'SP',
+      categoria: 'Tecnologia da Informação',
+      ano_referencia: 2025,
+      status_parametro: 'pendente_revisao',
+      conflito: false,
+      percentual_reajuste: 6.2,
+      data_base: '2025-03-01',
+      vigencia_inicio: '2025-03-01',
+      vigencia_fim: '2026-02-28',
+      fonte_documento: 'CCT/SP/Sindtest-Vari/CCT_2025_Sindtest_Vari.pdf',
+      observacao: 'Parâmetros com variações por cargo, jornada, escala e modalidade — demo PRJ-52',
+      itens_cct: {
+        piso_salarial: {
+          valor: null, tipo: null, unidade: 'BRL',
+          regra_textual: 'Piso salarial diferenciado por cargo/função conforme cláusula 5ª.',
+          clausula: 'CLÁUSULA QUINTA — PISO SALARIAL',
+          fonte_documento: 'CCT/SP/Sindtest-Vari/CCT_2025_Sindtest_Vari.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_cargo: [
+            { cargo: 'Técnico', valor: 2800.00, unidade: 'BRL', status_parametro: 'extraido_para_revisao', conflito: false },
+            { cargo: 'Administrativo', valor: 2200.00, unidade: 'BRL', status_parametro: 'extraido_para_revisao', conflito: false },
+            { cargo: 'Analista', valor: 3500.00, unidade: 'BRL', status_parametro: 'extraido_para_revisao', conflito: false },
+          ],
+        },
+        auxilio_alimentacao: {
+          valor: null, tipo: 'valor_mensal', unidade: 'BRL',
+          regra_textual: 'VA/VR varia conforme jornada de trabalho — cláusula 8ª.',
+          clausula: 'CLÁUSULA OITAVA — VALE ALIMENTAÇÃO/REFEIÇÃO',
+          fonte_documento: 'CCT/SP/Sindtest-Vari/CCT_2025_Sindtest_Vari.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_jornada: [
+            { jornada: '8h', valor: 1100.00, unidade: 'BRL', tipo: 'valor_mensal', status_parametro: 'extraido_para_revisao', conflito: false },
+            { jornada: '6h', valor: 825.00, unidade: 'BRL', tipo: 'valor_mensal', status_parametro: 'extraido_para_revisao', conflito: false },
+          ],
+        },
+        jornada: {
+          valor: null, horas_semanais: null, opcoes_identificadas: null,
+          regra_textual: 'Jornada varia conforme escala de trabalho.',
+          clausula: 'CLÁUSULA DÉCIMA — JORNADA DE TRABALHO',
+          fonte_documento: 'CCT/SP/Sindtest-Vari/CCT_2025_Sindtest_Vari.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_escala: [
+            { escala: '6x1', horas_semanais: 36, regra_textual: '6 dias de trabalho e 1 de folga.', status_parametro: 'extraido_para_revisao', conflito: false },
+            { escala: '5x2', horas_semanais: 44, regra_textual: '5 dias de trabalho e 2 de folga.', status_parametro: 'extraido_para_revisao', conflito: false },
+          ],
+        },
+        hora_extra: {
+          valor: null, tipo: 'percentual', unidade: '%',
+          regra_textual: 'Percentuais de hora extra variam por tipo de dia.',
+          clausula: 'CLÁUSULA DÉCIMA SEGUNDA — HORAS EXTRAS',
+          fonte_documento: 'CCT/SP/Sindtest-Vari/CCT_2025_Sindtest_Vari.pdf',
+          observacao: null,
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_modalidade: [
+            { modalidade: 'Dia útil', percentual: 50, unidade: '%', status_parametro: 'extraido_para_revisao', conflito: false },
+            { modalidade: 'Sábado', percentual: 75, unidade: '%', status_parametro: 'extraido_para_revisao', conflito: false },
+            { modalidade: 'Dom./Feriado', percentual: 100, unidade: '%', status_parametro: 'extraido_para_revisao', conflito: false },
+          ],
+        },
+      },
+    },
   ],
 };
 
@@ -674,7 +743,7 @@ function applyFilters() {
 
     const matchesSearch = !searchValue || searchableText.includes(searchValue);
 
-    // CCT item filters (AC11, AC12, AC13)
+    // CCT item filters (AC11, AC12, AC13 + PRJ-52 AC7)
     let matchesCctFilters = true;
     if (cctItemValue || itemStatusValue || itemPreenchimentoValue) {
       matchesCctFilters = false;
@@ -683,8 +752,7 @@ function applyFilters() {
       if (cctItemValue) {
         const item = itens[cctItemValue];
         if (item) {
-          const effectiveStatus = getItemEffectiveStatus(item);
-          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          const statusOk = !itemStatusValue || itemOrSubitemMatchesStatus(item, itemStatusValue);
           let fillOk = true;
           if (itemPreenchimentoValue === 'preenchido') {
             fillOk = isCctItemPreenchido(cctItemValue, item);
@@ -703,8 +771,7 @@ function applyFilters() {
         // No specific item — match if ANY item satisfies the conditions
         const allItems = Object.entries(itens);
         matchesCctFilters = allItems.some(([itemKey, item]) => {
-          const effectiveStatus = getItemEffectiveStatus(item);
-          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          const statusOk = !itemStatusValue || itemOrSubitemMatchesStatus(item, itemStatusValue);
           let fillOk = true;
           if (itemPreenchimentoValue === 'preenchido') {
             fillOk = isCctItemPreenchido(itemKey, item);
@@ -1099,7 +1166,13 @@ function buildCctItemCard(itemKey, item) {
   const effectiveStatus = getItemEffectiveStatus(item);
   const isValido = effectiveStatus === 'valido' && item.conflito !== true;
 
-  if (isValido) {
+  // Keep card editable if any subitem still needs review (AC6 granularity — PRJ-52)
+  const hasReviewableSubitems = getAllSubitems(item).some(({ sub }) => {
+    const subStatus = getSubitemEffectiveStatus(sub);
+    return subStatus !== 'valido' || sub.conflito === true;
+  });
+
+  if (isValido && !hasReviewableSubitems) {
     return buildCctItemReadOnlyCard(itemKey, item, label, badge);
   }
   return buildCctItemEditCard(itemKey, item, label, badge);
@@ -1129,6 +1202,8 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
     ? `<div class="cct-item-meta mt-1">${escapeHtml(String(item.clausula))}</div>`
     : '';
 
+  const variationHtml = buildVariationListsReadOnly(itemKey, item);
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card cct-item-card-valido">
@@ -1141,6 +1216,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         ${clausulaHtml}
         ${regraHtml}
         ${obsHtml}
+        ${variationHtml}
         <div class="mt-1">${fonteHtml}</div>
       </div>
     </div>`;
@@ -1203,6 +1279,8 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
   const obsVal = escapeHtml(item.observacao ?? '');
   const obsId = `cct-item-${itemKey}-obs`;
 
+  const variationEditHtml = buildVariationListsEdit(itemKey, item);
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card">
@@ -1216,6 +1294,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         ${regraHtml}
         <div class="cct-item-edit-form">
           ${inputsHtml}
+          ${variationEditHtml}
           <div class="mb-2">
             <label for="${obsId}" class="form-label form-label-sm mb-1">
               Observação <span class="text-danger">*</span>
@@ -1324,7 +1403,7 @@ function formatCctValor(item) {
  *   piso_unico, piso_tecnico, piso_administrativo, valor_piso_cct  — piso_salarial
  *   percentual_padrao, percentual_sabado, percentual_domingo_feriado — hora_extra
  *   horas_semanais, opcoes_identificadas     — jornada
- *   por_cargo, por_jornada, por_modalidade   — list-valued items
+ *   por_cargo, por_jornada, por_modalidade, por_escala — list-valued items (PRJ-52)
  *   trecho_fonte                             — raw source excerpt, traceability only
  */
 const ITENS_CCT_GOVERNANCE_DEFAULTS = {
@@ -1362,6 +1441,16 @@ function normalizeItensGovernance(records) {
         if (!(field in item)) {
           item[field] = defaultValue;
         }
+      });
+      // Also normalize subitems in variation lists (PRJ-52)
+      ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala'].forEach((listKey) => {
+        if (!Array.isArray(item[listKey])) return;
+        item[listKey].forEach((sub) => {
+          if (!sub || typeof sub !== 'object') return;
+          if (!('status_parametro' in sub)) sub.status_parametro = 'pendente_revisao';
+          if (!('conflito' in sub)) sub.conflito = false;
+          if (!('ids_registros_conflitantes' in sub)) sub.ids_registros_conflitantes = null;
+        });
       });
     });
   });
@@ -1464,11 +1553,22 @@ function hasReviewableCctItems(record) {
   if (!itens) return false;
   return Object.values(itens).some((item) => {
     const effectiveStatus = getItemEffectiveStatus(item);
-    return effectiveStatus === 'extraido_para_revisao' ||
+    if (effectiveStatus === 'extraido_para_revisao' ||
       effectiveStatus === 'pendente_revisao' ||
       effectiveStatus === 'pendente_avaliacao' ||
       effectiveStatus === 'conflito' ||
-      item.conflito === true;
+      item.conflito === true) {
+      return true;
+    }
+    // Also check subitems in variation lists (PRJ-52)
+    return getAllSubitems(item).some(({ sub }) => {
+      const subStatus = getSubitemEffectiveStatus(sub);
+      return subStatus === 'extraido_para_revisao' ||
+        subStatus === 'pendente_revisao' ||
+        subStatus === 'pendente_avaliacao' ||
+        subStatus === 'conflito' ||
+        sub.conflito === true;
+    });
   });
 }
 
@@ -1482,6 +1582,287 @@ function getItemEffectiveStatus(item) {
     return 'extraido_para_revisao';
   }
   return item.status_parametro;
+}
+
+// ── PRJ-52: Variation list helpers ───────────────────────────────────────────
+
+/**
+ * Metadata for each variation list: label shown in modal, keys to try as identifier, label for that key.
+ */
+const VARIATION_LIST_META = {
+  por_cargo: {
+    label: 'Por Cargo / Função',
+    identifierKeys: ['cargo', 'funcao', 'identificador'],
+    identifierLabel: 'Cargo/Função',
+  },
+  por_jornada: {
+    label: 'Por Jornada',
+    identifierKeys: ['jornada', 'tipo_jornada', 'identificador'],
+    identifierLabel: 'Jornada',
+  },
+  por_modalidade: {
+    label: 'Por Modalidade',
+    identifierKeys: ['modalidade', 'identificador'],
+    identifierLabel: 'Modalidade',
+  },
+  por_escala: {
+    label: 'Por Escala',
+    identifierKeys: ['escala', 'tipo_escala', 'identificador'],
+    identifierLabel: 'Escala',
+  },
+};
+
+/** Returns all subitem entries from all variation lists in a CCT item. */
+function getAllSubitems(item) {
+  if (!item) return [];
+  const subitems = [];
+  Object.keys(VARIATION_LIST_META).forEach((listKey) => {
+    if (!Array.isArray(item[listKey])) return;
+    item[listKey].forEach((sub, index) => {
+      if (sub && typeof sub === 'object') subitems.push({ listKey, index, sub });
+    });
+  });
+  return subitems;
+}
+
+/**
+ * Effective status for a subitem in a variation list.
+ * Same governance rule as getItemEffectiveStatus: manual validation required for 'valido'.
+ */
+function getSubitemEffectiveStatus(sub) {
+  if (!sub) return null;
+  if (sub.status_parametro === 'valido' && sub.origem_atualizacao !== 'validacao_manual_item_cct') {
+    return 'extraido_para_revisao';
+  }
+  return sub.status_parametro || 'pendente_revisao';
+}
+
+/** Returns true when a subitem is immutably validated and must not be overwritten. */
+function isSubitemImmutable(sub) {
+  return sub != null &&
+    sub.status_parametro === 'valido' &&
+    sub.origem_atualizacao === 'validacao_manual_item_cct';
+}
+
+/** Status badge HTML for a subitem. */
+function statusBadgeSubitem(sub) {
+  if (!sub) return '';
+  const effectiveStatus = getSubitemEffectiveStatus(sub);
+  if (effectiveStatus === 'conflito' || sub.conflito === true) {
+    return '<span class="badge-conflito">⚠ Conflito</span>';
+  }
+  if (effectiveStatus === 'pendente_revisao' || effectiveStatus === 'pendente_avaliacao') {
+    return '<span class="badge-pendente">⏳ Pendente</span>';
+  }
+  if (effectiveStatus === 'extraido_para_revisao') {
+    return '<span class="badge-extraido">🔎 Extraído</span>';
+  }
+  return '<span class="badge-valido">✔ Válido</span>';
+}
+
+/** Extracts the identifier string from a subitem using the provided key list. */
+function getSubitemIdentifier(sub, identifierKeys) {
+  for (const k of identifierKeys) {
+    if (sub[k] != null && sub[k] !== '') return String(sub[k]);
+  }
+  return '—';
+}
+
+/**
+ * Formats the primary value of a subitem for display.
+ * Tries valor, percentual, horas_semanais/horas_mensais, valor_textual in that order.
+ */
+function getSubitemValueDisplay(sub) {
+  if (!sub) return '<span class="text-secondary">—</span>';
+  if (sub.valor != null) {
+    const n = Number(sub.valor);
+    if (!isNaN(n)) {
+      const unidade = (sub.unidade ?? '').toLowerCase();
+      const tipo = sub.tipo ?? '';
+      if (unidade === 'brl' || unidade.startsWith('brl/') || tipo === 'valor_mensal' || tipo === 'valor_diario') {
+        const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        if (unidade.includes('/mes') || unidade.includes('/mês') || tipo === 'valor_mensal') return `${brl}/mês`;
+        if (unidade.includes('/dia') || tipo === 'valor_diario') return `${brl}/dia`;
+        return brl;
+      }
+      if (unidade === '%' || tipo === 'percentual') {
+        return `${n.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%`;
+      }
+      return escapeHtml(String(n));
+    }
+  }
+  if (sub.percentual != null) {
+    const n = Number(sub.percentual);
+    if (!isNaN(n)) return `${n.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%`;
+  }
+  if (sub.horas_semanais != null) return `${escapeHtml(String(sub.horas_semanais))}h/sem.`;
+  if (sub.horas_mensais != null) return `${escapeHtml(String(sub.horas_mensais))}h/mês`;
+  if (sub.valor_textual != null && sub.valor_textual !== '') return escapeHtml(String(sub.valor_textual));
+  if (sub.regra_textual != null && sub.regra_textual !== '') {
+    const s = String(sub.regra_textual);
+    return escapeHtml(s.length > 60 ? s.slice(0, 58) + '…' : s);
+  }
+  return '<span class="text-secondary">—</span>';
+}
+
+/**
+ * Builds a short summary label for a variation list for table display (AC9).
+ * 1 entry → show value directly (or identifier if no value)
+ * 2 entries → "Label1/Label2"
+ * 3+ entries → "Múltiplos"
+ */
+function buildVariationCellSummary(items, identifierKeys) {
+  if (!Array.isArray(items) || items.length === 0) return null;
+  // Deduplicated labels
+  const labels = [...new Set(
+    items
+      .map((entry) => {
+        if (!entry || typeof entry !== 'object') return null;
+        for (const k of identifierKeys) {
+          if (entry[k] != null && entry[k] !== '') return String(entry[k]);
+        }
+        return null;
+      })
+      .filter(Boolean)
+  )];
+  if (items.length === 1) {
+    // Single entry: show value or identifier
+    return labels[0] ?? '—';
+  }
+  if (labels.length === 0) return 'Múltiplos';
+  if (labels.length <= 2) return labels.map(escapeHtml).join('/');
+  return 'Múltiplos';
+}
+
+/**
+ * Returns true when an item OR any of its variation-list subitems matches
+ * the given status filter value (AC7).
+ */
+function itemOrSubitemMatchesStatus(item, itemStatusValue) {
+  if (!itemStatusValue) return true;
+  const effectiveStatus = getItemEffectiveStatus(item);
+  if (effectiveStatus === itemStatusValue) return true;
+  if (itemStatusValue === 'conflito' && item.conflito === true) return true;
+  return getAllSubitems(item).some(({ sub }) => {
+    const subStatus = getSubitemEffectiveStatus(sub);
+    return subStatus === itemStatusValue || (itemStatusValue === 'conflito' && sub.conflito === true);
+  });
+}
+
+/**
+ * Builds HTML for variation lists displayed as read-only (inside a validated item card).
+ */
+function buildVariationListsReadOnly(itemKey, item) {
+  let html = '';
+  Object.entries(VARIATION_LIST_META).forEach(([listKey, meta]) => {
+    const list = item[listKey];
+    if (!Array.isArray(list) || list.length === 0) return;
+    html += `
+      <div class="variation-list-section mt-2">
+        <div class="variation-list-label">${escapeHtml(meta.label)}</div>
+        <table class="variation-table">
+          <tbody>`;
+    list.forEach((sub) => {
+      if (!sub || typeof sub !== 'object') return;
+      const identifier = getSubitemIdentifier(sub, meta.identifierKeys);
+      const valueDisplay = getSubitemValueDisplay(sub);
+      const badge = statusBadgeSubitem(sub);
+      html += `<tr>
+          <td class="variation-td-id">${escapeHtml(identifier)}</td>
+          <td class="variation-td-val">${valueDisplay}</td>
+          <td class="variation-td-badge">${badge}</td>
+        </tr>`;
+      if (sub.regra_textual) {
+        html += `<tr><td colspan="3" class="variation-td-regra">${escapeHtml(String(sub.regra_textual))}</td></tr>`;
+      }
+    });
+    html += '</tbody></table></div>';
+  });
+  return html;
+}
+
+/**
+ * Builds HTML for variation lists in an editable item card, with per-subitem validate/reject (AC6).
+ */
+function buildVariationListsEdit(itemKey, item) {
+  let html = '';
+  Object.entries(VARIATION_LIST_META).forEach(([listKey, meta]) => {
+    const list = item[listKey];
+    if (!Array.isArray(list) || list.length === 0) return;
+    html += `<div class="variation-list-section variation-list-edit mt-2">
+      <div class="variation-list-label">${escapeHtml(meta.label)}</div>`;
+    list.forEach((sub, idx) => {
+      if (!sub || typeof sub !== 'object') return;
+      html += buildSubitemEditBlock(itemKey, listKey, idx, sub, meta);
+    });
+    html += '</div>';
+  });
+  return html;
+}
+
+/** Builds the HTML block for a single subitem in edit mode. */
+function buildSubitemEditBlock(itemKey, listKey, idx, sub, meta) {
+  const effectiveStatus = getSubitemEffectiveStatus(sub);
+  const isImmutable = isSubitemImmutable(sub);
+  const identifier = getSubitemIdentifier(sub, meta.identifierKeys);
+  const badge = statusBadgeSubitem(sub);
+  const valueDisplay = getSubitemValueDisplay(sub);
+
+  // Read-only for immutably validated subitems (AC6)
+  if (isImmutable) {
+    const regraHtml = sub.regra_textual
+      ? `<div class="small text-muted mt-1">${escapeHtml(String(sub.regra_textual))}</div>`
+      : '';
+    return `<div class="cct-subitem-card cct-subitem-valido">
+      <div class="cct-subitem-header">
+        <span class="cct-subitem-id">${escapeHtml(identifier)}</span>
+        <span class="cct-subitem-val">${valueDisplay}</span>
+        ${badge}
+      </div>
+      ${regraHtml}
+    </div>`;
+  }
+
+  // Editable subitem
+  const obsId = `cct-subitem-${itemKey}-${listKey}-${idx}-obs`;
+  const errId = `cct-subitem-${itemKey}-${listKey}-${idx}-error`;
+  const obsVal = escapeHtml(sub.observacao ?? '');
+  const regraHtml = sub.regra_textual
+    ? `<div class="cct-item-regra small mb-1">${escapeHtml(String(sub.regra_textual))}</div>`
+    : '';
+
+  let statusAlertHtml = '';
+  if (effectiveStatus === 'conflito' || sub.conflito === true) {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-conflito mb-1 py-1 small">⚠ Em conflito — não usar até revisão.</div>`;
+  } else if (effectiveStatus === 'extraido_para_revisao') {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-extraido mb-1 py-1 small">🔎 Extraído — conferir antes de validar.</div>`;
+  } else {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-pendente mb-1 py-1 small">⏳ Aguardando revisão.</div>`;
+  }
+
+  return `<div class="cct-subitem-card cct-subitem-edit">
+    <div class="cct-subitem-header">
+      <span class="cct-subitem-id">${escapeHtml(identifier)}</span>
+      <span class="cct-subitem-val">${valueDisplay}</span>
+      ${badge}
+    </div>
+    ${statusAlertHtml}
+    ${regraHtml}
+    <div class="mb-1">
+      <label for="${obsId}" class="form-label form-label-sm mb-0">
+        Observação <span class="text-danger">*</span>
+      </label>
+      <textarea class="form-control form-control-sm" id="${obsId}" rows="1"
+        placeholder="Motivo da decisão">${obsVal}</textarea>
+    </div>
+    <div id="${errId}" class="alert alert-danger py-1 small d-none mb-1" role="alert"></div>
+    <div class="d-flex gap-1">
+      <button type="button" class="btn btn-success btn-sm py-0 px-2"
+        id="btn-cct-sub-val-${itemKey}-${listKey}-${idx}">✔ Validar</button>
+      <button type="button" class="btn btn-outline-warning btn-sm py-0 px-2"
+        id="btn-cct-sub-rej-${itemKey}-${listKey}-${idx}">✗ Rejeitar</button>
+    </div>
+  </div>`;
 }
 
 /**
@@ -1508,7 +1889,7 @@ function buildCctSearchTokens(record) {
       if (item[f] != null) tokens.push(String(item[f]));
     });
     // Lists
-    ['por_cargo', 'por_jornada', 'por_modalidade'].forEach((f) => {
+    ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala'].forEach((f) => {
       if (Array.isArray(item[f])) {
         item[f].forEach((entry) => {
           if (typeof entry === 'object' && entry !== null) {
@@ -1542,11 +1923,17 @@ function isCctItemPreenchido(itemKey, item) {
   // Backward-compat: derive from tipo+valor for piso_salarial
   if (itemKey === 'piso_salarial' && item.valor != null && item.valor !== '') return true;
 
-  // List fields
-  const listFields = ['por_cargo', 'por_jornada', 'por_modalidade', 'opcoes_identificadas'];
-  if (listFields.some((k) => Array.isArray(item[k]) && item[k].length > 0)) return true;
-  // opcoes_identificadas may also be a string
-  if (item.opcoes_identificadas != null && item.opcoes_identificadas !== '') return true;
+  // List fields (non-empty array with at least one meaningful entry counts as preenchido)
+  const listFields = ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala'];
+  if (listFields.some((k) => {
+    const arr = item[k];
+    if (!Array.isArray(arr) || arr.length === 0) return false;
+    // At least one entry must have a meaningful identifier or value
+    return arr.some((entry) => entry && typeof entry === 'object' &&
+      Object.values(entry).some((v) => v != null && v !== '' && typeof v !== 'object'));
+  })) return true;
+  // opcoes_identificadas may be string or array
+  if (Array.isArray(item.opcoes_identificadas) && item.opcoes_identificadas.length > 0) return true;
 
   return false;
 }
@@ -1583,6 +1970,11 @@ function buildCctTableCells(record) {
     return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
   }
 
+  // Wraps variation summary text in a styled span (AC9)
+  function variationSummarySpan(text, title) {
+    return `<span class="cct-variation-summary" title="${escapeHtml(title)}">${escapeHtml(text)}</span>`;
+  }
+
   // Backward compat: derive piso columns from tipo+valor when specific fields absent
   const pisoItem = record.itens_cct?.piso_salarial;
   const pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
@@ -1595,8 +1987,39 @@ function buildCctTableCells(record) {
   const pisoUnico = cellGet('piso_salarial', 'piso_unico')
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
 
+  // PRJ-52 AC9: piso_salarial variation summary when no scalar values exist
+  let pisoCctDisplay = fmtBRL(pisoCct);
+  if (pisoCctDisplay === '—' && pisoItem) {
+    const pisoCargo = pisoItem.por_cargo;
+    if (Array.isArray(pisoCargo) && pisoCargo.length > 0) {
+      const summary = buildVariationCellSummary(pisoCargo, ['cargo', 'funcao', 'identificador']);
+      if (summary && summary !== '—') {
+        pisoCctDisplay = variationSummarySpan(summary, 'Múltiplas variações por cargo — ver detalhes');
+      }
+    }
+  }
+
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
   const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
+
+  // PRJ-52 AC9: auxilio_alimentacao variation summary when no scalar valor exists
+  let vrDisplay = fmtVR(vrItem);
+  if (vrDisplay === '—' && vrItem) {
+    const porJornada = vrItem.por_jornada;
+    const porModalidade = vrItem.por_modalidade;
+    if (Array.isArray(porJornada) && porJornada.length > 0) {
+      const summary = buildVariationCellSummary(porJornada, ['jornada', 'tipo_jornada', 'identificador']);
+      if (summary && summary !== '—') {
+        vrDisplay = variationSummarySpan(summary, 'Variações por jornada — ver detalhes');
+      }
+    } else if (Array.isArray(porModalidade) && porModalidade.length > 0) {
+      const summary = buildVariationCellSummary(porModalidade, ['modalidade', 'identificador']);
+      if (summary && summary !== '—') {
+        vrDisplay = variationSummarySpan(summary, 'Variações por modalidade — ver detalhes');
+      }
+    }
+  }
+
   // PLR: numeric value preferred; regra_textual only if it is a short operational summary (AC6)
   const plrNumeric = cellGet('plr', 'valor', 'percentual');
   const plrRegra = cellGet('plr', 'regra_textual');
@@ -1604,6 +2027,20 @@ function buildCctTableCells(record) {
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
   const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+
+  // PRJ-52 AC9: hora_extra por_modalidade summary
+  const heItem = record.itens_cct?.hora_extra ?? null;
+  let hePDisplay = heP != null ? fmtPct(heP) : '—';
+  if (hePDisplay === '—' && heItem) {
+    const porModalidade = heItem.por_modalidade;
+    if (Array.isArray(porModalidade) && porModalidade.length > 0) {
+      const summary = buildVariationCellSummary(porModalidade, ['modalidade', 'identificador']);
+      if (summary && summary !== '—') {
+        hePDisplay = variationSummarySpan(summary, 'Variações por modalidade — ver detalhes');
+      }
+    }
+  }
+
   // Sobreaviso: percentual preferred; regra_textual only if short operational summary (AC6)
   const sobNumeric = cellGet('sobreaviso', 'percentual');
   const sobRegra = cellGet('sobreaviso', 'regra_textual');
@@ -1617,19 +2054,31 @@ function buildCctTableCells(record) {
     ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
     : '—';
 
+  // PRJ-52 AC9: jornada por_escala summary
+  let jornadaDisplay = fmtJornada(jornadaItem);
+  if (jornadaDisplay === '—' && jornadaItem) {
+    const porEscala = jornadaItem.por_escala;
+    if (Array.isArray(porEscala) && porEscala.length > 0) {
+      const summary = buildVariationCellSummary(porEscala, ['escala', 'tipo_escala', 'identificador']);
+      if (summary && summary !== '—') {
+        jornadaDisplay = variationSummarySpan(summary, 'Variações por escala — ver detalhes');
+      }
+    }
+  }
+
   return [
-    `<td class="cct-col cct-group-start">${fmtBRL(pisoCct)}</td>`,
+    `<td class="cct-col cct-group-start">${pisoCctDisplay}</td>`,
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
     `<td class="cct-col">${adNoturnoFmt}</td>`,
-    `<td class="cct-col">${fmtVR(vrItem)}</td>`,
+    `<td class="cct-col">${vrDisplay}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
-    `<td class="cct-col">${heP != null ? fmtPct(heP) : '—'}</td>`,
+    `<td class="cct-col">${hePDisplay}</td>`,
     `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
     `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
     `<td class="cct-col">${sobFmt}</td>`,
-    `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
+    `<td class="cct-col">${jornadaDisplay}</td>`,
   ].join('');
 }
 
@@ -1640,6 +2089,19 @@ function bindCctItemControls(record) {
     const btnRej = document.getElementById(`btn-cct-rej-${itemKey}`);
     if (btnVal) btnVal.addEventListener('click', () => validateCctItem(record, itemKey));
     if (btnRej) btnRej.addEventListener('click', () => rejectCctItem(record, itemKey));
+
+    // Bind per-subitem validate/reject buttons (PRJ-52)
+    const item = record.itens_cct[itemKey];
+    if (!item) return;
+    Object.keys(VARIATION_LIST_META).forEach((listKey) => {
+      if (!Array.isArray(item[listKey])) return;
+      item[listKey].forEach((_sub, idx) => {
+        const btnSubVal = document.getElementById(`btn-cct-sub-val-${itemKey}-${listKey}-${idx}`);
+        const btnSubRej = document.getElementById(`btn-cct-sub-rej-${itemKey}-${listKey}-${idx}`);
+        if (btnSubVal) btnSubVal.addEventListener('click', () => validateSubitem(record, itemKey, listKey, idx));
+        if (btnSubRej) btnSubRej.addEventListener('click', () => rejectSubitem(record, itemKey, listKey, idx));
+      });
+    });
   });
 }
 
@@ -1669,8 +2131,12 @@ function validateCctItem(record, itemKey) {
   // Validate minimum fields (AC15): combine form values with pre-existing item values
   const effectiveValues = { ...item, ...fields };
   const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
+  // Variation lists (por_cargo etc.) also count as having content (PRJ-52)
+  const hasVariationEntries = ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala']
+    .some((k) => Array.isArray(effectiveValues[k]) && effectiveValues[k].length > 0);
   const hasMin = minKeys.length === 0
-    || minKeys.some((k) => effectiveValues[k] != null && effectiveValues[k] !== '');
+    || minKeys.some((k) => effectiveValues[k] != null && effectiveValues[k] !== '')
+    || hasVariationEntries;
 
   if (!hasMin) {
     if (errorEl) {
@@ -1745,6 +2211,95 @@ function refreshCctItemsSection(record) {
     ? buildCctItemsContent(record)
     : '';
   bindCctItemControls(record);
+}
+
+// ── PRJ-52: Per-subitem validation ────────────────────────────────────────────
+
+/**
+ * Validates a single subitem in a variation list.
+ * AC6: immutably-validated subitems cannot be overwritten.
+ */
+function validateSubitem(record, itemKey, listKey, subIndex) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+  const list = item[listKey];
+  if (!Array.isArray(list) || subIndex >= list.length) return;
+  const sub = list[subIndex];
+  if (!sub) return;
+
+  // AC6: immutable subitems cannot be re-validated
+  if (isSubitemImmutable(sub)) return;
+
+  const errId = `cct-subitem-${itemKey}-${listKey}-${subIndex}-error`;
+  const obsId = `cct-subitem-${itemKey}-${listKey}-${subIndex}-obs`;
+  const errorEl = document.getElementById(errId);
+  const obsEl = document.getElementById(obsId);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  if (!observacao) {
+    if (errorEl) {
+      errorEl.textContent = 'Observação obrigatória.';
+      errorEl.classList.remove('d-none');
+    }
+    return;
+  }
+  if (errorEl) errorEl.classList.add('d-none');
+
+  const now = new Date().toISOString();
+  list[subIndex] = {
+    ...sub,
+    status_parametro: 'valido',
+    conflito: false,
+    ids_registros_conflitantes: null,
+    observacao,
+    origem_atualizacao: 'validacao_manual_item_cct',
+    data_validacao: now,
+    data_hora_validacao_manual: now,
+    status_anterior: sub.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, item);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
+}
+
+/**
+ * Rejects/keeps a single subitem in pending state.
+ * AC6: immutably-validated subitems cannot be overwritten.
+ */
+function rejectSubitem(record, itemKey, listKey, subIndex) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+  const list = item[listKey];
+  if (!Array.isArray(list) || subIndex >= list.length) return;
+  const sub = list[subIndex];
+  if (!sub) return;
+
+  // AC6: immutable subitems cannot be rejected
+  if (isSubitemImmutable(sub)) return;
+
+  const obsId = `cct-subitem-${itemKey}-${listKey}-${subIndex}-obs`;
+  const obsEl = document.getElementById(obsId);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  const now = new Date().toISOString();
+  const wasConflito = sub.conflito === true || sub.status_parametro === 'conflito';
+
+  list[subIndex] = {
+    ...sub,
+    status_parametro: wasConflito ? 'conflito' : 'pendente_revisao',
+    conflito: wasConflito,
+    observacao: observacao || sub.observacao || null,
+    origem_atualizacao: 'rejeicao_manual_item_cct',
+    data_hora_rejeicao_manual: now,
+    status_anterior: sub.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, item);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
 }
 
 function statusBadge(record) {

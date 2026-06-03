@@ -483,3 +483,111 @@ body {
   border-radius: 0.25rem;
   background-color: #f8f9fa;
 }
+
+/* ── PRJ-52: Variation list styles ─────────────────────────────────── */
+
+/* Table cell: short summary label for multiple variation values (AC9) */
+.cct-variation-summary {
+  font-size: 0.8rem;
+  color: #0d6efd;
+  font-style: italic;
+  cursor: help;
+  white-space: nowrap;
+}
+
+/* Section container for a variation list in the modal */
+.variation-list-section {
+  border-top: 1px solid #e9ecef;
+  padding-top: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.variation-list-section.variation-list-edit {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  background: #fafbfc;
+}
+
+.variation-list-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+/* Read-only variation table */
+.variation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.variation-table td {
+  padding: 0.15rem 0.35rem;
+  vertical-align: middle;
+}
+
+.variation-td-id {
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 8rem;
+}
+
+.variation-td-val {
+  color: #212529;
+}
+
+.variation-td-badge {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.variation-td-regra {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.75rem;
+  padding-top: 0;
+}
+
+/* Single subitem card in edit mode */
+.cct-subitem-card {
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+}
+
+.cct-subitem-card:last-child {
+  margin-bottom: 0;
+}
+
+.cct-subitem-valido {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.cct-subitem-edit {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-left: 3px solid #ffc107;
+}
+
+.cct-subitem-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.cct-subitem-id {
+  font-weight: 600;
+  color: #212529;
+}
+
+.cct-subitem-val {
+  color: #495057;
+}
