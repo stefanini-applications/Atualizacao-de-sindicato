@@ -465,6 +465,7 @@ async function loadData() {
 
   allRecords = records;
   loadLocalOverrides(allRecords);
+  normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
   filteredRecords = [...allRecords];
 
   showApp(dataGeracao, demoMessage);
@@ -1299,6 +1300,89 @@ function formatCctValor(item) {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
+// ── itens_cct governance schema (PRJ-51) ─────────────────────────────────
+/**
+ * Mandatory common governance fields for every itens_cct item.
+ * Used by normalizeItensGovernance() — do not modify without updating that function.
+ *
+ * Mandatory fields (added with default when absent; NEVER overwritten if already set):
+ *   status_parametro           {string}   "pendente_revisao" — review/approval status
+ *   origem_regra               {null}     rule source identifier (e.g. normative reference)
+ *   fonte_documento            {null}     source document path or reference
+ *   clausula                   {null}     clause reference — traceability only, NEVER used as
+ *                                         value in table cells; displayed exclusively in modal
+ *   observacao                 {null}     free-text analyst observation
+ *   conflito                   {false}    boolean conflict flag; default false
+ *   ids_registros_conflitantes {null}     list of conflicting record IDs
+ *   data_validacao             {null}     ISO timestamp of last manual validation
+ *   origem_atualizacao         {null}     who/what last updated this item
+ *
+ * Optional item-specific fields (preserved as-is, NEVER altered by normalization):
+ *   valor, percentual, regra, tipo, unidade  — core value fields (may overlap governance)
+ *   regra_textual, valor_textual             — short operational summaries (table OK) or
+ *                                              full-text descriptions (modal only)
+ *   piso_unico, piso_tecnico, piso_administrativo, valor_piso_cct  — piso_salarial
+ *   percentual_padrao, percentual_sabado, percentual_domingo_feriado — hora_extra
+ *   horas_semanais, opcoes_identificadas     — jornada
+ *   por_cargo, por_jornada, por_modalidade   — list-valued items
+ *   trecho_fonte                             — raw source excerpt, traceability only
+ */
+const ITENS_CCT_GOVERNANCE_DEFAULTS = {
+  status_parametro: 'pendente_revisao',
+  origem_regra: null,
+  fonte_documento: null,
+  clausula: null,
+  observacao: null,
+  conflito: false,
+  ids_registros_conflitantes: null,
+  data_validacao: null,
+  origem_atualizacao: null,
+};
+
+/**
+ * Normalizes governance fields for all itens_cct items across all records (PRJ-51).
+ *
+ * Strictly additive and idempotent: fields already present are NEVER overwritten;
+ * absent fields are added with their default from ITENS_CCT_GOVERNANCE_DEFAULTS.
+ * Applying this function multiple times produces identical results to a single application.
+ *
+ * Call this after loadLocalOverrides() so that override-merged items are also covered.
+ *
+ * @param {Array} records - Array of parameter records (mutated in place).
+ */
+function normalizeItensGovernance(records) {
+  if (!Array.isArray(records)) return;
+  records.forEach((record) => {
+    const itens = record.itens_cct;
+    if (!itens || typeof itens !== 'object') return;
+    Object.keys(itens).forEach((itemKey) => {
+      const item = itens[itemKey];
+      if (!item || typeof item !== 'object') return;
+      Object.entries(ITENS_CCT_GOVERNANCE_DEFAULTS).forEach(([field, defaultValue]) => {
+        if (!(field in item)) {
+          item[field] = defaultValue;
+        }
+      });
+    });
+  });
+}
+
+/**
+ * Returns true only when value is a short operational summary suitable for table display (AC6).
+ *
+ * Rejects full clause texts and legal prose that belong exclusively in the modal:
+ *   - texts starting with clause/legal markers (cláusula, parágrafo, inciso, caput, fica)
+ *   - multiline text (contains newlines)
+ *   - texts longer than 80 characters
+ */
+function isShortOperationalSummary(value) {
+  if (value == null || value === '') return false;
+  const s = String(value).trim();
+  if (/^(cl[aá]usula|par[aá]grafo|inciso|caput|fica\s)/i.test(s)) return false;
+  if (s.includes('\n') || s.includes('\r')) return false;
+  return s.length <= 80;
+}
+
 /** Labels for itens_cct keys */
 const CCT_ITEM_LABELS = {
   reajuste_salarial: 'Reajuste Salarial',
@@ -1513,11 +1597,17 @@ function buildCctTableCells(record) {
 
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
   const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
-  const plrVal = cellGet('plr', 'valor', 'percentual', 'regra_textual');
+  // PLR: numeric value preferred; regra_textual only if it is a short operational summary (AC6)
+  const plrNumeric = cellGet('plr', 'valor', 'percentual');
+  const plrRegra = cellGet('plr', 'regra_textual');
+  const plrVal = plrNumeric ?? (isShortOperationalSummary(plrRegra) ? plrRegra : null);
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
   const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
-  const sob = cellGet('sobreaviso', 'percentual', 'regra_textual');
+  // Sobreaviso: percentual preferred; regra_textual only if short operational summary (AC6)
+  const sobNumeric = cellGet('sobreaviso', 'percentual');
+  const sobRegra = cellGet('sobreaviso', 'regra_textual');
+  const sob = sobNumeric ?? (isShortOperationalSummary(sobRegra) ? sobRegra : null);
   const jornadaItem = record.itens_cct?.jornada ?? null;
 
   const adNoturnoFmt = adNoturno != null
@@ -1609,6 +1699,7 @@ function validateCctItem(record, itemKey) {
     ids_registros_conflitantes: null,
     observacao,
     origem_atualizacao: 'validacao_manual_item_cct',
+    data_validacao: now,
     data_hora_validacao_manual: now,
     status_anterior: item.status_parametro,
   };
