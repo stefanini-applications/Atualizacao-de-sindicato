@@ -248,6 +248,121 @@ const EMBEDDED_DEMO = {
       },
     },
     {
+      id_registro_reajuste: 'DEMO-VAR-001',
+      ids_registros_conflitantes: null,
+      sindicato: 'SINP-SP-Demo',
+      uf: 'SP',
+      categoria: 'Segurança Patrimonial',
+      ano_referencia: 2025,
+      status_parametro: 'pendente_revisao',
+      conflito: false,
+      percentual_reajuste: 6.5,
+      data_base: '2025-01-01',
+      vigencia_inicio: '2025-01-01',
+      vigencia_fim: '2025-12-31',
+      fonte_documento: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+      observacao: 'CCT com múltiplas variações por cargo, jornada, modalidade e escala',
+      itens_cct: {
+        piso_salarial: {
+          valor: null, piso_unico: null, piso_tecnico: null, piso_administrativo: null,
+          valor_piso_cct: null, percentual: null, valor_textual: null, regra_textual: null,
+          tipo: null, unidade: 'BRL',
+          clausula: 'CLÁUSULA QUARTA – PISOS SALARIAIS',
+          fonte_documento: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+          observacao: 'Pisos diferenciados por cargo — revisar individualmente.',
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_cargo: [
+            {
+              cargo: 'Técnico de Segurança', valor: 2500.00, percentual: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: 'CLÁUSULA QUARTA – PISOS SALARIAIS',
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+            {
+              cargo: 'Administrativo', valor: 2000.00, percentual: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: 'CLÁUSULA QUARTA – PISOS SALARIAIS',
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+          ],
+        },
+        auxilio_alimentacao: {
+          valor: null, percentual: null, valor_textual: null, regra_textual: null,
+          tipo: null, unidade: 'BRL',
+          clausula: 'CLÁUSULA DÉCIMA PRIMEIRA – AUXÍLIO ALIMENTAÇÃO',
+          fonte_documento: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+          observacao: 'Valores distintos por jornada e por modalidade.',
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_jornada: [
+            {
+              jornada: '8h', valor: 880.00, percentual: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: null,
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+            {
+              jornada: '6h', valor: 660.00, percentual: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: null,
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+          ],
+          por_modalidade: [
+            {
+              modalidade: 'Mensal (VA)', valor: 880.00, percentual: null, regra: null,
+              observacao: 'Confirmado no clausulado.',
+              fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf', clausula: null,
+              status_parametro: 'valido', conflito: false,
+              origem_atualizacao: 'validacao_manual_item_cct',
+              data_validacao: '2025-05-01T10:00:00',
+            },
+            {
+              modalidade: 'Por dia útil (VR)', valor: 40.00, percentual: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: null,
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+          ],
+        },
+        jornada: {
+          horas_semanais: null, opcoes_identificadas: null, valor_textual: null, regra_textual: null,
+          tipo: null, unidade: null,
+          clausula: 'CLÁUSULA SEGUNDA – JORNADA DE TRABALHO',
+          fonte_documento: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+          observacao: 'Escalas distintas com jornadas diferentes.',
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          por_escala: [
+            {
+              escala: '6x1', jornada: '44h', valor: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: null,
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+            {
+              escala: '5x2', jornada: '40h', valor: null, regra: null,
+              observacao: null, fonte: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf',
+              clausula: null,
+              status_parametro: 'extraido_para_revisao', conflito: false,
+              origem_atualizacao: null, data_validacao: null,
+            },
+          ],
+        },
+        hora_extra: {
+          percentual_padrao: 50, percentual_sabado: 100, percentual_domingo_feriado: 100,
+          valor: null, tipo: 'percentual', unidade: '%',
+          regra_textual: 'H.E. 50% dias úteis; 100% sábados, domingos e feriados.',
+          status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          fonte_documento: 'CCT/SP/SINP-Demo/CCT_2025_SINP_Demo.pdf', observacao: null,
+        },
+      },
+    },
+    {
       id_registro_reajuste: 'PEND-DEMO-002',
       ids_registros_conflitantes: null,
       sindicato: 'Sindtest-Vazio',
@@ -684,7 +799,9 @@ function applyFilters() {
         const item = itens[cctItemValue];
         if (item) {
           const effectiveStatus = getItemEffectiveStatus(item);
-          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          // AC7: statusOk must consider subitems in variation lists too
+          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue ||
+            hasSubitemWithStatus(item, itemStatusValue);
           let fillOk = true;
           if (itemPreenchimentoValue === 'preenchido') {
             fillOk = isCctItemPreenchido(cctItemValue, item);
@@ -704,7 +821,9 @@ function applyFilters() {
         const allItems = Object.entries(itens);
         matchesCctFilters = allItems.some(([itemKey, item]) => {
           const effectiveStatus = getItemEffectiveStatus(item);
-          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue;
+          // AC7: also check subitem statuses in variation lists
+          const statusOk = !itemStatusValue || effectiveStatus === itemStatusValue ||
+            hasSubitemWithStatus(item, itemStatusValue);
           let fillOk = true;
           if (itemPreenchimentoValue === 'preenchido') {
             fillOk = isCctItemPreenchido(itemKey, item);
@@ -1105,6 +1224,151 @@ function buildCctItemCard(itemKey, item) {
   return buildCctItemEditCard(itemKey, item, label, badge);
 }
 
+// ── Variation list HTML builders (PRJ-52) ──────────────────────────────────
+
+/**
+ * Renders a badge for a variation entry's effective status.
+ */
+function statusBadgeVariationEntry(entry) {
+  const effectiveStatus = getVariationEntryEffectiveStatus(entry);
+  if (effectiveStatus === 'conflito' || entry.conflito === true) {
+    return '<span class="badge-conflito">⚠ Conflito</span>';
+  }
+  if (effectiveStatus === 'pendente_revisao' || effectiveStatus === 'pendente_avaliacao') {
+    return '<span class="badge-pendente">⏳ Pendente</span>';
+  }
+  if (effectiveStatus === 'extraido_para_revisao') {
+    return '<span class="badge-extraido">🔎 Extraído</span>';
+  }
+  return '<span class="badge-valido">✔ Válido</span>';
+}
+
+/**
+ * Renders a read-only row for a single variation list entry.
+ */
+function buildVariationEntryReadOnlyHtml(entry, listKey, index) {
+  const id = getVariationEntryId(entry, listKey) ?? '—';
+  const badge = statusBadgeVariationEntry(entry);
+  const valor = entry.valor ?? entry.percentual ?? null;
+  let valorFmt = '—';
+  if (valor != null) {
+    const n = Number(valor);
+    valorFmt = isNaN(n) ? escapeHtml(String(valor)) : n.toLocaleString('pt-BR', {
+      style: listKey === 'por_cargo' || listKey === 'por_modalidade' || listKey === 'por_jornada'
+        ? 'currency' : 'decimal',
+      currency: 'BRL',
+      maximumFractionDigits: 2,
+    });
+  }
+  const jornada = (listKey === 'por_escala' && entry.jornada) ? ` — ${escapeHtml(String(entry.jornada))}` : '';
+  const regraHtml = entry.regra ? `<div class="cct-item-regra mt-1 fst-italic small">${escapeHtml(String(entry.regra))}</div>` : '';
+  const obsHtml = (entry.observacao ?? entry.observações) ? `<div class="cct-item-meta mt-1 fst-italic">${escapeHtml(String(entry.observacao ?? entry.observações))}</div>` : '';
+  return `
+    <div class="variation-entry variation-entry-readonly">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-1">
+        <span class="variation-entry-id">${escapeHtml(String(id))}${jornada}</span>
+        ${badge}
+      </div>
+      <div class="variation-entry-valor">${valorFmt}</div>
+      ${regraHtml}${obsHtml}
+    </div>`;
+}
+
+/**
+ * Renders an editable row for a single variation list entry.
+ * Entries already validated by a human (AC6 immutability) are shown as read-only.
+ */
+function buildVariationEntryEditHtml(itemKey, listKey, entry, index) {
+  const effectiveStatus = getVariationEntryEffectiveStatus(entry);
+  const isImmutable = effectiveStatus === 'valido' && entry.origem_atualizacao === 'validacao_manual_item_cct';
+  if (isImmutable) {
+    // Show as read-only with lock icon (AC6: immutable)
+    return `
+      <div class="variation-entry variation-entry-readonly variation-entry-immutable">
+        ${buildVariationEntryReadOnlyHtml(entry, listKey, index)}
+        <div class="variation-entry-lock small text-muted">🔒 Validado manualmente — imutável</div>
+      </div>`;
+  }
+
+  const id = getVariationEntryId(entry, listKey) ?? '—';
+  const badge = statusBadgeVariationEntry(entry);
+  const valor = entry.valor ?? entry.percentual ?? null;
+  const valStr = valor != null ? escapeHtml(String(valor)) : '';
+  const obsVal = escapeHtml(entry.observacao ?? '');
+  const idSafe = `${itemKey}-${listKey}-${index}`;
+  const jornada = (listKey === 'por_escala' && entry.jornada)
+    ? `<div class="cct-item-meta mb-1">Jornada: ${escapeHtml(String(entry.jornada))}</div>` : '';
+
+  let statusAlertHtml = '';
+  if (effectiveStatus === 'conflito' || entry.conflito === true) {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-conflito mb-2">⚠ Em conflito — não usar até revisão.</div>`;
+  } else if (effectiveStatus === 'pendente_revisao' || effectiveStatus === 'pendente_avaliacao') {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-pendente mb-2">⏳ Aguardando revisão.</div>`;
+  } else if (effectiveStatus === 'extraido_para_revisao') {
+    statusAlertHtml = `<div class="cct-item-alert cct-item-alert-extraido mb-2">🔎 Extraído automaticamente — conferir antes de validar.</div>`;
+  }
+
+  return `
+    <div class="variation-entry variation-entry-edit" id="var-entry-${idSafe}">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-1 mb-1">
+        <span class="variation-entry-id fw-semibold">${escapeHtml(String(id))}</span>
+        ${badge}
+      </div>
+      ${statusAlertHtml}
+      ${jornada}
+      <div class="mb-2">
+        <label for="var-val-${idSafe}" class="form-label form-label-sm mb-1">Valor (R$)</label>
+        <input type="number" class="form-control form-control-sm" id="var-val-${idSafe}" step="0.01" value="${valStr}" placeholder="—" />
+      </div>
+      <div class="mb-2">
+        <label for="var-obs-${idSafe}" class="form-label form-label-sm mb-1">Observação <span class="text-danger">*</span></label>
+        <textarea class="form-control form-control-sm" id="var-obs-${idSafe}" rows="2" placeholder="Descreva evidência e motivo da decisão.">${obsVal}</textarea>
+      </div>
+      <div id="var-err-${idSafe}" class="alert alert-danger py-1 small d-none mb-2" role="alert"></div>
+      <div class="d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-success btn-sm" id="btn-var-val-${idSafe}">✔ Validar subitem</button>
+        <button type="button" class="btn btn-outline-warning btn-sm" id="btn-var-rej-${idSafe}">✗ Manter em revisão</button>
+      </div>
+    </div>`;
+}
+
+/**
+ * Builds the complete variation lists section for a CCT item card (PRJ-52).
+ * @param {string} itemKey - The CCT item key (e.g. 'piso_salarial').
+ * @param {object} item - The CCT item object.
+ * @param {boolean} isParentReadOnly - If true, render all entries as read-only (no edit inputs).
+ */
+function buildVariationListsHtml(itemKey, item, isParentReadOnly) {
+  let html = '';
+  VARIATION_LIST_KEYS.forEach((listKey) => {
+    const entries = item[listKey];
+    if (!Array.isArray(entries) || entries.length === 0) return;
+    const listLabel = VARIATION_LIST_LABELS[listKey] ?? listKey;
+    const entriesHtml = entries.map((entry, index) => {
+      if (isParentReadOnly) {
+        // Even in read-only parent cards, check if entry itself still needs review
+        const effectiveStatus = getVariationEntryEffectiveStatus(entry);
+        const entryNeedsReview = effectiveStatus !== 'valido' || entry.conflito === true;
+        if (entryNeedsReview) {
+          // Show as editable subitem since it hasn't been validated yet
+          return buildVariationEntryEditHtml(itemKey, listKey, entry, index);
+        }
+        return buildVariationEntryReadOnlyHtml(entry, listKey, index);
+      }
+      return buildVariationEntryEditHtml(itemKey, listKey, entry, index);
+    }).join('');
+
+    html += `
+      <div class="variation-list-section mt-3">
+        <div class="variation-list-title">${escapeHtml(listLabel)}</div>
+        <div class="variation-list-entries">${entriesHtml}</div>
+      </div>`;
+  });
+  return html;
+}
+
+// ── End variation list builders ───────────────────────────────────────────────
+
 function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
   const valorDisplay = formatCctValor(item);
   const fonteRaw = item.fonte_documento ?? null;
@@ -1129,6 +1393,9 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
     ? `<div class="cct-item-meta mt-1">${escapeHtml(String(item.clausula))}</div>`
     : '';
 
+  // PRJ-52: variation lists — shown even in read-only cards (entries may still need review)
+  const variationsHtml = buildVariationListsHtml(itemKey, item, true);
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card cct-item-card-valido">
@@ -1142,6 +1409,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         ${regraHtml}
         ${obsHtml}
         <div class="mt-1">${fonteHtml}</div>
+        ${variationsHtml}
       </div>
     </div>`;
 }
@@ -1203,6 +1471,9 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
   const obsVal = escapeHtml(item.observacao ?? '');
   const obsId = `cct-item-${itemKey}-obs`;
 
+  // PRJ-52: variation lists — shown in edit cards with per-entry validation (AC1, AC2)
+  const variationsHtml = buildVariationListsHtml(itemKey, item, false);
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card">
@@ -1233,6 +1504,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
             </button>
           </div>
         </div>
+        ${variationsHtml}
       </div>
     </div>`;
 }
@@ -1363,6 +1635,19 @@ function normalizeItensGovernance(records) {
           item[field] = defaultValue;
         }
       });
+      // PRJ-52: also normalize variation list entries with default governance fields
+      VARIATION_LIST_KEYS.forEach((listKey) => {
+        const entries = item[listKey];
+        if (!Array.isArray(entries)) return;
+        entries.forEach((entry) => {
+          if (!entry || typeof entry !== 'object') return;
+          // AC6: never overwrite existing governance fields — additive defaults only
+          if (!('status_parametro' in entry)) entry.status_parametro = 'extraido_para_revisao';
+          if (!('conflito' in entry)) entry.conflito = false;
+          if (!('origem_atualizacao' in entry)) entry.origem_atualizacao = null;
+          if (!('data_validacao' in entry)) entry.data_validacao = null;
+        });
+      });
     });
   });
 }
@@ -1442,13 +1727,13 @@ const CCT_ITEM_FIELDS = {
 /** Minimum fields required (at least one) before allowing item validation */
 const CCT_ITEM_MIN_FIELDS = {
   reajuste_salarial: ['valor'],
-  piso_salarial: ['valor_piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico', 'regra_textual'],
-  adicional_noturno: ['percentual', 'valor', 'regra_textual'],
-  auxilio_alimentacao: ['valor', 'regra_textual'],
+  piso_salarial: ['valor_piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico', 'regra_textual', 'por_cargo'],
+  adicional_noturno: ['percentual', 'valor', 'regra_textual', 'por_cargo', 'por_jornada'],
+  auxilio_alimentacao: ['valor', 'regra_textual', 'por_jornada', 'por_modalidade'],
   plr: ['valor', 'percentual', 'regra_textual'],
-  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'regra_textual'],
+  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'regra_textual', 'por_jornada', 'por_modalidade'],
   sobreaviso: ['percentual', 'regra_textual'],
-  jornada: ['horas_semanais', 'opcoes_identificadas', 'regra_textual'],
+  jornada: ['horas_semanais', 'opcoes_identificadas', 'regra_textual', 'por_escala'],
 };
 
 /**
@@ -1464,11 +1749,15 @@ function hasReviewableCctItems(record) {
   if (!itens) return false;
   return Object.values(itens).some((item) => {
     const effectiveStatus = getItemEffectiveStatus(item);
-    return effectiveStatus === 'extraido_para_revisao' ||
+    if (
+      effectiveStatus === 'extraido_para_revisao' ||
       effectiveStatus === 'pendente_revisao' ||
       effectiveStatus === 'pendente_avaliacao' ||
       effectiveStatus === 'conflito' ||
-      item.conflito === true;
+      item.conflito === true
+    ) return true;
+    // Also check variation list entries (PRJ-52)
+    return hasReviewableVariationEntries(item);
   });
 }
 
@@ -1483,6 +1772,112 @@ function getItemEffectiveStatus(item) {
   }
   return item.status_parametro;
 }
+
+// ── Variation list helpers (PRJ-52) ──────────────────────────────────────────
+
+/** All supported variation list keys */
+const VARIATION_LIST_KEYS = ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala'];
+
+/**
+ * Returns the "effective" status of a variation list entry, applying the same
+ * immutability governance as getItemEffectiveStatus — entries marked 'valido' by
+ * any origin other than 'validacao_manual_item_cct' are treated as 'extraido_para_revisao'.
+ */
+function getVariationEntryEffectiveStatus(entry) {
+  if (!entry) return null;
+  if (entry.status_parametro === 'valido' && entry.origem_atualizacao !== 'validacao_manual_item_cct') {
+    return 'extraido_para_revisao';
+  }
+  return entry.status_parametro ?? 'extraido_para_revisao';
+}
+
+/**
+ * Returns the human-readable identifier of a variation list entry.
+ * @param {object} entry - The variation entry object.
+ * @param {string} listKey - One of VARIATION_LIST_KEYS.
+ */
+function getVariationEntryId(entry, listKey) {
+  if (!entry || typeof entry !== 'object') return null;
+  if (listKey === 'por_cargo') return entry.cargo ?? entry.funcao ?? entry.identificador ?? null;
+  if (listKey === 'por_jornada') return entry.jornada ?? entry.identificador ?? null;
+  if (listKey === 'por_modalidade') return entry.modalidade ?? entry.identificador ?? null;
+  if (listKey === 'por_escala') return entry.escala ?? entry.identificador ?? null;
+  return entry.identificador ?? null;
+}
+
+/**
+ * Returns a short summary label for a variation list (AC9).
+ * Single entry → returns the entry identifier (or null if caller should use its value).
+ * Multiple entries → returns "Id1/Id2" (≤2) or "Múltiplos".
+ */
+function getVariationEntrySummaryLabel(entries, listKey) {
+  if (!Array.isArray(entries) || entries.length === 0) return null;
+  const ids = entries
+    .map((e) => getVariationEntryId(e, listKey))
+    .filter((id) => id != null && String(id).trim() !== '');
+  if (entries.length === 1) return ids[0] ?? null;
+  const deduped = [...new Set(ids)];
+  if (deduped.length === 0) return 'Múltiplos';
+  return deduped.length <= 2 ? deduped.join('/') : 'Múltiplos';
+}
+
+/**
+ * Returns true when any variation list entry in this item matches the given status (AC7).
+ * Uses effective status (same immutability governance as getItemEffectiveStatus).
+ */
+function hasSubitemWithStatus(item, statusValue) {
+  if (!item) return false;
+  return VARIATION_LIST_KEYS.some((listKey) => {
+    const entries = item[listKey];
+    if (!Array.isArray(entries)) return false;
+    return entries.some((entry) => {
+      if (typeof entry !== 'object' || entry === null) return false;
+      if (statusValue === 'conflito') {
+        return entry.conflito === true || getVariationEntryEffectiveStatus(entry) === 'conflito';
+      }
+      return getVariationEntryEffectiveStatus(entry) === statusValue;
+    });
+  });
+}
+
+/**
+ * Returns true when any variation list entry in this item has a conflict flag (AC7).
+ */
+function hasSubitemWithConflict(item) {
+  if (!item) return false;
+  return VARIATION_LIST_KEYS.some((listKey) => {
+    const entries = item[listKey];
+    if (!Array.isArray(entries)) return false;
+    return entries.some((entry) => entry && (entry.conflito === true || entry.status_parametro === 'conflito'));
+  });
+}
+
+/**
+ * Returns true when any variation list entry in the item needs review (pending, extracted, or conflict).
+ */
+function hasReviewableVariationEntries(item) {
+  if (!item) return false;
+  const reviewableStatuses = new Set(['extraido_para_revisao', 'pendente_revisao', 'pendente_avaliacao', 'conflito']);
+  return VARIATION_LIST_KEYS.some((listKey) => {
+    const entries = item[listKey];
+    if (!Array.isArray(entries)) return false;
+    return entries.some((entry) => {
+      if (typeof entry !== 'object' || entry === null) return false;
+      if (entry.conflito === true) return true;
+      return reviewableStatuses.has(getVariationEntryEffectiveStatus(entry));
+    });
+  });
+}
+
+/**
+ * Human-readable labels for variation list keys.
+ */
+const VARIATION_LIST_LABELS = {
+  por_cargo: 'Por cargo / função',
+  por_jornada: 'Por jornada',
+  por_modalidade: 'Por modalidade',
+  por_escala: 'Por escala',
+};
 
 /**
  * Collects searchable text tokens from all itens_cct entries (AC7).
@@ -1507,8 +1902,8 @@ function buildCctSearchTokens(record) {
     ['valor', 'percentual', 'horas_semanais', 'horas_mensais'].forEach((f) => {
       if (item[f] != null) tokens.push(String(item[f]));
     });
-    // Lists
-    ['por_cargo', 'por_jornada', 'por_modalidade'].forEach((f) => {
+    // Lists (por_cargo, por_jornada, por_modalidade, por_escala) — AC8
+    ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala'].forEach((f) => {
       if (Array.isArray(item[f])) {
         item[f].forEach((entry) => {
           if (typeof entry === 'object' && entry !== null) {
@@ -1543,7 +1938,7 @@ function isCctItemPreenchido(itemKey, item) {
   if (itemKey === 'piso_salarial' && item.valor != null && item.valor !== '') return true;
 
   // List fields
-  const listFields = ['por_cargo', 'por_jornada', 'por_modalidade', 'opcoes_identificadas'];
+  const listFields = ['por_cargo', 'por_jornada', 'por_modalidade', 'por_escala', 'opcoes_identificadas'];
   if (listFields.some((k) => Array.isArray(item[k]) && item[k].length > 0)) return true;
   // opcoes_identificadas may also be a string
   if (item.opcoes_identificadas != null && item.opcoes_identificadas !== '') return true;
@@ -1585,17 +1980,43 @@ function buildCctTableCells(record) {
 
   // Backward compat: derive piso columns from tipo+valor when specific fields absent
   const pisoItem = record.itens_cct?.piso_salarial;
-  const pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
+  let pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
     ?? (pisoItem?.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(pisoItem.tipo)
       ? pisoItem.valor : null);
-  const pisoTec = cellGet('piso_salarial', 'piso_tecnico')
+  let pisoTec = cellGet('piso_salarial', 'piso_tecnico')
     ?? (pisoItem?.tipo === 'piso_tecnico' ? pisoItem?.valor ?? null : null);
-  const pisoAdm = cellGet('piso_salarial', 'piso_administrativo')
+  let pisoAdm = cellGet('piso_salarial', 'piso_administrativo')
     ?? (pisoItem?.tipo === 'piso_administrativo' ? pisoItem?.valor ?? null : null);
-  const pisoUnico = cellGet('piso_salarial', 'piso_unico')
+  let pisoUnico = cellGet('piso_salarial', 'piso_unico')
     ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
 
-  const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  // AC9: when all piso scalar fields are null but por_cargo has entries, show a summary
+  if (pisoCct == null && pisoTec == null && pisoAdm == null && pisoUnico == null
+      && Array.isArray(pisoItem?.por_cargo) && pisoItem.por_cargo.length > 0) {
+    const label = getVariationEntrySummaryLabel(pisoItem.por_cargo, 'por_cargo');
+    // Single entry: show its value; multiple: show label
+    if (pisoItem.por_cargo.length === 1 && pisoItem.por_cargo[0].valor != null) {
+      pisoCct = pisoItem.por_cargo[0].valor;
+    } else {
+      pisoCct = label ?? 'Múltiplos';
+    }
+  }
+
+  let adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  // AC9: adicional noturno variation summary when scalar is absent
+  if (adNoturno == null) {
+    const anItem = record.itens_cct?.adicional_noturno;
+    for (const lk of ['por_cargo', 'por_jornada']) {
+      const entries = anItem?.[lk];
+      if (Array.isArray(entries) && entries.length > 0) {
+        adNoturno = entries.length === 1 && entries[0].percentual != null
+          ? entries[0].percentual
+          : (getVariationEntrySummaryLabel(entries, lk) ?? 'Múltiplos');
+        break;
+      }
+    }
+  }
+
   const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
   // PLR: numeric value preferred; regra_textual only if it is a short operational summary (AC6)
   const plrNumeric = cellGet('plr', 'valor', 'percentual');
@@ -1641,6 +2062,120 @@ function bindCctItemControls(record) {
     if (btnVal) btnVal.addEventListener('click', () => validateCctItem(record, itemKey));
     if (btnRej) btnRej.addEventListener('click', () => rejectCctItem(record, itemKey));
   });
+  // PRJ-52: also bind per-entry validation controls in variation lists
+  bindVariationEntryControls(record);
+}
+
+/**
+ * Binds validate/reject buttons for all variation list entries across all CCT items (PRJ-52).
+ */
+function bindVariationEntryControls(record) {
+  if (!record.itens_cct) return;
+  Object.keys(record.itens_cct).forEach((itemKey) => {
+    const item = record.itens_cct[itemKey];
+    if (!item) return;
+    VARIATION_LIST_KEYS.forEach((listKey) => {
+      const entries = item[listKey];
+      if (!Array.isArray(entries)) return;
+      entries.forEach((entry, index) => {
+        const idSafe = `${itemKey}-${listKey}-${index}`;
+        const btnVal = document.getElementById(`btn-var-val-${idSafe}`);
+        const btnRej = document.getElementById(`btn-var-rej-${idSafe}`);
+        if (btnVal) btnVal.addEventListener('click', () => validateVariationEntry(record, itemKey, listKey, index));
+        if (btnRej) btnRej.addEventListener('click', () => rejectVariationEntry(record, itemKey, listKey, index));
+      });
+    });
+  });
+}
+
+/**
+ * Validates a single variation list entry (AC6 granular status per subitem).
+ * AC6 immutability: entries already 'valido' by manual validation are never overwritten.
+ */
+function validateVariationEntry(record, itemKey, listKey, entryIndex) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+  const entries = item[listKey];
+  if (!Array.isArray(entries) || entryIndex >= entries.length) return;
+  const entry = entries[entryIndex];
+
+  // AC6: immutability — already manually validated entries must not be overwritten
+  if (getVariationEntryEffectiveStatus(entry) === 'valido' &&
+      entry.origem_atualizacao === 'validacao_manual_item_cct') return;
+
+  const idSafe = `${itemKey}-${listKey}-${entryIndex}`;
+  const errorEl = document.getElementById(`var-err-${idSafe}`);
+  const obsEl = document.getElementById(`var-obs-${idSafe}`);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  const valEl = document.getElementById(`var-val-${idSafe}`);
+  const valStr = valEl?.value?.trim() ?? '';
+  const val = valStr !== '' ? parseFloat(valStr) : null;
+
+  // Require at least one value: either from form or pre-existing in entry
+  const effectiveVal = (val != null && !isNaN(val)) ? val : (entry.valor ?? entry.percentual ?? null);
+  if (effectiveVal == null) {
+    if (errorEl) { errorEl.textContent = 'Preencha ao menos o valor.'; errorEl.classList.remove('d-none'); }
+    return;
+  }
+  if (!observacao) {
+    if (errorEl) { errorEl.textContent = 'Observação obrigatória.'; errorEl.classList.remove('d-none'); }
+    return;
+  }
+  if (errorEl) errorEl.classList.add('d-none');
+
+  const now = new Date().toISOString();
+  entries[entryIndex] = {
+    ...entry,
+    ...(val != null && !isNaN(val) ? { valor: val } : {}),
+    observacao,
+    status_parametro: 'valido',
+    conflito: false,
+    origem_atualizacao: 'validacao_manual_item_cct',
+    data_validacao: now,
+    status_anterior: entry.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, record.itens_cct[itemKey]);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
+}
+
+/**
+ * Keeps a variation list entry in review (rejects without changing it to 'valido').
+ */
+function rejectVariationEntry(record, itemKey, listKey, entryIndex) {
+  const item = record.itens_cct?.[itemKey];
+  if (!item) return;
+  const entries = item[listKey];
+  if (!Array.isArray(entries) || entryIndex >= entries.length) return;
+  const entry = entries[entryIndex];
+
+  // AC6: immutability — already manually validated entries must not be overwritten
+  if (getVariationEntryEffectiveStatus(entry) === 'valido' &&
+      entry.origem_atualizacao === 'validacao_manual_item_cct') return;
+
+  const idSafe = `${itemKey}-${listKey}-${entryIndex}`;
+  const obsEl = document.getElementById(`var-obs-${idSafe}`);
+  const observacao = obsEl?.value?.trim() ?? '';
+
+  const now = new Date().toISOString();
+  const wasConflito = entry.conflito === true || entry.status_parametro === 'conflito';
+  entries[entryIndex] = {
+    ...entry,
+    status_parametro: wasConflito ? 'conflito' : 'pendente_revisao',
+    conflito: wasConflito,
+    observacao: observacao || entry.observacao || null,
+    origem_atualizacao: 'rejeicao_manual_item_cct',
+    data_hora_rejeicao_manual: now,
+    status_anterior: entry.status_parametro,
+  };
+
+  saveItemCctOverride(getRecordKey(record), itemKey, record.itens_cct[itemKey]);
+  updateLocalChangesBanner();
+  applyFilters();
+  refreshCctItemsSection(record);
 }
 
 function validateCctItem(record, itemKey) {
@@ -1666,11 +2201,25 @@ function validateCctItem(record, itemKey) {
     }
   });
 
-  // Validate minimum fields (AC15): combine form values with pre-existing item values
+  // Validate minimum fields: combine form values with pre-existing item values
+  // PRJ-52: also count non-empty variation lists as satisfying minimum
   const effectiveValues = { ...item, ...fields };
   const minKeys = CCT_ITEM_MIN_FIELDS[itemKey] ?? [];
   const hasMin = minKeys.length === 0
-    || minKeys.some((k) => effectiveValues[k] != null && effectiveValues[k] !== '');
+    || minKeys.some((k) => {
+      const v = effectiveValues[k];
+      if (v == null || v === '') return false;
+      // Variation list: requires at least one entry with a meaningful identifier
+      if (Array.isArray(v)) {
+        return v.some((entry) => {
+          if (typeof entry !== 'object' || entry === null) return false;
+          const id = getVariationEntryId(entry, k);
+          const val = entry.valor ?? entry.percentual ?? entry.jornada;
+          return (id != null && String(id).trim() !== '') || val != null;
+        });
+      }
+      return true;
+    });
 
   if (!hasMin) {
     if (errorEl) {
@@ -2102,11 +2651,30 @@ function buildFonteLink(value) {
  * Formats VR / auxílio alimentação with BRL and periodicity (AC5).
  * Supports real-data schema (unidade: 'BRL/mes', 'BRL/dia') and
  * demo-data schema (tipo: 'valor_mensal', 'valor_diario').
+ * AC9: when scalar value is absent but variation lists are present, shows a summary.
  */
 function fmtVR(vrItem) {
   if (!vrItem) return '—';
   const v = vrItem.valor;
-  if (v == null || v === '') return '—';
+  if (v == null || v === '') {
+    // AC9: variation list fallback
+    for (const lk of ['por_jornada', 'por_modalidade', 'por_cargo']) {
+      const entries = vrItem[lk];
+      if (Array.isArray(entries) && entries.length > 0) {
+        if (entries.length === 1 && entries[0].valor != null) {
+          const n = Number(entries[0].valor);
+          if (!isNaN(n)) {
+            const id = getVariationEntryId(entries[0], lk);
+            const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            return id ? `${brl} (${escapeHtml(String(id))})` : brl;
+          }
+        }
+        const label = getVariationEntrySummaryLabel(entries, lk) ?? 'Múltiplos';
+        return escapeHtml(String(label).slice(0, 22));
+      }
+    }
+    return '—';
+  }
   const n = Number(v);
   if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
   const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -2125,6 +2693,7 @@ function fmtVR(vrItem) {
  * Formats jornada for table display (AC7).
  * Supports real-data schema (valor_textual: '44h/semana', unidade: 'h/semana') and
  * demo-data schema (horas_semanais, tipo: 'horas_semanais').
+ * AC9: when scalar values are absent but por_escala has entries, shows a summary.
  */
 function fmtJornada(jornadaItem) {
   if (!jornadaItem) return '—';
@@ -2149,6 +2718,20 @@ function fmtJornada(jornadaItem) {
   if (jornadaItem.horas_mensais != null) return `${jornadaItem.horas_mensais}h mensais`;
   if (jornadaItem.opcoes_identificadas != null) {
     return escapeHtml(String(jornadaItem.opcoes_identificadas).slice(0, 22));
+  }
+  // AC9: variation list fallback — por_escala
+  const escalaEntries = jornadaItem.por_escala;
+  if (Array.isArray(escalaEntries) && escalaEntries.length > 0) {
+    if (escalaEntries.length === 1) {
+      const entry = escalaEntries[0];
+      const id = getVariationEntryId(entry, 'por_escala');
+      const jornada = entry.jornada ?? entry.valor;
+      if (jornada != null && id != null) return escapeHtml(`${id}: ${String(jornada)}`.slice(0, 22));
+      if (id != null) return escapeHtml(String(id).slice(0, 22));
+      if (jornada != null) return escapeHtml(String(jornada).slice(0, 22));
+    }
+    const label = getVariationEntrySummaryLabel(escalaEntries, 'por_escala') ?? 'Múltiplos';
+    return escapeHtml(String(label).slice(0, 22));
   }
   return '—';
 }
