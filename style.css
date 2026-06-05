@@ -483,3 +483,38 @@ body {
   border-radius: 0.25rem;
   background-color: #f8f9fa;
 }
+
+/* ── Variation lists (PRJ-52) ────────────────────────────────────── */
+.cct-variation-section {
+  margin-top: 0.5rem;
+}
+
+.variation-list-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6c757d;
+  margin-bottom: 0.35rem;
+}
+
+.variation-entry {
+  background-color: #f8f9fa;
+  border-color: #dee2e6 !important;
+  font-size: 0.8125rem;
+}
+
+.variation-entry-valido {
+  background-color: #f0faf4;
+  border-color: #b7dfc5 !important;
+}
+
+/* Variation summary in table cell — overrides right-align and nowrap for text labels */
+.cct-col-variation {
+  display: inline-block;
+  text-align: left;
+  white-space: normal;
+  word-break: break-word;
+  font-style: italic;
+  color: #495057;
+}
