@@ -1,5 +1,5 @@
 {
-  "data_geracao": "2026-05-27T13:13:18.366991+00:00",
+  "data_geracao": "2026-06-05T18:47:09.486287+00:00",
   "registros": [
     {
       "id_registro_reajuste": "REG-AC-SEAC-2025",
@@ -28,7 +28,933 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL As empresas abrangidas pela Convenção Coletiva não poderão utilizar salário inferior ao piso mínimo estabelecido nesta Cláusula, que é de R$ 1.540,47 (um mil, quinhentos e quarenta reais e quarenta e sete centavos), compreendendo a mão de obra discriminada no Anexo I, parte integrante desta referida norma trabalhista. Parágrafo Único – Os salários não poderão ser reduzidos independentemente da carga horária fixada em conformidade ao Anexo I desta Convenção. Reajustes/Correções Salariais",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "Servente de Limpeza",
+              "valor": 1540.47,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Zelador (a)",
+              "valor": 1540.47,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Limpeza",
+              "valor": 1540.47,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Serviços Diversos",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Piscineiro",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Coletor de Lixo",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Varredor (a)",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Operador de Roçadeira",
+              "valor": 1648.58,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jardineiro",
+              "valor": 1648.58,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Copeiro (a)",
+              "valor": 1569.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Cozinha",
+              "valor": 1569.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Encarregado Geral",
+              "valor": 2177.75,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Conferente",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Merendeira",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Deposito",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Distribuição",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Carregador",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Estoquista",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Monitor de Transporte Escolar Terceirizado",
+              "valor": 1600.93,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Assistente Administrativo I",
+              "valor": 1640.46,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Porteiro de Edifício",
+              "valor": 1664.87,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Agente de Portaria",
+              "valor": 1664.87,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Fiscal de Shopping",
+              "valor": 1616.32,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Motorista de Ambulância",
+              "valor": 1648.58,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Manobrista",
+              "valor": 1648.58,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Garçom",
+              "valor": 1657.48,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Cozinheiro (a)",
+              "valor": 1657.48,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Terceirizado (onibus, micro-ônibus ou",
+              "valor": 2392.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Motoboy",
+              "valor": 1720.35,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Operador de máquina I",
+              "valor": 1857.46,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Almoxarife",
+              "valor": 1924.95,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Bibliotecário",
+              "valor": 1924.95,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Pedreiro, Pintor, Soldador, Serralheiro",
+              "valor": 2004.22,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Operador de máquina II",
+              "valor": 2160.61,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Operador de máquina III",
+              "valor": 2300.94,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Coordenador e/ou Gerente Operacional",
+              "valor": 3922.19,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Recepcionista (ensino médio)",
+              "valor": 1600.93,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Office boy",
+              "valor": 1600.93,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Xerocopista",
+              "valor": 1600.93,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Operador de Caixa",
+              "valor": 1616.32,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Telefonista",
+              "valor": 1720.35,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Tele-Atendente",
+              "valor": 1720.35,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Videofonista",
+              "valor": 1720.35,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico em Secretariado",
+              "valor": 1730.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Escritório",
+              "valor": 1739.63,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Secretário (a)",
+              "valor": 1739.63,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar Administrativo",
+              "valor": 1739.63,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Assistente de Compras",
+              "valor": 1924.95,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Atendente",
+              "valor": 2111.34,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Digitador",
+              "valor": 2111.34,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Departamento Pessoal",
+              "valor": 2177.75,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Assistente de Recurso Humanos",
+              "valor": 2297.72,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico em Segurança no Trabalho",
+              "valor": 2297.72,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Assistente Administrativo II",
+              "valor": 2410.2,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico de Suporte em informática",
+              "valor": 2458.4,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Assistente de Coordenação",
+              "valor": 2655.41,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Gestor de Contrato",
+              "valor": 2983.14,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico da tecnologia da Informática",
+              "valor": 3115.49,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Secretário (ª) Executivo(ª) Nível Superior",
+              "valor": 3295.1,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Supervisor Adm e/ou Oper",
+              "valor": 3462.12,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Programador de Informática",
+              "valor": 3462.12,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Coordenador e/ou Gerente Administrativo",
+              "valor": 3922.19,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Gerente Nível Superior I",
+              "valor": 3929.55,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Gerente Adm Nível Superior II",
+              "valor": 4699.08,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Gerente Nível Superior III",
+              "valor": 7032.43,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Coveiro",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Tratador de Animais",
+              "valor": 1573.02,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Maqueiro",
+              "valor": 1616.32,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico em Manutenção de Elevadores",
+              "valor": 1616.32,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Lavador de Veículos e Máquinas pesadas",
+              "valor": 1648.58,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Técnico em Semáforo",
+              "valor": 1730.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de Mecânico",
+              "valor": 1740.7,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Bombeiro Civil",
+              "valor": 2004.22,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Encarregado de Expedição",
+              "valor": 2297.71,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Web Designer",
+              "valor": 2297.71,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Eletricista de alta tensão",
+              "valor": 2458.4,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Mecânico de Carro Leve e Pesado",
+              "valor": 2521.6,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Secretário (a) de Gabinete",
+              "valor": 2503.4,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Auxiliar de refrigeração",
+              "valor": 2655.41,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Mecânico de refrigeração",
+              "valor": 2655.41,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Encarregado Administrativo",
+              "valor": 2805.62,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Motorista de Automóveis Oficial",
+              "valor": 2805.62,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Agente Administrativo Supervisor",
+              "valor": 3741.52,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Motorista de Automóveis de Representação",
+              "valor": 6430.55,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -41,7 +967,20 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA SÉTIMA - ADICIONAL NOTURNO\nPara o trabalho noturno, realizado das 22:00 (vinte e duas) horas de um dia até às 05:00 (cinco) horas do\ndia seguinte, a duração de cada hora trabalhada será de 60 (sessenta) minutos.\n\nParágrafo Único – O cálculo do valor do adicional e da hora normal dar-se-á pelo quociente da divisão do\nsalário mensal por 220 (duzentas e vinte) horas.\n\n\n                                       Adicional de Insalubridade",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 330.0,
@@ -54,7 +993,20 @@
           "clausula": "CLÁUSULA DÉCIMA - AUXÍLIO ALIMENTAÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA - AUXÍLIO ALIMENTAÇÃO Todo trabalhador terá direito ao Auxilio Alimentação fornecido pelas empresas, no valor mínimo mensal de R$ 330,00 (trezentos e trinta reais), valores retroativos ao mês de janeiro de 2025, independentemente de escala, horário de trabalho ou função, através do cartão alimentação, sendo descontados os dias não trabalhados em decorrências de (faltas, licenças médicas, férias, afastamento previdenciário, licenças paternidade/maternidade), descontos esses de forma proporcional, observando sempre a divisão por 30 (trinta) dias ao mês. Parágrafo Primeiro - As em…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -93,7 +1045,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 44.0,
@@ -106,7 +1071,20 @@
           "clausula": "CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO A jornada de trabalho será de no máximo 44 (quarenta e quatro) horas semanais, podendo ter acréscimo de 02 (duas) horas extras diárias ou até 04 (quatro) horas, caso ocorram necessidades imperiosas, por motivo de força maior, para atender a realização de conclusão de serviços inadiáveis ou cuja inexecução possa acarretar prejuízo manifesto, desde que devidamente justificadas. Parágrafo Primeiro – Além da jornada de trabalho prevista no caput da cláusula, poderão ser utilizadas pelas empresas as seguintes modalidades de jornada de trabalho: a) Hor…",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 30.0, 26.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -137,7 +1115,31 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL\nVIGÊNCIA DA CLÁUSULA: 01/01/2023 a 31/12/2023\n\n     Fica estipulado o valor do salário-mínimo nacional como piso salarial mensal da categoria, a partir de 1º de\n     janeiro de 2023, para jornada de 180 horas mensais.\n\n\nwww3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR036147/2023                               1/25\n\f06/06/2024, 15:12                                            Mediador - Extrato Convenção Coletiva\n\n\n\n\n     Parágrafo Primeiro: Para os trabalhadores com jornada inferior a 180 (cento e oitenta) horas mensais, o\n     salário deverá observar proporcionalmente o piso estabelecido no “caput”.\n\n     Parágrafo Segundo: Nos valores acima não está sendo considerada a remuneração variável.\n\n     Parágrafo Terceiro: Ficam as empresas obrigadas a realizarem a correção e o crédito dos valores\n     retroativos cabíveis, na folha de pagamento subsequente ao registro desta convenção coletiva de trabalho\n     no sistema MEDIADOR do Ministério do Trabalho.\n\n     Parágrafo Quarto: O piso para experiência fica autorizado desde que negociado diretamente com o\n     SINTTEL-AL e formalizado em acordo específico.\n\n\n\n\n                                        REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 10.5,
+              "jornada": "200/220h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 180h",
+              "valor": 5.33,
+              "jornada": "180h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -163,7 +1165,31 @@
           "clausula": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BÁSICA",
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BÁSICA VIGÊNCIA DA CLÁUSULA: 01/01/2023 a 31/12/2023 AS EMPRESAS fornecerão aos TRABALHADORES que estiverem no exercício de suas atividades regulares, a partir de 01/05/2023 e para os dias efetivamente trabalhados, vale-refeição ou alimentação por mês, nos seguintes valores faciais, conforme abaixo: Parágrafo Primeiro: O valor facial do vale refeição dos TRABALHADORES contratados com jornada de 200/220 horas mensais fica estabelecido em R$10,50 (dez reais e cinquenta centavos) a partir de 01/05/2023, por dia efetivamente trabalh…",
           "observacao": "Múltiplos valores identificados: 10.5, 5.33",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 10.5,
+              "jornada": "200/220h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 180h",
+              "valor": 5.33,
+              "jornada": "180h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -246,7 +1272,31 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 01/05/2024 nenhum trabalhador poderá ser admitido, ou continuar trabalhando com salário inferior às faixas abaixo: a) Aplicável exclusivamente Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21 (Um mil, quatrocentos e setenta e nove reais e vinte e um centavos); b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48(Um mil, quatrocentos e oitenta e sete reais e quarenta e oito centavos);c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07 (Dois mil, quatrocento…",
           "observacao": "Múltiplos valores identificados: 1479.21, 1487.48, 2434.07",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "Técnico de Suporte",
+              "valor": 1487.48,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Analista de Suporte",
+              "valor": 2434.07,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -298,7 +1348,42 @@
           "clausula": "CLÁUSULA SEXTA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA SEXTA - HORA EXTRA As horas extras serão remuneradas com acréscimo de 50% (cinquenta por cento, de segunda a sexta e 70% (setenta por cento) aos sábados. § PRIMEIRO: As horas extras nos domingos e feriados serão remuneradas com acréscimo de 100% (cem por cento). § SEGUNDO: Somente as horas extras autorizadas pelo superior imediato serão consideradas, caso contrário, tornar- se-á sem efeito para registro e/ou lançamento no Banco de Horas do empregado. AUXÍLIO ALIMENTAÇÃO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 70.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "observacao": "Hora extra — Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "observacao": "Hora extra — Sábado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -573,7 +1658,53 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL VIGÊNCIA DA CLÁUSULA: 01/05/2025 a 30/04/2026 Fica assegurado aos trabalhadores abrangidos por esta Convenção Coletiva de trabalho, o piso mínimo inicial normativo, que obedecerá aos seguintes critérios: a) Aos trabalhadores com jornada de trabalho de 36 (trinta e seis) horas semanais, fica fixado o piso mínimo de R$ 1.592,43 (um mil, quinhentos e noventa e dois reais e quarenta e três centavos); b) Aos trabalhadores com jornada de trabalho de 44(quarenta e quatro) horas semanais, fica fixado o piso mínimo de R$ 1.636,82 (um mil, seiscentos e trinta e seis rea…",
           "observacao": "Múltiplos valores identificados: 1592.43, 1636.82",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 08h/dia",
+              "valor": 39.52,
+              "jornada": "08h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 06h/dia",
+              "valor": 25.49,
+              "jornada": "06h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 12h/dia",
+              "valor": 53.55,
+              "jornada": "12h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 06h",
+              "valor": 25.48,
+              "jornada": "06h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -586,7 +1717,53 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUINTA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUINTA - ADICIONAL NOTURNO As empresas pagarão sobre as horas trabalhadas entre 22h e 06h, 20% (vinte por cento) de adicional noturno.",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -599,7 +1776,99 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 08h/dia",
+              "valor": 39.52,
+              "jornada": "08h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 06h/dia",
+              "valor": 25.49,
+              "jornada": "06h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 12h/dia",
+              "valor": 53.55,
+              "jornada": "12h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 06h",
+              "valor": 25.48,
+              "jornada": "06h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": null
+            }
+          ],
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -625,7 +1894,53 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Hora extra — Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Hora extra — Sábado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -638,7 +1953,53 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 36.0,
@@ -651,7 +2012,53 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUARTA - JORNADA DE TRABALHO E INTERVALO INTRAJORNADA",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUARTA - JORNADA DE TRABALHO E INTERVALO INTRAJORNADA Fica fixada a jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Operador Help Desk e Operador de Telemarketing e/ou Atividades de Tele-Suporte e/ou Tele- Serviços. Parágrafo Primeiro: A jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Digitador, Conferente, Auxiliar de Processamento, Auxiliar de Caixa Rápido, Digitalização, aplicável exclusivamente ao Analista 01, contrato Helpdesk – BA – CEF. Parágrafo Segundo: Os demais trabalhadores praticarão a jornada de…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         }
       }
     },
@@ -682,7 +2089,20 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais) a partir de 01/05/2025. Parágrafo Primeiro: Para jornadas de trabalho inferiores a 180 horas o salário poderá ser proporcional ao piso acima definido. Parágrafo Segundo: Será concedido um abono único e indenizatório no valor de R$424,00 (quatrocentos e vinte e quatro reais)para os empregados com jornada de trabalho de 180 horas e de R$353,00 (trezentos e cinquenta e três reais) para os empregados com jornada de trabalho de 150 horas,…",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0, 353.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "mínimo",
+              "valor": 1518.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1009,7 +2429,31 @@
           "clausula": "CLÁUSULA QUARTA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA QUARTA - PISO SALARIAL A partir de 1º de maio de 2025 é fixado o piso salarial da categoria, nos seguintes termos: 1- Para os trabalhadores com jornada de 6 (seis) horas o valor de R$ 1.642,48 (mil seiscentos e quarenta e dois reais e quarenta e oito centavos), pago até o 5º dia útil. II- Para os trabalhadores com jornada de 8 (oito) horas o valor de R$ 1.728,89 (mil setecentos e vinte e oito reais e oitenta e nove centavos), pago até o 5º dia útil. III Em caso de aumento do salário-mínimo vigente à época no país, ultrapassando-se os valores acima - discriminados, aplica-se o mais ben…",
           "observacao": "Múltiplos valores identificados: 1642.48, 1728.89",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 6h",
+              "valor": 1642.48,
+              "jornada": "6h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 8h",
+              "valor": 1728.89,
+              "jornada": "8h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1035,7 +2479,31 @@
           "clausula": "CLÁUSULA DÉCIMA TERCEIRA - VALE REFEIÇÃO/ALIMENTAÇÃO 2025",
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - VALE REFEIÇÃO/ALIMENTAÇÃO 2025 A partir de 1º de maio de 2025, as empresas concederão cartão magnético contendo vale-refeição ou alimentação equivalente aos dias trabalhados no mês, no valor mínimo de: a) R$ 39,00 (trinta e nove reais) para todos os empregados independentemente da carga horária de 06 (seis) horas ou 08 (oito) horas, sem integralizar ao salário. Parágrafo Primeiro - Os trabalhadores que recebem o vale refeição ou alimentação com valor superior ao estipulado nessa cláusula, terão os valores faciais reajustados no importe de 5,53% (cinco virgula cinquen…",
           "observacao": "Múltiplos valores identificados: 39.0, 2540.1, 2540.11, 4298.65, 4298.66, 6252.56, 6252.57, 7815.73, 7815.74, 9574.29, 9574.3",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 6h",
+              "valor": 1642.48,
+              "jornada": "6h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 8h",
+              "valor": 1728.89,
+              "jornada": "8h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -1170,7 +2638,42 @@
           "clausula": "CLÁUSULA DÉCIMA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORA EXTRA As horas extras semanais serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas aos domingos e feriados com adicional de 100% (cem por cento), as quais deverão ser pagas na folha de pagamento do mês seguinte ao do fato gerador. Adicional Noturno",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -1339,7 +2842,20 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS\nA partir de 01 de julho de 2024 fica estabelecido o piso salarial de 1.600,00 (um mil e seiscentos reais), para\n          os integrantes da categoria profissional regida por esta Convenção, exceto para os empregados que\n          exerçam as funções de office-boy, copa/cozinha e serviços de limpeza.\n\n\n\n          PARÁGRAFO 1º - Se na aplicação do percentual incidente no mês de julho de 2024, de que trata a\n          Cláusula do reajuste salarial desta Convenção, não resultar em valor igual ou superior ao piso salarial\n          referido no caput desta Cláusula, a empresa complementará o piso da categoria.\n\n          PARÁGRAFO 2º - Os empregados, excluídos os exercentes das funções de Office-boy, ou contínuo,\n          copa/cozinha, serviços de limpeza e serviços gerais, admitidos no período de 01/07/2023 a 30/06/2024\n          farão jus ao piso acima estabelecido.\n\n          PARÁGRAFO 3º - Os empregados que exercerem as funções de secretária e recepcionista, farão jus, ao\n          piso acima, após 3(três) meses de admissão.\n\n          PARÁGRAFO 4º - Aos trabalhadores contratados com jornada de trabalho inferior a 220 (Duzentas e Vinte)\n          horas mensais, 44 (Quarenta e Quatro) horas semanais ou 08 (Oito) horas diárias, será pago o piso salarial\n\n\n1 of 13                                                                                                             02/08/2024, 13:56\n\fMediador - Extrato Convenção Coletiva                           http://www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualiza...\n\n\n\n\n          da categoria proporcionalmente ao tempo trabalhado (OJ TST no 358).\n\n          PARÁGRAFO 5º - Os trabalhadores contratados até 30 de junho de 2023, para trabalharem jornada de até\n          06 (Seis) horas por dia, ficam assegurados o direito adquirido de um salário mínimo, vedado a aplicaçäo de\n          salário proporcional tratado no parágrafo 4º desta cláusula.\n\n          PARÁGRAFO 6º - Os trabalhadores contratados para laborar em jornada 12x36 ficam excluídos da jornada\n          de trabalho proporcional de 6 (Seis) horas/dia.\n\n\n                                        REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "Natalidade",
+              "valor": 500.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1352,7 +2868,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de adicional noturno não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -1365,7 +2894,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -1404,7 +2946,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": null,
@@ -1417,7 +2972,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -1448,7 +3016,20 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Aos trabalhadores das funções abaixo discriminadas ficam garantidos os seguintes pisos salariais, respeitando-se os salários em valores superiores. O Código CBO da tabela abaixo possui subitens que devem ser utilizados para o cargo específico. (sugestão de site para pesquisa: https://www.ocupacoes.com.br/): Salário Base CBO Funções (R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação R$ 3.733,82 Técnicos de desenvolvimento de sistemas e 3171 R$ 1.931,79 aplicações Iniciantes 3171 Técnicos de desenvol…",
           "observacao": "Múltiplos valores identificados: 2994.3, 3733.82, 1931.79, 2412.88, 1524.98, 1691.52, 1524.93",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "associados mensalistas do Sindinformática e",
+              "valor": 650.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1461,7 +3042,20 @@
           "clausula": "CLÁUSULA NONA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA NONA - ADICIONAL NOTURNO As horas de trabalho exercidas no horário compreendido entre às 22:00 horas de um dia e 05:00 horas do dia seguinte, serão remuneradas com um adicional de 20% (vinte por cento), calculado sobre o valor da hora normal, conforme dispositivo legal. ADICIONAL DE INSALUBRIDADE",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 28.0,
@@ -1474,7 +3068,20 @@
           "clausula": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO ALIMENTAÇÃO / REFEIÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO ALIMENTAÇÃO / REFEIÇÃO As empresas fornecerão, mensalmente, aos empregados 22 (vinte e dois) vales refeição ou vales alimentação, com os seguintes valores faciais: 1. Para empregados com jornada de trabalho de 6 (seis) horas, cada vale terá o valor facial de R$ 28,00 (Vinte e oito reais); 2. Para os demais empregados, e que trabalhem jornada superior a 6 (seis) cada vale terá o valor facial de R$ 32,67 (trinta e dois reais e sessenta e sete centavos) 3. Com vistas a adequação da entrega do Benefício Alimentação às exigências do Programa de Alimentação do Trab…",
           "observacao": "Múltiplos valores identificados: 28.0, 32.67",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -1513,7 +3120,20 @@
           "clausula": "CLÁUSULA TRIGÉSIMA SEXTA - SOBREAVISO",
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA SEXTA - SOBREAVISO Considera-se em sobreaviso o empregado que à distância é submetido a controle patronal por instrumentos telemáticos ou informatizados, permanecer em regime de plantão ou equivalente, aguardando a qualquer momento o chamado para o serviço durante o período de descanso. Parágrafo Primeiro – O uso de instrumentos telemáticos ou informatizados fornecidos pela empresa ao empregado, por si só, não caracteriza o regime de sobreaviso, desde que não sejam utilizados para o trabalho após o horário de expediente. Parágrafo Segundo – Ressalvado o disposto no art. 244,…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 36.0,
@@ -1526,7 +3146,20 @@
           "clausula": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO A jornada de trabalho de Fitotecário, Digitador e Operador de Main Frame será de 6 (seis) horas diárias de segunda-feira a sábado, perfazendo um total de 36 (trinta e seis) horas semanais. Para os demais cargos serão 8 (oito) horas diárias de segunda-feira a sexta-feira e 4 (quatro) horas no sábado, perfazendo um total de 44 (quarenta e quatro) horas semanais, ou 44 (quarenta e quatro) horas de segunda-feira a sexta-feira com REDUÇÃO do horário de almoço de 2 (duas) horas PARA 1h12m (uma hora e doze minutos) e sem expediente aos sábados, sendo es…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -1884,7 +3517,20 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$ 1.518,00 (mil, quinhentos e dezoito reais) partir de 01/05/2025. Parágrafo Primeiro: Será concedido um abono indenizatório no valor de R$ 424,00 (quatrocentos e vinte e quatro reais) para os trabalhadores com jornada de trabalho de 180 horas, a ser pago em parcela única em até 10 (dez) dias da formalização de aprovação da proposta em assembleia. Parágrafo Segundo: o Ficam isentas do pagamento do abono indenizatório as empresas que já reajustaram o valor do piso da categoria …",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 18.74,
+              "jornada": "200/220h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1910,7 +3556,20 @@
           "clausula": "CLÁUSULA DÉCIMA PRIMEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BASICA",
           "trecho_fonte": "CLÁUSULA DÉCIMA PRIMEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BASICA As EMPRESAS fornecerão, mensalmente, aos TRABALHADORES que estiverem no exercício de suas atividades regulares, e para os dias efetivamente trabalhados, vales refeição ou alimentação, nos seguintes valores faciais: a) R$18,37 (dezoito reais e trinta e sete centavos) por dia efetivamente trabalhado, para TRABALHADORES contratados com jornada de 200/220 horas mensais, passando para R$18,74 (dezoito reais e setenta e quatro centavos) a partir de 01/05/2025, passando para R$19,10 (dezenove reais e dez centavos) a partir de 01…",
           "observacao": "Múltiplos valores identificados: 18.37, 18.74, 19.1, 9.91, 10.11, 10.31, 8.33, 8.5, 8.66, 6.71, 6.84, 6.98",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 18.74,
+              "jornada": "200/220h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -1993,7 +3652,31 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL A título de Salário Normativo da categoria profissional, a partir de 1º de junho de 2.025, o salário dos empregados, abrangidos por esta convenção, não será inferior a R$ 1.689,53 (mil e seiscentos e oitenta e nove reais e cinquenta e três centavos) mensais; Parágrafo Primeiro: Fica assegurado ao Salário Normativo, de que trata a presente cláusula, a título de antecipação prevista no § primeiro da cláusula terceira, nunca será inferior ao salário mínimo vigente acrescido do percentual definido na Cláusula quarta; Parágrafo Segundo…",
           "observacao": "Múltiplos valores identificados: 1689.53, 3146.01, 2222.82",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "EMPRESAS COM SEIS ATÉ OITO EMPREGADOS",
+              "valor": 670.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "EMPRESAS COM NOVE ATÉ DEZ EMPREGADOS",
+              "valor": 730.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2006,7 +3689,20 @@
           "clausula": "CLÁUSULA NONA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA NONA - ADICIONAL NOTURNO É considerado trabalho noturno aquele prestado no período havido entre às 22 (vinte e duas) horas de um dia até às 05 (cinco) horas do dia seguinte. Parágrafo Primeiro: Será pago, a título de Adicional Noturno, um percentual de 35% (trinta e cinco por cento) sobre a hora diurna em relação ao salário nominal do empregado. Parágrafo Segundo: Nos termos do §5º do artigo 73 da CLT considera-se jornada noturna o tempo que se estender após as 05h por se tratar de prorrogação. Parágrafo Terceiro: A prorrogação de que trata o parágrafo segundo não se aplica aos profis…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -2019,7 +3715,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -2045,7 +3754,42 @@
           "clausula": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS As horas extraordinárias pagas serão remuneradas com os seguintes acréscimos: a) as duas primeiras horas extraordinárias no dia: 60% (sessenta por cento) em relação a normal; b) as demais em dias normais: 80% (oitenta por cento) em relação a hora normal; c) as horas extraordinárias realizadas aos domingos e feriados sofrerão um acréscimo de 100% (cem por cento) em relação as normais; Parágrafo Primeiro: As horas extras serão sempre remuneradas pelos valores atualizados dos salários bem como, o Repouso Semanal Remunerado, será pago à razão de 1/6 (um sext…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 80.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 80.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 80.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 80.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -2058,7 +3802,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": null,
@@ -2071,7 +3828,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -2375,7 +4145,53 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA SÉTIMA - HORAS EXTRAS\nO pagamento das horas extras será efetuado no mês subsequente a sua execução e apuração.\n\nParágrafo Primeiro - Não será aplicada essa norma relativa ao Banco de Horas para empresas que já\npossuam Acordo de Banco de Horas com o sindicato laboral, devidamente registrado no Ministério do\nTrabalho e Emprego – MTE, conforme legislação específica.\n\nParágrafo Segundo – O descumprimento do presente artigo acarretará penalidade prevista na Vigésima\nCláusula desta Convenção Coletiva de Trabalho.\n\n\n}\n\n\n                      LEANDRO RODRIGUES DE ANDRADE\n                          Membro de Diretoria Colegiada\nSIND DOS TRAB EM EMP E ORGAOS PUBLICOS E PRIVADOS DE PROC DE DADOS SERV DE\n                  INFORMAT SIMIL. E PROF DE PROC DADOS PB\n\n\n\n                      JOSE MARCONI MEDEIROS DE SOUZA\n                                   Presidente\n    FEDERACAO DO COMERCIO DE BENS, SERVICOS E TURISMO DO ESTADO DA PARAIBA\n\n\n\n                    GUILHERME MARCONI COUTINHO DE SOUZA\n                                    Presidente\n    SINDICATO DAS EMPRESAS DE SERVICOS DE INFORMATICA DO ESTADO DA PARAIBA\n\n\n                                             ANEXOS\n                        ANEXO I - EDITAL DE CONVOCAÇÃO DE ASSEMBLEIA\n\n\n\nEDITAL DE CONVOCAÇÃO DE ASSEMBLEIA, REALIZADA EM 08 DE SETEMBRO DE 2025. Anexo\n(PDF)\n\f                                  ANEXO II - LISTA DE PRESENÇA\n\n\n\nLISTA DE PRESENÇA DE ASSEMBLEIA DELIBERATIVA, REALIZADA EM 8 DE SETEMBRO DE\n2025. Anexo (PDF)\n\n\n\n                                 ANEXO III - ATA DE ASSEMBLEIA\n\n\n\nATA DE ASSEMBLEIA DELIBERATIVA, REALIZADA EM 8 DE SETEMBRO DE 2025. Anexo (PDF)\n\n\n  A autenticidade deste documento poderá ser confirmada na página do Ministerio do Trabalho e Emprego\nna Internet, no endereço http://www.mte.gov.br.",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 75.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PB/Sindpd/CCT_2025-2026_Sindpd-PB.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 75.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PB/Sindpd/CCT_2025-2026_Sindpd-PB.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 75.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PB/Sindpd/CCT_2025-2026_Sindpd-PB.pdf",
+              "observacao": "Hora extra — Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Dia útil",
+              "valor": 75.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PB/Sindpd/CCT_2025-2026_Sindpd-PB.pdf",
+              "observacao": "Hora extra — Dia útil"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -2554,7 +4370,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de adicional noturno não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -2567,7 +4396,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -2593,7 +4435,64 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA SEXTA - PRAZO DE PAGAMENTO DAS HORAS EXTRAORDINÁRIAS\nAs horas extras efetivamente prestadas pelos empregados até 15 (quinze) dias antes da data do pagamento da folha do mês ser–lhes–ão p\nde pagamento, enquanto as horas extras referentes aos últimos 15 (quinze) dias serão incluídas na folha do mês subsequente.",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Hora extra — Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Hora extra — Sábado"
+            },
+            {
+              "cargo_ou_funcao": "Dia útil",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Hora extra — Dia útil"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -2606,7 +4505,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 40.0,
@@ -2619,7 +4531,20 @@
           "clausula": "CLÁUSULA QUADRAGÉSIMA TERCEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA TERCEIRA - JORNADA DE TRABALHO Fica ajustado que as jornadas normais de trabalho dos empregados em processamento de dados serão: a) Digitadores e/ou operador de equipamento de entrada e transmissão de dados, operadores e/ou técnicos de operação e monitoraçã mainframe etc.) e auxiliares e/ou assistentes de informática ou de tecnologia da informação, quando do desempenho de atividades semel e/ou operador de equipamento de entrada e transmissão de dados e operadores e/ou técnicos de operação e monitoração (microcomputado (trinta) horas semanais; b) Demais empregados, inclusi…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -2868,7 +4793,31 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica assegurado para os empregados abrangidos por este Acordo Coletivo de Trabalho, o piso salarial de R$ 1.373,44 (Hum mil trezentos e setenta e três reais e quarenta e quatro centavos) para jornada de 6h e o piso salarial de R$ 1.675,29 (Hum mil seiscentos e setenta e cinco reais e vinte e nove centavos) para jornada de 8h. Para casos de proporcionalidade, será considerado o piso salarial da jornada de 8h. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Múltiplos valores identificados: 1373.44, 1675.29",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 6h",
+              "valor": 1675.29,
+              "jornada": "6h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 8h/dia",
+              "valor": 33.0,
+              "jornada": "8h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2881,7 +4830,20 @@
           "clausula": "CLÁUSULA SEXTA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA SEXTA - ADICIONAL NOTURNO O adicional noturno, devido a quem laborar neste horário, será de 30% (trinta por cento). AUXÍLIO ALIMENTAÇÃO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -2894,7 +4856,44 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 6h",
+              "valor": 1675.29,
+              "jornada": "6h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 8h/dia",
+              "valor": 33.0,
+              "jornada": "8h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": null
+            }
+          ],
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -2933,7 +4932,20 @@
           "clausula": "CLÁUSULA VIGÉSIMA OITAVA - PLANTÃO DE SOBREAVISO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA OITAVA - PLANTÃO DE SOBREAVISO Somente aos empregados que ficarem à disposição da Empresa, nos períodos fora da jornada normal de trabalho, será assegurado o pagamento de 1/3 (um terço) do salário normal, nos termos da Súmula 229 do TST. RELAÇÕES SINDICAIS CONTRIBUIÇÕES SINDICAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 40.0,
@@ -2946,7 +4958,20 @@
           "clausula": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO A jornada de trabalho para os trabalhadores será de 40 (quarenta) horas semanais, as quais deverão ser executadas em 8 (oito) horas diárias de segunda a sexta. Parágrafo Único - Para o caso de horas excedentes às 40 horas semanais, poderão as mesmas serem compensadas mediante celebração de Acordo de Banco de Horas. PRORROGAÇÃO/REDUÇÃO DE JORNADA",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -2977,7 +5002,20 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais)a partir do dia 1º de janeiro de 2025. Para as demais atividades cuja jornada seja de 44 (quarenta e quatro) horas semanais, e 220 horas mensais, o piso mínimo será de R$1.590,40 (mil, quinhentos e noventa reais e quarenta centavos) a partir de 1º de janeiro de 2025. PARÁGRAFO PRIMEIRO: As empresas que não concederam o reajuste em janeiro, poderão pagar o retroativo até a folha de pagamentos de abril/2025. PA…",
           "observacao": "Múltiplos valores identificados: 1518.0, 1590.4",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 220h",
+              "valor": 22.15,
+              "jornada": "220h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2990,7 +5028,20 @@
           "clausula": "CLÁUSULA DÉCIMA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA DÉCIMA - ADICIONAL NOTURNO O adicional noturno será remunerado com o acréscimo de 20% (vinte por cento) sobre o valor da hora de trabalho, entre as 22h00min e 5h00min da manhã, considerando-se a hora noturna com duração de 52 minutos e 30 segundos. COMISSÕES",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 20h/semana",
+              "valor": 20.0,
+              "jornada": "20h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Escala de 20h semanais identificada na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 11.4,
@@ -3003,7 +5054,33 @@
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - AUXÍLIO REFEIÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - AUXÍLIO REFEIÇÃO As empresas fornecerão aos trabalhadores que estiverem no exercício de suas atividades regulares, e para os dias efetivamente trabalhados vale-refeição ou alimentação por mês, nos seguintes valores faciais: a) As empresas fornecerão, a partir de 01 de janeiro de 2025, o mencionado benefício com valor facial mínimo R$11,40 (onze reais e quarenta centavos), passando para R$11,67 (onze reais e sessenta e sete centavos) a partir de 01 de maio de 2025, passando para R$11,94 (onze reais e noventa e quatro centavos) a partir de 01 de outubro de 2025, para os…",
           "observacao": "Múltiplos valores identificados: 11.4, 11.67, 11.94, 22.15, 22.68, 23.21",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 220h",
+              "valor": 22.15,
+              "jornada": "220h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": null
+            }
+          ],
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 20h/semana",
+              "valor": 20.0,
+              "jornada": "20h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Escala de 20h semanais identificada na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -3029,7 +5106,31 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As horas extras serão remuneradas com o acréscimo de 50% (cinquenta por cento) sobre o valor da hora normal. As horas extras prestadas em dias de repouso, feriados ou dias já compensados, desde que o respectivo descanso não seja concedido em outros dias, serão pagas em dobro, além da remuneração desses dias, já incluídas no salário. ADICIONAL NOTURNO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3042,7 +5143,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 20h/semana",
+              "valor": 20.0,
+              "jornada": "20h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Escala de 20h semanais identificada na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 36.0,
@@ -3055,7 +5169,20 @@
           "clausula": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO A duração da jornada diária efetiva de trabalho dos trabalhadores de operadores de mesas telefônicas e telefonistas em geral, trabalhadores em postos de serviços de telefonia, televendas, disk serviços, tele recados, tele chamadas, tele cobrança via tele atendimento e call centers, telemarketing receptivos e ativos, oferecem serviços e produtos, realizam pesquisas, fazem serviços de cobranças e cadastramento de clientes, sempre via tele atendimento, seguindo roteiros e scripts planejados e controlados para captar, reter ou recuperar clientes seg…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 20.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 20h/semana",
+              "valor": 20.0,
+              "jornada": "20h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+              "observacao": "Escala de 20h semanais identificada na CCT"
+            }
+          ]
         }
       }
     },
@@ -3138,7 +5265,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinditob/ACT 2025-2026_SINDTOB.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3195,7 +5335,55 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais) a partir de 01/05/2025. Parágrafo Primeiro: Para jornadas de trabalho inferiores a 180 horas o salário poderá ser proporcional ao piso acima definido. Parágrafo Segundo: O piso salarial mínimo para os empregados das empresas participantes de licitação perante os órgãos estabelecidos na Lei 14.133/2021 (administração direta, os fundos especiais, as autarquias, as fundações públicas, as empresas públicas, as sociedades de economia mist…",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0, 353.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "mínimo",
+              "valor": 1518.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            }
+          ],
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 180h/dia",
+              "valor": 9.99,
+              "jornada": "180h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 7h",
+              "valor": 12.8,
+              "jornada": "7h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 220h",
+              "valor": 20.73,
+              "jornada": "220h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3221,7 +5409,42 @@
           "clausula": "CLÁUSULA DÉCIMA PRIMEIRA - VALE REFEIÇAO / VALE ALIMENTAÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA PRIMEIRA - VALE REFEIÇAO / VALE ALIMENTAÇÃO As empresas fornecerão aos empregados, vale refeição/vale alimentação e reajustarão os valores praticados em 31/12/2024 em 4% (quatro por cento), sendo 2% (dois por cento) em maio/2025, sobre os valores praticados em 31/12/2024 e 2% (dois por cento) em outubro/2025, sobre os valores praticados em 31/12/2024. Parágrafo Primeiro: Respeitado o valor estipulado na CCT/2024, bem como o praticado atualmente pelas empresas, para os empregados com jornada de 180 horas/mês, ou seja, superior a 4 (quatro) e até 6 (seis) horas diárias, o vale-re…",
           "observacao": "Múltiplos valores identificados: 9.99, 10.19, 10.39, 12.8, 13.06, 13.31, 20.73, 21.14, 21.56",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 180h/dia",
+              "valor": 9.99,
+              "jornada": "180h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 7h",
+              "valor": 12.8,
+              "jornada": "7h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 220h",
+              "valor": 20.73,
+              "jornada": "220h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -3356,7 +5579,20 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS As horas extras excedentes laboradas em dias úteis serão acrescidas de 50% (cinquenta por cento) do valor da hora normal, e as horas extras laboradas em dias não úteis serão acrescidas de 100% (cem por cento) em relação ao valor da hora normal.",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Dia útil",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "observacao": "Hora extra — Dia útil"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3631,7 +5867,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 8h",
+              "valor": 37.0,
+              "jornada": "8h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3657,7 +5906,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 8h",
+              "valor": 37.0,
+              "jornada": "8h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -3683,7 +5945,31 @@
           "clausula": "CLÁUSULA DÉCIMA - ADICIONAIS - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - ADICIONAIS - HORAS EXTRAS As horas extraordinárias subsequentes às duas primeiras serão remuneradas com adicional de 75% (setenta e cinco por cento). ADICIONAL DE TEMPO DE SERVIÇO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 40.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 40.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3740,7 +6026,20 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 1º de janeiro de 2025, fica estabelecido o piso salarial dos Operadores de Mesas Telefônicas no valor de R$ 1.694,66 (um mil, seiscentos e noventa e quatro reais e sessenta e seis centavos), devendo ser adequado ao piso salarial regional quando revisado no estado do Rio Grande do Sul, caso o piso regional seja superior. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "empregado falecido, limitado ao valor",
+              "valor": 7683.21,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4010,7 +6309,20 @@
           "clausula": "CLÁUSULA SÉTIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SÉTIMA - HORAS EXTRAS As horas extraordinárias praticadas em dias normais de trabalho, serão remuneradas com adicional de 70% (setenta por cento); as realizadas em dia destinado ao descanso semanal remunerado ou feriado, serão remuneradas com adicional de 100% (cem por cento). ADICIONAL NOTURNO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4119,7 +6431,31 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias de segunda a sexta feira, serão pagas com acréscimo de 60% (sessenta por cento) sobre a hora normal. As horas extras efetuadas aos sábados, até o limite de 04 (quatro horas), serão pagas com 60% (sessenta por cento) de acréscimo sobre a hora normal. As demais horas extras dos sábados serão pagas com 100% (cem por cento) de acréscimo sobre a hora normal. Quando efetuadas aos domingos e feriados, todas as horas extras serão acrescidas de 100% (cem por cento) sobre a hora normal. § 1º - Fica assegurado ao empregado que tenha sua jorna…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "observacao": "Hora extra — Sábado"
+            },
+            {
+              "cargo_ou_funcao": "Dia útil",
+              "valor": 30.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "observacao": "Hora extra — Dia útil"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4176,7 +6512,33 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica convencionado que o piso da categoria, assim entendido como o menor salário pago pelas empresas, será de R$ 1.792,00 (mil, setecentos e noventa e dois reais) a partir da folha salarial do mês de julho/2025. Parágrafo Primeiro: Para efeito de piso por função serão considerados os seguintes cargos e salários, conforme a tabela abaixo: CARGOS 01/07/2025 ALMOXARIFE R$ 1.851,24 CABISTA I R$ 1.792,00 CABISTA II R$ 2.287,92 CABISTA III R$ 2.531,03 INSTALADOR DTH R$ 1.792,00 LIDER DE OBRAS / ENCARREGADO R$ 2.531,02 OFICIAL DE REDE R$ 1.792,00 OPERADOR MULTIFUNCIO…",
           "observacao": "Múltiplos valores identificados: 1792.0, 1851.24, 2287.92, 2531.03, 2531.02, 2191.83, 3701.02, 1794.94, 2289.31, 2535.16, 2845.5",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_cargo": [
+            {
+              "cargo_ou_funcao": "funeral até o limite",
+              "valor": 5000.0,
+              "jornada": null,
+              "tipo": "valor_mensal",
+              "unidade": "BRL",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": null
+            }
+          ],
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 44h",
+              "valor": 30.59,
+              "jornada": "44h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4189,7 +6551,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de adicional noturno não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 30.59,
@@ -4202,7 +6577,33 @@
           "clausula": "CLÁUSULA SEXTA - VALE REFEIÇÃO",
           "trecho_fonte": "CLÁUSULA SEXTA - VALE REFEIÇÃO As empresas concederão aos seus empregados com jornada de 44 (quarenta e quatro) horas semanais o Benefício Alimentação, cujo fornecimento dar-se-á por dia efetivo de trabalho, sendo o valor face do vale alimentação/refeição de R$30,59 (trinta reais e cinquenta e nove centavos), a partir de 01/07/2025, por dia efetivamente trabalhado. Parágrafo Primeiro: As cargas nos cartões VA/VR serão realizadas no primeiro dia útil de cada mês. Parágrafo Segundo: Na hipótese de trabalho extraordinário dos empregados igual ou superior a duas horas ele receberá um auxílio alime…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 44h",
+              "valor": 30.59,
+              "jornada": "44h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": null
+            }
+          ],
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -4241,7 +6642,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": null,
@@ -4254,7 +6668,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 44h/semana",
+              "valor": 44.0,
+              "jornada": "44h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "observacao": "Escala de 44h semanais identificada na CCT"
+            }
+          ]
         }
       }
     },
@@ -4446,7 +6873,20 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS\n",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SE/Sindtic/CCT_2025-2027 - SINDTIC SE.pdf",
+              "observacao": "Hora extra — Sábado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4625,7 +7065,20 @@
           "clausula": "CLÁUSULA DÉCIMA PRIMEIRA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA DÉCIMA PRIMEIRA - ADICIONAL NOTURNO A remuneração do trabalho noturno será acrescida do adicional de 35% (trinta e cinco por cento), para fins do artigo 73 da CLT. OUTROS ADICIONAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 28.32,
@@ -4638,7 +7091,20 @@
           "clausula": "CLÁUSULA DÉCIMA QUARTA - VALE REFEIÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA QUARTA - VALE REFEIÇÃO O empregador concederá 22 (vinte e dois) vales refeição por mês, no valor de R$ 28,32 (vinte e oito reais e trinta e dois centavos) cada um, ao empregado que cumpra jornada de trabalho igual ou superior 40 horas semanais. Parágrafo primeiro - O empregado com jornada de trabalho estabelecida no caput e que trabalhe menos de cinco dias na semana (ou regime de escala), receberá quantidade de vales proporcionalmente aos dias trabalhados. Parágrafo segundo - Os vales serão entregues até o dia de pagamento do salário mensal e seu valor será integralmente subsid…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -4677,7 +7143,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": null,
@@ -4690,7 +7169,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -4882,7 +7374,20 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA SÉTIMA - REFLEXO DAS HORAS EXTRAS E ADICIONAL NOTURNO\nA média das horas extras habituais e do adicional noturno refletirá no pagamento das férias, gratificação natalina e descanso semanal remunerado",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "observacao": "Hora extra — Domingo"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4939,7 +7444,20 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS.",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 1/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Fica assegurado para os empregados abrangidos por esta CONVENÇÃO COLETIVA DE TRABALHO, salário normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais; B) aplicável aos empregados integrantes da menor função e/ou atividade administrativa: R$ 1.615,00 (um mil, seicentos e quinze rea…",
           "observacao": "Múltiplos valores identificados: 2025.0, 1615.0, 2245.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 30h",
+              "valor": 1615.0,
+              "jornada": "30h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4952,7 +7470,31 @@
           "clausula": "CLÁUSULA DÉCIMA TERCEIRA - HORAS NOTURNAS.",
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - HORAS NOTURNAS. As horas noturnas previstas pelo artigo 73 da CLT ficam, por força da presente CONVENÇÃO COLETIVA DE TRABALHO, ampliadas para o período das 22:00 (vinte e duas) horas de um dia às 06:00 (seis) horas do dia seguinte e serão remuneradas com adicional de 30% (trinta por cento),preservados os percentuais superiores, condições de transporte e de alimentação que já venham sendo adotados pelas Empresas. Parágrafo único – As empresas deverão garantir transporte gratuitamente ao empregado, durante o período de trabalho compreendido no horário das 22:00 (vinte …",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 28.0,
@@ -4965,7 +7507,44 @@
           "clausula": "CLÁUSULA DÉCIMA SÉTIMA - AUXÍLIO REFEIÇÃO E/OU AUXÍLIO ALIMENTAÇÃO.",
           "trecho_fonte": "CLÁUSULA DÉCIMA SÉTIMA - AUXÍLIO REFEIÇÃO E/OU AUXÍLIO ALIMENTAÇÃO. As Empresas deverão fornecer Auxílio Refeição e/ou Auxílio Alimentação no valor mínimo de R$ 28,00 (vinte e oito reais) por dia, 22 (vinte e dois) dias por mês, deduzidos os descontos legais, quando houver, do mês precedente, pagos antecipadamente, para jornada de oito horas diárias. Parágrafo 1º - Faculta-se à Empresa os benefícios da Lei do PAT - Lei nº 6.321, de 14 de abril de 1976, regulamentada pelo Decreto nº 5, de 14 de janeiro de 1991. Parágrafo 2º - As Empresas que forneçam Auxílio Refeição para os seus empregados pod…",
           "observacao": "Múltiplos valores identificados: 28.0, 30.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 30h",
+              "valor": 1615.0,
+              "jornada": "30h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": null
+            }
+          ],
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -5004,7 +7583,31 @@
           "clausula": "CLÁUSULA DÉCIMA QUARTA - ADICIONAL DE SOBREAVISO.",
           "trecho_fonte": "CLÁUSULA DÉCIMA QUARTA - ADICIONAL DE SOBREAVISO. A todos os empregados que ficarem à disposição da Empresa, nos períodos fora da jornada normal de trabalho, será assegurado o pagamento de 1/3 (um terço) da hora normal por hora de sobreaviso. Parágrafo 1º - Caso o sobreaviso resulte em trabalho efetivo, a remuneração deverá ser efetuada conforme a Cláusula \"Hora Extraordinária\" e seus parágrafos, desta CONVENÇÃO COLETIVA DE TRABALHO. Parágrafo 2º - O sobreaviso, seu início e seu fim deverão ser comunicados por escrito ao empregado. OUTROS ADICIONAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": 30.0,
@@ -5017,7 +7620,31 @@
           "clausula": "CLÁUSULA TRIGÉSIMA OITAVA - JORNADA DE TRABALHO.",
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA OITAVA - JORNADA DE TRABALHO. A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais e dos demais empregados será de 40 (quarenta) horas semanais. Parágrafo 1º - Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos intervalos de repouso serão computados na duração da jornada de trabalho para todos os fins e efeitos. Parágrafo 2º - Fica autorizado às empresas abrangidas por esta CONVENÇÃO COLETIVA DE TRABALHO o trabalho aos domingos e feriados, conforme a lei n.º 11.603/2007. A) As horas trabalhadas…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 40.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Jornada 30h/semana",
+              "valor": 30.0,
+              "jornada": "30h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 30h semanais identificada na CCT"
+            },
+            {
+              "cargo_ou_funcao": "Jornada 40h/semana",
+              "valor": 40.0,
+              "jornada": "40h/semana",
+              "tipo": "jornada_semanal",
+              "unidade": "h/semana",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "observacao": "Escala de 40h semanais identificada na CCT"
+            }
+          ]
         }
       }
     },
@@ -5427,7 +8054,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Dia útil",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/FINATI/ACORDO COLETIVO SINDICAL – FENATI MG.pdf",
+              "observacao": "Hora extra — Dia útil"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -5497,7 +8137,20 @@
           "clausula": "CLÁUSULA SÉTIMA - ADICIONAL NOTURNO",
           "trecho_fonte": "CLÁUSULA SÉTIMA - ADICIONAL NOTURNO A remuneração do trabalho noturno será acrescida do adicional de 25% (vinte e cinco por cento), para fins do art. 73 da CLT. AUXÍLIO ALIMENTAÇÃO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": null,
@@ -5510,7 +8163,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -5536,7 +8202,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -5549,7 +8228,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de sobreaviso não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         },
         "jornada": {
           "valor": null,
@@ -5562,7 +8254,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_escala": [
+            {
+              "cargo_ou_funcao": "Escala 12x36",
+              "valor": null,
+              "jornada": "12x36",
+              "tipo": "jornada_escala",
+              "unidade": "regime",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+              "observacao": "Regime 12x36 identificado na CCT"
+            }
+          ]
         }
       }
     },
@@ -5593,7 +8298,31 @@
           "clausula": "CLÁUSULA TERCEIRA - REAJUSTE E PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - REAJUSTE E PISO SALARIAL Os salários dos empregados abrangidos pela presente convenção coletiva de trabalho serão reajustados em 01/05/2025, pelo percentual de 9% (Nove por cento) retroativo a data base. Parágrafo Primeiro: O salário-mínimo da categoria, vigente a partir de 1º de maio de 2025, será de R$ 2.149,06. Parágrafo Segundo: O piso salarial, a assiduidade e todos os benefícios previstos nesta negociação coletiva devem ser estendidos a todos os empregados da categoria sem exceções sob pena de aplicação das multas previstas nesta CCT e legislação laboral pertinente. P…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 06h/mês",
+              "valor": 2149.06,
+              "jornada": "06h/mês",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 08h/mês",
+              "valor": 3159.56,
+              "jornada": "08h/mês",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5619,7 +8348,31 @@
           "clausula": "CLÁUSULA SÉTIMA - AUXÍLIO ALIMENTAÇÃO",
           "trecho_fonte": "CLÁUSULA SÉTIMA - AUXÍLIO ALIMENTAÇÃO As empresas ficam obrigadas a conceder aos seus empregados, nos dias efetivamente trabalhados, o auxílio alimentação. A presente parcela não integra os salários, por não ter caráter de contraprestação de serviços. Parágrafo Primeiro: O valor facial do tíquete, para os empregados que trabalham até 180 (cento e oitenta) horas, o valor será de R$ 55,00 (cinquenta e cinco reais), e para os empregados que trabalham até 200 (duzentas) horas, o valor será de R$ 60,00 (sessenta reais). Parágrafo segundo A participação dos empregados filiados ao sindicato laboral S…",
           "observacao": "Múltiplos valores identificados: 55.0, 60.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 06h/mês",
+              "valor": 2149.06,
+              "jornada": "06h/mês",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 08h/mês",
+              "valor": 3159.56,
+              "jornada": "08h/mês",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -5645,7 +8398,53 @@
           "clausula": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS As dobras, assim entendidas duplicação de jornadas eventuais, serão remuneradas em 70% (setenta por cento) acima do valor da hora normal de segunda a sábado e aos domingos e feriados 120% (cento e vinte por cento). Auxílio Alimentação",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 120.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Domingo/Feriado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": "Hora extra — Domingo/Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Domingo",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": "Hora extra — Domingo"
+            },
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": "Hora extra — Feriado"
+            },
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 70.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+              "observacao": "Hora extra — Sábado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -6029,7 +8828,31 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL https://www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?nrSolicitacao=MR058539/2024 1/21 10/01/2025, 15:21 Mediador - Extrato Convenção Coletiva Fica estipulado o piso salarial mensal de R$1.412,00 (mil, quatrocentos e doze reais) a partir de 01/01/2024, considerando a carga horária mensal de 180 horas. Parágrafo Primeiro: Para os trabalhadores com jornada inferior a 180 (cento e oitenta) horas mensais, o salário deverá observar proporcionalmente o piso estabelecido no “caput”. Parágrafo Segundo: Nos valores acima não está sendo considerada a remuner…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 180h",
+              "valor": 6.89,
+              "jornada": "180h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 10.85,
+              "jornada": "200/220h",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6055,7 +8878,31 @@
           "clausula": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BÁSICA",
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - AUXÍLIO LANCHE / VALE REFEIÇÃO / CESTA BÁSICA As empresas fornecerão aos empregados que estiverem no exercício de suas atividades regulares, para os dias efetivamente trabalhados, vale-refeição ou alimentação por mês, nos seguintes valores faciais: Parágrafo Primeiro: O valor facial do vale refeição dos empregados contratados com jornada de 180 horas mensais, por dia efetivamente trabalhado, será de R$6,89 (seis reais e oitenta e nove centavos) a partir de 01/06/2024, passando para R$7,02 (sete reais e dois centavos) a partir de 01/09/2024. Parágrafo Segundo: O valor…",
           "observacao": "Múltiplos valores identificados: 6.89, 7.02, 10.85, 11.07",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 180h",
+              "valor": 6.89,
+              "jornada": "180h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
+              "observacao": null
+            },
+            {
+              "cargo_ou_funcao": "Jornada 200/220h",
+              "valor": 10.85,
+              "jornada": "200/220h",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/dia",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": 120.0,
@@ -6138,7 +8985,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 8h/dia",
+              "valor": 25.3,
+              "jornada": "8h/dia",
+              "tipo": "piso_salarial",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Finati Sidierj RJ/ACORDO COLETIVO SINDICAL – FENATI SINDIERJ RJ.pdf",
+              "observacao": null
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6164,7 +9024,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de auxílio alimentação não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_jornada": [
+            {
+              "cargo_ou_funcao": "Jornada 8h/dia",
+              "valor": 25.3,
+              "jornada": "8h/dia",
+              "tipo": "auxilio_alimentacao",
+              "unidade": "BRL/mês",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Finati Sidierj RJ/ACORDO COLETIVO SINDICAL – FENATI SINDIERJ RJ.pdf",
+              "observacao": null
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -6408,7 +9281,20 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Feriado",
+              "valor": 100.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/RJ/Sinditob/ACT 2025-2026_SINDTOB.pdf",
+              "observacao": "Hora extra — Feriado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -7171,7 +10057,20 @@
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS As Empresas remunerarão as horas extraordinárias realizadas de segunda-feira a sábado com adicional de 50% (cinquenta por cento). Aos domingos e feriados, o adicional será de 100% (cem por cento). As Empresas manterão as condições mais vantajosas existentes e aplicáveis aos contratos vigentes. ADICIONAL NOTURNO www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR023975/2021 4/19 25/04/2022 18:40 Mediador - Extrato Convenção Coletiva",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "por_modalidade": [
+            {
+              "cargo_ou_funcao": "Sábado",
+              "valor": 50.0,
+              "jornada": null,
+              "tipo": "percentual_hora_extra",
+              "unidade": "%",
+              "status_parametro": "extraido_para_revisao",
+              "origem_regra": "cct_extraida",
+              "fonte_documento": "CCT/TO/Sinttel/CCT_SINTTEL TO_2020-2022.pdf",
+              "observacao": "Hora extra — Sábado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
