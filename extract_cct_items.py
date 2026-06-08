@@ -212,10 +212,17 @@ def build_item(
     clausula_heading: str,
     trecho_fonte: str,
     observacao: str | None = None,
+    param_type: str | None = None,
 ) -> dict:
     """
     Assemble a single itens_cct item dict, choosing the appropriate
     status based on the number of values found.
+
+    When *param_type* is provided and multiple distinct BRL values are detected,
+    ``classify_by_dimension`` is invoked.  If at least one dimension is matched,
+    the item receives ``status_parametro = "extraido_para_revisao"`` and the
+    populated sub-structures (``por_cargo``, ``por_jornada``, etc.) are merged in.
+    Otherwise the existing ``"conflito"`` fallback is preserved (AC5).
     """
     if not values:
         obs = observacao or "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
@@ -235,16 +242,39 @@ def build_item(
     else:
         valor_textual = distinct_vals[0] if distinct_vals else None
 
+    classification: dict = {}
     if len(distinct_vals) > 1:
-        status = "conflito"
-        obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
-        if observacao:
-            obs = f"{observacao}; {obs}"
+        if param_type and unidade.startswith("BRL"):
+            float_vals = [v for v in values if isinstance(v, float)]
+            if len(float_vals) >= 2:
+                classification = classify_by_dimension(
+                    regra_textual or trecho_fonte, float_vals, param_type
+                )
+
+        if classification:
+            status = "extraido_para_revisao"
+            obs = f"Valores classificados por dimensão: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
+            # Top-level valor holds the minimum value across all classified entries
+            all_classified_values = [
+                entry["valor"]
+                for entries in classification.values()
+                for entry in entries
+                if isinstance(entry.get("valor"), float)
+            ]
+            if all_classified_values:
+                valor = min(all_classified_values)
+        else:
+            status = "conflito"
+            obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
     else:
         status = "extraido_para_revisao"
         obs = observacao
 
-    return {
+    item = {
         "valor": valor,
         "percentual": percentual,
         "valor_textual": valor_textual,
@@ -257,6 +287,11 @@ def build_item(
         "observacao": obs,
         "status_parametro": status,
     }
+
+    # Merge classification sub-structures when present
+    item.update(classification)
+
+    return item
 
 
 def _item_not_found(
@@ -302,6 +337,167 @@ def has_negative_clause(text: str) -> bool:
     ]
     text_n = normalize(text)
     return any(re.search(p, text_n) for p in neg_patterns)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Classification by dimension
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Each entry is (normalized_regex_pattern, human_readable_label).
+# Patterns are matched against normalize()'d text (lowercase, no accents).
+# Ordered from most specific to most generic within each dimension.
+DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "cargo": [
+        # Specific role combos first
+        (r"auxiliar\s+administrativo", "Auxiliar Administrativo"),
+        (r"tecnico\s+de\s+suporte", "Técnico de Suporte"),
+        (r"piso\s+(?:salarial\s+)?(?:para\s+(?:os?\s+)?)?tecnico", "Técnico"),
+        (r"piso\s+(?:salarial\s+)?(?:para\s+(?:os?\s+)?)?administrativo", "Administrativo"),
+        (r"\boperador(?:es)?\b", "Operador"),
+        (r"\batendente(?:s)?\b", "Atendente"),
+        (r"\brecepcionista(?:s)?\b", "Recepcionista"),
+        (r"\banalista(?:s)?\b", "Analista"),
+        (r"\bsupervisor(?:es)?\b", "Supervisor"),
+        # Used by PLR
+        (r"\boperacional\b", "Operacional"),
+    ],
+    "jornada": [
+        (r"44\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "44h semanais"),
+        (r"40\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "40h semanais"),
+        (r"36\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "36h semanais"),
+        (r"30\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "30h semanais"),
+        (r"\bhorista(?:s)?\b", "Horista"),
+        (r"\bmensalista(?:s)?\b", "Mensalista"),
+        # Used by auxilio_alimentacao / VR / VA
+        (r"jornada\s+(?:de\s+)?6\s*(?:horas?|h)\b", "6 horas"),
+        (r"jornada\s+(?:de\s+)?8\s*(?:horas?|h)\b", "8 horas"),
+        (r"\bintegral\b", "Jornada Integral"),
+        (r"\bparcial\b", "Jornada Parcial"),
+        # Used by adicional_noturno / jornada
+        (r"\bnoturno\b", "Horário Noturno"),
+        (r"horas?\s+noturnas?", "Hora Noturna"),
+    ],
+    "modalidade": [
+        # Used by hora_extra
+        (r"dias?\s+uteis?", "Dias Úteis"),
+        (r"\bsabado(?:s)?\b", "Sábado"),
+        (r"\bdomingo(?:s)?\b", "Domingo"),
+        (r"\bferiado(?:s)?\b", "Feriado"),
+        # Work modality
+        (r"\bpresencial\b", "Presencial"),
+        (r"\bremoto\b", "Remoto"),
+        (r"\bhibrido\b", "Híbrido"),
+        # Used by sobreaviso
+        (r"\bacionado(?:s)?\b", "Acionado"),
+        (r"\bdisponivel\b", "Disponível"),
+    ],
+    "escala": [
+        (r"12\s*[xX×]\s*36", "12×36"),
+        (r"6\s*[xX×]\s*1\b", "6×1"),
+        (r"5\s*[xX×]\s*2\b", "5×2"),
+        (r"5\s*[xX×]\s*1\b", "5×1"),
+    ],
+}
+
+# Maps param_type → which dimensions to try (in order).
+# Unlisted param types fall back to all four dimensions.
+PARAM_PATTERN_MAP: dict[str, list[str]] = {
+    "piso_salarial": ["cargo", "jornada", "modalidade", "escala"],
+    "auxilio_alimentacao": ["jornada", "modalidade"],
+    "hora_extra": ["modalidade"],
+    "adicional_noturno": ["jornada", "escala"],
+    "sobreaviso": ["modalidade"],
+    "plr": ["cargo"],
+    "jornada": ["jornada", "escala"],
+}
+
+# How each dimension labels its primary key in the output objects
+_DIM_LABEL_KEY: dict[str, str] = {
+    "cargo": "cargo",
+    "jornada": "jornada",
+    "modalidade": "label",
+    "escala": "label",
+}
+
+
+def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
+    """
+    Classify multiple numeric values by dimension (cargo, jornada, modalidade, escala).
+
+    For each applicable dimension, the function searches for keyword patterns in the
+    clause text and associates nearby BRL values (drawn from *values*) with the matched
+    label.  The result is independent of any specific parameter — the caller supplies
+    *param_type* only to select the relevant pattern sets via PARAM_PATTERN_MAP.
+
+    Args:
+        text:       Full clause text (un-truncated) used for pattern matching.
+        values:     List of distinct float values extracted from the clause.
+        param_type: Identifier of the parameter being classified (e.g. "piso_salarial").
+                    Used to select the applicable dimension sets from PARAM_PATTERN_MAP.
+
+    Returns:
+        Dict containing only the dimensions for which at least one match was found.
+        Keys: "por_cargo", "por_jornada", "por_modalidade", "por_escala".
+        Each value is a list of dicts with fields:
+            - <dim_label_key> : str   — label for the matched category
+            - "valor"         : float — the associated BRL value
+            - "trecho_fonte"  : str   — the source line from the PDF
+    """
+    if len(values) < 2:
+        return {}
+
+    known_values: dict[float, float] = {round(v, 2): v for v in values}
+    dimensions = PARAM_PATTERN_MAP.get(param_type, list(DIMENSION_PATTERNS.keys()))
+
+    lines = text.split("\n")
+    lines_n = [normalize(line) for line in lines]
+
+    result: dict[str, list[dict]] = {}
+
+    for dim_name in dimensions:
+        patterns = DIMENSION_PATTERNS.get(dim_name, [])
+        if not patterns:
+            continue
+
+        entries: list[dict] = []
+        claimed: set[float] = set()  # values already assigned to this dimension
+        label_key = _DIM_LABEL_KEY.get(dim_name, "label")
+
+        for pattern, label in patterns:
+            # Find the first line that matches this pattern
+            matched_idx: int | None = None
+            for i, line_n in enumerate(lines_n):
+                if re.search(pattern, line_n):
+                    matched_idx = i
+                    break
+
+            if matched_idx is None:
+                continue
+
+            # Build a search window: matched line ± 1 adjacent line
+            start = max(0, matched_idx - 1)
+            end = min(len(lines), matched_idx + 2)
+            window = " ".join(lines[start:end])
+
+            # Find the first known, unclaimed BRL value in the window
+            matched_val: float | None = None
+            for v in first_brl_values(window):
+                key = round(v, 2)
+                if key in known_values and key not in claimed:
+                    matched_val = known_values[key]
+                    break
+
+            if matched_val is None:
+                continue
+
+            claimed.add(round(matched_val, 2))
+            trecho = _truncate(lines[matched_idx], 300)
+            entries.append({label_key: label, "valor": matched_val, "trecho_fonte": trecho})
+
+        if entries:
+            result[f"por_{dim_name}"] = entries
+
+    return result
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -352,6 +548,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="piso_salarial",
     )
 
 
