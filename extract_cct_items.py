@@ -36,6 +36,86 @@ JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
 EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Dimension classification patterns
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Each dict maps human-readable label → regex pattern (applied on normalized text).
+# These are intentionally extensible to cover future parameters beyond piso_salarial.
+
+CARGO_PATTERNS: dict[str, str] = {
+    "Piso Administrativo": r"piso\s+administrativo",
+    "Piso Técnico": r"piso\s+tecnico",
+    "Auxiliar Administrativo": r"auxiliar\s+administrativo",
+    "Técnico de Suporte": r"tecnico\s+de\s+suporte",
+    "Operador": r"\boperador\b",
+    "Atendente": r"\batendente\b",
+    "Recepcionista": r"\brecepcionista\b",
+    "Analista": r"\banalista\b",
+    "Supervisor": r"\bsupervisor\b",
+    # PLR / future parameters
+    "Técnico": r"\btecnico\b",
+    "Operacional": r"\boperacional\b",
+}
+
+JORNADA_PATTERNS: dict[str, str] = {
+    "44h semanais": r"44\s*(?:horas?|h)(?:\s+semanais?)?",
+    "40h semanais": r"40\s*(?:horas?|h)(?:\s+semanais?)?",
+    "36h semanais": r"36\s*(?:horas?|h)(?:\s+semanais?)?",
+    "30h semanais": r"30\s*(?:horas?|h)(?:\s+semanais?)?",
+    "Horista": r"\bhorista\b",
+    "Mensalista": r"\bmensalista\b",
+    # VR/VA and future parameters
+    "6h diárias": r"\b6\s*(?:horas?|h)(?:\s+diarias?)?\b|turno\s+de\s+6",
+    "8h diárias": r"\b8\s*(?:horas?|h)(?:\s+diarias?)?\b|turno\s+de\s+8",
+    "Integral": r"\bjornada\s+integral\b",
+    "Parcial": r"\bjornada\s+parcial\b",
+}
+
+MODALIDADE_PATTERNS: dict[str, str] = {
+    "Presencial": r"\bpresencial\b",
+    "Remoto": r"\bremoto\b|\bhome\s*office\b|\bteletrabalho\b",
+    "Híbrido": r"\bhibrido\b|\bhybrid\b",
+    # Hora extra / future parameters
+    "Dia Útil": r"\bdias?\s+uteis?\b",
+    "Sábado": r"\bsabados?\b",
+    "Domingo": r"\bdomingos?\b",
+    "Feriado": r"\bferiados?\b",
+    # Sobreaviso / future parameters
+    "Acionado": r"\bacionado\b",
+    "Disponível": r"\bdisponivel\b",
+}
+
+ESCALA_PATTERNS: dict[str, str] = {
+    "12x36": r"12\s*[xX×]\s*36",
+    "6x1": r"6\s*[xX×]\s*1",
+    "5x1": r"5\s*[xX×]\s*1",
+    "5x2": r"5\s*[xX×]\s*2",
+    # Adicional noturno / future parameters
+    "Horário Noturno": r"\bhorario\s+noturno\b|\bturno\s+noturno\b",
+}
+
+# Maps dimension key → (patterns dict, label field name used in output objects).
+# "cargo" and "jornada" use dedicated field names per AC1/AC2; others use "label".
+_DIMENSION_CONFIG: dict[str, tuple[dict[str, str], str]] = {
+    "cargo": (CARGO_PATTERNS, "cargo"),
+    "jornada": (JORNADA_PATTERNS, "jornada"),
+    "modalidade": (MODALIDADE_PATTERNS, "label"),
+    "escala": (ESCALA_PATTERNS, "label"),
+}
+
+# Which dimensions are applicable per param_type (extensible for future params).
+_PARAM_DIMENSIONS: dict[str, list[str]] = {
+    "piso_salarial": ["cargo", "jornada", "modalidade", "escala"],
+    "auxilio_alimentacao": ["jornada"],
+    "hora_extra": ["modalidade"],
+    "adicional_noturno": ["jornada", "escala"],
+    "sobreaviso": ["modalidade"],
+    "plr": ["cargo"],
+    "jornada": ["jornada", "escala"],
+}
+_DEFAULT_DIMENSIONS: list[str] = ["cargo", "jornada", "modalidade", "escala"]
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -143,6 +223,9 @@ def first_brl_values(text: str) -> list[float]:
     results = []
     seen = set()
     for raw in raw_values:
+        # Strip trailing punctuation that the greedy pattern may have captured
+        # e.g. "1.500,00," (followed by clause comma) or "1.800,00." (sentence dot)
+        raw = raw.rstrip(".,")
         # Normalize Brazilian number format: 1.540,47 → 1540.47
         clean = raw.replace(".", "").replace(",", ".")
         try:
@@ -212,10 +295,19 @@ def build_item(
     clausula_heading: str,
     trecho_fonte: str,
     observacao: str | None = None,
+    classification: dict | None = None,
 ) -> dict:
     """
     Assemble a single itens_cct item dict, choosing the appropriate
     status based on the number of values found.
+
+    Args:
+        classification: Optional result from classify_by_dimension().  When
+                        provided and non-empty, multiple values are resolved as
+                        "extraido_para_revisao" instead of "conflito", and the
+                        sub-structures (por_cargo, por_jornada, etc.) are merged
+                        into the returned item.  The top-level `valor` is set to
+                        the minimum classified BRL value (AC1).
     """
     if not values:
         obs = observacao or "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
@@ -236,15 +328,30 @@ def build_item(
         valor_textual = distinct_vals[0] if distinct_vals else None
 
     if len(distinct_vals) > 1:
-        status = "conflito"
-        obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
-        if observacao:
-            obs = f"{observacao}; {obs}"
+        if classification:
+            # Successful dimensional classification replaces "conflito" (AC1-3)
+            status = "extraido_para_revisao"
+            obs = observacao
+            # Top-level valor = minimum of all classified BRL values (AC1)
+            if unidade.startswith("BRL"):
+                all_classified_vals = [
+                    entry["valor"]
+                    for sub in classification.values()
+                    for entry in sub
+                    if isinstance(entry.get("valor"), float)
+                ]
+                if all_classified_vals:
+                    valor = min(all_classified_vals)
+        else:
+            status = "conflito"
+            obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
     else:
         status = "extraido_para_revisao"
         obs = observacao
 
-    return {
+    item = {
         "valor": valor,
         "percentual": percentual,
         "valor_textual": valor_textual,
@@ -257,6 +364,11 @@ def build_item(
         "observacao": obs,
         "status_parametro": status,
     }
+
+    if classification:
+        item.update(classification)
+
+    return item
 
 
 def _item_not_found(
@@ -286,6 +398,74 @@ def _truncate(text: str | None, max_len: int) -> str | None:
     if len(text) > max_len:
         return text[:max_len] + "…"
     return text
+
+
+def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
+    """
+    Classify multiple CCT values by cargo, jornada, modalidade, or escala.
+
+    This function is generic and decoupled from any specific parameter: it
+    receives the clause text, the numeric values already extracted and a
+    param_type identifier (used only to select the applicable set of
+    dimensions).  It never references piso_salarial or any other parameter
+    directly.
+
+    Args:
+        text:       Full clause text (original, not normalized) from the PDF.
+        values:     Distinct float values found in the clause (e.g. BRL amounts).
+        param_type: Key from _PARAM_DIMENSIONS that selects which dimensions to
+                    probe (e.g. "piso_salarial", "hora_extra").  Unknown keys
+                    fall back to all four dimensions.
+
+    Returns:
+        Dict containing zero or more of:
+            por_cargo      – list of {cargo, valor, trecho_fonte}
+            por_jornada    – list of {jornada, valor, trecho_fonte}
+            por_modalidade – list of {label, valor, trecho_fonte}
+            por_escala     – list of {label, valor, trecho_fonte}
+
+        Returns empty dict when no dimension can be matched with ≥ 2 values,
+        preserving the "conflito" fallback for the caller (AC5).
+    """
+    if len(values) < 2:
+        return {}
+
+    text_n = normalize(text)
+    value_set = {round(v, 2) for v in values}
+    applicable_dims = _PARAM_DIMENSIONS.get(param_type, _DEFAULT_DIMENSIONS)
+    result: dict = {}
+
+    for dim_key in applicable_dims:
+        patterns_dict, label_field = _DIMENSION_CONFIG[dim_key]
+        classified: list[dict] = []
+        matched_values: set[float] = set()
+
+        for label, pattern in patterns_dict.items():
+            for m in re.finditer(pattern, text_n):
+                # Search for BRL values in a ±300-char window around the match.
+                win_start = max(0, m.start() - 300)
+                win_end = min(len(text), m.end() + 300)
+                window = text[win_start:win_end]
+
+                for bval in first_brl_values(window):
+                    key = round(bval, 2)
+                    if key in value_set and key not in matched_values:
+                        matched_values.add(key)
+                        classified.append(
+                            {
+                                label_field: label,
+                                "valor": bval,
+                                "trecho_fonte": _truncate(window, 300),
+                            }
+                        )
+                        break  # one value per pattern match is enough
+
+        # Require at least 2 distinct values classified to form a meaningful
+        # sub-structure (single-value classification gives no insight).
+        if len(classified) >= 2:
+            result[f"por_{dim_key}"] = classified
+
+    return result
 
 
 def has_negative_clause(text: str) -> bool:
@@ -333,7 +513,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
 
     values = first_brl_values(full_text)
 
-    # Detect piso type hints
+    # Detect piso type hints (preserved per AC6 / existing field semantics)
     text_n = normalize(full_text)
     if re.search(r"piso\s+tecnico", text_n):
         tipo = "piso_tecnico"
@@ -344,6 +524,13 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
     else:
         tipo = "piso_cct"
 
+    # When multiple values are found, attempt dimensional classification (AC1-4).
+    classification: dict | None = None
+    if len(values) > 1:
+        result = classify_by_dimension(full_text, values, "piso_salarial")
+        if result:
+            classification = result
+
     return build_item(
         values=values,
         regra_textual=full_text,
@@ -352,6 +539,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        classification=classification,
     )
 
 
