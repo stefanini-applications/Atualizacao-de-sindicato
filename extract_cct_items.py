@@ -212,10 +212,17 @@ def build_item(
     clausula_heading: str,
     trecho_fonte: str,
     observacao: str | None = None,
+    param_type: str | None = None,
 ) -> dict:
     """
     Assemble a single itens_cct item dict, choosing the appropriate
     status based on the number of values found.
+
+    When ``param_type`` is supplied and multiple distinct values are found,
+    ``classify_by_dimension`` is attempted.  A successful classification
+    populates ``por_cargo`` / ``por_jornada`` / ``por_modalidade`` /
+    ``por_escala`` sub-structures and sets ``status_parametro`` to
+    ``"extraido_para_revisao"`` instead of ``"conflito"``.
     """
     if not values:
         obs = observacao or "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
@@ -235,16 +242,30 @@ def build_item(
     else:
         valor_textual = distinct_vals[0] if distinct_vals else None
 
+    classification: dict = {}
+    if len(distinct_vals) > 1 and param_type and trecho_fonte:
+        float_values = [v for v in values if isinstance(v, float)]
+        classification = classify_by_dimension(trecho_fonte, float_values, param_type)
+
     if len(distinct_vals) > 1:
-        status = "conflito"
-        obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
-        if observacao:
-            obs = f"{observacao}; {obs}"
+        if classification:
+            # Structured classification succeeded — use minimum BRL value at top level
+            if unidade.startswith("BRL"):
+                float_values = [v for v in values if isinstance(v, float)]
+                if float_values:
+                    valor = min(float_values)
+            status = "extraido_para_revisao"
+            obs = observacao
+        else:
+            status = "conflito"
+            obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
     else:
         status = "extraido_para_revisao"
         obs = observacao
 
-    return {
+    item = {
         "valor": valor,
         "percentual": percentual,
         "valor_textual": valor_textual,
@@ -257,6 +278,8 @@ def build_item(
         "observacao": obs,
         "status_parametro": status,
     }
+    item.update(classification)
+    return item
 
 
 def _item_not_found(
@@ -286,6 +309,196 @@ def _truncate(text: str | None, max_len: int) -> str | None:
     if len(text) > max_len:
         return text[:max_len] + "…"
     return text
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Dimension classification
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Pattern dictionaries for each classification dimension.
+# Each entry is (regex, label) where regex is matched against normalized text.
+# Extend these dicts to support new parameters without touching classify_by_dimension.
+DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "cargo": [
+        (r"piso\s+(?:salarial\s+)?(?:do\s+)?t[eé]cnicos?", "piso_tecnico"),
+        (r"piso\s+(?:salarial\s+)?(?:do\s+)?administrativos?", "piso_administrativo"),
+        (r"auxiliar\s+administrativo", "auxiliar_administrativo"),
+        (r"t[eé]cnico\s+de\s+suporte", "tecnico_suporte"),
+        (r"operador(?:es)?", "operador"),
+        (r"atendente[s]?", "atendente"),
+        (r"recepcionista[s]?", "recepcionista"),
+        (r"analista[s]?", "analista"),
+        (r"supervisor(?:es)?", "supervisor"),
+        # Future: PLR por cargo
+        (r"cargo\s+t[eé]cnico", "cargo_tecnico"),
+        (r"cargo\s+operacional", "cargo_operacional"),
+        (r"cargo\s+administrativo", "cargo_administrativo"),
+    ],
+    "jornada": [
+        (r"44\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "44h_semanal"),
+        (r"40\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "40h_semanal"),
+        (r"36\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "36h_semanal"),
+        (r"30\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "30h_semanal"),
+        (r"20\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "20h_semanal"),
+        (r"\bhorista[s]?\b", "horista"),
+        (r"\bmensalista[s]?\b", "mensalista"),
+        # Future: VR/VA por jornada
+        (r"jornada\s+de\s+6\s*(?:horas?|h)\b", "6h_diario"),
+        (r"jornada\s+de\s+8\s*(?:horas?|h)\b", "8h_diario"),
+        (r"\b6\s*(?:horas?|h)\s+di[aá]rias?\b", "6h_diario"),
+        (r"\b8\s*(?:horas?|h)\s+di[aá]rias?\b", "8h_diario"),
+        (r"jornada\s+integral", "jornada_integral"),
+        (r"jornada\s+parcial", "jornada_parcial"),
+        # Future: adicional_noturno, jornada
+        (r"hor[aá]rio\s+noturno", "horario_noturno"),
+    ],
+    "modalidade": [
+        (r"\bpresencial\b", "presencial"),
+        (r"\bremoto\b|\bhome[\s-]*office\b", "remoto"),
+        (r"\bh[ií]brido\b", "hibrido"),
+        # Future: hora_extra por modalidade
+        (r"dias?\s+[uú]teis?", "dia_util"),
+        (r"\bs[aá]bados?\b", "sabado"),
+        (r"\bdomingos?\b", "domingo"),
+        (r"\bferiados?\b", "feriado"),
+        # Future: sobreaviso por modalidade
+        (r"\bacionado\b", "acionado"),
+        (r"\bdispon[ií]vel\b", "disponivel"),
+    ],
+    "escala": [
+        (r"12\s*[xX×]\s*36", "12x36"),
+        (r"5\s*[xX×]\s*1\b", "5x1"),
+        (r"6\s*[xX×]\s*1\b", "6x1"),
+        (r"5\s*[xX×]\s*2\b", "5x2"),
+        (r"4\s*[xX×]\s*3\b", "4x3"),
+    ],
+}
+
+# Maps each param_type to the dimensions that should be attempted for classification.
+# Extend to enable classification for new parameters in future stories.
+PARAM_DIMENSIONS: dict[str, list[str]] = {
+    "piso_salarial": ["cargo", "jornada", "modalidade", "escala"],
+    "auxilio_alimentacao": ["jornada"],
+    "hora_extra": ["modalidade"],
+    "adicional_noturno": ["jornada", "escala"],
+    "sobreaviso": ["modalidade"],
+    "plr": ["cargo"],
+    "jornada": ["jornada", "escala"],
+}
+
+# Proximity window (characters): max distance between a dimension label and a BRL value
+# for the association to be considered valid.
+_PROXIMITY_WINDOW = 350
+
+
+def _find_brl_with_positions(text_n: str) -> list[tuple[float, int, int]]:
+    """
+    Find all distinct BRL values in normalized text, returning (value, start, end).
+    Keeps only the first occurrence of each rounded value.
+    """
+    seen: dict[float, tuple[float, int, int]] = {}
+    for m in re.finditer(r"r\$\s*([\d.,]+)", text_n):
+        raw = m.group(1)
+        clean = raw.replace(".", "").replace(",", ".")
+        try:
+            val = float(clean)
+            if val >= 5:
+                key = round(val, 2)
+                if key not in seen:
+                    seen[key] = (val, m.start(), m.end())
+        except ValueError:
+            pass
+    return list(seen.values())
+
+
+def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
+    """
+    Classify multiple values by dimension (cargo, jornada, modalidade, escala).
+
+    Generic and decoupled from any specific parameter. The ``param_type``
+    argument selects which dimensions (from ``PARAM_DIMENSIONS``) to attempt.
+
+    Args:
+        text:        Raw clause text (normalization is applied internally).
+        values:      List of float values extracted from the clause.
+        param_type:  Parameter identifier used to select applicable dimensions.
+
+    Returns:
+        A dict with any combination of:
+            por_cargo      — list[{cargo, valor, trecho_fonte}]
+            por_jornada    — list[{jornada, valor, trecho_fonte}]
+            por_modalidade — list[{label, valor, trecho_fonte}]
+            por_escala     — list[{label, valor, trecho_fonte}]
+        Returns {} when no dimension classification is possible.
+    """
+    if not values or param_type not in PARAM_DIMENSIONS:
+        return {}
+
+    text_n = normalize(text)
+    values_set = {round(v, 2) for v in values}
+    brl_positions = _find_brl_with_positions(text_n)
+
+    result: dict = {}
+
+    for dim_name in PARAM_DIMENSIONS[param_type]:
+        patterns = DIMENSION_PATTERNS.get(dim_name, [])
+        classified: list[dict] = []
+        matched_val_keys: set[float] = set()
+
+        for pattern, label in patterns:
+            for pm in re.finditer(pattern, text_n, re.IGNORECASE):
+                # Find the BRL value nearest to this pattern match within the window
+                best_val: float | None = None
+                best_dist = _PROXIMITY_WINDOW + 1
+                best_vspan: tuple[int, int] | None = None
+
+                for val, vstart, vend in brl_positions:
+                    if round(val, 2) not in values_set:
+                        continue
+                    dist = min(abs(pm.start() - vend), abs(pm.end() - vstart))
+                    if dist < best_dist:
+                        best_dist = dist
+                        best_val = val
+                        best_vspan = (vstart, vend)
+
+                if best_val is None:
+                    continue
+
+                val_key = round(best_val, 2)
+                if val_key in matched_val_keys:
+                    continue  # already claimed by an earlier pattern
+
+                matched_val_keys.add(val_key)
+
+                # Extract a readable source snippet centred around the match
+                win_start = max(0, min(pm.start(), best_vspan[0]) - 80)
+                win_end = min(len(text), max(pm.end(), best_vspan[1]) + 80)
+                trecho = " ".join(text[win_start:win_end].split())
+
+                if dim_name == "cargo":
+                    entry: dict = {
+                        "cargo": label,
+                        "valor": round(best_val, 2),
+                        "trecho_fonte": _truncate(trecho, 300),
+                    }
+                elif dim_name == "jornada":
+                    entry = {
+                        "jornada": label,
+                        "valor": round(best_val, 2),
+                        "trecho_fonte": _truncate(trecho, 300),
+                    }
+                else:  # modalidade or escala
+                    entry = {
+                        "label": label,
+                        "valor": round(best_val, 2),
+                        "trecho_fonte": _truncate(trecho, 300),
+                    }
+                classified.append(entry)
+
+        if classified:
+            result[f"por_{dim_name}"] = classified
+
+    return result
 
 
 def has_negative_clause(text: str) -> bool:
@@ -352,6 +565,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="piso_salarial",
     )
 
 
