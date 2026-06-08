@@ -212,10 +212,17 @@ def build_item(
     clausula_heading: str,
     trecho_fonte: str,
     observacao: str | None = None,
+    param_type: str | None = None,
 ) -> dict:
     """
     Assemble a single itens_cct item dict, choosing the appropriate
     status based on the number of values found.
+
+    When param_type is supplied and multiple distinct values are present,
+    classify_by_dimension is invoked to attempt structured classification
+    into por_cargo / por_jornada / por_modalidade / por_escala.  If at
+    least one dimension is resolved, status_parametro becomes
+    "extraido_para_revisao" instead of "conflito".
     """
     if not values:
         obs = observacao or "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
@@ -235,16 +242,38 @@ def build_item(
     else:
         valor_textual = distinct_vals[0] if distinct_vals else None
 
+    # Multiple values: attempt dimension classification when param_type is given
+    classification: dict = {}
+    if len(distinct_vals) > 1 and param_type and regra_textual:
+        float_values = [v for v in values if isinstance(v, float)]
+        if float_values:
+            classification = classify_by_dimension(regra_textual, float_values, param_type)
+
     if len(distinct_vals) > 1:
-        status = "conflito"
-        obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
-        if observacao:
-            obs = f"{observacao}; {obs}"
+        if classification:
+            # Successfully classified — upgrade status and set valor to minimum
+            status = "extraido_para_revisao"
+            obs = observacao
+            # Top-level valor holds the minimum classified value for BRL items
+            if unidade.startswith("BRL"):
+                all_classified_vals = [
+                    entry["valor"]
+                    for entries in classification.values()
+                    for entry in entries
+                    if isinstance(entry.get("valor"), float)
+                ]
+                if all_classified_vals:
+                    valor = min(all_classified_vals)
+        else:
+            status = "conflito"
+            obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
     else:
         status = "extraido_para_revisao"
         obs = observacao
 
-    return {
+    item = {
         "valor": valor,
         "percentual": percentual,
         "valor_textual": valor_textual,
@@ -257,6 +286,11 @@ def build_item(
         "observacao": obs,
         "status_parametro": status,
     }
+
+    # Embed classification sub-structures directly into the item
+    item.update(classification)
+
+    return item
 
 
 def _item_not_found(
@@ -286,6 +320,209 @@ def _truncate(text: str | None, max_len: int) -> str | None:
     if len(text) > max_len:
         return text[:max_len] + "…"
     return text
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Dimension classification — generic, parameter-agnostic
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Pattern registries: param_type → list of (label, regex_string).
+# Use "_default" as a fallback for unknown/unlisted param types.
+# Patterns are normalized (no accents, lowercase) before matching.
+
+_CARGO_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "_default": [
+        ("Administrativo", r"piso\s+administrativo|auxiliar\s+administrativo|analista\s+administrativo"),
+        ("Técnico", r"piso\s+tecnico|tecnico\s+de\s+suporte"),
+        ("Operador", r"\boperador(?:\s+de)?\b"),
+        ("Atendente", r"\batendente\b"),
+        ("Recepcionista", r"\brecepcionista\b"),
+        ("Analista", r"\banalista\b"),
+        ("Supervisor", r"\bsupervisor\b"),
+    ],
+    "plr": [
+        ("Técnico", r"(?:cargo|funcao|nivel)\s+tecnico"),
+        ("Operacional", r"(?:cargo|funcao|nivel)\s+operacional"),
+        ("Administrativo", r"(?:cargo|funcao|nivel)\s+administrativo"),
+    ],
+}
+
+_JORNADA_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "_default": [
+        ("44h semanais", r"44\s*horas?\s*semanais?|jornada\s+de\s+44"),
+        ("40h semanais", r"40\s*horas?\s*semanais?|jornada\s+de\s+40"),
+        ("36h semanais", r"36\s*horas?\s*semanais?|jornada\s+de\s+36"),
+        ("30h semanais", r"30\s*horas?\s*semanais?|jornada\s+de\s+30"),
+        ("Mensalista", r"\bmensalista\b"),
+        ("Horista", r"\bhorista\b"),
+    ],
+    "auxilio_alimentacao": [
+        ("6 horas", r"6\s*(?:h\b|horas?)(?:\s*diarias?|\s*por\s+dia)?"),
+        ("8 horas", r"8\s*(?:h\b|horas?)(?:\s*diarias?|\s*por\s+dia)?"),
+        ("Integral", r"jornada\s+integral|turno\s+integral|regime\s+integral"),
+        ("Parcial", r"jornada\s+parcial|turno\s+parcial|regime\s+parcial"),
+    ],
+    "adicional_noturno": [
+        ("Horário Noturno", r"horario\s+noturno|periodo\s+noturno|turno\s+noturno"),
+        ("Escala 12x36", r"12\s*[xX]\s*36"),
+    ],
+    "jornada": [
+        ("36h semanais", r"36\s*horas?\s*semanais?"),
+        ("40h semanais", r"40\s*horas?\s*semanais?"),
+        ("44h semanais", r"44\s*horas?\s*semanais?"),
+    ],
+}
+
+_MODALIDADE_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "_default": [
+        ("Presencial", r"\bpresencial\b"),
+        ("Remoto", r"\bremoto\b|teletrabalho|home\s*office"),
+        ("Híbrido", r"\bhibrido\b"),
+    ],
+    "hora_extra": [
+        ("Dia Útil", r"dia\s+util|dias?\s+uteis?"),
+        ("Sábado", r"\bsabados?\b"),
+        ("Domingo", r"\bdomingos?\b"),
+        ("Feriado", r"\bferiados?\b"),
+    ],
+    "sobreaviso": [
+        ("Acionado", r"sobreaviso\s+acionado|quando\s+acionado"),
+        ("Disponível", r"sobreaviso\s+disponivel|apenas\s+disponivel|sem\s+acionamento"),
+    ],
+}
+
+_ESCALA_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "_default": [
+        ("12x36", r"12\s*[xX]\s*36"),
+        ("6x1", r"6\s*[xX]\s*1"),
+        ("5x1", r"5\s*[xX]\s*1"),
+        ("5x2", r"5\s*[xX]\s*2"),
+    ],
+    "adicional_noturno": [
+        ("12x36", r"12\s*[xX]\s*36"),
+        ("6x1", r"6\s*[xX]\s*1"),
+    ],
+    "jornada": [
+        ("12x36", r"12\s*[xX]\s*36"),
+        ("6x1", r"6\s*[xX]\s*1"),
+        ("5x1", r"5\s*[xX]\s*1"),
+        ("5x2", r"5\s*[xX]\s*2"),
+    ],
+}
+
+# Dimension config: (registry, result_key, object_field_name)
+_DIMENSION_CONFIG = [
+    (_CARGO_PATTERNS,     "por_cargo",      "cargo"),
+    (_JORNADA_PATTERNS,   "por_jornada",    "jornada"),
+    (_MODALIDADE_PATTERNS, "por_modalidade", "label"),
+    (_ESCALA_PATTERNS,    "por_escala",     "label"),
+]
+
+
+def _segment_text(text: str) -> list[tuple[str, str]]:
+    """
+    Split text into (original, normalized) pairs at sentence/line boundaries.
+    Produces segments suitable for proximity-based pattern matching.
+    """
+    parts = re.split(r"[\n;]+", text)
+    return [(p.strip(), normalize(p.strip())) for p in parts if p.strip()]
+
+
+def _find_labeled_values(
+    text: str,
+    patterns: list[tuple[str, re.Pattern, str]],
+    target_values: list[float],
+) -> list[dict]:
+    """
+    For each (label, compiled_pattern, field_key), find the nearest target BRL
+    value in the clause text. Returns a list of classified items. A value is
+    only assigned to the first matching label (used_values guard).
+    """
+    segments = _segment_text(text)
+    target_set = {round(v, 2) for v in target_values}
+    used_values: set[float] = set()
+    results = []
+
+    for label, pattern, field_key in patterns:
+        found_val = None
+        found_excerpt = None
+
+        # Pass 1 — same segment contains both pattern and a target value
+        for orig, norm in segments:
+            if pattern.search(norm):
+                for val in first_brl_values(orig):
+                    rounded = round(val, 2)
+                    if rounded in target_set and rounded not in used_values:
+                        found_val = val
+                        found_excerpt = orig
+                        break
+            if found_val is not None:
+                break
+
+        # Pass 2 — pattern found; look ±2 segments for the value
+        if found_val is None:
+            for i, (orig, norm) in enumerate(segments):
+                if pattern.search(norm):
+                    ctx_start = max(0, i - 2)
+                    ctx_end = min(len(segments), i + 3)
+                    ctx_orig = " ".join(s[0] for s in segments[ctx_start:ctx_end])
+                    for val in first_brl_values(ctx_orig):
+                        rounded = round(val, 2)
+                        if rounded in target_set and rounded not in used_values:
+                            found_val = val
+                            found_excerpt = ctx_orig
+                            break
+                if found_val is not None:
+                    break
+
+        if found_val is not None:
+            used_values.add(round(found_val, 2))
+            results.append(
+                {
+                    field_key: label,
+                    "valor": found_val,
+                    "trecho_fonte": _truncate(found_excerpt, 300),
+                }
+            )
+
+    return results
+
+
+def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
+    """
+    Classify multiple CCT values by dimension (cargo, jornada, modalidade, escala).
+
+    Operates independently of any specific parameter, receiving only:
+      - text:       clause text from the PDF
+      - values:     BRL/numeric values already identified in the clause
+      - param_type: identifier selecting the applicable pattern set
+                    (e.g. "piso_salarial", "hora_extra", "auxilio_alimentacao")
+
+    Returns a dict with zero or more of:
+      por_cargo     : list of {cargo, valor, trecho_fonte}
+      por_jornada   : list of {jornada, valor, trecho_fonte}
+      por_modalidade: list of {label, valor, trecho_fonte}
+      por_escala    : list of {label, valor, trecho_fonte}
+
+    Only dimensions where at least 2 distinct values are classified are included.
+    When no dimension matches, an empty dict is returned (caller preserves "conflito").
+    """
+    if not values or len(values) < 2:
+        return {}
+
+    result = {}
+
+    for registry, result_key, field_key in _DIMENSION_CONFIG:
+        pattern_list = registry.get(param_type) or registry.get("_default", [])
+        compiled = [
+            (label, re.compile(regex, re.IGNORECASE), field_key)
+            for label, regex in pattern_list
+        ]
+        classified = _find_labeled_values(text, compiled, values)
+        if len(classified) >= 2:
+            result[result_key] = classified
+
+    return result
 
 
 def has_negative_clause(text: str) -> bool:
@@ -352,6 +589,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="piso_salarial",
     )
 
 
