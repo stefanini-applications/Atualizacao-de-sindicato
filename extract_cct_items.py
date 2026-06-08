@@ -212,10 +212,16 @@ def build_item(
     clausula_heading: str,
     trecho_fonte: str,
     observacao: str | None = None,
+    classification: dict | None = None,
 ) -> dict:
     """
     Assemble a single itens_cct item dict, choosing the appropriate
     status based on the number of values found.
+
+    When *classification* (from classify_by_dimension) is non-empty and multiple
+    distinct values are present, the item receives status "extraido_para_revisao"
+    and the subestruturas (por_cargo, por_jornada, etc.) are embedded in the
+    returned dict instead of falling back to "conflito".
     """
     if not values:
         obs = observacao or "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente"
@@ -236,15 +242,28 @@ def build_item(
         valor_textual = distinct_vals[0] if distinct_vals else None
 
     if len(distinct_vals) > 1:
-        status = "conflito"
-        obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
-        if observacao:
-            obs = f"{observacao}; {obs}"
+        if classification:
+            # Classification resolved the conflict — use minimum value at top level
+            all_classified_values = [
+                entry.get("valor")
+                for entries in classification.values()
+                for entry in entries
+                if entry.get("valor") is not None
+            ]
+            if all_classified_values and unidade.startswith("BRL"):
+                valor = min(all_classified_values)
+            status = "extraido_para_revisao"
+            obs = observacao
+        else:
+            status = "conflito"
+            obs = f"Múltiplos valores identificados: {', '.join(distinct_vals)}"
+            if observacao:
+                obs = f"{observacao}; {obs}"
     else:
         status = "extraido_para_revisao"
         obs = observacao
 
-    return {
+    item = {
         "valor": valor,
         "percentual": percentual,
         "valor_textual": valor_textual,
@@ -257,6 +276,11 @@ def build_item(
         "observacao": obs,
         "status_parametro": status,
     }
+
+    if classification:
+        item.update(classification)
+
+    return item
 
 
 def _item_not_found(
@@ -286,6 +310,161 @@ def _truncate(text: str | None, max_len: int) -> str | None:
     if len(text) > max_len:
         return text[:max_len] + "…"
     return text
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Dimension classification — generic, param-agnostic
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Each entry: (label, regex_pattern_for_normalized_text)
+_CARGO_PATTERNS: list[tuple[str, str]] = [
+    ("piso_administrativo", r"piso\s+administrativo"),
+    ("piso_tecnico", r"piso\s+tecnico"),
+    ("auxiliar_administrativo", r"auxiliar\s+administrativo"),
+    ("tecnico_suporte", r"tecnico\s+de\s+suporte"),
+    ("operador", r"\boperador\b"),
+    ("atendente", r"\batendente\b"),
+    ("recepcionista", r"\brecepcionista\b"),
+    ("analista", r"\banalista\b"),
+    ("supervisor", r"\bsupervisor\b"),
+    ("tecnico", r"\btecnico\b"),
+    ("operacional", r"\boperacional\b"),
+    ("administrativo", r"\badministrativo\b"),
+]
+
+_JORNADA_PATTERNS: list[tuple[str, str]] = [
+    ("44h_semana", r"44\s*horas?\s+semanais?"),
+    ("40h_semana", r"40\s*horas?\s+semanais?"),
+    ("36h_semana", r"36\s*horas?\s+semanais?"),
+    ("30h_semana", r"30\s*horas?\s+semanais?"),
+    ("20h_semana", r"20\s*horas?\s+semanais?"),
+    ("horista", r"\bhorista\b"),
+    ("mensalista", r"\bmensalista\b"),
+    ("6h_dia", r"\b6\s*h(?:oras?)?\s+(?:diaria|por\s+dia)"),
+    ("8h_dia", r"\b8\s*h(?:oras?)?\s+(?:diaria|por\s+dia)"),
+    ("integral", r"tempo\s+integral|\bjornada\s+integral\b"),
+    ("parcial", r"tempo\s+parcial|\bjornada\s+parcial\b"),
+    ("noturno", r"trabalhador\s+noturno|jornada\s+noturna"),
+]
+
+_MODALIDADE_PATTERNS: list[tuple[str, str]] = [
+    ("presencial", r"\bpresencial\b"),
+    ("remoto", r"\bremoto\b|\bteletrabalho\b|\bhome.?office\b"),
+    ("hibrido", r"\bhibrido\b"),
+    ("dia_util", r"dias?\s+uteis?"),
+    ("sabado", r"\bsabado\b"),
+    ("domingo", r"\bdomingo\b"),
+    ("feriado", r"\bferiado\b"),
+    ("acionado", r"\bacionado\b"),
+    ("disponivel", r"\bdisponivel\b"),
+    ("sobreaviso", r"em\s+sobreaviso"),
+]
+
+_ESCALA_PATTERNS: list[tuple[str, str]] = [
+    ("12x36", r"12\s*[x×]\s*36"),
+    ("6x1", r"6\s*[x×]\s*1"),
+    ("5x1", r"5\s*[x×]\s*1"),
+    ("5x2", r"5\s*[x×]\s*2"),
+    ("4x2", r"4\s*[x×]\s*2"),
+    ("6x2", r"6\s*[x×]\s*2"),
+]
+
+_ALL_DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "cargo": _CARGO_PATTERNS,
+    "jornada": _JORNADA_PATTERNS,
+    "modalidade": _MODALIDADE_PATTERNS,
+    "escala": _ESCALA_PATTERNS,
+}
+
+# Which dimensions to activate per parameter type.
+# Future parameters (auxilio_alimentacao, hora_extra, etc.) are already wired
+# here so their extractor functions can call classify_by_dimension with no
+# architectural changes.
+PARAM_DIMENSION_CONFIG: dict[str, list[str]] = {
+    "piso_salarial": ["cargo", "jornada", "modalidade", "escala"],
+    "auxilio_alimentacao": ["jornada"],
+    "hora_extra": ["modalidade"],
+    "adicional_noturno": ["jornada", "escala"],
+    "sobreaviso": ["modalidade"],
+    "plr": ["cargo"],
+    "jornada": ["jornada", "escala"],
+}
+
+_VALUE_SEARCH_WINDOW = 350  # characters around each pattern match
+
+
+def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
+    """
+    Classify *values* found in *text* by textual dimension evidence.
+
+    Generic and param-agnostic: the function never references specific parameters
+    internally; *param_type* is used only to select the applicable dimension set
+    from PARAM_DIMENSION_CONFIG.
+
+    Args:
+        text:       Raw clause text (accents preserved).
+        values:     Numeric values (BRL floats) found in the clause.
+        param_type: Identifier selecting the active dimensions, e.g. "piso_salarial".
+
+    Returns:
+        Dict containing any of ``por_cargo``, ``por_jornada``, ``por_modalidade``,
+        ``por_escala`` — only keys with at least one matched entry are included.
+
+        ``por_cargo``     entries: ``{cargo, valor, trecho_fonte}``
+        ``por_jornada``   entries: ``{jornada, valor, trecho_fonte}``
+        ``por_modalidade``/``por_escala`` entries: ``{label, valor, trecho_fonte}``
+    """
+    if not values or not text:
+        return {}
+
+    value_set = set(round(v, 2) for v in values)
+    active_dims = PARAM_DIMENSION_CONFIG.get(param_type, list(_ALL_DIMENSION_PATTERNS.keys()))
+    text_n = normalize(text)
+
+    result: dict = {}
+
+    for dim in active_dims:
+        patterns = _ALL_DIMENSION_PATTERNS.get(dim, [])
+        dim_entries: list[dict] = []
+        used_values: set[float] = set()
+
+        for label, pat_str in patterns:
+            pat = re.compile(pat_str, re.IGNORECASE)
+            for m in pat.finditer(text_n):
+                # Approximate window in original text (normalize() only removes
+                # combining marks — positions are within 1–2 chars of original).
+                win_start = max(0, m.start() - _VALUE_SEARCH_WINDOW)
+                win_end = min(len(text), m.end() + _VALUE_SEARCH_WINDOW)
+                window = text[win_start:win_end]
+
+                nearby = first_brl_values(window)
+                matched_val = next(
+                    (v for v in nearby if round(v, 2) in value_set and round(v, 2) not in used_values),
+                    None,
+                )
+                if matched_val is None:
+                    continue
+
+                used_values.add(round(matched_val, 2))
+
+                trecho_start = max(0, m.start() - 80)
+                trecho_end = min(len(text), m.end() + 120)
+                trecho = _truncate(" ".join(text[trecho_start:trecho_end].split()), 300)
+
+                if dim == "cargo":
+                    entry: dict = {"cargo": label, "valor": matched_val, "trecho_fonte": trecho}
+                elif dim == "jornada":
+                    entry = {"jornada": label, "valor": matched_val, "trecho_fonte": trecho}
+                else:
+                    entry = {"label": label, "valor": matched_val, "trecho_fonte": trecho}
+
+                dim_entries.append(entry)
+                break  # one match per label per dimension
+
+        if dim_entries:
+            result[f"por_{dim}"] = dim_entries
+
+    return result
 
 
 def has_negative_clause(text: str) -> bool:
@@ -344,6 +523,8 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
     else:
         tipo = "piso_cct"
 
+    classification = classify_by_dimension(full_text, values, "piso_salarial") if len(values) > 1 else {}
+
     return build_item(
         values=values,
         regra_textual=full_text,
@@ -352,6 +533,7 @@ def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        classification=classification or None,
     )
 
 
