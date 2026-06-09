@@ -34,6 +34,9 @@ body {
   font-weight: 600;
 }
 
+.col-estado-sindicato { min-width: 180px; white-space: nowrap; }
+.cct-col-cargo { min-width: 110px; white-space: nowrap; }
+
 #params-tbody tr {
   cursor: pointer;
 }

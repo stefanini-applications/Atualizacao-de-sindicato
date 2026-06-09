@@ -15,6 +15,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/AC/SEAC/CCT SEAC 2025.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1540.47,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -124,6 +131,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -233,6 +247,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1479.21,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -342,6 +363,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -451,6 +479,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -560,6 +595,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1592.43,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -669,6 +711,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/BA/Sinttel/CCT_SINTTEL BA_2025-2026.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -778,6 +827,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -887,6 +943,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/DF/SESCON/CCT_2025_SESCON-DF.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -996,6 +1059,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/DF/Sindpd/CCT-2025-2026 - SINDPD DF (assinada).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1642.48,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1105,6 +1175,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1547.59,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1217,6 +1294,13 @@
       "status_parametro": "conflito",
       "conflito": true,
       "fonte_documento": "CCT/ES/Sindpd/",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Conflito: dois documentos com vigência coincidente para 2025-2026 — CCT 2024-2026 e Circular Conjunta 2025-2026 — apresentam termos divergentes para o mesmo sindicato/UF/período. Requer verificação manual com RH para determinar o documento prevalente e o percentual aplicável.",
       "itens_cct": {
         "piso_salarial": {
@@ -1326,6 +1410,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/GO/SESCON/CCT SESCON GO 2024-2025.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1435,6 +1526,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2994.3,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1544,6 +1642,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1653,6 +1758,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1762,6 +1874,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1871,6 +1990,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -1980,6 +2106,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1689.53,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2092,6 +2225,13 @@
       "status_parametro": "conflito",
       "conflito": true,
       "fonte_documento": "CCT/MT/SINDPD/",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Conflito: o Aditivo CCT 2025-2026 apresenta percentual de reajuste divergente em relação à cláusula salarial da CCT 2024-2026 original para o mesmo período 2025-2026. Requer verificação manual com RH para determinar o documento prevalente e o percentual aplicável.",
       "itens_cct": {
         "piso_salarial": {
@@ -2201,6 +2341,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2310,6 +2457,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PB/Sindpd/CCT_2025-2026_Sindpd-PB.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2419,6 +2573,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PB/Sinttel/ACT_2025_SINTTEL-PB (homologado).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1518.0,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2528,6 +2689,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Técnico",
+          "valor": 1602.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2637,6 +2805,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2746,6 +2921,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2855,6 +3037,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1373.44,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -2964,6 +3153,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3073,6 +3269,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RJ/Sinditob/ACT 2025-2026_SINDTOB.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3182,6 +3385,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3291,6 +3501,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2016.69,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3400,6 +3617,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3509,6 +3733,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RS/Sescon/CCT_2025-2026_SESCON RS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3618,6 +3849,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RS/Sindpd/CCT_2025-2026_Sindpd RS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3727,6 +3965,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1694.66,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3836,6 +4081,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/RS/Sinaprosul - Sinaptep_Haus/CCT-2024-2026-SINPAPTEP RS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 44.97,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -3945,6 +4197,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 4410.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4054,6 +4313,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1978.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4163,6 +4429,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1792.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4272,6 +4545,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4381,6 +4661,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SE/Sindtic/CCT_2025-2027 - SINDTIC SE.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4490,6 +4777,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4599,6 +4893,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1852.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4708,6 +5009,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sinapro - Spaptep_Haus/CCT SPAPTEP 2025-2026 (homologado).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2035.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4817,6 +5125,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1980.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -4926,6 +5241,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2025.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -5035,6 +5357,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1412.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -5144,6 +5473,13 @@
       "status_parametro": "valido",
       "conflito": false,
       "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
@@ -5253,6 +5589,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": null,
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5362,6 +5705,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/MG/FINATI/ACORDO COLETIVO SINDICAL – FENATI MG.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5471,6 +5821,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/MG/Senalba/CCT_2019-2020_Senalba-MG.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5580,6 +5937,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 2149.06,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5689,6 +6053,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5798,6 +6169,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -5907,6 +6285,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6016,6 +6401,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1412.0,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6125,6 +6517,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/RJ/Finati Sidierj RJ/ACORDO COLETIVO SINDICAL – FENATI SINDIERJ RJ.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6234,6 +6633,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6343,6 +6749,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/RJ/Sinditob/ACT 2025-2026_SINDTOB.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6452,6 +6865,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6561,6 +6981,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/RS/Sinaprosul - Sinaptep_Haus/CCT-2024-2026-SINPAPTEP RS.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 44.97,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6670,6 +7097,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6779,6 +7213,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sinapro - Spaptep_Haus/CCT SPAPTEP 2025-2026 (homologado).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2035.0,
+          "status_parametro": "conflito"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6888,6 +7329,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -6997,6 +7445,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/SP/Sintesp (técnicos ST Petrobras)/CCT _2022-2023_SINTESP x engenharia consultiva (Processo Rodrigo).pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
@@ -7106,6 +7561,13 @@
       "status_parametro": "pendente_revisao",
       "conflito": false,
       "fonte_documento": "CCT/TO/Sinttel/CCT_SINTTEL TO_2020-2022.pdf",
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1129.78,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ],
       "observacao": "Sindicato encontrado na pasta CCT, mas sem parâmetro aprovado disponível",
       "itens_cct": {
         "piso_salarial": {
