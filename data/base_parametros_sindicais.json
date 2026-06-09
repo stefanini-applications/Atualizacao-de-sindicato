@@ -28,7 +28,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL As empresas abrangidas pela Convenção Coletiva não poderão utilizar salário inferior ao piso mínimo estabelecido nesta Cláusula, que é de R$ 1.540,47 (um mil, quinhentos e quarenta reais e quarenta e sete centavos), compreendendo a mão de obra discriminada no Anexo I, parte integrante desta referida norma trabalhista. Parágrafo Único – Os salários não poderão ser reduzidos independentemente da carga horária fixada em conformidade ao Anexo I desta Convenção. Reajustes/Correções Salariais",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 1540.47,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -137,7 +144,14 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL\nVIGÊNCIA DA CLÁUSULA: 01/01/2023 a 31/12/2023\n\n     Fica estipulado o valor do salário-mínimo nacional como piso salarial mensal da categoria, a partir de 1º de\n     janeiro de 2023, para jornada de 180 horas mensais.\n\n\nwww3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR036147/2023                               1/25\n\f06/06/2024, 15:12                                            Mediador - Extrato Convenção Coletiva\n\n\n\n\n     Parágrafo Primeiro: Para os trabalhadores com jornada inferior a 180 (cento e oitenta) horas mensais, o\n     salário deverá observar proporcionalmente o piso estabelecido no “caput”.\n\n     Parágrafo Segundo: Nos valores acima não está sendo considerada a remuneração variável.\n\n     Parágrafo Terceiro: Ficam as empresas obrigadas a realizarem a correção e o crédito dos valores\n     retroativos cabíveis, na folha de pagamento subsequente ao registro desta convenção coletiva de trabalho\n     no sistema MEDIADOR do Ministério do Trabalho.\n\n     Parágrafo Quarto: O piso para experiência fica autorizado desde que negociado diretamente com o\n     SINTTEL-AL e formalizado em acordo específico.\n\n\n\n\n                                        REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -246,7 +260,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 01/05/2024 nenhum trabalhador poderá ser admitido, ou continuar trabalhando com salário inferior às faixas abaixo: a) Aplicável exclusivamente Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21 (Um mil, quatrocentos e setenta e nove reais e vinte e um centavos); b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48(Um mil, quatrocentos e oitenta e sete reais e quarenta e oito centavos);c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07 (Dois mil, quatrocento…",
           "observacao": "Múltiplos valores identificados: 1479.21, 1487.48, 2434.07",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1479.21,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -355,7 +376,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -464,7 +492,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -573,7 +608,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL VIGÊNCIA DA CLÁUSULA: 01/05/2025 a 30/04/2026 Fica assegurado aos trabalhadores abrangidos por esta Convenção Coletiva de trabalho, o piso mínimo inicial normativo, que obedecerá aos seguintes critérios: a) Aos trabalhadores com jornada de trabalho de 36 (trinta e seis) horas semanais, fica fixado o piso mínimo de R$ 1.592,43 (um mil, quinhentos e noventa e dois reais e quarenta e três centavos); b) Aos trabalhadores com jornada de trabalho de 44(quarenta e quatro) horas semanais, fica fixado o piso mínimo de R$ 1.636,82 (um mil, seiscentos e trinta e seis rea…",
           "observacao": "Múltiplos valores identificados: 1592.43, 1636.82",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1592.43,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -682,7 +724,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais) a partir de 01/05/2025. Parágrafo Primeiro: Para jornadas de trabalho inferiores a 180 horas o salário poderá ser proporcional ao piso acima definido. Parágrafo Segundo: Será concedido um abono único e indenizatório no valor de R$424,00 (quatrocentos e vinte e quatro reais)para os empregados com jornada de trabalho de 180 horas e de R$353,00 (trezentos e cinquenta e três reais) para os empregados com jornada de trabalho de 150 horas,…",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0, 353.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1518.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -791,7 +840,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -900,7 +956,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1009,7 +1072,14 @@
           "clausula": "CLÁUSULA QUARTA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA QUARTA - PISO SALARIAL A partir de 1º de maio de 2025 é fixado o piso salarial da categoria, nos seguintes termos: 1- Para os trabalhadores com jornada de 6 (seis) horas o valor de R$ 1.642,48 (mil seiscentos e quarenta e dois reais e quarenta e oito centavos), pago até o 5º dia útil. II- Para os trabalhadores com jornada de 8 (oito) horas o valor de R$ 1.728,89 (mil setecentos e vinte e oito reais e oitenta e nove centavos), pago até o 5º dia útil. III Em caso de aumento do salário-mínimo vigente à época no país, ultrapassando-se os valores acima - discriminados, aplica-se o mais ben…",
           "observacao": "Múltiplos valores identificados: 1642.48, 1728.89",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1642.48,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1118,7 +1188,14 @@
           "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS A todos os empregados da categoria profissional fica garantido o reajuste salarial, a partir de 1º de janeiro de 2025, conforme tabela abaixo: SALÁRIO FUNÇÃO Jornada Jornada 30h/semanais 36h/semanais Atendente de Central Telefônica - Operador de Telecobrança / I Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). Atendente de Central Telefônica - Operador de Telecobrança / Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele II R$ 1.856,74 R$ 2.228,…",
           "observacao": "Múltiplos valores identificados: 1547.59, 1857.11, 1856.74, 2228.08, 2214.61, 2673.72, 3005.06",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1547.59,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1230,7 +1307,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1339,7 +1423,14 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS\nA partir de 01 de julho de 2024 fica estabelecido o piso salarial de 1.600,00 (um mil e seiscentos reais), para\n          os integrantes da categoria profissional regida por esta Convenção, exceto para os empregados que\n          exerçam as funções de office-boy, copa/cozinha e serviços de limpeza.\n\n\n\n          PARÁGRAFO 1º - Se na aplicação do percentual incidente no mês de julho de 2024, de que trata a\n          Cláusula do reajuste salarial desta Convenção, não resultar em valor igual ou superior ao piso salarial\n          referido no caput desta Cláusula, a empresa complementará o piso da categoria.\n\n          PARÁGRAFO 2º - Os empregados, excluídos os exercentes das funções de Office-boy, ou contínuo,\n          copa/cozinha, serviços de limpeza e serviços gerais, admitidos no período de 01/07/2023 a 30/06/2024\n          farão jus ao piso acima estabelecido.\n\n          PARÁGRAFO 3º - Os empregados que exercerem as funções de secretária e recepcionista, farão jus, ao\n          piso acima, após 3(três) meses de admissão.\n\n          PARÁGRAFO 4º - Aos trabalhadores contratados com jornada de trabalho inferior a 220 (Duzentas e Vinte)\n          horas mensais, 44 (Quarenta e Quatro) horas semanais ou 08 (Oito) horas diárias, será pago o piso salarial\n\n\n1 of 13                                                                                                             02/08/2024, 13:56\n\fMediador - Extrato Convenção Coletiva                           http://www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualiza...\n\n\n\n\n          da categoria proporcionalmente ao tempo trabalhado (OJ TST no 358).\n\n          PARÁGRAFO 5º - Os trabalhadores contratados até 30 de junho de 2023, para trabalharem jornada de até\n          06 (Seis) horas por dia, ficam assegurados o direito adquirido de um salário mínimo, vedado a aplicaçäo de\n          salário proporcional tratado no parágrafo 4º desta cláusula.\n\n          PARÁGRAFO 6º - Os trabalhadores contratados para laborar em jornada 12x36 ficam excluídos da jornada\n          de trabalho proporcional de 6 (Seis) horas/dia.\n\n\n                                        REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1448,7 +1539,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Aos trabalhadores das funções abaixo discriminadas ficam garantidos os seguintes pisos salariais, respeitando-se os salários em valores superiores. O Código CBO da tabela abaixo possui subitens que devem ser utilizados para o cargo específico. (sugestão de site para pesquisa: https://www.ocupacoes.com.br/): Salário Base CBO Funções (R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação R$ 3.733,82 Técnicos de desenvolvimento de sistemas e 3171 R$ 1.931,79 aplicações Iniciantes 3171 Técnicos de desenvol…",
           "observacao": "Múltiplos valores identificados: 2994.3, 3733.82, 1931.79, 2412.88, 1524.98, 1691.52, 1524.93",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 2994.3,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1557,7 +1655,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1666,7 +1771,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1775,7 +1887,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Os empregados admitidos a partir de 1º de junho de 2025 não poderão receber salários inferiores a: Funções Pisos Mensageiro/copeiro/Faxineiro R$ 1.518,00 e contínuo Após o período de experiência R$ 1.518,00 Leiturista – Belo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Primeiro: Independentemente da denominação do cargo e/ou função ocupado, a todos os trabalhadores, que por força de contrato de terceirização ou prestação de serviços, desenvolvam serviços de tratamento de document…",
           "observacao": "Múltiplos valores identificados: 1518.0, 2282.24, 2224.51, 1546.59, 1696.5, 3544.76",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1518.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1884,7 +2003,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$ 1.518,00 (mil, quinhentos e dezoito reais) partir de 01/05/2025. Parágrafo Primeiro: Será concedido um abono indenizatório no valor de R$ 424,00 (quatrocentos e vinte e quatro reais) para os trabalhadores com jornada de trabalho de 180 horas, a ser pago em parcela única em até 10 (dez) dias da formalização de aprovação da proposta em assembleia. Parágrafo Segundo: o Ficam isentas do pagamento do abono indenizatório as empresas que já reajustaram o valor do piso da categoria …",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1518.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1993,7 +2119,14 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL A título de Salário Normativo da categoria profissional, a partir de 1º de junho de 2.025, o salário dos empregados, abrangidos por esta convenção, não será inferior a R$ 1.689,53 (mil e seiscentos e oitenta e nove reais e cinquenta e três centavos) mensais; Parágrafo Primeiro: Fica assegurado ao Salário Normativo, de que trata a presente cláusula, a título de antecipação prevista no § primeiro da cláusula terceira, nunca será inferior ao salário mínimo vigente acrescido do percentual definido na Cláusula quarta; Parágrafo Segundo…",
           "observacao": "Múltiplos valores identificados: 1689.53, 3146.01, 2222.82",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1689.53,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2105,7 +2238,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2214,7 +2354,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2323,7 +2470,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2432,7 +2586,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial, assim entendido como o menor salário pago pelas empresas, será de R$ 1.518,00 (Um Mil quinhentos e dezoito reais) mensais para os empregados contratados em jornada de trabalho de 36 (trinta e seis) horas semanais ou 180 (cento e oitenta) horas mensais, e de R: 1.794,08 (Um Mil, Setecentos e noventa e quatro reais e oito centavos) mensais para os empregados contratados em jornada de trabalho correspondente a 44 (quarenta e quatro) horas por semana ou a 220 (duzentos e vinte) horas mensais. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 1518.0,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2541,7 +2702,14 @@
           "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS Ficam estabelecidos pisos salariais a vigorarem a partir de 1º de setembro de 2025, durante o prazo de vigência desta Convenção Coletiva, ALÍNEA DESCRIÇÃO REMUNERAÇÃO R$ 1.602,00 (hum mil e seiscentos e a Contínuos, copeiros, vigia e assemelhados dois reais) R$ 1.602,00 (hum mil e seiscentos e b Demais empregados na área administrativa dois reais) Digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e R$ 1.918,00 (hum mil e novecentos e c monitoração de computadores; auxiliares, assistentes e/…",
           "observacao": "Múltiplos valores identificados: 1602.0, 1918.0, 2067.0, 2535.0, 3290.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso Técnico",
+              "valor": 1602.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2650,7 +2818,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2759,7 +2934,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2868,7 +3050,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica assegurado para os empregados abrangidos por este Acordo Coletivo de Trabalho, o piso salarial de R$ 1.373,44 (Hum mil trezentos e setenta e três reais e quarenta e quatro centavos) para jornada de 6h e o piso salarial de R$ 1.675,29 (Hum mil seiscentos e setenta e cinco reais e vinte e nove centavos) para jornada de 8h. Para casos de proporcionalidade, será considerado o piso salarial da jornada de 8h. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Múltiplos valores identificados: 1373.44, 1675.29",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1373.44,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2977,7 +3166,14 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais)a partir do dia 1º de janeiro de 2025. Para as demais atividades cuja jornada seja de 44 (quarenta e quatro) horas semanais, e 220 horas mensais, o piso mínimo será de R$1.590,40 (mil, quinhentos e noventa reais e quarenta centavos) a partir de 1º de janeiro de 2025. PARÁGRAFO PRIMEIRO: As empresas que não concederam o reajuste em janeiro, poderão pagar o retroativo até a folha de pagamentos de abril/2025. PA…",
           "observacao": "Múltiplos valores identificados: 1518.0, 1590.4",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1518.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3086,7 +3282,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3195,7 +3398,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais) a partir de 01/05/2025. Parágrafo Primeiro: Para jornadas de trabalho inferiores a 180 horas o salário poderá ser proporcional ao piso acima definido. Parágrafo Segundo: O piso salarial mínimo para os empregados das empresas participantes de licitação perante os órgãos estabelecidos na Lei 14.133/2021 (administração direta, os fundos especiais, as autarquias, as fundações públicas, as empresas públicas, as sociedades de economia mist…",
           "observacao": "Múltiplos valores identificados: 1518.0, 424.0, 353.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1518.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3304,7 +3514,14 @@
           "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL As empresas reajustarão, a partir de 01 de janeiro de 2025, a remuneração integral a todos os seus empregados, inclusive daqueles que estão acima do piso, o valor correspondente a 5,5% (cinco ponto cinco por cento), reajuste salarial de toda a categoria profissional e do constate desta cláusula, estendido também aos assemelhados. Excetuando-se exigências legais, que, proporcionar um maior índice de correção em favor dos empregados. Funções PISO 2025 Digitador R$ 2.016,69 Conferente R$ 2.016,69 Classificador de Documentos R$ 2.016,69 A…",
           "observacao": "Múltiplos valores identificados: 2016.69, 2230.93, 2660.44, 3192.51, 3831.06, 3150.14, 3465.3, 3811.97, 3464.39, 16.86, 9275.66, 6852.12, 13703.8, 3518.49, 3945.41, 4859.17, 5831.04, 4908.45, 5890.07, 7861.69, 5119.17, 6103.59, 7324.27, 8789.1, 6103.51, 8072.24, 8491.79, 9498.16",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 2016.69,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3413,7 +3630,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3522,7 +3746,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3631,7 +3862,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3740,7 +3978,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 1º de janeiro de 2025, fica estabelecido o piso salarial dos Operadores de Mesas Telefônicas no valor de R$ 1.694,66 (um mil, seiscentos e noventa e quatro reais e sessenta e seis centavos), devendo ser adequado ao piso salarial regional quando revisado no estado do Rio Grande do Sul, caso o piso regional seja superior. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 1694.66,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3849,7 +4094,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Ficam assegurados à categoria profissional os seguintes pisos salariais mensais: Grupo Profissionais Valor R$ Vigência a partir de A Em serviços de limpeza, copa, faxina, office boy e assemelhado 1.412,00 1º/05/2024 B Em funções administrativas: telefonista, recepcionista, auxiliar e 1.719,39 1º/01/2025 assistente administrativo, financeiro, de pessoal e assemelhado C Da área técnica do setor de publicidade: criação, planejamento, 1.960,82 1º/01/2025 mídia, atendimento, produção gráfica e eletrônica, web design, tráfego, arte final ou montagem, coordenação, …",
           "observacao": "Múltiplos valores identificados: 44.97, 51.29, 49.75, 39.58",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 44.97,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3958,7 +4210,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Os pisos salariais da categoria profissional, a partir da assinatura do presente instrumento, serão os seguintes: a) Analistas de Sistemas R$ 4.410,00 b) Funções que exijam formação universitária de graduação plena R$ 4.105,00 c) Programadores e Instrutores R$ 3.560,00 d) Supervisores e Cargos de Nível Técnico R$ 3.115,00 e) Auxiliares Administrativos, Financeiros e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00 f) Digitadores e Telefonistas R$ 2.000,00 g) Pessoal de Serviços Gerais e Contínuos R$ 2.000,00 Parágrafo Primeiro: Os empregados que …",
           "observacao": "Múltiplos valores identificados: 4410.0, 4105.0, 3560.0, 3115.0, 2000.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 4410.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4067,7 +4326,14 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO Fica estabelecido o Salário Normativo das funções abaixo na admissão, sendo que nenhum salário poderá ser inferior a Lei do piso estadual da categoria, normalmente reajustado no mês de janeiro: Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e R$ 1.978,00 Office-boy) Trainee técnico R$ 2.044,20 Cargos Administrativos R$ 1.978,00 Técnicos em Geral R$ 2.207,10 § ÚNICO. A permanência máxima do empregado na função de trainee técnico será de 12 (doze) meses a contar da data de sua contratação. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Múltiplos valores identificados: 1978.0, 2044.2, 2207.1",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1978.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4176,7 +4442,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica convencionado que o piso da categoria, assim entendido como o menor salário pago pelas empresas, será de R$ 1.792,00 (mil, setecentos e noventa e dois reais) a partir da folha salarial do mês de julho/2025. Parágrafo Primeiro: Para efeito de piso por função serão considerados os seguintes cargos e salários, conforme a tabela abaixo: CARGOS 01/07/2025 ALMOXARIFE R$ 1.851,24 CABISTA I R$ 1.792,00 CABISTA II R$ 2.287,92 CABISTA III R$ 2.531,03 INSTALADOR DTH R$ 1.792,00 LIDER DE OBRAS / ENCARREGADO R$ 2.531,02 OFICIAL DE REDE R$ 1.792,00 OPERADOR MULTIFUNCIO…",
           "observacao": "Múltiplos valores identificados: 1792.0, 1851.24, 2287.92, 2531.03, 2531.02, 2191.83, 3701.02, 1794.94, 2289.31, 2535.16, 2845.5",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1792.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4285,7 +4558,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4394,7 +4674,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4503,7 +4790,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4612,7 +4906,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica assegurado um salário normativo para os empregados abrangidos por essa convenção, a partir de 1º de março de 2025, no valor de R$ 1.852,00 (hum mil oitocentos e cinquenta e dois reais), para a jornada de trabalho legalmente prevista. Parágrafo único - Para os instrutores/monitores remunerados por hora, o piso salarial será no valor mínimo de R$ 13,09 (treze reais e nove centavos) por hora trabalhada, devendo ser acrescentado ao cálculo do salário, o valor correspondente ao descanso semanal remunerado. REAJUSTES/CORREÇÕES SALARIAIS",
           "observacao": "Múltiplos valores identificados: 1852.0, 13.09",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1852.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4721,7 +5022,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Ficam estabelecidos os seguintes pisos salariais a partir de 01/04/2025: PARA AGÊNCIAS/EMPRESAS COM ATÉ 40 EMPREGADOS EM 31/03/2025 (a) São PauloCapital = R$ 2.035,00(dois mil e trinta e cinco reais) por mês; (b) São Paulo – Interior, Litoral e Grande São Paulo = R$ 1.590,00(mil quinhentos e noventa reais) por mês. PARA AGÊNCIAS/EMPRESAS COM MAIS DE 40 EMPREGADOS EM 31/03/2025 (a) São PauloCapital = R$ 2.180,00(dois mil cento e oitenta reais) por mês; (b) São Paulo – Interior, Litoral e Grande São Paulo = R$ 1.600,00(mil e seiscentos reais) por mês. O piso sal…",
           "observacao": "Múltiplos valores identificados: 2035.0, 1590.0, 2180.0, 1600.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 2035.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4830,7 +5138,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Para os empregados abrangidos pela presente Convenção Coletiva, independentemente da idade, sujeitos ao regime de trabalho de tempo integral, ficam assegurados como pisos salariais os seguintes valores: 3.1. Para empregados contratados e que exerçam as funções de: “Office boy\" - CBO 4122-05; Recepcionista - CBO 4221-05; Faxineiro - CBO 5143-20; Porteiro - CBO 5174-10; Auxiliar de Serviços Gerais - CBO 5143; Copeira - CBO 5134-25; Atendente de Negócios - CBO 2532-25; Entrevistador de Pesquisas de Campo - CBO 4241-15; o valor mensal correspondente a R$ 1.980,00 …",
           "observacao": "Múltiplos valores identificados: 1980.0, 2100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1980.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4939,7 +5254,14 @@
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS.",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 1/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Fica assegurado para os empregados abrangidos por esta CONVENÇÃO COLETIVA DE TRABALHO, salário normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais; B) aplicável aos empregados integrantes da menor função e/ou atividade administrativa: R$ 1.615,00 (um mil, seicentos e quinze rea…",
           "observacao": "Múltiplos valores identificados: 2025.0, 1615.0, 2245.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 2025.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5048,7 +5370,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL PISO SALARIAL Fica convencionado que o piso salarial mensal será de R$ 1.412,00 (mil, quatrocentos e doze reais), a partir de 01/05/2024, sempre considerando a carga horária mensal de 180 (cento e oitenta) horas. Parágrafo Primeiro: Para os TRABALHADORES com jornada inferior a 180 (cento e oitenta) horas mensais, o salário deverá observar proporcionalmente o piso estabelecido no “caput”. Parágrafo Segundo: Nos valores acima, não está sendo considerada a remuneração variável. Parágrafo Terceiro (ABONO PISO SALARIAL): Será concedido um abono indenizatório no val…",
           "observacao": "Múltiplos valores identificados: 1412.0, 368.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 1412.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5157,7 +5486,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5266,7 +5602,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5375,7 +5718,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5484,7 +5834,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5593,7 +5950,14 @@
           "clausula": "CLÁUSULA TERCEIRA - REAJUSTE E PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - REAJUSTE E PISO SALARIAL Os salários dos empregados abrangidos pela presente convenção coletiva de trabalho serão reajustados em 01/05/2025, pelo percentual de 9% (Nove por cento) retroativo a data base. Parágrafo Primeiro: O salário-mínimo da categoria, vigente a partir de 1º de maio de 2025, será de R$ 2.149,06. Parágrafo Segundo: O piso salarial, a assiduidade e todos os benefícios previstos nesta negociação coletiva devem ser estendidos a todos os empregados da categoria sem exceções sob pena de aplicação das multas previstas nesta CCT e legislação laboral pertinente. P…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 2149.06,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5702,7 +6066,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5811,7 +6182,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -5920,7 +6298,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6029,7 +6414,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL https://www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?nrSolicitacao=MR058539/2024 1/21 10/01/2025, 15:21 Mediador - Extrato Convenção Coletiva Fica estipulado o piso salarial mensal de R$1.412,00 (mil, quatrocentos e doze reais) a partir de 01/01/2024, considerando a carga horária mensal de 180 horas. Parágrafo Primeiro: Para os trabalhadores com jornada inferior a 180 (cento e oitenta) horas mensais, o salário deverá observar proporcionalmente o piso estabelecido no “caput”. Parágrafo Segundo: Nos valores acima não está sendo considerada a remuner…",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 1412.0,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6138,7 +6530,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6247,7 +6646,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6356,7 +6762,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6465,7 +6878,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6574,7 +6994,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Ficam assegurados à categoria profissional os seguintes pisos salariais mensais: Grupo Profissionais Valor R$ Vigência a partir de A Em serviços de limpeza, copa, faxina, office boy e assemelhado 1.412,00 1º/05/2024 B Em funções administrativas: telefonista, recepcionista, auxiliar e 1.719,39 1º/01/2025 assistente administrativo, financeiro, de pessoal e assemelhado C Da área técnica do setor de publicidade: criação, planejamento, 1.960,82 1º/01/2025 mídia, atendimento, produção gráfica e eletrônica, web design, tráfego, arte final ou montagem, coordenação, …",
           "observacao": "Múltiplos valores identificados: 44.97, 51.29, 49.75, 39.58",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 44.97,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6683,7 +7110,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6792,7 +7226,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Ficam estabelecidos os seguintes pisos salariais a partir de 01/04/2025: PARA AGÊNCIAS/EMPRESAS COM ATÉ 40 EMPREGADOS EM 31/03/2025 (a) São PauloCapital = R$ 2.035,00(dois mil e trinta e cinco reais) por mês; (b) São Paulo – Interior, Litoral e Grande São Paulo = R$ 1.590,00(mil quinhentos e noventa reais) por mês. PARA AGÊNCIAS/EMPRESAS COM MAIS DE 40 EMPREGADOS EM 31/03/2025 (a) São PauloCapital = R$ 2.180,00(dois mil cento e oitenta reais) por mês; (b) São Paulo – Interior, Litoral e Grande São Paulo = R$ 1.600,00(mil e seiscentos reais) por mês. O piso sal…",
           "observacao": "Múltiplos valores identificados: 2035.0, 1590.0, 2180.0, 1600.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": 2035.0,
+              "status_parametro": "conflito"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -6901,7 +7342,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -7010,7 +7458,14 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de piso salarial não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso CCT",
+              "valor": null,
+              "status_parametro": "pendente"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -7119,7 +7574,14 @@
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica convencionado que o piso salarial da categoria será de R$1.129,78 (hum mil, cento e vinte e nove reais e setenta e oito centavos). Parágrafo Único: As EMPRESAS, que porventura já tenham aplicado o reajuste por liberalidade antes ou no período estipulado na presente convenção coletiva de trabalho ficam isentas de qualquer pagamento retroativo. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR023975/2021 1/19 25/04/2022 18:40 Mediador - Extrato Convenção Coletiva",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "pisos": [
+            {
+              "cargo": "Piso Único",
+              "valor": 1129.78,
+              "status_parametro": "extraido_para_revisao"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,

@@ -402,6 +402,7 @@ body {
 /* Fixed column widths for non-CCT columns */
 .col-uf    { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }
+.col-estado-sindicato { min-width: 180px; white-space: nowrap; }
 .col-categoria { min-width: 160px; }
 .col-ano   { min-width: 50px;  white-space: nowrap; }
 .col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
@@ -409,6 +410,17 @@ body {
 .col-status { min-width: 120px; white-space: nowrap; }
 .col-fonte  { min-width: 100px; }
 .col-acao   { min-width: 100px; white-space: nowrap; }
+
+/* Cargo cell status highlights */
+#params-tbody td.cct-col-conflito {
+  background-color: #fff8e1;
+  color: #7a4100;
+}
+
+#params-tbody td.cct-col-pendente {
+  color: #6c757d;
+  font-style: italic;
+}
 
 /* Monetary and percent cells right-aligned */
 #params-tbody td.cct-col {

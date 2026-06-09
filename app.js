@@ -191,6 +191,7 @@ const EMBEDDED_DEMO = {
           fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
           observacao: null,
           status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          pisos: [{ cargo: 'Piso Único', valor: 1540.47, status_parametro: 'extraido_para_revisao' }],
         },
         adicional_noturno: {
           valor: 35, percentual: 35, valor_textual: null,
@@ -312,6 +313,7 @@ let elLoading;
 let elUnavailable;
 let elApp;
 let elDataGeracao;
+let elTableHead;
 let elTableBody;
 let elEmptyState;
 let elTotalRecords;
@@ -346,6 +348,7 @@ function bindElements() {
   elApp = document.getElementById('app');
   elDataGeracao = document.getElementById('data-geracao-badge');
 
+  elTableHead = document.getElementById('params-thead') || document.querySelector('#params-table thead');
   elTableBody = document.getElementById('params-tbody') || document.querySelector('tbody');
   elTableContainer = document.getElementById('table-responsive-container');
   elScrollHint = document.getElementById('table-scroll-hint');
@@ -744,6 +747,12 @@ function updateScrollHint() {
 function renderTable() {
   if (!elTableBody) return;
 
+  // Compute dynamic cargo columns from pisos arrays across filtered records
+  const cargoCols = getUniqueCargoCols(filteredRecords);
+
+  // Rebuild thead with Ratecard column order (including dynamic cargo columns)
+  updateRatecardTableHeader(cargoCols);
+
   elTableBody.innerHTML = '';
 
   if (elTotalRecords) {
@@ -783,15 +792,7 @@ function renderTable() {
     }
 
     row.innerHTML = `
-      <td>${escapeHtml(record.uf ?? '—')}</td>
-      <td>${escapeHtml(record.sindicato ?? '—')}</td>
-      <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
-      <td>${formatDate(record.data_base)}</td>
-      <td>${formatDate(record.vigencia_inicio)}</td>
-      <td>${formatDate(record.vigencia_fim)}</td>
-      ${buildCctTableCells(record)}
+      ${buildRatecardCells(record, cargoCols)}
       <td class="status-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
@@ -1551,7 +1552,126 @@ function isCctItemPreenchido(itemKey, item) {
   return false;
 }
 
-/** Generates 12 CCT item columns for the main table row */
+/** Collects unique cargo names from pisos arrays across all given records */
+function getUniqueCargoCols(records) {
+  const seen = new Set();
+  const cols = [];
+  records.forEach((record) => {
+    const pisos = record.itens_cct?.piso_salarial?.pisos;
+    if (Array.isArray(pisos)) {
+      pisos.forEach((p) => {
+        if (p.cargo && !seen.has(p.cargo)) {
+          seen.add(p.cargo);
+          cols.push(p.cargo);
+        }
+      });
+    }
+  });
+  return cols;
+}
+
+/** Rebuilds the table thead with Ratecard column order + dynamic cargo columns */
+function updateRatecardTableHeader(cargoCols) {
+  if (!elTableHead) return;
+  const cargoHeaderCells = cargoCols
+    .map((c) => `<th scope="col" class="cct-th">${escapeHtml(c)}</th>`)
+    .join('');
+  elTableHead.innerHTML = `
+    <tr>
+      <th scope="col" class="col-estado-sindicato">Estado/Sindicato</th>
+      <th scope="col" class="col-sindicato">Sindicato</th>
+      <th scope="col" class="col-uf">Estado</th>
+      <th scope="col" class="col-categoria">Aplicável à</th>
+      <th scope="col" class="cct-th cct-group-start">HR SegSex</th>
+      <th scope="col" class="cct-th">HR Sábado</th>
+      <th scope="col" class="cct-th">HR Domingo</th>
+      <th scope="col" class="cct-th">Adicional Noturno</th>
+      <th scope="col" class="cct-th">Sobreaviso</th>
+      <th scope="col" class="cct-th">Jornada de Trabalho</th>
+      <th scope="col" class="col-data cct-group-start">Data Vigência Piso</th>
+      <th scope="col" class="col-data">Início Vigência CCT</th>
+      <th scope="col" class="col-data">Fim Vigência CCT</th>
+      <th scope="col" class="col-reajuste">Reajuste Salarial %</th>
+      ${cargoHeaderCells}
+      <th scope="col" class="cct-th">VR Remuneração</th>
+      <th scope="col" class="col-status status-group-start">Status</th>
+      <th scope="col" class="col-fonte">Fonte</th>
+      <th scope="col" class="col-acao"></th>
+    </tr>
+  `;
+}
+
+/**
+ * Builds all data cells for a Ratecard table row.
+ * Column order per AC4: Estado/Sindicato, Sindicato, Estado, Aplicável à,
+ * HR SegSex, HR Sábado, HR Domingo, Adicional Noturno, Sobreaviso, Jornada,
+ * Data Vigência Piso, Início CCT, Fim CCT, Reajuste %, [cargo cols], VR Remuneração.
+ */
+function buildRatecardCells(record, cargoCols) {
+  const estadoSindicato = [record.uf, record.sindicato].filter(Boolean).join(' / ');
+
+  function cellGet(itemKey, ...fields) {
+    const item = record.itens_cct?.[itemKey];
+    if (!item) return null;
+    for (const f of fields) {
+      const v = item[f];
+      if (v != null && v !== '') return v;
+    }
+    return null;
+  }
+
+  const heP = cellGet('hora_extra', 'percentual_padrao');
+  const heSab = cellGet('hora_extra', 'percentual_sabado');
+  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+  const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  const sobNumeric = cellGet('sobreaviso', 'percentual');
+  const sobRegra = cellGet('sobreaviso', 'regra_textual');
+  const sob = sobNumeric ?? (isShortOperationalSummary(sobRegra) ? sobRegra : null);
+  const jornadaItem = record.itens_cct?.jornada ?? null;
+  const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
+
+  const adNoturnoFmt = adNoturno != null
+    ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
+    : '—';
+  const sobFmt = sob != null
+    ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
+    : '—';
+
+  // Dynamic cargo cells from pisos array
+  const pisos = record.itens_cct?.piso_salarial?.pisos ?? [];
+  const cargoCells = cargoCols.map((cargo) => {
+    const entry = pisos.find((p) => p.cargo === cargo);
+    if (!entry) return `<td class="cct-col text-end">—</td>`;
+    const val = entry.valor;
+    const st = entry.status_parametro;
+    const display = val != null ? fmtBRL(val) : '—';
+    let extraCls = '';
+    if (st === 'conflito') extraCls = ' cct-col-conflito';
+    else if (st === 'pendente' || st === 'pendente_revisao') extraCls = ' cct-col-pendente';
+    return `<td class="cct-col text-end${extraCls}">${display}</td>`;
+  }).join('');
+
+  return `
+    <td class="col-estado-sindicato">${escapeHtml(estadoSindicato || '—')}</td>
+    <td>${escapeHtml(record.sindicato ?? '—')}</td>
+    <td>${escapeHtml(record.uf ?? '—')}</td>
+    <td>${escapeHtml(record.categoria ?? '—')}</td>
+    <td class="cct-col cct-group-start text-end">${heP != null ? fmtPct(heP) : '—'}</td>
+    <td class="cct-col text-end">${heSab != null ? fmtPct(heSab) : '—'}</td>
+    <td class="cct-col text-end">${heDom != null ? fmtPct(heDom) : '—'}</td>
+    <td class="cct-col text-end">${adNoturnoFmt}</td>
+    <td class="cct-col text-end">${sobFmt}</td>
+    <td class="cct-col">${fmtJornada(jornadaItem)}</td>
+    <td class="cct-group-start">${formatDate(record.data_base)}</td>
+    <td>${formatDate(record.vigencia_inicio)}</td>
+    <td>${formatDate(record.vigencia_fim)}</td>
+    <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
+    ${cargoCells}
+    <td class="cct-col text-end">${fmtVR(vrItem)}</td>
+  `;
+}
+
+/** Generates 12 CCT item columns for the main table row (legacy — kept for reference) */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
     const item = record.itens_cct?.[itemKey];
@@ -2209,4 +2329,25 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+// ── Shared cell formatters ────────────────────────────────────────────
+function fmtBRL(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+  return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function fmtPct(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+  return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+}
+
+function fmtShort(v) {
+  if (v == null) return '—';
+  const s = String(v);
+  return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
 }
