@@ -483,3 +483,29 @@ body {
   border-radius: 0.25rem;
   background-color: #f8f9fa;
 }
+
+/* ── Ratecard columns (PRJ-56) ───────────────────────────────────── */
+.col-estado-sindicato-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8125rem;
+}
+
+.cct-cargo-col {
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  text-align: right;
+}
+
+.cct-th.cct-cargo {
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background-color: #f0f4ff;
+}
+
+#params-tbody tr.row-pendente {
+  --bs-table-bg: #f8f9fa;
+}

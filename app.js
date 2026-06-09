@@ -191,6 +191,7 @@ const EMBEDDED_DEMO = {
           fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
           observacao: null,
           status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
+          pisos: [{ cargo: 'Piso Único', valor: 1540.47, status_parametro: 'extraido_para_revisao' }],
         },
         adicional_noturno: {
           valor: 35, percentual: 35, valor_textual: null,
@@ -305,6 +306,7 @@ const EMBEDDED_DEMO = {
 
 let allRecords = [];
 let filteredRecords = [];
+let allCargos = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
 
@@ -466,6 +468,7 @@ async function loadData() {
   allRecords = records;
   loadLocalOverrides(allRecords);
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
+  allCargos = collectAllCargos(allRecords);
   filteredRecords = [...allRecords];
 
   showApp(dataGeracao, demoMessage);
@@ -596,6 +599,17 @@ function populateFilterOptions() {
   populateSelect(filterUf, uniqueValues(allRecords, 'uf'), 'Todas as UFs');
   populateSelect(filterAno, uniqueValues(allRecords, 'ano_referencia'), 'Todos os anos');
   populateSelect(filterStatus, ['valido', 'conflito', 'pendente_revisao'], 'Todos os status');
+}
+
+function collectAllCargos(records) {
+  const cargoSet = new Set();
+  records.forEach((r) => {
+    const pisos = r.itens_cct?.piso_salarial?.pisos;
+    if (Array.isArray(pisos)) {
+      pisos.forEach((p) => { if (p.cargo) cargoSet.add(p.cargo); });
+    }
+  });
+  return [...cargoSet].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 }
 
 function populateSelect(selectElement, values, defaultLabel) {
@@ -743,6 +757,7 @@ function updateScrollHint() {
 
 function renderTable() {
   if (!elTableBody) return;
+  renderTableHeaders(allCargos);
 
   elTableBody.innerHTML = '';
 
@@ -783,15 +798,7 @@ function renderTable() {
     }
 
     row.innerHTML = `
-      <td>${escapeHtml(record.uf ?? '—')}</td>
-      <td>${escapeHtml(record.sindicato ?? '—')}</td>
-      <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
-      <td>${formatDate(record.data_base)}</td>
-      <td>${formatDate(record.vigencia_inicio)}</td>
-      <td>${formatDate(record.vigencia_fim)}</td>
-      ${buildCctTableCells(record)}
+      ${buildRatecardCells(record, allCargos)}
       <td class="status-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
@@ -819,6 +826,41 @@ function renderTable() {
 
   // Update scroll hint after DOM update (defer so layout is computed)
   setTimeout(updateScrollHint, 0);
+}
+
+function renderTableHeaders(cargoNames) {
+  const theadRow = document.getElementById('params-thead-row');
+  if (!theadRow) return;
+
+  const fixedBefore = [
+    { text: 'Estado/Sindicato', cls: 'col-estado-sindicato' },
+    { text: 'Sindicato', cls: 'col-sindicato' },
+    { text: 'Estado', cls: 'col-uf' },
+    { text: 'Aplicável à', cls: 'col-categoria' },
+    { text: 'HR Seg-Sex', cls: 'cct-th cct-group-start' },
+    { text: 'HR Sábado', cls: 'cct-th' },
+    { text: 'HR Domingo', cls: 'cct-th' },
+    { text: 'Adicional Noturno', cls: 'cct-th' },
+    { text: 'Sobreaviso', cls: 'cct-th' },
+    { text: 'Jornada de Trabalho', cls: 'cct-th' },
+    { text: 'Data Vigência Piso', cls: 'col-data' },
+    { text: 'Início Vigência CCT', cls: 'col-data' },
+    { text: 'Fim Vigência CCT', cls: 'col-data' },
+    { text: 'Reajuste Salarial %', cls: 'col-reajuste' },
+  ];
+
+  const fixedAfter = [
+    { text: 'VR Remuneração', cls: 'cct-th cct-group-end' },
+    { text: 'Status', cls: 'col-status status-group-start' },
+    { text: 'Fonte', cls: 'col-fonte' },
+    { text: '', cls: 'col-acao' },
+  ];
+
+  theadRow.innerHTML = [
+    ...fixedBefore.map((h) => `<th scope="col" class="${h.cls}">${escapeHtml(h.text)}</th>`),
+    ...cargoNames.map((c) => `<th scope="col" class="cct-th cct-cargo">${escapeHtml(c)}</th>`),
+    ...fixedAfter.map((h) => `<th scope="col" class="${h.cls}">${h.text ? escapeHtml(h.text) : ''}</th>`),
+  ].join('');
 }
 
 function isConflictRecord(record) {
@@ -1631,6 +1673,93 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${sobFmt}</td>`,
     `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
   ].join('');
+}
+
+/** Builds all data cells for a Ratecard table row (PRJ-56).
+ *  Returns cells from Estado/Sindicato through VR Remuneração (before Status/Fonte/Action). */
+function buildRatecardCells(record, cargoNames) {
+  function cellGet(itemKey, ...fields) {
+    const item = record.itens_cct?.[itemKey];
+    if (!item) return null;
+    for (const f of fields) {
+      const v = item[f];
+      if (v != null && v !== '') return v;
+    }
+    return null;
+  }
+
+  function fmtBRL(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function fmtPct(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+  }
+
+  function fmtShort(v) {
+    if (v == null) return '—';
+    const s = String(v);
+    return escapeHtml(s.length > 22 ? s.slice(0, 20) + '\u2026' : s);
+  }
+
+  const heP = cellGet('hora_extra', 'percentual_padrao');
+  const heSab = cellGet('hora_extra', 'percentual_sabado');
+  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+
+  const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  const adNoturnoFmt = adNoturno != null
+    ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
+    : '—';
+
+  const sobNumeric = cellGet('sobreaviso', 'percentual');
+  const sobRegra = cellGet('sobreaviso', 'regra_textual');
+  const sob = sobNumeric ?? (isShortOperationalSummary(sobRegra) ? sobRegra : null);
+  const sobFmt = sob != null
+    ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
+    : '—';
+
+  const jornadaItem = record.itens_cct?.jornada ?? null;
+  const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
+
+  const pisos = record.itens_cct?.piso_salarial?.pisos ?? [];
+  const pisoMap = {};
+  pisos.forEach((p) => { if (p.cargo) pisoMap[p.cargo] = p; });
+
+  const cells = [
+    `<td class="col-estado-sindicato-cell">${escapeHtml((record.uf ?? '—') + ' \u2014 ' + (record.sindicato ?? '—'))}</td>`,
+    `<td>${escapeHtml(record.sindicato ?? '—')}</td>`,
+    `<td>${escapeHtml(record.uf ?? '—')}</td>`,
+    `<td>${escapeHtml(record.categoria ?? '—')}</td>`,
+    `<td class="cct-col cct-group-start">${heP != null ? fmtPct(heP) : '—'}</td>`,
+    `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
+    `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
+    `<td class="cct-col">${adNoturnoFmt}</td>`,
+    `<td class="cct-col">${sobFmt}</td>`,
+    `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
+    `<td>${formatDate(record.data_base)}</td>`,
+    `<td>${formatDate(record.vigencia_inicio)}</td>`,
+    `<td>${formatDate(record.vigencia_fim)}</td>`,
+    `<td class="text-end">${formatPercent(record.percentual_reajuste)}</td>`,
+  ];
+
+  cargoNames.forEach((cargo) => {
+    const piso = pisoMap[cargo];
+    cells.push(
+      piso && piso.valor != null
+        ? `<td class="cct-col cct-cargo-col">${fmtBRL(piso.valor)}</td>`
+        : `<td class="cct-col cct-cargo-col">—</td>`
+    );
+  });
+
+  cells.push(`<td class="cct-col cct-group-end">${fmtVR(vrItem)}</td>`);
+
+  return cells.join('');
 }
 
 function bindCctItemControls(record) {
