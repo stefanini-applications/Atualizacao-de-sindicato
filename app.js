@@ -31,6 +31,7 @@ const EMBEDDED_DEMO = {
       vigencia_fim: '2025-12-31',
       fonte_documento: 'CCT/MG/SESCON/2025.pdf',
       observacao: null,
+      pisos: [{ cargo: 'Piso Salarial', valor: null, status_parametro: 'pendente_revisao' }],
       itens_cct: {
         reajuste_salarial: {
           valor: 5.5, tipo: 'percentual', unidade: '%',
@@ -79,6 +80,7 @@ const EMBEDDED_DEMO = {
       vigencia_fim: '2026-03-31',
       fonte_documento: 'CCT/SP/SINTTEL/2025.pdf',
       observacao: null,
+      pisos: [{ cargo: 'Piso Único', valor: 2800.00, status_parametro: 'valido' }],
       itens_cct: {
         reajuste_salarial: {
           valor: 6.0, tipo: 'percentual', unidade: '%',
@@ -147,6 +149,7 @@ const EMBEDDED_DEMO = {
       fonte_documento: 'CCT/RJ/Senalba/CCT_SENALBA_RJ_2025_v1.pdf',
       observacao:
         'Dois documentos distintos apresentam percentuais divergentes: 4,80% vs 5,20%. Requer verificação manual.',
+      pisos: [{ cargo: 'Piso Salarial', valor: null, status_parametro: 'pendente_revisao' }],
     },
     {
       id_registro_reajuste: 'DEMO-004',
@@ -164,6 +167,7 @@ const EMBEDDED_DEMO = {
       fonte_documento: 'CCT/RJ/Senalba/CCT_SENALBA_RJ_2025_aditivo.pdf',
       observacao:
         'Dois documentos distintos apresentam percentuais divergentes: 4,80% vs 5,20%. Requer verificação manual.',
+      pisos: [{ cargo: 'Piso Salarial', valor: null, status_parametro: 'pendente_revisao' }],
     },
     {
       id_registro_reajuste: 'PEND-DEMO-001',
@@ -180,6 +184,7 @@ const EMBEDDED_DEMO = {
       vigencia_fim: '2026-02-28',
       fonte_documento: 'CCT/SP/Sindtest-Demo/CCT_2025_Sindtest_Demo.pdf',
       observacao: 'Parâmetros extraídos automaticamente — aguardando conferência manual',
+      pisos: [{ cargo: 'Piso Único', valor: 1540.47, status_parametro: 'extraido_para_revisao' }],
       itens_cct: {
         piso_salarial: {
           valor: 1540.47, piso_unico: 1540.47, piso_tecnico: null,
@@ -262,6 +267,7 @@ const EMBEDDED_DEMO = {
       vigencia_fim: null,
       fonte_documento: 'CCT/SP/Sindtest-Vazio/CCT_2025_Sindtest_Vazio.pdf',
       observacao: 'Sindicato encontrado na pasta CCT, mas sem parâmetros extraídos disponíveis',
+      pisos: [{ cargo: 'Piso Salarial', valor: null, status_parametro: 'pendente_revisao' }],
       itens_cct: {
         reajuste_salarial: {
           valor: null, tipo: 'percentual', unidade: '%',
@@ -304,6 +310,7 @@ const EMBEDDED_DEMO = {
 };
 
 let allRecords = [];
+let allCargoNames = []; // sorted unique cargo names from pisos[], computed after data load
 let filteredRecords = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
@@ -464,6 +471,7 @@ async function loadData() {
   }
 
   allRecords = records;
+  allCargoNames = computeCargoColumns(allRecords);
   loadLocalOverrides(allRecords);
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
   filteredRecords = [...allRecords];
@@ -744,6 +752,7 @@ function updateScrollHint() {
 function renderTable() {
   if (!elTableBody) return;
 
+  buildTableHeader();
   elTableBody.innerHTML = '';
 
   if (elTotalRecords) {
@@ -782,24 +791,7 @@ function renderTable() {
       btnLabel = 'Detalhes';
     }
 
-    row.innerHTML = `
-      <td>${escapeHtml(record.uf ?? '—')}</td>
-      <td>${escapeHtml(record.sindicato ?? '—')}</td>
-      <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
-      <td>${formatDate(record.data_base)}</td>
-      <td>${formatDate(record.vigencia_inicio)}</td>
-      <td>${formatDate(record.vigencia_fim)}</td>
-      ${buildCctTableCells(record)}
-      <td class="status-group-start">${buildStatusBadge(record)}</td>
-      <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
-      <td>
-        <button type="button" class="${btnClass}" data-index="${index}">
-          ${btnLabel}
-        </button>
-      </td>
-    `;
+    row.innerHTML = buildRatecardRowCells(record, index, btnClass, btnLabel);
 
     const detailButton = row.querySelector('button[data-index]');
     detailButton.addEventListener('click', (e) => {
@@ -825,6 +817,67 @@ function isConflictRecord(record) {
   return record.status_parametro === 'conflito' || record.conflito === true;
 }
 
+/**
+ * Collects all unique cargo names from records' pisos arrays (PRJ-56/AC1).
+ * Returns a sorted list used to build dynamic cargo columns in the Ratecard table.
+ */
+function computeCargoColumns(records) {
+  const cargoSet = new Set();
+  records.forEach((record) => {
+    (record.pisos || []).forEach((p) => {
+      if (p && p.cargo) cargoSet.add(p.cargo);
+    });
+  });
+  return [...cargoSet].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+/**
+ * Builds the dynamic Ratecard table header (PRJ-56/AC4).
+ * Column order: Estado/Sindicato, Sindicato, Estado, Aplicável à,
+ *   HR SegSex, HR Sábado, HR Domingo, Adicional Noturno, Sobreaviso, Jornada de Trabalho,
+ *   Data Vigência Piso, Início Vigência CCT, Fim Vigência CCT, Reajuste Salarial %,
+ *   [dynamic cargo columns], VR Remuneração, Status, Fonte, (action).
+ */
+function buildTableHeader() {
+  const headRow = document.getElementById('params-thead-row');
+  if (!headRow) return;
+
+  const staticBefore = [
+    ['Estado/Sindicato', ''],
+    ['Sindicato', 'col-sindicato'],
+    ['Estado', 'col-uf'],
+    ['Aplicável à', 'col-categoria'],
+    ['HR SegSex', 'ratecard-th'],
+    ['HR Sábado', 'ratecard-th'],
+    ['HR Domingo', 'ratecard-th'],
+    ['Adicional Noturno', 'ratecard-th'],
+    ['Sobreaviso', 'ratecard-th'],
+    ['Jornada de Trabalho', 'ratecard-th'],
+    ['Data Vigência Piso', 'col-data'],
+    ['Início Vigência CCT', 'col-data'],
+    ['Fim Vigência CCT', 'col-data'],
+    ['Reajuste Salarial %', 'col-reajuste'],
+  ];
+
+  const staticAfter = [
+    ['VR Remuneração', 'ratecard-th'],
+    ['Status', 'col-status status-group-start'],
+    ['Fonte', 'col-fonte'],
+    ['', 'col-acao'],
+  ];
+
+  const ths = [
+    ...staticBefore.map(([label, cls]) =>
+      `<th scope="col"${cls ? ` class="${cls}"` : ''}>${escapeHtml(label)}</th>`),
+    ...allCargoNames.map((c) =>
+      `<th scope="col" class="ratecard-cargo-th">${escapeHtml(c)}</th>`),
+    ...staticAfter.map(([label, cls]) =>
+      `<th scope="col"${cls ? ` class="${cls}"` : ''}>${escapeHtml(label)}</th>`),
+  ];
+
+  headRow.innerHTML = ths.join('');
+}
+
 function buildStatusBadge(record) {
   if (record.status_parametro === 'pendente_revisao') {
     return '<span class="badge badge-pendente">⏳ Pendente revisão</span>';
@@ -833,6 +886,60 @@ function buildStatusBadge(record) {
     return '<span class="badge badge-conflito">⚠ Conflito</span>';
   }
   return '<span class="badge badge-valido">✔ Válido</span>';
+}
+
+/**
+ * Builds all table cells for a single row in Ratecard column order (PRJ-56/AC4).
+ * Includes dynamic cargo columns from allCargoNames (PRJ-56/AC1).
+ */
+function buildRatecardRowCells(record, rowIndex, btnClass, btnLabel) {
+  const itens = record.itens_cct || {};
+  const heItem = itens.hora_extra;
+  const adItem = itens.adicional_noturno;
+  const sobItem = itens.sobreaviso;
+  const jorItem = itens.jornada;
+  const vrItem = itens.auxilio_alimentacao;
+
+  const heSex = heItem != null
+    ? (heItem.percentual_padrao ?? heItem.percentual_dia_util ?? heItem.percentual ?? null)
+    : null;
+  const heSab = heItem?.percentual_sabado ?? null;
+  const heDom = heItem?.percentual_domingo_feriado ?? heItem?.percentual_domingo ?? null;
+  const adN = adItem != null ? (adItem.percentual ?? adItem.valor) : null;
+  const adNIsPct = adItem != null && (adItem.unidade === '%' || adItem.tipo === 'percentual' || adItem.tipo === 'adicional_noturno' || adItem.percentual != null);
+  const sobPct = sobItem?.percentual ?? null;
+
+  const cargoCells = allCargoNames.map((cargo) => {
+    const pisoEntry = (record.pisos || []).find((p) => p.cargo === cargo);
+    const v = pisoEntry?.valor;
+    return `<td class="ratecard-cargo-col text-end">${v != null ? fmtBRL(v) : '—'}</td>`;
+  }).join('');
+
+  return `
+    <td>${escapeHtml((record.uf ?? '') + ' / ' + (record.sindicato ?? '—'))}</td>
+    <td>${escapeHtml(record.sindicato ?? '—')}</td>
+    <td>${escapeHtml(record.uf ?? '—')}</td>
+    <td>${escapeHtml(record.categoria ?? '—')}</td>
+    <td class="text-end">${heSex != null ? fmtPct(heSex) : '—'}</td>
+    <td class="text-end">${heSab != null ? fmtPct(heSab) : '—'}</td>
+    <td class="text-end">${heDom != null ? fmtPct(heDom) : '—'}</td>
+    <td class="text-end">${adN != null ? (adNIsPct ? fmtPct(adN) : fmtBRL(adN)) : '—'}</td>
+    <td class="text-end">${sobPct != null ? fmtPct(sobPct) : '—'}</td>
+    <td>${fmtJornada(jorItem)}</td>
+    <td>${formatDate(record.data_base)}</td>
+    <td>${formatDate(record.vigencia_inicio)}</td>
+    <td>${formatDate(record.vigencia_fim)}</td>
+    <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
+    ${cargoCells}
+    <td>${fmtVR(vrItem)}</td>
+    <td class="status-group-start">${buildStatusBadge(record)}</td>
+    <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
+    <td>
+      <button type="button" class="${btnClass}" data-index="${rowIndex}">
+        ${btnLabel}
+      </button>
+    </td>
+  `;
 }
 
 function openDetail(record) {
@@ -1551,7 +1658,7 @@ function isCctItemPreenchido(itemKey, item) {
   return false;
 }
 
-/** Generates 12 CCT item columns for the main table row */
+/** Generates legacy CCT item columns — kept for modal detail rendering compatibility */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
     const item = record.itens_cct?.[itemKey];
@@ -1561,26 +1668,6 @@ function buildCctTableCells(record) {
       if (v != null && v !== '') return v;
     }
     return null;
-  }
-
-  function fmtBRL(v) {
-    if (v == null) return '—';
-    const n = Number(v);
-    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
-    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
-
-  function fmtPct(v) {
-    if (v == null) return '—';
-    const n = Number(v);
-    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
-    return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
-  }
-
-  function fmtShort(v) {
-    if (v == null) return '—';
-    const s = String(v);
-    return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
   }
 
   // Backward compat: derive piso columns from tipo+valor when specific fields absent
@@ -2096,6 +2183,29 @@ function buildFonteLink(value) {
   }
 
   return `<span class="text-secondary">${escapeHtml(value)}</span>`;
+}
+
+/** Formats a numeric value as BRL currency string, or '—' if null. */
+function fmtBRL(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+  return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+/** Formats a numeric value as a percentage string, or '—' if null. */
+function fmtPct(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+  return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+}
+
+/** Truncates and escapes a value for compact table cell display. */
+function fmtShort(v) {
+  if (v == null) return '—';
+  const s = String(v);
+  return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
 }
 
 /**

@@ -390,6 +390,33 @@ body {
   text-align: right;
 }
 
+/* ── Ratecard table columns (PRJ-56) ─────────────────────────────── */
+.ratecard-th {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #495057;
+  background-color: #eef2ff;
+  min-width: 90px;
+}
+
+/* Dynamic cargo columns */
+.ratecard-cargo-th {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0a3622;
+  background-color: #d1e7dd;
+  min-width: 110px;
+}
+
+.ratecard-cargo-col {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: #0a3622;
+  min-width: 110px;
+}
+
 /* Column group visual separators */
 .cct-group-start {
   border-left: 2px solid #dee2e6 !important;
@@ -400,15 +427,15 @@ body {
 }
 
 /* Fixed column widths for non-CCT columns */
-.col-uf    { min-width: 45px;  white-space: nowrap; }
+.col-uf        { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }
 .col-categoria { min-width: 160px; }
-.col-ano   { min-width: 50px;  white-space: nowrap; }
-.col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
-.col-data  { min-width: 90px;  white-space: nowrap; }
-.col-status { min-width: 120px; white-space: nowrap; }
-.col-fonte  { min-width: 100px; }
-.col-acao   { min-width: 100px; white-space: nowrap; }
+.col-ano       { min-width: 50px;  white-space: nowrap; }
+.col-reajuste  { min-width: 90px;  white-space: nowrap; text-align: right; }
+.col-data      { min-width: 95px;  white-space: nowrap; }
+.col-status    { min-width: 120px; white-space: nowrap; }
+.col-fonte     { min-width: 100px; }
+.col-acao      { min-width: 100px; white-space: nowrap; }
 
 /* Monetary and percent cells right-aligned */
 #params-tbody td.cct-col {
