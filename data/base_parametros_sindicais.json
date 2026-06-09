@@ -284,14 +284,40 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "tecnico_suporte",
-              "valor": 1487.48,
-              "trecho_fonte": "e setenta e nove reais e vinte e um centavos); b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48(Um mil, quatrocentos e oitenta e sete reais e quarenta e oito centavos);c). Apl"
+              "cargo": "Técnico de atendimento",
+              "valor": 1479.21,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "a) Aplicável exclusivamente Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21"
             },
             {
-              "cargo": "analista",
+              "cargo": "Auxiliar de Processamento",
+              "valor": 1479.21,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "a) Aplicável exclusivamente Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21"
+            },
+            {
+              "cargo": "Técnico de Suporte",
+              "valor": 1487.48,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48"
+            },
+            {
+              "cargo": "Analista de Suporte",
               "valor": 2434.07,
-              "trecho_fonte": "itenta e sete reais e quarenta e oito centavos);c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07 (Dois mil, quatrocentos e trinta e quatro reais e sete centavos): d). Os traba"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07"
             }
           ]
         },
@@ -1210,24 +1236,40 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "operador",
+              "cargo": "Atendente de Central Telefônica - Operador de Telecobrança - Telefonista - Teleatendente ou afins",
               "valor": 1547.59,
-              "trecho_fonte": "30h/semanais 36h/semanais Atendente de Central Telefônica - Operador de Telecobrança / I Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). A"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Nível I Jornada 30h/semanais R$ 1.547,59"
             },
             {
-              "cargo": "operador",
+              "cargo": "Atendente de Central Telefônica - Operador de Telecobrança - Telefonista - Teleatendente ou afins",
               "valor": 1857.11,
-              "trecho_fonte": "dio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). Atendente de Central Telefônica - Operador de Telecobrança / Op. Rádio Chamada – Op. Telemarketing - Telefonista -"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Nível I Jornada 36h/semanais R$ 1.857,11"
             },
             {
-              "cargo": "atendente",
+              "cargo": "Nível Técnico e/ou Bilíngue Monitor de Teleatendimento",
               "valor": 2228.08,
-              "trecho_fonte": "R$ 1.856,74 R$ 2.228,08 atendente ou afins (ativo/receptivo/híbrido). Nível Técnico e/ou Bilíngue M"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "III Nível Técnico e/ou Bilíngue Monitor de Teleatendimento R$ 2.228,08"
             },
             {
-              "cargo": "analista",
+              "cargo": "Analista de Atendimento / Analista de tráfego ou afins",
               "valor": 3005.06,
-              "trecho_fonte": "Teleatendimento / Telecobrança ou afins. Nível Técnico e/ou R$ 3.005,06 Bilíngue. VII Analista de Atendimento / Analista de tráfego ou afins R$ 3.005,0"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
+              "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "VII Analista de Atendimento / Analista de tráfego ou afins R$ 3.005,06"
             }
           ],
           "por_modalidade": [
@@ -1581,14 +1623,58 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "operador",
-              "valor": 1691.52,
-              "trecho_fonte": "3172 Técnicos em operação e monitoração de computadores R$ 1.691,52 3722 Operadores de rede de teleprocessamento e afins R$ 1.691,52"
+              "cargo": "Analistas de tecnologia da informação Iniciantes",
+              "valor": 2994.3,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30"
             },
             {
-              "cargo": "analista",
-              "valor": 2994.3,
-              "trecho_fonte": "(R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação"
+              "cargo": "Analistas de tecnologia da informação",
+              "valor": 3733.82,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "2124 Analistas de tecnologia da informação R$ 3.733,82"
+            },
+            {
+              "cargo": "Técnicos de desenvolvimento de sistemas e aplicações Iniciantes",
+              "valor": 1931.79,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "3171 Técnicos de desenvolvimento de sistemas e aplicações Iniciantes R$ 1.931,79"
+            },
+            {
+              "cargo": "Técnicos de desenvolvimento de sistemas e aplicações",
+              "valor": 2412.88,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "3171 Técnicos de desenvolvimento de sistemas e aplicações R$ 2.412,88"
+            },
+            {
+              "cargo": "Técnicos em operação e monitoração de computadores Iniciantes",
+              "valor": 1524.98,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "3172 Técnicos em operação e monitoração de computadores Iniciantes R$ 1.524,98"
+            },
+            {
+              "cargo": "Técnicos em operação e monitoração de computadores",
+              "valor": 1691.52,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "3172 Técnicos em operação e monitoração de computadores R$ 1.691,52"
             }
           ]
         },
@@ -1949,29 +2035,40 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "leiturista",
-              "valor": 2282.24,
-              "trecho_fonte": ".518,00 e contínuo Após o período de experiência R$ 1.518,00 Leiturista – Belo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – In"
-            },
-            {
-              "cargo": "leiturista",
-              "valor": 2224.51,
-              "trecho_fonte": "elo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Prim"
-            },
-            {
-              "cargo": "leiturista",
-              "valor": 1696.5,
-              "trecho_fonte": "de caixa rápido ou correlato, não poderá ser aplicado piso salarial inferior a R$ 1.696,50 (hum mil, seiscentos e noventa e seis reais e cinquenta centavos). Parágrafo Segundo: O Leiturista que utilizar veículo próprio ou outro veículo deverá receber em contrapartida v"
-            },
-            {
-              "cargo": "mensageiro",
+              "cargo": "Mensageiro/copeiro/Faxineiro e contínuo",
               "valor": 1518.0,
-              "trecho_fonte": "derão receber salários inferiores a: Funções Pisos Mensageiro/copeiro/Faxineiro R$ 1.518,00 e contínuo Após o período de experiência R$ 1.518,00 Leituri"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Mensageiro/copeiro/Faxineiro R$ 1.518,00 e contínuo"
             },
             {
-              "cargo": "demais_funcoes",
+              "cargo": "Leiturista - Belo Horizonte e Região Metropolitana",
+              "valor": 2282.24,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Leiturista Belo Horizonte e Região Metropolitana R$ 2.282,24"
+            },
+            {
+              "cargo": "Leiturista - Interior de Minas",
+              "valor": 2224.51,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Leiturista Interior de Minas R$ 2.224,51"
+            },
+            {
+              "cargo": "Demais Funções",
               "valor": 1546.59,
-              "trecho_fonte": "itana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Primeiro: Independentemente da denominação do cargo e/ou função ocup"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Demais Funções R$ 1.546,59"
             }
           ]
         },
@@ -2206,14 +2303,22 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "analista",
+              "cargo": "Analista de Sistemas ou de Tecnologia da Informação",
               "valor": 3146.01,
-              "trecho_fonte": "ágrafo Segundo: Fica assegurado para os profissionais que exercem as funções de Analista de Sistemas ou de Tecnologia da Informação, sendo aquelas definidas na Classificação Brasileira de Ocupações de nº 2122,2123 e 2124, o salário nunca inferior a R$ 3.146,01 (três mil, cento e quarenta e seis reai…"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "funções de Analista de Sistemas ou de Tecnologia da Informação, Classificação Brasileira de Ocupações nº 2122,2123 e 2124, salário nunca inferior a R$ 3.146,01"
             },
             {
-              "cargo": "programador",
+              "cargo": "Programador",
               "valor": 2222.82,
-              "trecho_fonte": "grafo Terceiro: Fica assegurado para os profissionais que exercem as funções de Programador, sendo aquelas definidas na Classificação Brasileira de Ocupações de nº 3.171, o salário nunca inferior a R$ 2.222,82 (dois mil, duzentos e vinte e dois reais e oitenta e dois centavos) mensais. P"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "funções de Programador, Classificação Brasileira de Ocupações nº 3.171, salário nunca inferior a R$ 2.222,82"
             }
           ]
         },
@@ -2797,29 +2902,58 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "piso_tecnico",
-              "valor": 3290.0,
-              "trecho_fonte": "R$ 3.290,00 (três mil e duzentos e f Analistas de tecnologia da informação noventa reais) PARÁGRAFO PRIMEIRO – Fica acordado que o PISO técnico–profissional da categoria será o da alínea “d”. PARÁGRAFO SEGUNDO – Para esta"
-            },
-            {
-              "cargo": "operador",
-              "valor": 1918.0,
-              "trecho_fonte": "dois reais) Digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e R$ 1.918,00 (hum mil e novecentos e c monitoração de computadores"
-            },
-            {
-              "cargo": "atendente",
-              "valor": 2067.0,
-              "trecho_fonte": "dores; auxiliares, assistentes e/ou dezoito reais) atendentes de informática e tecnologia da informação R$ 2.067,00 (dois mil e sessenta e sete Profissionais de nível médio que"
-            },
-            {
-              "cargo": "copeiro",
+              "cargo": "Contínuos, copeiros, vigia e assemelhados",
               "valor": 1602.0,
-              "trecho_fonte": "R$ 1.602,00 (hum mil e seiscentos e a Contínuos, copeiros, vigia e assemelhados"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "a Contínuos, copeiros, vigia e assemelhados R$ 1.602,00"
             },
             {
-              "cargo": "programador",
+              "cargo": "Demais empregados na área administrativa",
+              "valor": 1602.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "b Demais empregados na área administrativa R$ 1.602,00"
+            },
+            {
+              "cargo": "Digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e monitoração de computadores; auxiliares, assistentes e/ou atendentes de informática e tecnologia da informação",
+              "valor": 1918.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "c ...Digitadores e/ou operadores de equipamento de entrada...R$ 1.918,00"
+            },
+            {
+              "cargo": "Profissionais de nível médio que desempenhem atividades técnicas",
+              "valor": 2067.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "d Profissionais de nível médio que desempenhem atividades técnicas R$ 2.067,00"
+            },
+            {
+              "cargo": "Programadores de computadores; demais profissionais, que desenvolvam atividades técnicas de TI em funções que a empresa exija nível superior",
               "valor": 2535.0,
-              "trecho_fonte": "espondentes às alíneas “a”, \"b\", “c” e “e” Programadores de computadores; demais profissionais, que desenvolvam atividades técnicas de TI em funções que a empresa R$ 2.535,00 (dois mil e quinhentos e e exija nível superior compa"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "e Programadores de computadores; demais profissionais de TI que a empresa exija nível superior R$ 2.535,00"
+            },
+            {
+              "cargo": "Analistas de tecnologia da informação",
+              "valor": 3290.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "f Analistas de tecnologia da informação R$ 3.290,00"
             }
           ]
         },
@@ -3661,124 +3795,364 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "tecnico_suporte",
-              "valor": 3150.14,
-              "trecho_fonte": "831,06 Operador de Internet R$ 3.150,14 Técnico de Suporte R$ 3.150,14 Técnico de Su"
-            },
-            {
-              "cargo": "tecnico_suporte",
-              "valor": 3465.3,
-              "trecho_fonte": "co de Suporte R$ 3.150,14 Técnico de Suporte Pleno R$ 3.465,30 Técnico de Suporte Sênior R$ 3.8"
-            },
-            {
-              "cargo": "tecnico_suporte",
-              "valor": 13703.8,
-              "trecho_fonte": "852,12 Gerente/Coordenador de Processos ITIL R$ 13.703,80 Técnico Operador e Instalador Telemática R$ 3.150,14 Técnico de Suporte e Manutenção de Redes R$ 3.150,14 Técnico de Te"
-            },
-            {
-              "cargo": "tecnico_informatica",
-              "valor": 3811.97,
-              "trecho_fonte": "465,30 Técnico de Suporte Sênior R$ 3.811,97 Técnico de Manutenção em Hardware R$ 3.150,14 Técnico em Informática R$ 3.150,14 Técnico em Inform"
-            },
-            {
-              "cargo": "tecnico_informatica",
-              "valor": 3464.39,
-              "trecho_fonte": "co em Informática R$ 3.150,14 Técnico em Informática Pleno R$ 3.464,39 Técnico em Informática Sênior R$ 3.8"
-            },
-            {
-              "cargo": "operador",
-              "valor": 2660.44,
-              "trecho_fonte": "230,93 Aux. Técnico em manutenção de hardware R$ 2.660,44 Operador de Micro/Mini R$ 2.660,44 Ope"
-            },
-            {
-              "cargo": "operador",
-              "valor": 3192.51,
-              "trecho_fonte": "dor Júnior R$ 2.660,44 Operador Pleno R$ 3.192,51 Operador Sênior R$ 3.8"
-            },
-            {
-              "cargo": "operador",
-              "valor": 3831.06,
-              "trecho_fonte": "192,51 Operador Sênior R$ 3.831,06 Operador de Internet R$ 3.150,14 Téc"
-            },
-            {
-              "cargo": "analista",
-              "valor": 5831.04,
-              "trecho_fonte": "859,17 Programador Sênior R$ 5.831,04 Analista de Sistemas Júnior R$ 4.908,45 An"
-            },
-            {
-              "cargo": "analista",
-              "valor": 4908.45,
-              "trecho_fonte": "831,04 Analista de Sistemas Júnior R$ 4.908,45 Analista de Sistemas Pleno R$ 5.890,07 Analista de Sist"
-            },
-            {
-              "cargo": "analista",
-              "valor": 5890.07,
-              "trecho_fonte": "R$ 4.908,45 Analista de Sistemas Pleno R$ 5.890,07 Analista de Sistemas Sênior R$ 7.861,69 Administrador de"
-            },
-            {
-              "cargo": "analista",
-              "valor": 5119.17,
-              "trecho_fonte": "R$ 7.861,69 Administrador de Banco de Dados R$ 5.119,17 Analista de Suporte Júnior R$ 6.103,59 Analista de Supo"
-            },
-            {
-              "cargo": "analista",
-              "valor": 6103.59,
-              "trecho_fonte": "R$ 5.119,17 Analista de Suporte Júnior R$ 6.103,59 Analista de Suporte Pleno R$ 7.324,27 Analista de Supo"
-            },
-            {
-              "cargo": "analista",
-              "valor": 7324.27,
-              "trecho_fonte": "R$ 6.103,59 Analista de Suporte Pleno R$ 7.324,27 Analista de Suporte Sênior R$ 8.789,10 Administrador de"
-            },
-            {
-              "cargo": "analista",
-              "valor": 6103.51,
-              "trecho_fonte": "R$ 5.119,17 Administrador de Sites (web Master) R$ 6.103,51 Analista de Segurança da informação R$ 8.072,24 Arquiteto de Sof"
-            },
-            {
-              "cargo": "supervisor",
-              "valor": 16.86,
-              "trecho_fonte": "150,14 Instrutor/Monitor de informática (hora aula) R$ 16,86 Supervisor de Central de Atendimento R$ 9.275,66 Coord"
-            },
-            {
-              "cargo": "digitador",
+              "cargo": "Digitador",
               "valor": 2016.69,
-              "trecho_fonte": "Funções PISO 2025 Digitador R$ 2.016,69 Conferente R$ 2.0"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Digitador R$ 2.016,69"
             },
             {
-              "cargo": "programador",
+              "cargo": "Conferente",
+              "valor": 2016.69,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Conferente R$ 2.016,69"
+            },
+            {
+              "cargo": "Classificador de Documentos",
+              "valor": 2016.69,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Classificador de Documentos R$ 2.016,69"
+            },
+            {
+              "cargo": "Aux de Processamento",
+              "valor": 2016.69,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Aux de Processamento R$ 2.016,69"
+            },
+            {
+              "cargo": "Preparador de Dados",
+              "valor": 2016.69,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Preparador de Dados R$ 2.016,69"
+            },
+            {
+              "cargo": "Fitotecário",
+              "valor": 2230.93,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Fitotecário R$ 2.230,93"
+            },
+            {
+              "cargo": "Aux. Técnico em manutenção de hardware",
+              "valor": 2660.44,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Aux. Técnico em manutenção de hardware R$ 2.660,44"
+            },
+            {
+              "cargo": "Operador de Micro/Mini",
+              "valor": 2660.44,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Operador de Micro/Mini R$ 2.660,44"
+            },
+            {
+              "cargo": "Operador Júnior",
+              "valor": 2660.44,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Operador Júnior R$ 2.660,44"
+            },
+            {
+              "cargo": "Operador Pleno",
+              "valor": 3192.51,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Operador Pleno R$ 3.192,51"
+            },
+            {
+              "cargo": "Operador Sênior",
+              "valor": 3831.06,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Operador Sênior R$ 3.831,06"
+            },
+            {
+              "cargo": "Operador de Internet",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Operador de Internet R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico de Suporte",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Suporte R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico de Suporte Pleno",
+              "valor": 3465.3,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Suporte Pleno R$ 3.465,30"
+            },
+            {
+              "cargo": "Técnico de Suporte Sênior",
+              "valor": 3811.97,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Suporte Sênior R$ 3.811,97"
+            },
+            {
+              "cargo": "Técnico Operador e Instalador Telemática",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico Operador e Instalador Telemática R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico de Suporte e Manutenção de Redes",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Suporte e Manutenção de Redes R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico de Manutenção em Hardware",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Manutenção em Hardware R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico em Informática",
+              "valor": 3150.14,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico em Informática R$ 3.150,14"
+            },
+            {
+              "cargo": "Técnico em Informática Pleno",
+              "valor": 3464.39,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico em Informática Pleno R$ 3.464,39"
+            },
+            {
+              "cargo": "Técnico de Teleprocessamento",
               "valor": 3518.49,
-              "trecho_fonte": "150,14 Técnico de Teleprocessamento R$ 3.518,49 Programador Júnior R$ 3.945,41 Progra"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnico de Teleprocessamento R$ 3.518,49"
             },
             {
-              "cargo": "programador",
+              "cargo": "Programador Jnior",
               "valor": 3945.41,
-              "trecho_fonte": "518,49 Programador Júnior R$ 3.945,41 Programador Pleno R$ 4.859,17 Progra"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Programador Júnior R$ 3.945,41"
             },
             {
-              "cargo": "programador",
+              "cargo": "Programador Pleno",
               "valor": 4859.17,
-              "trecho_fonte": "945,41 Programador Pleno R$ 4.859,17 Programador Sênior R$ 5.831,04 Analis"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Programador Pleno R$ 4.859,17"
             },
             {
-              "cargo": "gerente",
-              "valor": 6852.12,
-              "trecho_fonte": "275,66 Coordenador Técnico de Atendimento e Suporte R$ 6.852,12 Gerente/Coordenador de Processos ITIL R$ 13.703,80 T"
+              "cargo": "Programador Sênior",
+              "valor": 5831.04,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Programador Sênior R$ 5.831,04"
             },
             {
-              "cargo": "gerente",
+              "cargo": "Analista de Sistemas Júnior",
+              "valor": 4908.45,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Sistemas Júnior R$ 4.908,45"
+            },
+            {
+              "cargo": "Analista de Sistemas Pleno",
+              "valor": 5890.07,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Sistemas Pleno R$ 5.890,07"
+            },
+            {
+              "cargo": "Analista de Sistemas Sênior",
+              "valor": 7861.69,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Sistemas Sênior R$ 7.861,69"
+            },
+            {
+              "cargo": "Administrador de Banco de Dados",
+              "valor": 5119.17,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Administrador de Banco de Dados R$ 5.119,17"
+            },
+            {
+              "cargo": "Analista de Suporte Júnior",
+              "valor": 6103.59,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Suporte Júnior R$ 6.103,59"
+            },
+            {
+              "cargo": "Analista de Suporte Pleno",
+              "valor": 7324.27,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Suporte Pleno R$ 7.324,27"
+            },
+            {
+              "cargo": "Analista de Suporte Sênior",
+              "valor": 8789.1,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Suporte Sênior R$ 8.789,10"
+            },
+            {
+              "cargo": "Administrador de Sites (web Master)",
+              "valor": 6103.51,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Administrador de Sites (web Master) R$ 6.103,51"
+            },
+            {
+              "cargo": "Analista de Segurança da informação",
+              "valor": 8072.24,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Analista de Segurança da informação R$ 8.072,24"
+            },
+            {
+              "cargo": "Arquiteto de Software",
               "valor": 8491.79,
-              "trecho_fonte": "R$ 8.072,24 Arquiteto de Software R$ 8.491,79 Gerente/Coordenador Projeto TI R$ 9.498,16 Gerente/Coorden"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Arquiteto de Software R$ 8.491,79"
             },
             {
-              "cargo": "gerente",
-              "valor": 9498.16,
-              "trecho_fonte": "R$ 8.491,79 Gerente/Coordenador Projeto TI R$ 9.498,16 Gerente/Coordenador de Tecnologia da InformaçãoR$ 13.703,80 Parágrafo Primeiro - O pi"
+              "cargo": "Instrutor/Monitor de informática (hora aula)",
+              "valor": 16.86,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Instrutor/Monitor de informática (hora aula) R$ 16,86"
             },
             {
-              "cargo": "coordenador",
+              "cargo": "Supervisor de Central de Atendimento",
               "valor": 9275.66,
-              "trecho_fonte": "16,86 Supervisor de Central de Atendimento R$ 9.275,66 Coordenador Técnico de Atendimento e Suporte R$ 6.852,12 Gerent"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Supervisor de Central de Atendimento R$ 9.275,66"
+            },
+            {
+              "cargo": "Coordenador Técnico de Atendimento e Suporte",
+              "valor": 6852.12,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Coordenador Técnico de Atendimento e Suporte R$ 6.852,12"
+            },
+            {
+              "cargo": "Gerente/Coordenador de Processos ITIL",
+              "valor": 13703.8,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Gerente/Coordenador de Processos ITIL R$ 13.703,80"
+            },
+            {
+              "cargo": "Gerente/Coordenador Projeto TI",
+              "valor": 9498.16,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Gerente/Coordenador Projeto TI R$ 9.498,16"
+            },
+            {
+              "cargo": "Gerente/Coordenador de Tecnologia da Informação",
+              "valor": 13703.8,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Gerente/Coordenador de Tecnologia da Informação R$ 13.703,80"
             }
           ]
         },
@@ -4492,24 +4866,67 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "analista",
+              "cargo": "Analistas de Sistemas",
               "valor": 4410.0,
-              "trecho_fonte": "sional, a partir da assinatura do presente instrumento, serão os seguintes: a) Analistas de Sistemas R$ 4.410,00 b) Funções que exijam formação universitária de graduação plena"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "a) Analistas de Sistemas R$ 4.410,00"
             },
             {
-              "cargo": "supervisor",
-              "valor": 3560.0,
-              "trecho_fonte": "R$ 3.560,00 d) Supervisores e Cargos de Nível Técnico"
-            },
-            {
-              "cargo": "continuo",
-              "valor": 2000.0,
-              "trecho_fonte": "e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00 f) Digitadores e Telefonistas R$ 2.000,00 g) Pessoal de Serviços Gerais e Contínuos"
-            },
-            {
-              "cargo": "programador",
+              "cargo": "Funções que exijam formação universitária de graduação plena",
               "valor": 4105.0,
-              "trecho_fonte": "ia de graduação plena R$ 4.105,00 c) Programadores e Instrutores"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "b) Funções que exijam formação universitária de graduação plena R$ 4.105,00"
+            },
+            {
+              "cargo": "Programadores e Instrutores",
+              "valor": 3560.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "c) Programadores e Instrutores R$ 3.560,00"
+            },
+            {
+              "cargo": "Supervisores e Cargos de Nível Técnico",
+              "valor": 3115.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "d) Supervisores e Cargos de Nível Técnico R$ 3.115,00"
+            },
+            {
+              "cargo": "Auxiliares Administrativos, Financeiros e de Escritórios e Assistentes de Apoio ao Usuário",
+              "valor": 2000.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "e) Auxiliares Administrativos, Financeiros e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00"
+            },
+            {
+              "cargo": "Digitadores e Telefonistas",
+              "valor": 2000.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "f) Digitadores e Telefonistas R$ 2.000,00"
+            },
+            {
+              "cargo": "Pessoal de Serviços Gerais e Contínuos",
+              "valor": 2000.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "g) Pessoal de Serviços Gerais e Contínuos R$ 2.000,00"
             }
           ]
         },
@@ -4642,9 +5059,40 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "digitador",
+              "cargo": "Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e Office-boy)",
               "valor": 1978.0,
-              "trecho_fonte": "ual da categoria, normalmente reajustado no mês de janeiro: Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e R$ 1.978,00 Office-boy) Trainee técnico"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e R$ 1.978,00 Office-boy)"
+            },
+            {
+              "cargo": "Trainee técnico",
+              "valor": 2044.2,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Trainee técnico R$ 2.044,20"
+            },
+            {
+              "cargo": "Cargos Administrativos",
+              "valor": 1978.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Cargos Administrativos R$ 1.978,00"
+            },
+            {
+              "cargo": "Técnicos em Geral",
+              "valor": 2207.1,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Técnicos em Geral R$ 2.207,10"
             }
           ]
         },
@@ -4787,14 +5235,121 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "operador",
-              "valor": 2191.83,
-              "trecho_fonte": "AL DE REDE R$ 1.792,00 OPERADOR MULTIFUNCIONAL / HOME R$ 2.191,83 CONNECT OPERADOR SERVICO AO CLIENTE -"
+              "cargo": "ALMOXARIFE",
+              "valor": 1851.24,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "ALMOXARIFE R$ 1.851,24"
             },
             {
-              "cargo": "supervisor",
+              "cargo": "CABISTA I",
+              "valor": 1792.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "CABISTA I R$ 1.792,00"
+            },
+            {
+              "cargo": "CABISTA II",
+              "valor": 2287.92,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "CABISTA II R$ 2.287,92"
+            },
+            {
+              "cargo": "CABISTA III",
+              "valor": 2531.03,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "CABISTA III R$ 2.531,03"
+            },
+            {
+              "cargo": "INSTALADOR DTH",
+              "valor": 1792.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "INSTALADOR DTH R$ 1.792,00"
+            },
+            {
+              "cargo": "LIDER DE OBRAS / ENCARREGADO",
+              "valor": 2531.02,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "LIDER DE OBRAS / ENCARREGADO R$ 2.531,02"
+            },
+            {
+              "cargo": "OFICIAL DE REDE",
+              "valor": 1792.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "OFICIAL DE REDE R$ 1.792,00"
+            },
+            {
+              "cargo": "OPERADOR MULTIFUNCIONAL / HOME CONNECT",
+              "valor": 2191.83,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "OPERADOR MULTIFUNCIONAL / HOME R$ 2.191,83 CONNECT"
+            },
+            {
+              "cargo": "OPERADOR SERVICO AO CLIENTE - OSC",
+              "valor": 1792.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "OPERADOR SERVICO AO CLIENTE - R$ 1.792,00 OSC"
+            },
+            {
+              "cargo": "SUPERVISOR OPERACIONAL",
               "valor": 3701.02,
-              "trecho_fonte": "R$ 1.792,00 OSC SUPERVISOR OPERACIONAL R$ 3.701,02 TEC DADOS I R$ 1.7"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "SUPERVISOR OPERACIONAL R$ 3.701,02"
+            },
+            {
+              "cargo": "TEC DADOS I",
+              "valor": 1794.94,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "TEC DADOS I R$ 1.794,94"
+            },
+            {
+              "cargo": "TEC DADOS II",
+              "valor": 2289.31,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "TEC DADOS II R$ 2.289,31"
+            },
+            {
+              "cargo": "TEC DADOS III",
+              "valor": 2535.16,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "TEC DADOS III R$ 2.535,16"
             }
           ]
         },
@@ -5460,14 +6015,85 @@
           "status_parametro": "extraido_para_revisao",
           "por_cargo": [
             {
-              "cargo": "atendente",
+              "cargo": "Office boy",
               "valor": 1980.0,
-              "trecho_fonte": "o - CBO 5174-10; Auxiliar de Serviços Gerais - CBO 5143; Copeira - CBO 5134-25; Atendente de Negócios - CBO 2532-25; Entrevistador de Pesquisas de Campo - CBO 4241-15; o valor mensal correspondente a R$ 1.980,00 (um mil, novecentos e oitenta reais); 3.2. Para as demais funções, o valor men"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "\"Office boy\" - CBO 4122-05 o valor mensal correspondente a R$ 1.980,00"
             },
             {
-              "cargo": "demais_funcoes",
+              "cargo": "Recepcionista",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Recepcionista - CBO 4221-05 R$ 1.980,00"
+            },
+            {
+              "cargo": "Faxineiro",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Faxineiro - CBO 5143-20 R$ 1.980,00"
+            },
+            {
+              "cargo": "Porteiro",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Porteiro - CBO 5174-10 R$ 1.980,00"
+            },
+            {
+              "cargo": "Auxiliar de Serviços Gerais",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Auxiliar de Serviços Gerais - CBO 5143 R$ 1.980,00"
+            },
+            {
+              "cargo": "Copeira",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Copeira - CBO 5134-25 R$ 1.980,00"
+            },
+            {
+              "cargo": "Atendente de Negócios",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Atendente de Negócios - CBO 2532-25 R$ 1.980,00"
+            },
+            {
+              "cargo": "Entrevistador de Pesquisas de Campo",
+              "valor": 1980.0,
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "Entrevistador de Pesquisas de Campo - CBO 4241-15 R$ 1.980,00"
+            },
+            {
+              "cargo": "demais funções",
               "valor": 2100.0,
-              "trecho_fonte": "orrespondente a R$ 1.980,00 (um mil, novecentos e oitenta reais); 3.2. Para as demais funções, o valor mensal corresponde a R$ 2.100,00 (dois mil e cem reais)."
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
+              "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "3.2. Para as demais funções, o valor mensal corresponde a R$ 2.100,00"
             }
           ]
         },
@@ -5583,7 +6209,11 @@
             {
               "cargo": "digitador",
               "valor": 2025.0,
-              "trecho_fonte": "rio normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais;"
+              "unidade": "BRL",
+              "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
+              "clausula": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS.",
+              "status_parametro": "extraido_para_revisao",
+              "trecho_fonte": "A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais"
             }
           ],
           "por_jornada": [

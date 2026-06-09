@@ -399,6 +399,19 @@ body {
   border-left: 2px solid #dee2e6 !important;
 }
 
+/* PRJ-57: Dynamic cargo columns — subtle visual distinction */
+.cct-cargo-th {
+  background-color: #f0f4ff !important;
+  color: #3a5bbf !important;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cct-cargo-col {
+  background-color: #f8faff;
+}
+
 /* Fixed column widths for non-CCT columns */
 .col-uf    { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }

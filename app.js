@@ -308,6 +308,10 @@ let filteredRecords = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
 
+/** Sorted unique list of literal cargo names found in piso_salarial.por_cargo[] across ALL records.
+ *  Computed once from allRecords on data load; never recomputed on filter changes (AC2). */
+let cargoCols = [];
+
 let elLoading;
 let elUnavailable;
 let elApp;
@@ -468,8 +472,12 @@ async function loadData() {
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
   filteredRecords = [...allRecords];
 
+  // PRJ-57: compute cargo columns from ALL records once; header stays stable under filters (AC2)
+  cargoCols = collectCargoCols(allRecords);
+
   showApp(dataGeracao, demoMessage);
   populateFilterOptions();
+  updateTableHeader();
   renderTable();
 }
 
@@ -739,6 +747,55 @@ function updateScrollHint() {
   const isScrolledRight =
     elTableContainer.scrollLeft + elTableContainer.clientWidth >= elTableContainer.scrollWidth - 4;
   elScrollHint.classList.toggle('d-none', !isScrollable || isScrolledRight);
+}
+
+/**
+ * Collects all unique cargo names from piso_salarial.por_cargo[] across
+ * all records (not just filtered). Returns a sorted array.
+ */
+function collectCargoCols(records) {
+  const seen = new Set();
+  records.forEach((r) => {
+    const pc = r.itens_cct?.piso_salarial?.por_cargo;
+    if (Array.isArray(pc)) {
+      pc.forEach((entry) => {
+        if (entry && typeof entry.cargo === 'string' && entry.cargo.trim()) {
+          seen.add(entry.cargo.trim());
+        }
+      });
+    }
+  });
+  return Array.from(seen).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+/**
+ * Inserts/replaces dynamic cargo <th> elements in the table header row,
+ * immediately after the "Piso Único" column (id="th-piso-unico").
+ * Called once after data load; headers remain stable when filters change (AC2).
+ */
+function updateTableHeader() {
+  const anchor = document.getElementById('th-piso-unico');
+  if (!anchor) return;
+  const theadRow = anchor.parentElement;
+  if (!theadRow) return;
+
+  // Remove previously injected cargo headers
+  theadRow.querySelectorAll('.cct-cargo-th').forEach((el) => el.remove());
+
+  // Insert new cargo headers after "Piso Único"
+  const refEl = anchor.nextSibling;
+  cargoCols.forEach((cargo) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.className = 'cct-th cct-cargo-th';
+    const label = cargo.length > 20 ? cargo.slice(0, 18) + '\u2026' : cargo;
+    th.textContent = label;
+    th.title = cargo;
+    theadRow.insertBefore(th, refEl);
+  });
+
+  // Update scroll hint after header change
+  setTimeout(updateScrollHint, 0);
 }
 
 function renderTable() {
@@ -1622,6 +1679,14 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
+    // PRJ-57: dynamic cargo columns — one cell per cargo in cargoCols (AC2)
+    ...cargoCols.map((cargo) => {
+      const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
+      const entry = Array.isArray(porCargo)
+        ? porCargo.find((c) => c.cargo === cargo)
+        : null;
+      return `<td class="cct-col cct-cargo-col">${entry != null && entry.valor != null ? fmtBRL(entry.valor) : '—'}</td>`;
+    }),
     `<td class="cct-col">${adNoturnoFmt}</td>`,
     `<td class="cct-col">${fmtVR(vrItem)}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
