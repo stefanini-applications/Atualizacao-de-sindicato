@@ -80,7 +80,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -189,7 +192,10 @@
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR036147/2023 3/25 06/06/2024, 15:12 Mediador - Extrato Convenção Coletiva Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º s…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -298,7 +304,10 @@
           "clausula": "CLÁUSULA SEXTA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA SEXTA - HORA EXTRA As horas extras serão remuneradas com acréscimo de 50% (cinquenta por cento, de segunda a sexta e 70% (setenta por cento) aos sábados. § PRIMEIRO: As horas extras nos domingos e feriados serão remuneradas com acréscimo de 100% (cem por cento). § SEGUNDO: Somente as horas extras autorizadas pelo superior imediato serão consideradas, caso contrário, tornar- se-á sem efeito para registro e/ou lançamento no Banco de Horas do empregado. AUXÍLIO ALIMENTAÇÃO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 70.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -407,7 +416,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -516,7 +528,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -625,7 +640,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -734,7 +752,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -843,7 +864,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -952,7 +976,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1061,7 +1088,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA OITAVA                 -   HORAS EXTRAS\nO pagamento das horas extras dar-se-á no mesmo período de apuração da frequência dos\nempregados na folha mensal.\n\n\n                                              Compensação de Jornada",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1170,7 +1200,10 @@
           "clausula": "CLÁUSULA DÉCIMA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORA EXTRA As horas extras semanais serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas aos domingos e feriados com adicional de 100% (cem por cento), as quais deverão ser pagas na folha de pagamento do mês seguinte ao do fato gerador. Adicional Noturno",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1282,7 +1315,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1391,7 +1427,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - DAS HORAS EXTRAORDINÁRIAS\n3 of 13                                                                                                            02/08/2024, 13:56\n\fMediador - Extrato Convenção Coletiva                               http://www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualiza...",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1500,7 +1539,10 @@
           "clausula": "CLÁUSULA SÉTIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SÉTIMA - HORAS EXTRAS As horas laboradas em regime extraordinário serão remuneradas com o adicional de 50% (cinquenta por cento), calculados sobre o valor da hora normal, conforme dispositivo legal. Parágrafo Único – Havendo necessidade de trabalho aos domingos e/ou feriados, as horas laboradas nestes dias, serão remuneradas com o adicional de 100% (cem por cento), calculado sobre o valor da hora normal. ADICIONAL DE TEMPO DE SERVIÇO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1609,7 +1651,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1718,7 +1763,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1827,7 +1875,10 @@
           "clausula": "CLÁUSULA OITAVA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA OITAVA - HORAS EXTRAS As horas extraordinárias serão pagas com adicional de 90% (noventa inteiros por cento) sobre o salário hora normal. Parágrafo Único: Fica estabelecida a possibilidade de compensão de jornada em 180 dias (cento e oitenta dias). Caso da empresa opte por pagar as horas extras nesse período quando poderia compensá-las, poderá aplicar o percentual de 50% (cinquenta por cento) de adicional de horas extras. Ultrapassado o prazo de 180 (cento e oitenta) dias sem compensação ou pagamento o percentual de adicional de horas extras será de 90% (noventa por cento). Outros Adi…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 90.0, 50.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 90.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1936,7 +1987,10 @@
           "clausula": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal e na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida do adicional de 100% (cem por cento), devendo as empresas manterem as condições mais vantajosas já existentes e aplicáveis aos contratos de trabalho. Parágrafo Primeiro: As horas extras habituais serão integradas para fins de cálculo de férias + 1/3, 13º salário, DSR’s e demais verbas de cunho salarial,…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2045,7 +2099,10 @@
           "clausula": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS As horas extraordinárias pagas serão remuneradas com os seguintes acréscimos: a) as duas primeiras horas extraordinárias no dia: 60% (sessenta por cento) em relação a normal; b) as demais em dias normais: 80% (oitenta por cento) em relação a hora normal; c) as horas extraordinárias realizadas aos domingos e feriados sofrerão um acréscimo de 100% (cem por cento) em relação as normais; Parágrafo Primeiro: As horas extras serão sempre remuneradas pelos valores atualizados dos salários bem como, o Repouso Semanal Remunerado, será pago à razão de 1/6 (um sext…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 80.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 60.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2157,7 +2214,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2266,7 +2326,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2375,7 +2438,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA SÉTIMA - HORAS EXTRAS\nO pagamento das horas extras será efetuado no mês subsequente a sua execução e apuração.\n\nParágrafo Primeiro - Não será aplicada essa norma relativa ao Banco de Horas para empresas que já\npossuam Acordo de Banco de Horas com o sindicato laboral, devidamente registrado no Ministério do\nTrabalho e Emprego – MTE, conforme legislação específica.\n\nParágrafo Segundo – O descumprimento do presente artigo acarretará penalidade prevista na Vigésima\nCláusula desta Convenção Coletiva de Trabalho.\n\n\n}\n\n\n                      LEANDRO RODRIGUES DE ANDRADE\n                          Membro de Diretoria Colegiada\nSIND DOS TRAB EM EMP E ORGAOS PUBLICOS E PRIVADOS DE PROC DE DADOS SERV DE\n                  INFORMAT SIMIL. E PROF DE PROC DADOS PB\n\n\n\n                      JOSE MARCONI MEDEIROS DE SOUZA\n                                   Presidente\n    FEDERACAO DO COMERCIO DE BENS, SERVICOS E TURISMO DO ESTADO DA PARAIBA\n\n\n\n                    GUILHERME MARCONI COUTINHO DE SOUZA\n                                    Presidente\n    SINDICATO DAS EMPRESAS DE SERVICOS DE INFORMATICA DO ESTADO DA PARAIBA\n\n\n                                             ANEXOS\n                        ANEXO I - EDITAL DE CONVOCAÇÃO DE ASSEMBLEIA\n\n\n\nEDITAL DE CONVOCAÇÃO DE ASSEMBLEIA, REALIZADA EM 08 DE SETEMBRO DE 2025. Anexo\n(PDF)\n\f                                  ANEXO II - LISTA DE PRESENÇA\n\n\n\nLISTA DE PRESENÇA DE ASSEMBLEIA DELIBERATIVA, REALIZADA EM 8 DE SETEMBRO DE\n2025. Anexo (PDF)\n\n\n\n                                 ANEXO III - ATA DE ASSEMBLEIA\n\n\n\nATA DE ASSEMBLEIA DELIBERATIVA, REALIZADA EM 8 DE SETEMBRO DE 2025. Anexo (PDF)\n\n\n  A autenticidade deste documento poderá ser confirmada na página do Ministerio do Trabalho e Emprego\nna Internet, no endereço http://www.mte.gov.br.",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2484,7 +2550,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA OITAVA - ADICIONAL DE HORAS EXTRAS\nAs horas extraordinárias programadas serão informadas com dez dias de antecedência ao sindicato e ao\n      Ministério do Trabalho, de acordo com o parágrafo primeiro do artigo 61 da CLT. Não respeitada à\n      antecedência estabelecida as horas serão negociadas e não ultrapassarão às 40 horas mensais e cada\n      funcionário não pode ultrapassar às 10 horas diárias, uma vez que pode se considerar jornada exaustiva\n      prevista em lei.\n\n\n\n      Parágrafo primeiro - Para o pagamento ou inclusão em banco de horas das horas extraordinárias, estas\n      deverão ser aprovadas pelo empregador. Horas não autorizadas previamente não serão remuneradas ou\n      inclusas em Banco de Horas.\n\n      Parágrafo segundo - O serviço extraordinário será registrado no mesmo sistema de controle de ponto que\n      acolher o registro do horário normal do trabalho.\n\n\n                                                   OUTROS ADICIONAIS",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2593,7 +2662,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA SEXTA - PRAZO DE PAGAMENTO DAS HORAS EXTRAORDINÁRIAS\nAs horas extras efetivamente prestadas pelos empregados até 15 (quinze) dias antes da data do pagamento da folha do mês ser–lhes–ão p\nde pagamento, enquanto as horas extras referentes aos últimos 15 (quinze) dias serão incluídas na folha do mês subsequente.",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2702,7 +2774,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2811,7 +2886,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2920,7 +2998,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3029,7 +3110,10 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As horas extras serão remuneradas com o acréscimo de 50% (cinquenta por cento) sobre o valor da hora normal. As horas extras prestadas em dias de repouso, feriados ou dias já compensados, desde que o respectivo descanso não seja concedido em outros dias, serão pagas em dobro, além da remuneração desses dias, já incluídas no salário. ADICIONAL NOTURNO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3138,7 +3222,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3247,7 +3334,10 @@
           "clausula": "CLÁUSULA OITAVA - DAS HORAS EXTRAORDINARIAS",
           "trecho_fonte": "CLÁUSULA OITAVA - DAS HORAS EXTRAORDINARIAS As horas extras semanais, serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas nas folgas, domingos e feriados, exceto na hipótese de escala de revezamento quando pagas, serão remuneradas com o adicional de 100% (cem por cento). Parágrafo Único: As horas extras habituais serão integradas para fins de cálculo de férias, 13º salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º salário e demais verbas de cunho salarial, será considerada a média percebida nos últimos 12 (doze) m…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3356,7 +3446,10 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS As horas extras excedentes laboradas em dias úteis serão acrescidas de 50% (cinquenta por cento) do valor da hora normal, e as horas extras laboradas em dias não úteis serão acrescidas de 100% (cem por cento) em relação ao valor da hora normal.",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3465,7 +3558,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3574,7 +3670,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3683,7 +3782,10 @@
           "clausula": "CLÁUSULA DÉCIMA - ADICIONAIS - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - ADICIONAIS - HORAS EXTRAS As horas extraordinárias subsequentes às duas primeiras serão remuneradas com adicional de 75% (setenta e cinco por cento). ADICIONAL DE TEMPO DE SERVIÇO",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "percentual_padrao": 75.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3792,7 +3894,10 @@
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAS Os serviços extraordinários que extrapolarem os limites estabelecidos na cláusula Jornada de Trabalho, serão acrescidos de 50% (cinquenta por cento) do valor da hora normal, exceto o realizado no dia do repouso semanal e feriado, que será remunerado com adicional de 100% (cem por cento). Parágrafo Primeiro: O serviço extraordinário será registrado no mesmo cartão ponto que acolher o registro do horário normal. Parágrafo Segundo: As horas extras somente poderão ser realizadas mediante autorização do coordenador da área, devendo esta autorização ser registrada em d…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3901,7 +4006,10 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As 2 (duas) primeiras horas extraordinárias serão pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVIÇO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 75.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4010,7 +4118,10 @@
           "clausula": "CLÁUSULA SÉTIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SÉTIMA - HORAS EXTRAS As horas extraordinárias praticadas em dias normais de trabalho, serão remuneradas com adicional de 70% (setenta por cento); as realizadas em dia destinado ao descanso semanal remunerado ou feriado, serão remuneradas com adicional de 100% (cem por cento). ADICIONAL NOTURNO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 70.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4119,7 +4230,10 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias de segunda a sexta feira, serão pagas com acréscimo de 60% (sessenta por cento) sobre a hora normal. As horas extras efetuadas aos sábados, até o limite de 04 (quatro horas), serão pagas com 60% (sessenta por cento) de acréscimo sobre a hora normal. As demais horas extras dos sábados serão pagas com 100% (cem por cento) de acréscimo sobre a hora normal. Quando efetuadas aos domingos e feriados, todas as horas extras serão acrescidas de 100% (cem por cento) sobre a hora normal. § 1º - Fica assegurado ao empregado que tenha sua jorna…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 60.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4228,7 +4342,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4337,7 +4454,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4446,7 +4566,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS\n",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4555,7 +4678,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4664,7 +4790,10 @@
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAS A hora extraordinária será remunerada na forma abaixo: a) 50% (cinquenta por cento) de acréscimo, em relação a hora normal, quando trabalhada em qualquer dia de segunda-feira a sábado, desde que não ultrapasse o limite de duas horas diárias; b)100% (cem por cento) de acréscimo, em relação a hora normal, as horas trabalhadas excedentes ao limite da letra \"a\", bem como aquelas trabalhadas em dias de repouso. ADICIONAL NOTURNO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4773,7 +4902,10 @@
           "clausula": "CLÁUSULA DÉCIMA QUARTA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA QUARTA - HORAS EXTRAORDINÁRIAS As horas extraordinárias serão remuneradas, sempre em dinheiro, com adicional de 100% (cem por cento) calculado sobre o valor da hora normal. Em qualquer hipótese, para serem consideradas extraordinárias, devem ser previamente autorizadas pela empresa, por escrito. PARTICIPAÇÃO NOS LUCROS E/OU RESULTADOS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "percentual_padrao": 100.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4882,7 +5014,10 @@
           "clausula": null,
           "trecho_fonte": "CLÁUSULA SÉTIMA - REFLEXO DAS HORAS EXTRAS E ADICIONAL NOTURNO\nA média das horas extras habituais e do adicional noturno refletirá no pagamento das férias, gratificação natalina e descanso semanal remunerado",
           "observacao": "Cláusula localizada, mas valor/percentual não pôde ser identificado automaticamente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4991,7 +5126,10 @@
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - HORA EXTRAORDINÁRIA.",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - HORA EXTRAORDINÁRIA. A remuneração adicional por hora extraordinária será de 75% (setenta e cinco por cento) do salário-hora, nos dias úteis, para as primeiras 2 (duas) horas após a jornada normal de trabalho. Se por motivo de força maior for exigida do trabalhador uma sobrejornada mais elástica, as horas excedentes de 2 (duas) horas serão remuneradas com o adicional de 100% (cem por cento). www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 3/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Parágra…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 75.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 75.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5100,7 +5238,10 @@
           "clausula": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º (décimo terceiro) salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º (décimo ter…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5209,7 +5350,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5318,7 +5462,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5427,7 +5574,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5536,7 +5686,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5645,7 +5798,10 @@
           "clausula": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS As dobras, assim entendidas duplicação de jornadas eventuais, serão remuneradas em 70% (setenta por cento) acima do valor da hora normal de segunda a sábado e aos domingos e feriados 120% (cento e vinte por cento). Auxílio Alimentação",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 120.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 70.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5754,7 +5910,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5863,7 +6022,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5972,7 +6134,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6081,7 +6246,10 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º salário e demais verbas de cunho salarial, será considerada…",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6190,7 +6358,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6299,7 +6470,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6408,7 +6582,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6517,7 +6694,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6626,7 +6806,10 @@
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As 2 (duas) primeiras horas extraordinárias serão pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVIÇO",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 75.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6735,7 +6918,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6844,7 +7030,10 @@
           "clausula": "CLÁUSULA DÉCIMA QUARTA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA QUARTA - HORAS EXTRAORDINÁRIAS As horas extraordinárias serão remuneradas, sempre em dinheiro, com adicional de 100% (cem por cento) calculado sobre o valor da hora normal. Em qualquer hipótese, para serem consideradas extraordinárias, devem ser previamente autorizadas pela empresa, por escrito. PARTICIPAÇÃO NOS LUCROS E/OU RESULTADOS",
           "observacao": null,
-          "status_parametro": "extraido_para_revisao"
+          "status_parametro": "extraido_para_revisao",
+          "percentual_padrao": 100.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6953,7 +7142,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7062,7 +7254,10 @@
           "clausula": null,
           "trecho_fonte": null,
           "observacao": "Cláusula de hora extra não localizada no PDF",
-          "status_parametro": "pendente_revisao"
+          "status_parametro": "pendente_revisao",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7171,7 +7366,10 @@
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS As Empresas remunerarão as horas extraordinárias realizadas de segunda-feira a sábado com adicional de 50% (cinquenta por cento). Aos domingos e feriados, o adicional será de 100% (cem por cento). As Empresas manterão as condições mais vantajosas existentes e aplicáveis aos contratos vigentes. ADICIONAL NOTURNO www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR023975/2021 4/19 25/04/2022 18:40 Mediador - Extrato Convenção Coletiva",
           "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "status_parametro": "conflito",
+          "percentual_padrao": 50.0,
+          "percentual_sabado": null,
+          "percentual_domingo_feriado": null
         },
         "sobreaviso": {
           "valor": null,

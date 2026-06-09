@@ -755,6 +755,15 @@ function renderTable() {
     elEmptyState.classList.toggle('d-none', filteredRecords.length > 0);
   }
 
+  // Compute dynamic cargo columns from current filtered set (AC1, AC4)
+  const cargoColumns = getCargoColumns(filteredRecords);
+
+  // Update thead with Ratecard layout (AC4)
+  const thead = document.getElementById('params-thead');
+  if (thead) {
+    thead.innerHTML = buildRatecardHeader(cargoColumns);
+  }
+
   filteredRecords.forEach((record, index) => {
     const isConflict = isConflictRecord(record);
     const row = document.createElement('tr');
@@ -782,16 +791,23 @@ function renderTable() {
       btnLabel = 'Detalhes';
     }
 
+    // Ratecard column order (AC4): Estado/Sindicato, Sindicato, Estado, Aplicável à,
+    // HR SegSex, HR Sáb, HR Dom, Ad.Noturno, Sobreaviso, Jornada (cols 5-10),
+    // Data Vigência Piso, Início Vig CCT, Fim Vig CCT, Reajuste Salarial % (cols 11-14),
+    // [dynamic cargo cols], VR Remuneração (cols 15-16), Status, Fonte, Ação
+    const estadoSindicato = `${record.uf ?? ''}${record.uf && record.sindicato ? ' — ' : ''}${record.sindicato ?? ''}`;
+
     row.innerHTML = `
-      <td>${escapeHtml(record.uf ?? '—')}</td>
+      <td class="col-estado-sindicato">${escapeHtml(estadoSindicato || '—')}</td>
       <td>${escapeHtml(record.sindicato ?? '—')}</td>
+      <td>${escapeHtml(record.uf ?? '—')}</td>
       <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
+      ${buildRatecardCctCells(record)}
       <td>${formatDate(record.data_base)}</td>
       <td>${formatDate(record.vigencia_inicio)}</td>
       <td>${formatDate(record.vigencia_fim)}</td>
-      ${buildCctTableCells(record)}
+      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
+      ${buildRatecardCargoCells(record, cargoColumns)}
       <td class="status-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
@@ -1551,7 +1567,194 @@ function isCctItemPreenchido(itemKey, item) {
   return false;
 }
 
-/** Generates 12 CCT item columns for the main table row */
+// ── Ratecard layout (PRJ-56) ──────────────────────────────────────────────────
+
+/** Maps piso_salarial.tipo values to human-readable Ratecard column labels */
+const PISO_TIPO_LABELS = {
+  piso_cct: 'Piso CCT',
+  piso_tecnico: 'Piso Técnico',
+  piso_administrativo: 'Piso Adm.',
+  piso_unico: 'Piso Único',
+};
+
+/** Canonical display order for piso cargo columns */
+const PISO_TIPO_ORDER = ['piso_cct', 'piso_tecnico', 'piso_administrativo', 'piso_unico'];
+
+/**
+ * Derives the set of dynamic cargo columns from the given records.
+ * Returns an ordered array of piso tipo keys actually present in the data.
+ */
+function getCargoColumns(records) {
+  const found = new Set();
+  records.forEach((r) => {
+    const piso = r.itens_cct?.piso_salarial;
+    if (!piso) return;
+    // Named sub-fields (demo/legacy data)
+    if (piso.valor_piso_cct != null) found.add('piso_cct');
+    if (piso.piso_tecnico != null) found.add('piso_tecnico');
+    if (piso.piso_administrativo != null) found.add('piso_administrativo');
+    if (piso.piso_unico != null) found.add('piso_unico');
+    // Real-data schema: tipo + valor
+    if (piso.tipo && piso.valor != null) found.add(piso.tipo);
+  });
+  // Ordered by canonical order, unknown types appended alphabetically
+  const ordered = PISO_TIPO_ORDER.filter((t) => found.has(t));
+  [...found].filter((t) => !PISO_TIPO_ORDER.includes(t)).sort().forEach((t) => ordered.push(t));
+  return ordered;
+}
+
+/**
+ * Builds the Ratecard <thead> HTML with dynamic cargo columns (AC4).
+ * Column order: Estado/Sindicato, Sindicato, Estado, Aplicável à,
+ *   HR SegSex, HR Sábado, HR Domingo, Adicional Noturno, Sobreaviso,
+ *   Jornada de Trabalho, Data Vigência Piso, Início Vigência CCT,
+ *   Fim Vigência CCT, Reajuste Salarial %, [dynamic cargo cols], VR Remuneração,
+ *   Status, Fonte, (ação)
+ */
+function buildRatecardHeader(cargoColumns) {
+  const fixedBefore = [
+    { label: 'Estado/Sindicato',    cls: 'col-estado-sindicato' },
+    { label: 'Sindicato',           cls: 'col-sindicato' },
+    { label: 'Estado',              cls: 'col-uf' },
+    { label: 'Aplicável à',         cls: 'col-categoria' },
+    { label: 'HR SegSex',           cls: 'cct-th cct-group-start' },
+    { label: 'HR Sábado',           cls: 'cct-th' },
+    { label: 'HR Domingo',          cls: 'cct-th' },
+    { label: 'Adicional Noturno',   cls: 'cct-th' },
+    { label: 'Sobreaviso',          cls: 'cct-th' },
+    { label: 'Jornada de Trabalho', cls: 'cct-th' },
+    { label: 'Data Vigência Piso',  cls: 'col-data' },
+    { label: 'Início Vigência CCT', cls: 'col-data' },
+    { label: 'Fim Vigência CCT',    cls: 'col-data' },
+    { label: 'Reajuste Salarial %', cls: 'col-reajuste' },
+  ];
+  const cargoCols = cargoColumns.map((t) => ({
+    label: PISO_TIPO_LABELS[t] ?? t,
+    cls: 'cct-th cct-cargo-col',
+  }));
+  const fixedAfter = [
+    { label: 'VR Remuneração', cls: 'cct-th cct-group-end' },
+    { label: 'Status',         cls: 'col-status status-group-start' },
+    { label: 'Fonte',          cls: 'col-fonte' },
+    { label: '',               cls: 'col-acao' },
+  ];
+
+  const all = [...fixedBefore, ...cargoCols, ...fixedAfter];
+  return '<tr>' + all.map((c) =>
+    `<th scope="col" class="${escapeHtml(c.cls)}">${escapeHtml(c.label)}</th>`
+  ).join('') + '</tr>';
+}
+
+/**
+ * Returns the piso valor for the given tipo from a piso_salarial item,
+ * handling both the real-data schema (tipo + valor) and the demo schema
+ * (named sub-fields like piso_unico, piso_tecnico, etc.).
+ */
+function getPisoValorForTipo(pisoItem, tipo) {
+  if (!pisoItem) return null;
+  // Named sub-field (demo/legacy data)
+  const subKey = tipo === 'piso_cct' ? 'valor_piso_cct' : tipo;
+  if (pisoItem[subKey] != null) return pisoItem[subKey];
+  // Real-data schema: tipo matches and valor present
+  if (pisoItem.tipo === tipo && pisoItem.valor != null) return pisoItem.valor;
+  return null;
+}
+
+/**
+ * Builds Ratecard CCT cells (cols 5–10): HR SegSex, HR Sábado, HR Domingo,
+ * Adicional Noturno, Sobreaviso, Jornada de Trabalho.
+ */
+function buildRatecardCctCells(record) {
+  function cellGet(itemKey, ...fields) {
+    const item = record.itens_cct?.[itemKey];
+    if (!item) return null;
+    for (const f of fields) {
+      const v = item[f];
+      if (v != null && v !== '') return v;
+    }
+    return null;
+  }
+
+  function fmtPct(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+  }
+
+  function fmtShort(v) {
+    if (v == null) return '—';
+    const s = String(v);
+    return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
+  }
+
+  // HR SegSex: percentual_padrao preferred (mapped from percentual in JSON update)
+  const heSegSex = cellGet('hora_extra', 'percentual_padrao', 'percentual');
+  const heSab    = cellGet('hora_extra', 'percentual_sabado');
+  const heDom    = cellGet('hora_extra', 'percentual_domingo_feriado');
+
+  // Adicional Noturno
+  const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
+  const adNoturnoFmt = adNoturno != null
+    ? (typeof adNoturno === 'number' ? fmtPct(adNoturno) : fmtShort(String(adNoturno)))
+    : '—';
+
+  // Sobreaviso: percentual preferred; short regra_textual fallback
+  const sobNumeric = cellGet('sobreaviso', 'percentual');
+  const sobRegra   = cellGet('sobreaviso', 'regra_textual');
+  const sob = sobNumeric ?? (isShortOperationalSummary(sobRegra) ? sobRegra : null);
+  const sobFmt = sob != null
+    ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
+    : '—';
+
+  return [
+    `<td class="cct-col cct-group-start">${heSegSex != null ? fmtPct(heSegSex) : '—'}</td>`,
+    `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
+    `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
+    `<td class="cct-col">${adNoturnoFmt}</td>`,
+    `<td class="cct-col">${sobFmt}</td>`,
+    `<td class="cct-col">${fmtJornada(record.itens_cct?.jornada ?? null)}</td>`,
+  ].join('');
+}
+
+/**
+ * Builds Ratecard dynamic cargo + VR cells (cols 15-16):
+ * one cell per cargoColumns entry, then VR Remuneração.
+ * Shows piso value and a small status indicator per AC1.
+ */
+function buildRatecardCargoCells(record, cargoColumns) {
+  function fmtBRL(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function statusDot(item) {
+    if (!item) return '';
+    const st = getItemEffectiveStatus(item);
+    if (st === 'valido') return ' <span class="piso-status-dot piso-status-valido" title="Validado">●</span>';
+    if (st === 'extraido_para_revisao') return ' <span class="piso-status-dot piso-status-extraido" title="Extraído para revisão">●</span>';
+    return ' <span class="piso-status-dot piso-status-pendente" title="Pendente">●</span>';
+  }
+
+  const pisoItem = record.itens_cct?.piso_salarial ?? null;
+
+  const cargoCells = cargoColumns.map((tipo) => {
+    const val = getPisoValorForTipo(pisoItem, tipo);
+    const dot = statusDot(pisoItem);
+    return `<td class="cct-col cct-cargo-col">${val != null ? fmtBRL(val) + dot : '—'}</td>`;
+  }).join('');
+
+  return cargoCells + `<td class="cct-col cct-group-end">${fmtVR(record.itens_cct?.auxilio_alimentacao ?? null)}</td>`;
+}
+
+/** @deprecated Use buildRatecardCctCells / buildRatecardCargoCells instead */
+function buildRatecardTableCells(record, cargoColumns) {
+  return buildRatecardCctCells(record) + buildRatecardCargoCells(record, cargoColumns);
+}
+
+/** @deprecated Kept for internal backward compatibility; new code uses buildRatecardTableCells */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
     const item = record.itens_cct?.[itemKey];
@@ -1601,7 +1804,7 @@ function buildCctTableCells(record) {
   const plrNumeric = cellGet('plr', 'valor', 'percentual');
   const plrRegra = cellGet('plr', 'regra_textual');
   const plrVal = plrNumeric ?? (isShortOperationalSummary(plrRegra) ? plrRegra : null);
-  const heP = cellGet('hora_extra', 'percentual_padrao');
+  const heP = cellGet('hora_extra', 'percentual_padrao', 'percentual');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
   const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
   // Sobreaviso: percentual preferred; regra_textual only if short operational summary (AC6)

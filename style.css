@@ -403,6 +403,7 @@ body {
 .col-uf    { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }
 .col-categoria { min-width: 160px; }
+.col-estado-sindicato { min-width: 200px; white-space: nowrap; }
 .col-ano   { min-width: 50px;  white-space: nowrap; }
 .col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
 .col-data  { min-width: 90px;  white-space: nowrap; }
@@ -410,10 +411,28 @@ body {
 .col-fonte  { min-width: 100px; }
 .col-acao   { min-width: 100px; white-space: nowrap; }
 
+/* Dynamic cargo piso columns */
+.cct-cargo-col {
+  min-width: 110px;
+  background-color: #fafbff;
+}
+
 /* Monetary and percent cells right-aligned */
 #params-tbody td.cct-col {
   text-align: right;
 }
+
+/* ── Piso status indicators (AC1) ────────────────────────────────── */
+.piso-status-dot {
+  font-size: 0.55rem;
+  vertical-align: super;
+  margin-left: 0.2em;
+  line-height: 1;
+}
+
+.piso-status-valido    { color: #198754; }
+.piso-status-extraido  { color: #fd7e14; }
+.piso-status-pendente  { color: #adb5bd; }
 
 /* ── Scroll indicator ─────────────────────────────────────────────── */
 .table-scroll-wrapper {
