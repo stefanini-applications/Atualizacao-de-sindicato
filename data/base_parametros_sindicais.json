@@ -1,5 +1,5 @@
 {
-  "data_geracao": "2026-05-27T13:13:18.366991+00:00",
+  "data_geracao": "2026-06-09T12:06:14.249414+00:00",
   "registros": [
     {
       "id_registro_reajuste": "REG-AC-SEAC-2025",
@@ -106,7 +106,30 @@
           "clausula": "CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO A jornada de trabalho será de no máximo 44 (quarenta e quatro) horas semanais, podendo ter acréscimo de 02 (duas) horas extras diárias ou até 04 (quatro) horas, caso ocorram necessidades imperiosas, por motivo de força maior, para atender a realização de conclusão de serviços inadiáveis ou cuja inexecução possa acarretar prejuízo manifesto, desde que devidamente justificadas. Parágrafo Primeiro – Além da jornada de trabalho prevista no caput da cláusula, poderão ser utilizadas pelas empresas as seguintes modalidades de jornada de trabalho: a) Hor…",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 30.0, 26.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO A jornada de trabalho será de no máximo 44 (quarenta e quatro) horas semanais, podendo ter acréscimo de 02 (duas) horas extras diárias ou até 04 (quatro) horas, caso ocorram necessidades imperiosas"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 30.0,
+              "trecho_fonte": "o Semanal Remunerado, OU; d) Trabalho a tempo parcial, cuja jornada não exceda 30 (trinta) horas semanais, ou, 26 (vinte e seis) horas semanais, com a possibilidade de acréscimo de até 6 (seis) horas suplementares semanais, O"
+            },
+            {
+              "jornada": "horista",
+              "valor": null,
+              "trecho_fonte": "ossibilidade de acréscimo de até 6 (seis) horas suplementares semanais, OU; e) Horista variável, com limitação semanal de 44 (quarenta e quatro) horas e possibilidade de horas extras nos termos da Lei. f)"
+            }
+          ],
+          "por_escala": [
+            {
+              "label": "12x36",
+              "trecho_fonte": "das pelas empresas as seguintes modalidades de jornada de trabalho: a) Horário 12x36: Doze horas de trabalho por trinta e seis de descanso, OU; b) Horário de 06:00: Seis horas de trabalho por dia, com um"
+            }
+          ]
         }
       }
     },
@@ -188,8 +211,20 @@
           "fonte_documento": "CCT/AL/Sinteel/CCT 2023-2024 SINTTEL AL (1).pdf",
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR036147/2023 3/25 06/06/2024, 15:12 Mediador - Extrato Convenção Coletiva Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º s…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 50.0,
+              "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. www3.mte.gov.br/sist"
+            },
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "ágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão int"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -245,8 +280,20 @@
           "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL A partir de 01/05/2024 nenhum trabalhador poderá ser admitido, ou continuar trabalhando com salário inferior às faixas abaixo: a) Aplicável exclusivamente Técnico de atendimento, Auxiliar de Processamento o valor deR$1.479,21 (Um mil, quatrocentos e setenta e nove reais e vinte e um centavos); b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48(Um mil, quatrocentos e oitenta e sete reais e quarenta e oito centavos);c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07 (Dois mil, quatrocento…",
-          "observacao": "Múltiplos valores identificados: 1479.21, 1487.48, 2434.07",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "tecnico_suporte",
+              "valor": 1487.48,
+              "trecho_fonte": "e setenta e nove reais e vinte e um centavos); b). Aplicável exclusivamente ao Técnico de Suporte o valor correspondente a R$ 1.487,48(Um mil, quatrocentos e oitenta e sete reais e quarenta e oito centavos);c). Apl"
+            },
+            {
+              "cargo": "analista",
+              "valor": 2434.07,
+              "trecho_fonte": "itenta e sete reais e quarenta e oito centavos);c). Aplicável exclusivamente ao Analista de Suporte o valor correspondente a R$ 2.434,07 (Dois mil, quatrocentos e trinta e quatro reais e sete centavos): d). Os traba"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -297,8 +344,20 @@
           "fonte_documento": "CCT/AM/Sindpd/ACT_2025_Sindpd-AM (homologado).pdf",
           "clausula": "CLÁUSULA SEXTA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA SEXTA - HORA EXTRA As horas extras serão remuneradas com acréscimo de 50% (cinquenta por cento, de segunda a sexta e 70% (setenta por cento) aos sábados. § PRIMEIRO: As horas extras nos domingos e feriados serão remuneradas com acréscimo de 100% (cem por cento). § SEGUNDO: Somente as horas extras autorizadas pelo superior imediato serão consideradas, caso contrário, tornar- se-á sem efeito para registro e/ou lançamento no Banco de Horas do empregado. AUXÍLIO ALIMENTAÇÃO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 70.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util",
+              "valor": 70.0,
+              "trecho_fonte": "As horas extras serão remuneradas com acréscimo de 50% (cinquenta por cento, de segunda a sexta e 70% (setenta por cento) aos sábados. § PRIMEIRO: As horas extras nos domingos e fe"
+            },
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "a sexta e 70% (setenta por cento) aos sábados. § PRIMEIRO: As horas extras nos domingos e feriados serão remuneradas com acréscimo de 100% (cem por cento). § SEGUNDO: Somente as horas extras autorizadas pelo superior"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -354,7 +413,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -367,7 +426,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -380,7 +439,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -393,7 +452,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -406,7 +465,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -419,7 +478,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -432,7 +491,7 @@
           "fonte_documento": "CCT/AP/CCT_2025-2026_Sindpd-AP.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -463,7 +522,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -476,7 +535,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -489,7 +548,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -502,7 +561,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -515,7 +574,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -528,7 +587,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -541,7 +600,7 @@
           "fonte_documento": "CCT/BA/SINDPEC/CCT_2025-2026_SINDPEC BA.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -572,8 +631,20 @@
           "fonte_documento": "CCT/BA/Sindados/SINDADOS - BA - 2025-2027.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL VIGÊNCIA DA CLÁUSULA: 01/05/2025 a 30/04/2026 Fica assegurado aos trabalhadores abrangidos por esta Convenção Coletiva de trabalho, o piso mínimo inicial normativo, que obedecerá aos seguintes critérios: a) Aos trabalhadores com jornada de trabalho de 36 (trinta e seis) horas semanais, fica fixado o piso mínimo de R$ 1.592,43 (um mil, quinhentos e noventa e dois reais e quarenta e três centavos); b) Aos trabalhadores com jornada de trabalho de 44(quarenta e quatro) horas semanais, fica fixado o piso mínimo de R$ 1.636,82 (um mil, seiscentos e trinta e seis rea…",
-          "observacao": "Múltiplos valores identificados: 1592.43, 1636.82",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 1636.82,
+              "trecho_fonte": "renta e três centavos); b) Aos trabalhadores com jornada de trabalho de 44(quarenta e quatro) horas semanais, fica fixado o piso mínimo de R$ 1.636,82 (um mil, seiscentos e trinta e seis reais e oitenta e dois centavos) até folha"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 1592.43,
+              "trecho_fonte": "aos seguintes critérios: a) Aos trabalhadores com jornada de trabalho de 36 (trinta e seis) horas semanais, fica fixado o piso mínimo de R$ 1.592,43 (um mil, quinhentos e noventa e dois reais e quarenta e três centavos); b)"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -651,7 +722,25 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUARTA - JORNADA DE TRABALHO E INTERVALO INTRAJORNADA",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUARTA - JORNADA DE TRABALHO E INTERVALO INTRAJORNADA Fica fixada a jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Operador Help Desk e Operador de Telemarketing e/ou Atividades de Tele-Suporte e/ou Tele- Serviços. Parágrafo Primeiro: A jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Digitador, Conferente, Auxiliar de Processamento, Auxiliar de Caixa Rápido, Digitalização, aplicável exclusivamente ao Analista 01, contrato Helpdesk – BA – CEF. Parágrafo Segundo: Os demais trabalhadores praticarão a jornada de…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "BA – CEF. Parágrafo Segundo: Os demais trabalhadores praticarão a jornada de 44 (quarenta e quatro) horas semanais, se outra não lhes for aplicada, em razão de determinação legal ou por concessão da empresa. Parágrafo Terceiro: As"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "RNADA DE TRABALHO E INTERVALO INTRAJORNADA Fica fixada a jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Operador Help Desk e Operador de Telemarketing e/ou Atividades de Tele-Suporte e/ou Tele- Serv"
+            }
+          ],
+          "por_escala": [
+            {
+              "label": "12x36",
+              "trecho_fonte": "ão da empresa. Parágrafo Terceiro: As empresas poderão estabelecer regime de 12X36 (doze por trinta e seis) horas, observados o previsto em lei. Parágrafo Quarto: Os empregados em regime de 44 (quare"
+            }
+          ]
         }
       }
     },
@@ -790,7 +879,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -803,7 +892,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -816,7 +905,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -829,7 +918,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -842,7 +931,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -855,7 +944,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -868,7 +957,7 @@
           "fonte_documento": "CCT/CE/Sindpd/CCT_2024-2026_Sindpd-CE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -1117,8 +1206,42 @@
           "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
           "clausula": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA QUARTA - SALÁRIO MÍNIMO DA CATEGORIA E PISOS SALARIAIS A todos os empregados da categoria profissional fica garantido o reajuste salarial, a partir de 1º de janeiro de 2025, conforme tabela abaixo: SALÁRIO FUNÇÃO Jornada Jornada 30h/semanais 36h/semanais Atendente de Central Telefônica - Operador de Telecobrança / I Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). Atendente de Central Telefônica - Operador de Telecobrança / Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele II R$ 1.856,74 R$ 2.228,…",
-          "observacao": "Múltiplos valores identificados: 1547.59, 1857.11, 1856.74, 2228.08, 2214.61, 2673.72, 3005.06",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "operador",
+              "valor": 1547.59,
+              "trecho_fonte": "30h/semanais 36h/semanais Atendente de Central Telefônica - Operador de Telecobrança / I Op. Rádio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). A"
+            },
+            {
+              "cargo": "operador",
+              "valor": 1857.11,
+              "trecho_fonte": "dio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). Atendente de Central Telefônica - Operador de Telecobrança / Op. Rádio Chamada – Op. Telemarketing - Telefonista -"
+            },
+            {
+              "cargo": "atendente",
+              "valor": 2228.08,
+              "trecho_fonte": "R$ 1.856,74 R$ 2.228,08 atendente ou afins (ativo/receptivo/híbrido). Nível Técnico e/ou Bilíngue M"
+            },
+            {
+              "cargo": "analista",
+              "valor": 3005.06,
+              "trecho_fonte": "Teleatendimento / Telecobrança ou afins. Nível Técnico e/ou R$ 3.005,06 Bilíngue. VII Analista de Atendimento / Analista de tráfego ou afins R$ 3.005,0"
+            }
+          ],
+          "por_modalidade": [
+            {
+              "label": "hibrido",
+              "valor": 1857.11,
+              "trecho_fonte": "dio Chamada – Op. Telemarketing - Telefonista - Tele R$ 1.547,59 R$ 1.857,11 atendente ou afins (ativo/receptivo/híbrido). Atendente de Central Telefônica - Operador de Telecobrança / Op"
+            },
+            {
+              "label": "hibrido",
+              "valor": 2228.08,
+              "trecho_fonte": "R$ 1.856,74 R$ 2.228,08 atendente ou afins (ativo/receptivo/híbrido). Nível Técnico e/ou Bilíngue Monitor de Teleatendimento / Telema"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1169,8 +1292,15 @@
           "fonte_documento": "CCT/DF/Sinttel/CCT_2025_SINTTEL DF.pdf",
           "clausula": "CLÁUSULA DÉCIMA - HORA EXTRA",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORA EXTRA As horas extras semanais serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas aos domingos e feriados com adicional de 100% (cem por cento), as quais deverão ser pagas na folha de pagamento do mês seguinte ao do fato gerador. Adicional Noturno",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "s com o adicional de 50% (cinquenta por cento) e as horas extras realizadas aos domingos e feriados com adicional de 100% (cem por cento), as quais deverão ser pagas na folha de pagamento do mês seguin"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -1229,7 +1359,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -1242,7 +1372,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -1255,7 +1385,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -1268,7 +1398,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -1281,7 +1411,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -1294,7 +1424,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -1307,7 +1437,7 @@
           "fonte_documento": "CCT/ES/Sindpd/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -1438,7 +1568,7 @@
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
-          "valor": 2994.3,
+          "valor": 1524.93,
           "percentual": null,
           "valor_textual": null,
           "regra_textual": "CLÁUSULA TERCEIRA - PISO SALARIAL Aos trabalhadores das funções abaixo discriminadas ficam garantidos os seguintes pisos salariais, respeitando-se os salários em valores superiores. O Código CBO da tabela abaixo possui subitens que devem ser utilizados para o cargo específico. (sugestão de site para pesquisa: https://www.ocupacoes.com.br/): Salário Base CBO Funções (R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação R$ 3.733,82 Técnicos de desenvolvimento de sistemas e 3171 R$ 1.931,79 aplicações Iniciantes 3171 Técnicos de desenvolvimento de sistemas e aplicações R$ 2.412,88 Técnicos em operação e monitoração de 3172 R$ 1.524,98 computadores Iniciantes 3172 Técnicos em operação e monitoração de computadores R$ 1.691,52 3722 Ope…",
@@ -1447,8 +1577,20 @@
           "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Aos trabalhadores das funções abaixo discriminadas ficam garantidos os seguintes pisos salariais, respeitando-se os salários em valores superiores. O Código CBO da tabela abaixo possui subitens que devem ser utilizados para o cargo específico. (sugestão de site para pesquisa: https://www.ocupacoes.com.br/): Salário Base CBO Funções (R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação R$ 3.733,82 Técnicos de desenvolvimento de sistemas e 3171 R$ 1.931,79 aplicações Iniciantes 3171 Técnicos de desenvol…",
-          "observacao": "Múltiplos valores identificados: 2994.3, 3733.82, 1931.79, 2412.88, 1524.98, 1691.52, 1524.93",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "operador",
+              "valor": 1691.52,
+              "trecho_fonte": "3172 Técnicos em operação e monitoração de computadores R$ 1.691,52 3722 Operadores de rede de teleprocessamento e afins R$ 1.691,52"
+            },
+            {
+              "cargo": "analista",
+              "valor": 2994.3,
+              "trecho_fonte": "(R$) 2124 Analistas de tecnologia da informação Iniciantes R$ 2.994,30 2124 Analistas de tecnologia da informação"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1499,8 +1641,15 @@
           "fonte_documento": "CCT/GO/Sindpd/CCT_2025-2026_Sindpd-GO.pdf",
           "clausula": "CLÁUSULA SÉTIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SÉTIMA - HORAS EXTRAS As horas laboradas em regime extraordinário serão remuneradas com o adicional de 50% (cinquenta por cento), calculados sobre o valor da hora normal, conforme dispositivo legal. Parágrafo Único – Havendo necessidade de trabalho aos domingos e/ou feriados, as horas laboradas nestes dias, serão remuneradas com o adicional de 100% (cem por cento), calculado sobre o valor da hora normal. ADICIONAL DE TEMPO DE SERVIÇO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "forme dispositivo legal. Parágrafo Único – Havendo necessidade de trabalho aos domingos e/ou feriados, as horas laboradas nestes dias, serão remuneradas com o adicional de 100% (cem por cento), calculado sobre o valor da hora normal."
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -1526,7 +1675,29 @@
           "clausula": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO A jornada de trabalho de Fitotecário, Digitador e Operador de Main Frame será de 6 (seis) horas diárias de segunda-feira a sábado, perfazendo um total de 36 (trinta e seis) horas semanais. Para os demais cargos serão 8 (oito) horas diárias de segunda-feira a sexta-feira e 4 (quatro) horas no sábado, perfazendo um total de 44 (quarenta e quatro) horas semanais, ou 44 (quarenta e quatro) horas de segunda-feira a sexta-feira com REDUÇÃO do horário de almoço de 2 (duas) horas PARA 1h12m (uma hora e doze minutos) e sem expediente aos sábados, sendo es…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "gunda-feira a sexta-feira e 4 (quatro) horas no sábado, perfazendo um total de 44 (quarenta e quatro) horas semanais, ou 44 (quarenta e quatro) horas de segunda-feira a sexta-feira com REDUÇÃO do horário de almoço de 2 (duas) horas PARA"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "erá de 6 (seis) horas diárias de segunda-feira a sábado, perfazendo um total de 36 (trinta e seis) horas semanais. Para os demais cargos serão 8 (oito) horas diárias de segunda-feira a sexta-feira e 4 (quatro) horas no sábado, perfa"
+            }
+          ],
+          "por_escala": [
+            {
+              "label": "12x36",
+              "trecho_fonte": "sa e a necessidade do serviço, a realização de jornada de trabalho em escala de 12x36 (doze horas de trabalho, por trinta e seis horas de descanso), observados o previsto em lei, nos termos do texto origin"
+            },
+            {
+              "label": "5x2",
+              "trecho_fonte": "e acordo individual, estabelecer a jornada de trabalho na escala de revezamento 5x2 de segunda a domingo, com duas folgas semanais, sendo garantido ao trabalhador que o descanso coincida com pelo o menos"
+            }
+          ]
         }
       }
     },
@@ -1556,7 +1727,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -1569,7 +1740,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -1582,7 +1753,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -1595,7 +1766,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -1608,7 +1779,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -1621,7 +1792,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -1634,7 +1805,7 @@
           "fonte_documento": "CCT/GO/Sinttel/CCT 2025-2026_SINTTEL - GO (nova CCT).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -1665,7 +1836,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -1678,7 +1849,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -1691,7 +1862,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -1704,7 +1875,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -1717,7 +1888,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -1730,7 +1901,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -1743,7 +1914,7 @@
           "fonte_documento": "CCT/MA/Sindpd/CCT_2023-2024_Sindpd-MA (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -1774,8 +1945,35 @@
           "fonte_documento": "CCT/MG/Sescon/CCT_2025-2026 - SESCON MG.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Os empregados admitidos a partir de 1º de junho de 2025 não poderão receber salários inferiores a: Funções Pisos Mensageiro/copeiro/Faxineiro R$ 1.518,00 e contínuo Após o período de experiência R$ 1.518,00 Leiturista – Belo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Primeiro: Independentemente da denominação do cargo e/ou função ocupado, a todos os trabalhadores, que por força de contrato de terceirização ou prestação de serviços, desenvolvam serviços de tratamento de document…",
-          "observacao": "Múltiplos valores identificados: 1518.0, 2282.24, 2224.51, 1546.59, 1696.5, 3544.76",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "leiturista",
+              "valor": 2282.24,
+              "trecho_fonte": ".518,00 e contínuo Após o período de experiência R$ 1.518,00 Leiturista – Belo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – In"
+            },
+            {
+              "cargo": "leiturista",
+              "valor": 2224.51,
+              "trecho_fonte": "elo Horizonte e R$ 2.282,24 Região Metropolitana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Prim"
+            },
+            {
+              "cargo": "leiturista",
+              "valor": 1696.5,
+              "trecho_fonte": "de caixa rápido ou correlato, não poderá ser aplicado piso salarial inferior a R$ 1.696,50 (hum mil, seiscentos e noventa e seis reais e cinquenta centavos). Parágrafo Segundo: O Leiturista que utilizar veículo próprio ou outro veículo deverá receber em contrapartida v"
+            },
+            {
+              "cargo": "mensageiro",
+              "valor": 1518.0,
+              "trecho_fonte": "derão receber salários inferiores a: Funções Pisos Mensageiro/copeiro/Faxineiro R$ 1.518,00 e contínuo Após o período de experiência R$ 1.518,00 Leituri"
+            },
+            {
+              "cargo": "demais_funcoes",
+              "valor": 1546.59,
+              "trecho_fonte": "itana R$ 2.224,51 Leiturista – Interior de Minas Demais Funções R$ 1.546,59 Parágrafo Primeiro: Independentemente da denominação do cargo e/ou função ocup"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -1935,8 +2133,20 @@
           "fonte_documento": "CCT/MG/Sinttel/CCT 2025_SINTTEL MG.pdf",
           "clausula": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal e na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida do adicional de 100% (cem por cento), devendo as empresas manterem as condições mais vantajosas já existentes e aplicáveis aos contratos de trabalho. Parágrafo Primeiro: As horas extras habituais serão integradas para fins de cálculo de férias + 1/3, 13º salário, DSR’s e demais verbas de cunho salarial,…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 50.0,
+              "trecho_fonte": "ÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal e na hipótese de ocorrer tra"
+            },
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "da hora normal e na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida do adicional de 100% (cem por cento), devendo as empresas manterem as condições mais vantajosas já e"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -1992,8 +2202,20 @@
           "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO DA CATEGORIA PROFISSIONAL A título de Salário Normativo da categoria profissional, a partir de 1º de junho de 2.025, o salário dos empregados, abrangidos por esta convenção, não será inferior a R$ 1.689,53 (mil e seiscentos e oitenta e nove reais e cinquenta e três centavos) mensais; Parágrafo Primeiro: Fica assegurado ao Salário Normativo, de que trata a presente cláusula, a título de antecipação prevista no § primeiro da cláusula terceira, nunca será inferior ao salário mínimo vigente acrescido do percentual definido na Cláusula quarta; Parágrafo Segundo…",
-          "observacao": "Múltiplos valores identificados: 1689.53, 3146.01, 2222.82",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "analista",
+              "valor": 3146.01,
+              "trecho_fonte": "ágrafo Segundo: Fica assegurado para os profissionais que exercem as funções de Analista de Sistemas ou de Tecnologia da Informação, sendo aquelas definidas na Classificação Brasileira de Ocupações de nº 2122,2123 e 2124, o salário nunca inferior a R$ 3.146,01 (três mil, cento e quarenta e seis reai…"
+            },
+            {
+              "cargo": "programador",
+              "valor": 2222.82,
+              "trecho_fonte": "grafo Terceiro: Fica assegurado para os profissionais que exercem as funções de Programador, sendo aquelas definidas na Classificação Brasileira de Ocupações de nº 3.171, o salário nunca inferior a R$ 2.222,82 (dois mil, duzentos e vinte e dois reais e oitenta e dois centavos) mensais. P"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2044,8 +2266,15 @@
           "fonte_documento": "CCT/MS/SPPD/CCT_2025-2026_SPPD-MS.pdf",
           "clausula": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA OITAVA - HORAS EXTRAORDINÁRIAS As horas extraordinárias pagas serão remuneradas com os seguintes acréscimos: a) as duas primeiras horas extraordinárias no dia: 60% (sessenta por cento) em relação a normal; b) as demais em dias normais: 80% (oitenta por cento) em relação a hora normal; c) as horas extraordinárias realizadas aos domingos e feriados sofrerão um acréscimo de 100% (cem por cento) em relação as normais; Parágrafo Primeiro: As horas extras serão sempre remuneradas pelos valores atualizados dos salários bem como, o Repouso Semanal Remunerado, será pago à razão de 1/6 (um sext…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 80.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "or cento) em relação a hora normal; c) as horas extraordinárias realizadas aos domingos e feriados sofrerão um acréscimo de 100% (cem por cento) em relação as normais; Parágrafo Primeiro: As horas extras ser"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -2104,7 +2333,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -2117,7 +2346,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -2130,7 +2359,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -2143,7 +2372,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -2156,7 +2385,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -2169,7 +2398,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -2182,7 +2411,7 @@
           "fonte_documento": "CCT/MT/SINDPD/",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -2213,7 +2442,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -2226,7 +2455,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -2239,7 +2468,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -2252,7 +2481,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -2265,7 +2494,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -2278,7 +2507,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -2291,7 +2520,7 @@
           "fonte_documento": "CCT/PA/sindpd/CCT-2025-2026_Sindpd-PA - assinada.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -2401,7 +2630,19 @@
           "clausula": "CLÁUSULA DÉCIMA QUINTA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA DÉCIMA QUINTA - JORNADA DE TRABALHO A duração da jornada de trabalho do Digitador e do Help Desk, será de 30 (trinta) horas semanais e, dos demais trabalhadores serão de até 44 horas semanais. Parágrafo Primeiro: Fica ressalvada que as jornadas de menor número de horas semanais, que já vierem sendo adotadas pelas empresas, serão preservadas. Parágrafo Segundo: O trabalhador de Help Desk poderá, eventualmente, efetuar o atendimento direto no cliente, dentro de sua carga horária estabelecida, qual seja 30 horas semanais. Caso o labor ultrapasse a carga horária de 6 seis horas diárias ou…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "sk, será de 30 (trinta) horas semanais e, dos demais trabalhadores serão de até 44 horas semanais. Parágrafo Primeiro: Fica ressalvada que as jornadas de menor número de horas semanais, que já vierem sendo adotadas p"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 30.0,
+              "trecho_fonte": "TRABALHO A duração da jornada de trabalho do Digitador e do Help Desk, será de 30 (trinta) horas semanais e, dos demais trabalhadores serão de até 44 horas semanais. Parágrafo Primeiro: Fica ressalvada que as jornadas de men"
+            }
+          ]
         }
       }
     },
@@ -2510,7 +2751,19 @@
           "clausula": "CLÁUSULA VIGÉSIMA - JORNADA DE TRABALHO/ PAUSAS",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA - JORNADA DE TRABALHO/ PAUSAS Parágrafo primeiro - Fica garantida a jornada de trabalho 36h00min (trinta e seis horas) semanal para empregados que exercem as funções de atendente, operador, técnicos e analistas, em conformidade com a NR 17 em seu anexo II, da portaria 3214/78 do Ministério do Trabalho e Emprego e Art. 229 da CLT. Parágrafo segundo – De acordo com a NR 17 em seu anexo II, 5.7, “com o fim de permitir a satisfação das necessidades fisiológicas, as empresas devem permitir que os operadores saiam de seus postos de trabalho a qualquer momento da jornada, sem reperc…",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 40.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "nal. Parágrafo terceiro - Para os funcionários com jornada contratada de 44 horas semanais (220 horas mensais), mas que por liberalidade da empresa trabalhem 40 horas semanais, somente serão remuneradas"
+            },
+            {
+              "jornada": "40h_semanal",
+              "valor": 40.0,
+              "trecho_fonte": "manais (220 horas mensais), mas que por liberalidade da empresa trabalhem 40 horas semanais, somente serão remuneradas como horas extraordinárias aquelas que, porventura, venham a exceder a 20 horas extras"
+            }
+          ]
         }
       }
     },
@@ -2540,8 +2793,35 @@
           "fonte_documento": "CCT/PE/Sindpd/CCT_2025-2026_Sindpd-PE.pdf",
           "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS Ficam estabelecidos pisos salariais a vigorarem a partir de 1º de setembro de 2025, durante o prazo de vigência desta Convenção Coletiva, ALÍNEA DESCRIÇÃO REMUNERAÇÃO R$ 1.602,00 (hum mil e seiscentos e a Contínuos, copeiros, vigia e assemelhados dois reais) R$ 1.602,00 (hum mil e seiscentos e b Demais empregados na área administrativa dois reais) Digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e R$ 1.918,00 (hum mil e novecentos e c monitoração de computadores; auxiliares, assistentes e/…",
-          "observacao": "Múltiplos valores identificados: 1602.0, 1918.0, 2067.0, 2535.0, 3290.0",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "piso_tecnico",
+              "valor": 3290.0,
+              "trecho_fonte": "R$ 3.290,00 (três mil e duzentos e f Analistas de tecnologia da informação noventa reais) PARÁGRAFO PRIMEIRO – Fica acordado que o PISO técnico–profissional da categoria será o da alínea “d”. PARÁGRAFO SEGUNDO – Para esta"
+            },
+            {
+              "cargo": "operador",
+              "valor": 1918.0,
+              "trecho_fonte": "dois reais) Digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e R$ 1.918,00 (hum mil e novecentos e c monitoração de computadores"
+            },
+            {
+              "cargo": "atendente",
+              "valor": 2067.0,
+              "trecho_fonte": "dores; auxiliares, assistentes e/ou dezoito reais) atendentes de informática e tecnologia da informação R$ 2.067,00 (dois mil e sessenta e sete Profissionais de nível médio que"
+            },
+            {
+              "cargo": "copeiro",
+              "valor": 1602.0,
+              "trecho_fonte": "R$ 1.602,00 (hum mil e seiscentos e a Contínuos, copeiros, vigia e assemelhados"
+            },
+            {
+              "cargo": "programador",
+              "valor": 2535.0,
+              "trecho_fonte": "espondentes às alíneas “a”, \"b\", “c” e “e” Programadores de computadores; demais profissionais, que desenvolvam atividades técnicas de TI em funções que a empresa R$ 2.535,00 (dois mil e quinhentos e e exija nível superior compa"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2649,7 +2929,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -2662,7 +2942,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -2675,7 +2955,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -2688,7 +2968,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -2701,7 +2981,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -2714,7 +2994,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -2727,7 +3007,7 @@
           "fonte_documento": "CCT/PI/Sindpd/CCT_2025-2026_Sindpd-PI (assinada).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -2758,7 +3038,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -2771,7 +3051,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -2784,7 +3064,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -2797,7 +3077,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -2810,7 +3090,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -2823,7 +3103,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -2836,7 +3116,7 @@
           "fonte_documento": "CCT/PR/Sindaspp PR/CCT  SINDASPP PR_2025-2026.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -2867,8 +3147,15 @@
           "fonte_documento": "CCT/PR/Sintipar/ACT_2025-2026 SINTIPAR-PR.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica assegurado para os empregados abrangidos por este Acordo Coletivo de Trabalho, o piso salarial de R$ 1.373,44 (Hum mil trezentos e setenta e três reais e quarenta e quatro centavos) para jornada de 6h e o piso salarial de R$ 1.675,29 (Hum mil seiscentos e setenta e cinco reais e vinte e nove centavos) para jornada de 8h. Para casos de proporcionalidade, será considerado o piso salarial da jornada de 8h. REAJUSTES/CORREÇÕES SALARIAIS",
-          "observacao": "Múltiplos valores identificados: 1373.44, 1675.29",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "6h_diario",
+              "valor": 1675.29,
+              "trecho_fonte": "44 (Hum mil trezentos e setenta e três reais e quarenta e quatro centavos) para jornada de 6h e o piso salarial de R$ 1.675,29 (Hum mil seiscentos e setenta e cinco reais e vinte e nove centavos) para jorna"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -2976,8 +3263,15 @@
           "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO E CONDIÇÕES SALARIAIS O piso salarial dos empregados sujeitos a jornada de trabalho de 180 horas, será de R$1.518,00 (mil, quinhentos e dezoito reais)a partir do dia 1º de janeiro de 2025. Para as demais atividades cuja jornada seja de 44 (quarenta e quatro) horas semanais, e 220 horas mensais, o piso mínimo será de R$1.590,40 (mil, quinhentos e noventa reais e quarenta centavos) a partir de 1º de janeiro de 2025. PARÁGRAFO PRIMEIRO: As empresas que não concederam o reajuste em janeiro, poderão pagar o retroativo até a folha de pagamentos de abril/2025. PA…",
-          "observacao": "Múltiplos valores identificados: 1518.0, 1590.4",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 1590.4,
+              "trecho_fonte": "ir do dia 1º de janeiro de 2025. Para as demais atividades cuja jornada seja de 44 (quarenta e quatro) horas semanais, e 220 horas mensais, o piso mínimo será de R$1.590,40 (mil, quinhentos e noventa reais e quarenta centavos) a partir de 1º de janeiro"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3002,8 +3296,15 @@
           "fonte_documento": "CCT/PR/Sinttel/CCT SINTTEL PR - 2025.pdf",
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - AUXÍLIO REFEIÇÃO",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - AUXÍLIO REFEIÇÃO As empresas fornecerão aos trabalhadores que estiverem no exercício de suas atividades regulares, e para os dias efetivamente trabalhados vale-refeição ou alimentação por mês, nos seguintes valores faciais: a) As empresas fornecerão, a partir de 01 de janeiro de 2025, o mencionado benefício com valor facial mínimo R$11,40 (onze reais e quarenta centavos), passando para R$11,67 (onze reais e sessenta e sete centavos) a partir de 01 de maio de 2025, passando para R$11,94 (onze reais e noventa e quatro centavos) a partir de 01 de outubro de 2025, para os…",
-          "observacao": "Múltiplos valores identificados: 11.4, 11.67, 11.94, 22.15, 22.68, 23.21",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "36h_semanal",
+              "valor": 11.94,
+              "trecho_fonte": "reais e sessenta e sete centavos) a partir de 01 de maio de 2025, passando para R$11,94 (onze reais e noventa e quatro centavos) a partir de 01 de outubro de 2025, para os trabalhadores com jornada igual ou inferior a 180 horas mensais e 36 horas semanais. b) Aos trabalhadores com jornada de 220 (du…"
+            }
+          ]
         },
         "plr": {
           "valor": null,
@@ -3055,7 +3356,34 @@
           "clausula": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO A duração da jornada diária efetiva de trabalho dos trabalhadores de operadores de mesas telefônicas e telefonistas em geral, trabalhadores em postos de serviços de telefonia, televendas, disk serviços, tele recados, tele chamadas, tele cobrança via tele atendimento e call centers, telemarketing receptivos e ativos, oferecem serviços e produtos, realizam pesquisas, fazem serviços de cobranças e cadastramento de clientes, sempre via tele atendimento, seguindo roteiros e scripts planejados e controlados para captar, reter ou recuperar clientes seg…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 20.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "o diário de trabalho é de 7:12 horas e respeitará o total de jornada regular de 36 (trinta e seis) horas semanais trabalhadas, 5 (cinco) dias por semana de acordo com a escala de revezamento da empresa, a qual poderá ser de segunda a"
+            },
+            {
+              "jornada": "20h_semanal",
+              "valor": 20.0,
+              "trecho_fonte": "alho conforme legislação vigente. PARÁGRAFO NONO: Fica autorizado a jornada de 20 horas semanais, com salário proporcional ao piso de 180 horas, com pagamento dos benefícios de forma integral."
+            },
+            {
+              "jornada": "jornada_integral",
+              "valor": null,
+              "trecho_fonte": "ulo e pagamento será proporcionalizado. PARÁGRAFO QUARTO: Para os ocupantes de jornada integral, nos demais cargos da empresa, a jornada efetiva de trabalho a ser cumprida é de no máximo 220 (duzentas e vinte) horas"
+            }
+          ],
+          "por_escala": [
+            {
+              "label": "6x1",
+              "trecho_fonte": "scala de revezamento da empresa, a qual poderá ser de segunda a domingo; ou b) 6x1 (seis dias trabalhados e um dia de folga): fica estabelecido que a jornada diária de trabalho é de 6 (seis) horas e res"
+            },
+            {
+              "label": "5x2",
+              "trecho_fonte": "nada diária de 6 (seis) horas ou por escalas de revezamento conforme segue. a) 5x2 (cinco dias trabalhados e dois de descanso), fica estabelecido que o horário diário de trabalho é de 7:12 horas e respe"
+            }
+          ]
         }
       }
     },
@@ -3207,8 +3535,15 @@
           "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
           "clausula": "CLÁUSULA NONA - HORA NOTURNA",
           "trecho_fonte": "CLÁUSULA NONA - HORA NOTURNA O trabalho realizado em horário noturno terá a sua hora remunerada com acréscimo de 20% (vinte por cento), entendendo-se como tal, o trabalho realizado das 22:00 horas de um dia até as 5hs00min do dia seguinte, computando-se, para tanto, a hora de trabalho a cada 52:30 minutos, nos termos do artigo 73 da CLT, ou aplicação do percentual de 37,14% (trinta e sete vírgula quatorze por cento) sobre a hora normal, como forma alternativa, apenas para fins de incidência do aludido adicional. Parágrafo Primeiro: O adicional noturno será também devido quando houver a prorrog…",
-          "observacao": "Múltiplos valores identificados: 20.0, 37.14",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "horario_noturno",
+              "valor": 20.0,
+              "trecho_fonte": "CLÁUSULA NONA - HORA NOTURNA O trabalho realizado em horário noturno terá a sua hora remunerada com acréscimo de 20% (vinte por cento), entendendo-se como tal, o trabalho realizado das 22:00 horas"
+            }
+          ]
         },
         "auxilio_alimentacao": {
           "valor": 9.99,
@@ -3246,8 +3581,15 @@
           "fonte_documento": "CCT/RJ/Sinttel/CCT_2025-2026_SINTTEL RJ.pdf",
           "clausula": "CLÁUSULA OITAVA - DAS HORAS EXTRAORDINARIAS",
           "trecho_fonte": "CLÁUSULA OITAVA - DAS HORAS EXTRAORDINARIAS As horas extras semanais, serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas nas folgas, domingos e feriados, exceto na hipótese de escala de revezamento quando pagas, serão remuneradas com o adicional de 100% (cem por cento). Parágrafo Único: As horas extras habituais serão integradas para fins de cálculo de férias, 13º salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º salário e demais verbas de cunho salarial, será considerada a média percebida nos últimos 12 (doze) m…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "domingo",
+              "valor": 50.0,
+              "trecho_fonte": "EXTRAORDINARIAS As horas extras semanais, serão remuneradas com o adicional de 50% (cinquenta por cento) e as horas extras realizadas nas folgas, domingos e feriados, exceto na hipótese de escala de revezamento quando pagas, serão rem"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3273,7 +3615,19 @@
           "clausula": "CLÁUSULA VIGÉSIMA TERCEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA TERCEIRA - JORNADA DE TRABALHO As jornadas de trabalho de empregados integrantes de categorias profissionais diferenciadas e regulamentadas serão fixadas, conforme previsto em legislação específica: a) ANEXO II da NR-17: Operadores de Teleatendimento ou Telemarketing, jornada máxima de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais, com intervalo de 20 (vinte) minutos para alimentação, 2(duas) pausas de 10 (dez) minutos para descanso, sem prejuízo das demais pausas previstas. b) Decreto 5598/2005, art. 18: Aprendizes jornada máxima de 6 (seis) horas diárias ou, a…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "imeiro: Os demais empregados serão contratados para jornadas de trabalho de até 44 (quarenta e quatro) horas semanais, com intervalo para refeição e descanso de 1 (uma) hora diária, conforme previsto no art. 71, da CLT. Parágrafo Segund"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "e Teleatendimento ou Telemarketing, jornada máxima de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais, com intervalo de 20 (vinte) minutos para alimentação, 2(duas) pausas de 10 (dez) minutos para descanso, sem prejuízo d"
+            }
+          ]
         }
       }
     },
@@ -3294,7 +3648,7 @@
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
-          "valor": 2016.69,
+          "valor": 16.86,
           "percentual": null,
           "valor_textual": null,
           "regra_textual": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL As empresas reajustarão, a partir de 01 de janeiro de 2025, a remuneração integral a todos os seus empregados, inclusive daqueles que estão acima do piso, o valor correspondente a 5,5% (cinco ponto cinco por cento), reajuste salarial de toda a categoria profissional e do constate desta cláusula, estendido também aos assemelhados. Excetuando-se exigências legais, que, proporcionar um maior índice de correção em favor dos empregados. Funções PISO 2025 Digitador R$ 2.016,69 Conferente R$ 2.016,69 Classificador de Documentos R$ 2.016,69 Aux de Processamento R$ 2.016,69 Preparador de Dados R$ 2.016,69 Fitotecário R$ 2.230,93 Aux. Técnico em manutenção de hardware R$ 2.660,44 Operador de Micro/Mini R$ 2.660,44 Operador Júnior R$ 2.660,4…",
@@ -3303,8 +3657,130 @@
           "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
           "clausula": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - DOS PISOS SALARIAIS E REAJUSTE SALARIAL As empresas reajustarão, a partir de 01 de janeiro de 2025, a remuneração integral a todos os seus empregados, inclusive daqueles que estão acima do piso, o valor correspondente a 5,5% (cinco ponto cinco por cento), reajuste salarial de toda a categoria profissional e do constate desta cláusula, estendido também aos assemelhados. Excetuando-se exigências legais, que, proporcionar um maior índice de correção em favor dos empregados. Funções PISO 2025 Digitador R$ 2.016,69 Conferente R$ 2.016,69 Classificador de Documentos R$ 2.016,69 A…",
-          "observacao": "Múltiplos valores identificados: 2016.69, 2230.93, 2660.44, 3192.51, 3831.06, 3150.14, 3465.3, 3811.97, 3464.39, 16.86, 9275.66, 6852.12, 13703.8, 3518.49, 3945.41, 4859.17, 5831.04, 4908.45, 5890.07, 7861.69, 5119.17, 6103.59, 7324.27, 8789.1, 6103.51, 8072.24, 8491.79, 9498.16",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "tecnico_suporte",
+              "valor": 3150.14,
+              "trecho_fonte": "831,06 Operador de Internet R$ 3.150,14 Técnico de Suporte R$ 3.150,14 Técnico de Su"
+            },
+            {
+              "cargo": "tecnico_suporte",
+              "valor": 3465.3,
+              "trecho_fonte": "co de Suporte R$ 3.150,14 Técnico de Suporte Pleno R$ 3.465,30 Técnico de Suporte Sênior R$ 3.8"
+            },
+            {
+              "cargo": "tecnico_suporte",
+              "valor": 13703.8,
+              "trecho_fonte": "852,12 Gerente/Coordenador de Processos ITIL R$ 13.703,80 Técnico Operador e Instalador Telemática R$ 3.150,14 Técnico de Suporte e Manutenção de Redes R$ 3.150,14 Técnico de Te"
+            },
+            {
+              "cargo": "tecnico_informatica",
+              "valor": 3811.97,
+              "trecho_fonte": "465,30 Técnico de Suporte Sênior R$ 3.811,97 Técnico de Manutenção em Hardware R$ 3.150,14 Técnico em Informática R$ 3.150,14 Técnico em Inform"
+            },
+            {
+              "cargo": "tecnico_informatica",
+              "valor": 3464.39,
+              "trecho_fonte": "co em Informática R$ 3.150,14 Técnico em Informática Pleno R$ 3.464,39 Técnico em Informática Sênior R$ 3.8"
+            },
+            {
+              "cargo": "operador",
+              "valor": 2660.44,
+              "trecho_fonte": "230,93 Aux. Técnico em manutenção de hardware R$ 2.660,44 Operador de Micro/Mini R$ 2.660,44 Ope"
+            },
+            {
+              "cargo": "operador",
+              "valor": 3192.51,
+              "trecho_fonte": "dor Júnior R$ 2.660,44 Operador Pleno R$ 3.192,51 Operador Sênior R$ 3.8"
+            },
+            {
+              "cargo": "operador",
+              "valor": 3831.06,
+              "trecho_fonte": "192,51 Operador Sênior R$ 3.831,06 Operador de Internet R$ 3.150,14 Téc"
+            },
+            {
+              "cargo": "analista",
+              "valor": 5831.04,
+              "trecho_fonte": "859,17 Programador Sênior R$ 5.831,04 Analista de Sistemas Júnior R$ 4.908,45 An"
+            },
+            {
+              "cargo": "analista",
+              "valor": 4908.45,
+              "trecho_fonte": "831,04 Analista de Sistemas Júnior R$ 4.908,45 Analista de Sistemas Pleno R$ 5.890,07 Analista de Sist"
+            },
+            {
+              "cargo": "analista",
+              "valor": 5890.07,
+              "trecho_fonte": "R$ 4.908,45 Analista de Sistemas Pleno R$ 5.890,07 Analista de Sistemas Sênior R$ 7.861,69 Administrador de"
+            },
+            {
+              "cargo": "analista",
+              "valor": 5119.17,
+              "trecho_fonte": "R$ 7.861,69 Administrador de Banco de Dados R$ 5.119,17 Analista de Suporte Júnior R$ 6.103,59 Analista de Supo"
+            },
+            {
+              "cargo": "analista",
+              "valor": 6103.59,
+              "trecho_fonte": "R$ 5.119,17 Analista de Suporte Júnior R$ 6.103,59 Analista de Suporte Pleno R$ 7.324,27 Analista de Supo"
+            },
+            {
+              "cargo": "analista",
+              "valor": 7324.27,
+              "trecho_fonte": "R$ 6.103,59 Analista de Suporte Pleno R$ 7.324,27 Analista de Suporte Sênior R$ 8.789,10 Administrador de"
+            },
+            {
+              "cargo": "analista",
+              "valor": 6103.51,
+              "trecho_fonte": "R$ 5.119,17 Administrador de Sites (web Master) R$ 6.103,51 Analista de Segurança da informação R$ 8.072,24 Arquiteto de Sof"
+            },
+            {
+              "cargo": "supervisor",
+              "valor": 16.86,
+              "trecho_fonte": "150,14 Instrutor/Monitor de informática (hora aula) R$ 16,86 Supervisor de Central de Atendimento R$ 9.275,66 Coord"
+            },
+            {
+              "cargo": "digitador",
+              "valor": 2016.69,
+              "trecho_fonte": "Funções PISO 2025 Digitador R$ 2.016,69 Conferente R$ 2.0"
+            },
+            {
+              "cargo": "programador",
+              "valor": 3518.49,
+              "trecho_fonte": "150,14 Técnico de Teleprocessamento R$ 3.518,49 Programador Júnior R$ 3.945,41 Progra"
+            },
+            {
+              "cargo": "programador",
+              "valor": 3945.41,
+              "trecho_fonte": "518,49 Programador Júnior R$ 3.945,41 Programador Pleno R$ 4.859,17 Progra"
+            },
+            {
+              "cargo": "programador",
+              "valor": 4859.17,
+              "trecho_fonte": "945,41 Programador Pleno R$ 4.859,17 Programador Sênior R$ 5.831,04 Analis"
+            },
+            {
+              "cargo": "gerente",
+              "valor": 6852.12,
+              "trecho_fonte": "275,66 Coordenador Técnico de Atendimento e Suporte R$ 6.852,12 Gerente/Coordenador de Processos ITIL R$ 13.703,80 T"
+            },
+            {
+              "cargo": "gerente",
+              "valor": 8491.79,
+              "trecho_fonte": "R$ 8.072,24 Arquiteto de Software R$ 8.491,79 Gerente/Coordenador Projeto TI R$ 9.498,16 Gerente/Coorden"
+            },
+            {
+              "cargo": "gerente",
+              "valor": 9498.16,
+              "trecho_fonte": "R$ 8.491,79 Gerente/Coordenador Projeto TI R$ 9.498,16 Gerente/Coordenador de Tecnologia da InformaçãoR$ 13.703,80 Parágrafo Primeiro - O pi"
+            },
+            {
+              "cargo": "coordenador",
+              "valor": 9275.66,
+              "trecho_fonte": "16,86 Supervisor de Central de Atendimento R$ 9.275,66 Coordenador Técnico de Atendimento e Suporte R$ 6.852,12 Gerent"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -3355,8 +3831,15 @@
           "fonte_documento": "CCT/RN/Sindpd/CCT_2025 - Sindpd-RN.pdf",
           "clausula": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS As horas extras excedentes laboradas em dias úteis serão acrescidas de 50% (cinquenta por cento) do valor da hora normal, e as horas extras laboradas em dias não úteis serão acrescidas de 100% (cem por cento) em relação ao valor da hora normal.",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util",
+              "valor": 50.0,
+              "trecho_fonte": "SULA VIGÉSIMA QUINTA - DAS HORAS EXTRAS As horas extras excedentes laboradas em dias úteis serão acrescidas de 50% (cinquenta por cento) do valor da hora normal, e as horas extras laboradas em d"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3382,7 +3865,24 @@
           "clausula": "CLÁUSULA VIGÉSIMA QUARTA - DA JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUARTA - DA JORNADA DE TRABALHO Para as categorias de digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e monitoração de computadores, será cumprida jornada de trabalho de 06 (seis) horas diárias, perfazendo um total de 30 (trinta) horas semanais, para empregadores que trabalhem de segunda a sexta-feira e os demais 36 (trinta e seis) horas semanais. Parágrafo Único - Para as demais categorias será cumprida jornada de trabalho de 08 (oito) horas diárias, perfazendo um total de 44 (quarenta e quatro) horas semanai…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "cumprida jornada de trabalho de 08 (oito) horas diárias, perfazendo um total de 44 (quarenta e quatro) horas semanais. PRORROGAÇÃO/REDUÇÃO DE JORNADA"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "semanais, para empregadores que trabalhem de segunda a sexta-feira e os demais 36 (trinta e seis) horas semanais. Parágrafo Único - Para as demais categorias será cumprida jornada de trabalho de 08 (oito) horas diárias, perfazendo"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 30.0,
+              "trecho_fonte": "cumprida jornada de trabalho de 06 (seis) horas diárias, perfazendo um total de 30 (trinta) horas semanais, para empregadores que trabalhem de segunda a sexta-feira e os demais 36 (trinta e seis) horas semanais. Parágrafo Úni"
+            }
+          ]
         }
       }
     },
@@ -3412,7 +3912,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -3425,7 +3925,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -3438,7 +3938,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -3451,7 +3951,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -3464,7 +3964,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -3477,7 +3977,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -3490,7 +3990,7 @@
           "fonte_documento": "CCT/RR/Sinteco/CCT_2024-2026_SINTECO RR.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -3709,7 +4209,19 @@
           "clausula": "CLÁUSULA QUADRAGÉSIMA PRIMEIRA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA PRIMEIRA - JORNADA DE TRABALHO O horário máximo normal de trabalho será de 44 (quarenta e quatro) horas semanais, sem prejuízo salarial ou de jornadas menores já vigentes. Os digitadores e os operadores, excluídos os investidos em cargo de chefia ou supervisão, terão a duração máxima normal de trabalho de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais também sem prejuízo salarial ou de jornadas menores já praticadas. COMPENSAÇÃO DE JORNADA",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 36.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "SIMA PRIMEIRA - JORNADA DE TRABALHO O horário máximo normal de trabalho será de 44 (quarenta e quatro) horas semanais, sem prejuízo salarial ou de jornadas menores já vigentes. Os digitadores e os operadores, excluídos os investidos em c"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "ervisão, terão a duração máxima normal de trabalho de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais também sem prejuízo salarial ou de jornadas menores já praticadas. COMPENSAÇÃO DE"
+            }
+          ]
         }
       }
     },
@@ -3791,8 +4303,15 @@
           "fonte_documento": "CCT/RS/Sinttel/CCT_2025_SINTTEL RS.pdf",
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAS Os serviços extraordinários que extrapolarem os limites estabelecidos na cláusula Jornada de Trabalho, serão acrescidos de 50% (cinquenta por cento) do valor da hora normal, exceto o realizado no dia do repouso semanal e feriado, que será remunerado com adicional de 100% (cem por cento). Parágrafo Primeiro: O serviço extraordinário será registrado no mesmo cartão ponto que acolher o registro do horário normal. Parágrafo Segundo: As horas extras somente poderão ser realizadas mediante autorização do coordenador da área, devendo esta autorização ser registrada em d…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "feriado",
+              "valor": 100.0,
+              "trecho_fonte": "cento) do valor da hora normal, exceto o realizado no dia do repouso semanal e feriado, que será remunerado com adicional de 100% (cem por cento). Parágrafo Primeiro: O serviço extraordinário será registrado"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3900,8 +4419,20 @@
           "fonte_documento": "CCT/RS/Sinaprosul - Sinaptep_Haus/CCT-2024-2026-SINPAPTEP RS.pdf",
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As 2 (duas) primeiras horas extraordinárias serão pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVIÇO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 75.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "sabado",
+              "valor": 100.0,
+              "trecho_fonte": "sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVI"
+            },
+            {
+              "label": "domingo",
+              "valor": 75.0,
+              "trecho_fonte": "o pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, se"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -3948,7 +4479,7 @@
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
-          "valor": 4410.0,
+          "valor": 2000.0,
           "percentual": null,
           "valor_textual": null,
           "regra_textual": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Os pisos salariais da categoria profissional, a partir da assinatura do presente instrumento, serão os seguintes: a) Analistas de Sistemas R$ 4.410,00 b) Funções que exijam formação universitária de graduação plena R$ 4.105,00 c) Programadores e Instrutores R$ 3.560,00 d) Supervisores e Cargos de Nível Técnico R$ 3.115,00 e) Auxiliares Administrativos, Financeiros e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00 f) Digitadores e Telefonistas R$ 2.000,00 g) Pessoal de Serviços Gerais e Contínuos R$ 2.000,00 Parágrafo Primeiro: Os empregados que tenham o primeiro registro em carteira para os cargos enquadrados nas letras “a”, “b” e “c” desta cláusula, receberão, no mínimo, 75% (setenta e cinco por cento) do salário acima fixado para a função,…",
@@ -3957,8 +4488,30 @@
           "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISOS SALARIAIS",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISOS SALARIAIS Os pisos salariais da categoria profissional, a partir da assinatura do presente instrumento, serão os seguintes: a) Analistas de Sistemas R$ 4.410,00 b) Funções que exijam formação universitária de graduação plena R$ 4.105,00 c) Programadores e Instrutores R$ 3.560,00 d) Supervisores e Cargos de Nível Técnico R$ 3.115,00 e) Auxiliares Administrativos, Financeiros e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00 f) Digitadores e Telefonistas R$ 2.000,00 g) Pessoal de Serviços Gerais e Contínuos R$ 2.000,00 Parágrafo Primeiro: Os empregados que …",
-          "observacao": "Múltiplos valores identificados: 4410.0, 4105.0, 3560.0, 3115.0, 2000.0",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "analista",
+              "valor": 4410.0,
+              "trecho_fonte": "sional, a partir da assinatura do presente instrumento, serão os seguintes: a) Analistas de Sistemas R$ 4.410,00 b) Funções que exijam formação universitária de graduação plena"
+            },
+            {
+              "cargo": "supervisor",
+              "valor": 3560.0,
+              "trecho_fonte": "R$ 3.560,00 d) Supervisores e Cargos de Nível Técnico"
+            },
+            {
+              "cargo": "continuo",
+              "valor": 2000.0,
+              "trecho_fonte": "e de Escritórios e Assistentes de Apoio ao Usuário R$ 2.000,00 f) Digitadores e Telefonistas R$ 2.000,00 g) Pessoal de Serviços Gerais e Contínuos"
+            },
+            {
+              "cargo": "programador",
+              "valor": 4105.0,
+              "trecho_fonte": "ia de graduação plena R$ 4.105,00 c) Programadores e Instrutores"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4009,8 +4562,15 @@
           "fonte_documento": "CCT/SC/Sindpd/CCT-2025-2026-SINDPD SC.pdf",
           "clausula": "CLÁUSULA SÉTIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SÉTIMA - HORAS EXTRAS As horas extraordinárias praticadas em dias normais de trabalho, serão remuneradas com adicional de 70% (setenta por cento); as realizadas em dia destinado ao descanso semanal remunerado ou feriado, serão remuneradas com adicional de 100% (cem por cento). ADICIONAL NOTURNO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "feriado",
+              "valor": 100.0,
+              "trecho_fonte": "ta por cento); as realizadas em dia destinado ao descanso semanal remunerado ou feriado, serão remuneradas com adicional de 100% (cem por cento)."
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4036,7 +4596,19 @@
           "clausula": "CLÁUSULA DÉCIMA SEXTA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEXTA - JORNADA DE TRABALHO A jornada de trabalho para os digitadores, auxiliares de processamento de dados e telefonistas será de 36 (trinta e seis) horas semanais e, para as demais funções, de 44 (quarenta e quatro) horas semanais, observadas as determinações estabelecidas na NR 17. COMPENSAÇÃO DE JORNADA",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "onistas será de 36 (trinta e seis) horas semanais e, para as demais funções, de 44 (quarenta e quatro) horas semanais, observadas as determinações estabelecidas na NR 17. COMPENSAÇÃ"
+            },
+            {
+              "jornada": "36h_semanal",
+              "valor": 36.0,
+              "trecho_fonte": "ara os digitadores, auxiliares de processamento de dados e telefonistas será de 36 (trinta e seis) horas semanais e, para as demais funções, de 44 (quarenta e quatro) horas semanais, observadas as determinações estabelecidas na NR 17"
+            }
+          ]
         }
       }
     },
@@ -4066,8 +4638,15 @@
           "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIO NORMATIVO Fica estabelecido o Salário Normativo das funções abaixo na admissão, sendo que nenhum salário poderá ser inferior a Lei do piso estadual da categoria, normalmente reajustado no mês de janeiro: Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e R$ 1.978,00 Office-boy) Trainee técnico R$ 2.044,20 Cargos Administrativos R$ 1.978,00 Técnicos em Geral R$ 2.207,10 § ÚNICO. A permanência máxima do empregado na função de trainee técnico será de 12 (doze) meses a contar da data de sua contratação. REAJUSTES/CORREÇÕES SALARIAIS",
-          "observacao": "Múltiplos valores identificados: 1978.0, 2044.2, 2207.1",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "digitador",
+              "valor": 1978.0,
+              "trecho_fonte": "ual da categoria, normalmente reajustado no mês de janeiro: Auxiliar Técnico/Digitador/ Auxiliares Administrativos (inclui Limpeza e R$ 1.978,00 Office-boy) Trainee técnico"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4118,8 +4697,20 @@
           "fonte_documento": "CCT/SC/Sindpd Joinville/CCT_2025-2026 - SINDPD JOINVILLE.pdf",
           "clausula": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias de segunda a sexta feira, serão pagas com acréscimo de 60% (sessenta por cento) sobre a hora normal. As horas extras efetuadas aos sábados, até o limite de 04 (quatro horas), serão pagas com 60% (sessenta por cento) de acréscimo sobre a hora normal. As demais horas extras dos sábados serão pagas com 100% (cem por cento) de acréscimo sobre a hora normal. Quando efetuadas aos domingos e feriados, todas as horas extras serão acrescidas de 100% (cem por cento) sobre a hora normal. § 1º - Fica assegurado ao empregado que tenha sua jorna…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 60.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util",
+              "valor": 60.0,
+              "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias de segunda a sexta feira, serão pagas com acréscimo de 60% (sessenta por cento) sobre a hora normal. As horas extras efetuadas aos sábados"
+            },
+            {
+              "label": "sabado",
+              "valor": 100.0,
+              "trecho_fonte": "essenta por cento) de acréscimo sobre a hora normal. As demais horas extras dos sábados serão pagas com 100% (cem por cento) de acréscimo sobre a hora normal. Quando efetuadas aos domingos"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4145,7 +4736,24 @@
           "clausula": "CLÁUSULA VIGÉSIMA SÉTIMA - JORNADA DE TRABALHO",
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SÉTIMA - JORNADA DE TRABALHO A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais (6 horas diárias) e dos demais empregados será de 44 (quarenta e quatro) horas semanais. § 1º – Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos intervalos de repouso serão computados na duração da jornada de trabalho para todos os fins e efeitos. § 2º – Ficam ressalvadas as jornadas de menor número de horas semanais que venham sendo adotadas pelas empresas e preservadas outras já existentes. § 3º – Será facultad…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "44h_semanal",
+              "valor": 44.0,
+              "trecho_fonte": "de 30 (trinta) horas semanais (6 horas diárias) e dos demais empregados será de 44 (quarenta e quatro) horas semanais. § 1º – Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos interv"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 30.0,
+              "trecho_fonte": "- JORNADA DE TRABALHO A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais (6 horas diárias) e dos demais empregados será de 44 (quarenta e quatro) horas semanais. § 1º – Os digitadores terão"
+            },
+            {
+              "jornada": "6h_diario",
+              "valor": 6.0,
+              "trecho_fonte": "ação da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais (6 horas diárias) e dos demais empregados será de 44 (quarenta e quatro) horas semanais. § 1º – Os digitadores terão um descanso de 1"
+            }
+          ]
         }
       }
     },
@@ -4175,8 +4783,20 @@
           "fonte_documento": "CCT/SC/Sinttel/ADITIVO CCT 2025-2026 - SINTTEL SC.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Fica convencionado que o piso da categoria, assim entendido como o menor salário pago pelas empresas, será de R$ 1.792,00 (mil, setecentos e noventa e dois reais) a partir da folha salarial do mês de julho/2025. Parágrafo Primeiro: Para efeito de piso por função serão considerados os seguintes cargos e salários, conforme a tabela abaixo: CARGOS 01/07/2025 ALMOXARIFE R$ 1.851,24 CABISTA I R$ 1.792,00 CABISTA II R$ 2.287,92 CABISTA III R$ 2.531,03 INSTALADOR DTH R$ 1.792,00 LIDER DE OBRAS / ENCARREGADO R$ 2.531,02 OFICIAL DE REDE R$ 1.792,00 OPERADOR MULTIFUNCIO…",
-          "observacao": "Múltiplos valores identificados: 1792.0, 1851.24, 2287.92, 2531.03, 2531.02, 2191.83, 3701.02, 1794.94, 2289.31, 2535.16, 2845.5",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "operador",
+              "valor": 2191.83,
+              "trecho_fonte": "AL DE REDE R$ 1.792,00 OPERADOR MULTIFUNCIONAL / HOME R$ 2.191,83 CONNECT OPERADOR SERVICO AO CLIENTE -"
+            },
+            {
+              "cargo": "supervisor",
+              "valor": 3701.02,
+              "trecho_fonte": "R$ 1.792,00 OSC SUPERVISOR OPERACIONAL R$ 3.701,02 TEC DADOS I R$ 1.7"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4284,7 +4904,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -4297,7 +4917,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -4310,7 +4930,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -4323,7 +4943,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -4336,7 +4956,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -4349,7 +4969,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -4362,7 +4982,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -4502,7 +5122,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -4515,7 +5135,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -4528,7 +5148,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -4541,7 +5161,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -4554,7 +5174,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -4567,7 +5187,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -4580,7 +5200,7 @@
           "fonte_documento": "CCT/SE/Sinttel/CCT_2024-2025_SINTTEL-SE.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -4663,8 +5283,15 @@
           "fonte_documento": "CCT/SP/SENALBA/CCT_2025-2026_Senalba-SP.pdf",
           "clausula": "CLÁUSULA DÉCIMA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA - HORAS EXTRAS A hora extraordinária será remunerada na forma abaixo: a) 50% (cinquenta por cento) de acréscimo, em relação a hora normal, quando trabalhada em qualquer dia de segunda-feira a sábado, desde que não ultrapasse o limite de duas horas diárias; b)100% (cem por cento) de acréscimo, em relação a hora normal, as horas trabalhadas excedentes ao limite da letra \"a\", bem como aquelas trabalhadas em dias de repouso. ADICIONAL NOTURNO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 100.0,
+              "trecho_fonte": "o) de acréscimo, em relação a hora normal, quando trabalhada em qualquer dia de segunda-feira a sábado, desde que não ultrapasse o limite de duas horas diárias; b)100% (cem por cento) de acréscimo, em relação a hora normal, as horas trabalhadas ex"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -4829,8 +5456,20 @@
           "fonte_documento": "CCT/SP/Sindicatão/CCT_2025-2026_SINDICATÃO-SP.pdf",
           "clausula": "CLÁUSULA TERCEIRA - PISO SALARIAL",
           "trecho_fonte": "CLÁUSULA TERCEIRA - PISO SALARIAL Para os empregados abrangidos pela presente Convenção Coletiva, independentemente da idade, sujeitos ao regime de trabalho de tempo integral, ficam assegurados como pisos salariais os seguintes valores: 3.1. Para empregados contratados e que exerçam as funções de: “Office boy\" - CBO 4122-05; Recepcionista - CBO 4221-05; Faxineiro - CBO 5143-20; Porteiro - CBO 5174-10; Auxiliar de Serviços Gerais - CBO 5143; Copeira - CBO 5134-25; Atendente de Negócios - CBO 2532-25; Entrevistador de Pesquisas de Campo - CBO 4241-15; o valor mensal correspondente a R$ 1.980,00 …",
-          "observacao": "Múltiplos valores identificados: 1980.0, 2100.0",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "atendente",
+              "valor": 1980.0,
+              "trecho_fonte": "o - CBO 5174-10; Auxiliar de Serviços Gerais - CBO 5143; Copeira - CBO 5134-25; Atendente de Negócios - CBO 2532-25; Entrevistador de Pesquisas de Campo - CBO 4241-15; o valor mensal correspondente a R$ 1.980,00 (um mil, novecentos e oitenta reais); 3.2. Para as demais funções, o valor men"
+            },
+            {
+              "cargo": "demais_funcoes",
+              "valor": 2100.0,
+              "trecho_fonte": "orrespondente a R$ 1.980,00 (um mil, novecentos e oitenta reais); 3.2. Para as demais funções, o valor mensal corresponde a R$ 2.100,00 (dois mil e cem reais)."
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4929,7 +5568,7 @@
       "observacao": null,
       "itens_cct": {
         "piso_salarial": {
-          "valor": 2025.0,
+          "valor": 1615.0,
           "percentual": null,
           "valor_textual": null,
           "regra_textual": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 1/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Fica assegurado para os empregados abrangidos por esta CONVENÇÃO COLETIVA DE TRABALHO, salário normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais; B) aplicável aos empregados integrantes da menor função e/ou atividade administrativa: R$ 1.615,00 (um mil, seicentos e quinze reais), jornada de 40 (quarenta) horas semanais. C) aplicável aos empregados integrantes da menor função e/ou atividade técnica de informática: R$ 2.245,00 (dois mil, duzentos e quarenta e cinco reais), …",
@@ -4938,8 +5577,32 @@
           "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
           "clausula": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS.",
           "trecho_fonte": "CLÁUSULA TERCEIRA - SALÁRIOS NORMATIVOS. www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 1/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Fica assegurado para os empregados abrangidos por esta CONVENÇÃO COLETIVA DE TRABALHO, salário normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais; B) aplicável aos empregados integrantes da menor função e/ou atividade administrativa: R$ 1.615,00 (um mil, seicentos e quinze rea…",
-          "observacao": "Múltiplos valores identificados: 2025.0, 1615.0, 2245.0",
-          "status_parametro": "conflito"
+          "observacao": null,
+          "status_parametro": "extraido_para_revisao",
+          "por_cargo": [
+            {
+              "cargo": "digitador",
+              "valor": 2025.0,
+              "trecho_fonte": "rio normativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais;"
+            }
+          ],
+          "por_jornada": [
+            {
+              "jornada": "40h_semanal",
+              "valor": 1615.0,
+              "trecho_fonte": "cável aos empregados integrantes da menor função e/ou atividade administrativa: R$ 1.615,00 (um mil, seicentos e quinze reais), jornada de 40 (quarenta) horas semanais. C) aplicável aos empregados integrantes da menor função e/ou atividade t"
+            },
+            {
+              "jornada": "40h_semanal",
+              "valor": 2245.0,
+              "trecho_fonte": "s empregados integrantes da menor função e/ou atividade técnica de informática: R$ 2.245,00 (dois mil, duzentos e quarenta e cinco reais), jornada de 40 (quarenta) horas semanais. D) aplicável aos empregados integrantes da atividade técnica de suporte"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 2025.0,
+              "trecho_fonte": "rmativo que obedecerá aos seguintes critérios: A) aplicável ao digitador: R$ 2.025,00 (dois mil, e vinte e cinco reais), jornada de 30 (trinta) horas semanais; B) aplicável aos empregados integrantes da menor função e/ou atividade a"
+            }
+          ]
         },
         "adicional_noturno": {
           "valor": null,
@@ -4990,8 +5653,20 @@
           "fonte_documento": "CCT/SP/Sindpd/CCT_2024_2025_Sindpd-SP (homologado).pdf",
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - HORA EXTRAORDINÁRIA.",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - HORA EXTRAORDINÁRIA. A remuneração adicional por hora extraordinária será de 75% (setenta e cinco por cento) do salário-hora, nos dias úteis, para as primeiras 2 (duas) horas após a jornada normal de trabalho. Se por motivo de força maior for exigida do trabalhador uma sobrejornada mais elástica, as horas excedentes de 2 (duas) horas serão remuneradas com o adicional de 100% (cem por cento). www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 3/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Parágra…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 75.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util",
+              "valor": 75.0,
+              "trecho_fonte": "- HORA EXTRAORDINÁRIA. A remuneração adicional por hora extraordinária será de 75% (setenta e cinco por cento) do salário-hora, nos dias úteis, para as primeiras 2 (duas) horas após a jornada normal de trabalho. Se por mot"
+            },
+            {
+              "label": "sabado",
+              "valor": 100.0,
+              "trecho_fonte": "as horas excedentes de 2 (duas) horas serão remuneradas com o adicional de 100% (cem por cento). www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR001707/2024&CNPJ=55537666000175&CEI= 3/20 07/05/2024, 18:41 Mediador - Extrato Convenção Coletiva Parágrafo 1º - Na hipótese de o…"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -5017,7 +5692,19 @@
           "clausula": "CLÁUSULA TRIGÉSIMA OITAVA - JORNADA DE TRABALHO.",
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA OITAVA - JORNADA DE TRABALHO. A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais e dos demais empregados será de 40 (quarenta) horas semanais. Parágrafo 1º - Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos intervalos de repouso serão computados na duração da jornada de trabalho para todos os fins e efeitos. Parágrafo 2º - Fica autorizado às empresas abrangidas por esta CONVENÇÃO COLETIVA DE TRABALHO o trabalho aos domingos e feriados, conforme a lei n.º 11.603/2007. A) As horas trabalhadas…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 40.0h/sem",
-          "status_parametro": "conflito"
+          "status_parametro": "extraido_para_revisao",
+          "por_jornada": [
+            {
+              "jornada": "40h_semanal",
+              "valor": 40.0,
+              "trecho_fonte": "tadores será de 30 (trinta) horas semanais e dos demais empregados será de 40 (quarenta) horas semanais. Parágrafo 1º - Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados,"
+            },
+            {
+              "jornada": "30h_semanal",
+              "valor": 30.0,
+              "trecho_fonte": "- JORNADA DE TRABALHO. A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais e dos demais empregados será de 40 (quarenta) horas semanais. Parágrafo 1º - Os digitadores terão um descans"
+            }
+          ]
         }
       }
     },
@@ -5099,8 +5786,20 @@
           "fonte_documento": "CCT/SP/Sintetel/CCT_2024_Sintetel-SP (homologada).pdf",
           "clausula": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - DAS HORAS EXTRAORDINÁRIAS DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º (décimo terceiro) salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º (décimo ter…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 50.0,
+              "trecho_fonte": "RAORDINÁRIAS DAS HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Primeiro: Na h"
+            },
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "ágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integrad"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -5156,7 +5855,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -5169,7 +5868,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -5182,7 +5881,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -5195,7 +5894,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -5208,7 +5907,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -5221,7 +5920,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -5234,7 +5933,7 @@
           "fonte_documento": "CCT/TO/Sintraesco/CCT_2024-2025_SINTRAESCO TO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -5265,7 +5964,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -5278,7 +5977,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -5291,7 +5990,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -5304,7 +6003,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -5317,7 +6016,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -5330,7 +6029,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -5343,7 +6042,7 @@
           "fonte_documento": "",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
+          "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -5644,8 +6343,15 @@
           "fonte_documento": "CCT/MT/Sinttel/CCT 2025-2026 - SINTTEL-MT.pdf",
           "clausula": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA SEXTA - ADICIONAL DE HORAS EXTRAS As dobras, assim entendidas duplicação de jornadas eventuais, serão remuneradas em 70% (setenta por cento) acima do valor da hora normal de segunda a sábado e aos domingos e feriados 120% (cento e vinte por cento). Auxílio Alimentação",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 70.0, 120.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 120.0,
+              "trecho_fonte": ", serão remuneradas em 70% (setenta por cento) acima do valor da hora normal de segunda a sábado e aos domingos e feriados 120% (cento e vinte por cento). Auxíl"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -5701,7 +6407,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -5714,7 +6420,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -5727,7 +6433,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -5740,7 +6446,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -5753,7 +6459,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -5766,7 +6472,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -5779,7 +6485,7 @@
           "fonte_documento": "CCT/PB/Sescon/SESCON PB (2).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -5810,7 +6516,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -5823,7 +6529,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -5836,7 +6542,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -5849,7 +6555,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -5862,7 +6568,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -5875,7 +6581,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -5888,7 +6594,7 @@
           "fonte_documento": "CCT/PE/Sintappi/CCT_SINTAPPI-PE - 2023-2024.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -5919,7 +6625,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -5932,7 +6638,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -5945,7 +6651,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -5958,7 +6664,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -5971,7 +6677,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -5984,7 +6690,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -5997,7 +6703,7 @@
           "fonte_documento": "CCT/PE/Sinttel/CCT_SINTTEL PE_2023-2025.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -6080,8 +6786,20 @@
           "fonte_documento": "CCT/PI/Sinttel/CCT 2024 -SINTTEL-PI.pdf",
           "clausula": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão integradas para fins de cálculo de férias, 13º salário, DSR’s e demais verbas de cunho salarial, sendo que para o cálculo das férias, 13º salário e demais verbas de cunho salarial, será considerada…",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 50.0,
+              "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAORDINÁRIAS As horas extraordinárias trabalhadas de segunda a sábado, serão remuneradas com o adicional de 50% (cinquenta por cento) sobre o valor da hora normal. Parágrafo Prim"
+            },
+            {
+              "label": "domingo",
+              "valor": 100.0,
+              "trecho_fonte": "ágrafo Primeiro: Na hipótese de ocorrer trabalho em dia de repouso, feriados ou domingos, a remuneração será acrescida com o adicional de 100% (cem por cento). Parágrafo Segundo: As horas extras habituais serão inte"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -6246,7 +6964,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -6259,7 +6977,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -6272,7 +6990,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -6285,7 +7003,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -6298,7 +7016,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -6311,7 +7029,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -6324,7 +7042,7 @@
           "fonte_documento": "CCT/RJ/Sindeap/CCT_2023-2024_SINDEAP RJ.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -6464,7 +7182,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -6477,7 +7195,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -6490,7 +7208,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -6503,7 +7221,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -6516,7 +7234,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -6529,7 +7247,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -6542,7 +7260,7 @@
           "fonte_documento": "CCT/RO/Sintepes/ADITIVO CCT_2025_SINTELPES RO.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -6625,8 +7343,20 @@
           "fonte_documento": "CCT/RS/Sinaprosul - Sinaptep_Haus/CCT-2024-2026-SINPAPTEP RS.pdf",
           "clausula": "CLÁUSULA NONA - HORAS EXTRAS",
           "trecho_fonte": "CLÁUSULA NONA - HORAS EXTRAS As 2 (duas) primeiras horas extraordinárias serão pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVIÇO",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 75.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "sabado",
+              "valor": 100.0,
+              "trecho_fonte": "sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, será remunerado com o adicional de 100% (cem por cento). ADICIONAL DE TEMPO DE SERVI"
+            },
+            {
+              "label": "domingo",
+              "valor": 75.0,
+              "trecho_fonte": "o pagas com acréscimo de 50% (cinquenta por cento) e as demais com acréscimo de 75% (setenta e cinco por cento), incidentes sobre o salário contratual. O trabalho em domingos e feriados, assim como nos sábados, quando adotado o regime de compensação, se"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,
@@ -6682,7 +7412,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -6695,7 +7425,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -6708,7 +7438,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -6721,7 +7451,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -6734,7 +7464,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -6747,7 +7477,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -6760,7 +7490,7 @@
           "fonte_documento": "CCT/SC/sisdaspi/CCT 2024-2025 - SINDASPI SC.pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -6900,7 +7630,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "adicional_noturno": {
@@ -6913,7 +7643,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "auxilio_alimentacao": {
@@ -6926,7 +7656,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "plr": {
@@ -6939,7 +7669,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "hora_extra": {
@@ -6952,7 +7682,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "sobreaviso": {
@@ -6965,7 +7695,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         },
         "jornada": {
@@ -6978,7 +7708,7 @@
           "fonte_documento": "CCT/SP/Sindiesp/CCT - SINDIESP GAUGE - 2025-2026 (assinada) (1).pdf",
           "clausula": null,
           "trecho_fonte": null,
-          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
+          "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
       }
@@ -7170,8 +7900,20 @@
           "fonte_documento": "CCT/TO/Sinttel/CCT_SINTTEL TO_2020-2022.pdf",
           "clausula": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS",
           "trecho_fonte": "CLÁUSULA DÉCIMA SEGUNDA - HORAS EXTRAORDINÁRIAS As Empresas remunerarão as horas extraordinárias realizadas de segunda-feira a sábado com adicional de 50% (cinquenta por cento). Aos domingos e feriados, o adicional será de 100% (cem por cento). As Empresas manterão as condições mais vantajosas existentes e aplicáveis aos contratos vigentes. ADICIONAL NOTURNO www3.mte.gov.br/sistemas/mediador/Resumo/ResumoVisualizar?NrSolicitacao=MR023975/2021 4/19 25/04/2022 18:40 Mediador - Extrato Convenção Coletiva",
-          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados; Múltiplos valores identificados: 50.0, 100.0",
-          "status_parametro": "conflito"
+          "observacao": "Percentuais diferentes para dias úteis, sábados, domingos e feriados",
+          "status_parametro": "extraido_para_revisao",
+          "por_modalidade": [
+            {
+              "label": "dia_util_e_sabado",
+              "valor": 50.0,
+              "trecho_fonte": "EXTRAORDINÁRIAS As Empresas remunerarão as horas extraordinárias realizadas de segunda-feira a sábado com adicional de 50% (cinquenta por cento). Aos domingos e feriados, o adicional será de 100% (cem p"
+            },
+            {
+              "label": "feriado",
+              "valor": 100.0,
+              "trecho_fonte": "-feira a sábado com adicional de 50% (cinquenta por cento). Aos domingos e feriados, o adicional será de 100% (cem por cento). As Empresas manterão as condições mais vantajosas existen"
+            }
+          ]
         },
         "sobreaviso": {
           "valor": null,

@@ -324,15 +324,30 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"piso\s+(?:salarial\s+)?(?:do\s+)?administrativos?", "piso_administrativo"),
         (r"auxiliar\s+administrativo", "auxiliar_administrativo"),
         (r"t[eé]cnico\s+de\s+suporte", "tecnico_suporte"),
+        (r"t[eé]cnico\s+em\s+inform[aá]tica", "tecnico_informatica"),
         (r"operador(?:es)?", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
         (r"analista[s]?", "analista"),
         (r"supervisor(?:es)?", "supervisor"),
-        # Future: PLR por cargo
         (r"cargo\s+t[eé]cnico", "cargo_tecnico"),
         (r"cargo\s+operacional", "cargo_operacional"),
         (r"cargo\s+administrativo", "cargo_administrativo"),
+        (r"\bleiturista[s]?\b", "leiturista"),
+        (r"\bmensageiro[s]?\b", "mensageiro"),
+        (r"\bfaxineiro[s]?\b", "faxineiro"),
+        (r"\bcopeiro[s]?\b", "copeiro"),
+        (r"\bcontinuo[s]?\b", "continuo"),
+        (r"\bdigitador(?:es)?\b", "digitador"),
+        (r"\bprogramador(?:es)?\b", "programador"),
+        (r"\bdesenvolvedor(?:es)?\b", "desenvolvedor"),
+        (r"\bgerente[s]?\b", "gerente"),
+        (r"\bcoordenador(?:es)?\b", "coordenador"),
+        (r"\bdemais\s+fun[cç][oõ]es?\b", "demais_funcoes"),
+        (r"\bfun[cç][aã]o\s+de\s+(?:nível\s+)?(?:i+|[0-9]+)\b", "cargo_nivel"),
+        (r"\bescrit[uú]r[aá]rio[s]?\b", "escriturario"),
+        (r"\bcaixa[s]?\b", "caixa"),
+        (r"\bcontador(?:es)?\b", "contador"),
     ],
     "jornada": [
         (r"44\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "44h_semanal"),
@@ -342,26 +357,27 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"20\s*(?:\([^)]+\)\s*)?horas?\s+semanais?", "20h_semanal"),
         (r"\bhorista[s]?\b", "horista"),
         (r"\bmensalista[s]?\b", "mensalista"),
-        # Future: VR/VA por jornada
         (r"jornada\s+de\s+6\s*(?:horas?|h)\b", "6h_diario"),
         (r"jornada\s+de\s+8\s*(?:horas?|h)\b", "8h_diario"),
         (r"\b6\s*(?:horas?|h)\s+di[aá]rias?\b", "6h_diario"),
         (r"\b8\s*(?:horas?|h)\s+di[aá]rias?\b", "8h_diario"),
         (r"jornada\s+integral", "jornada_integral"),
         (r"jornada\s+parcial", "jornada_parcial"),
-        # Future: adicional_noturno, jornada
         (r"hor[aá]rio\s+noturno", "horario_noturno"),
     ],
     "modalidade": [
         (r"\bpresencial\b", "presencial"),
         (r"\bremoto\b|\bhome[\s-]*office\b", "remoto"),
         (r"\bh[ií]brido\b", "hibrido"),
-        # Future: hora_extra por modalidade
+        # hora_extra: order matters — longer/more-specific patterns first
+        (r"segunda.{0,20}(?:sexta|sexta-feira).{0,20}s[aá]bado", "dia_util_e_sabado"),
+        (r"segunda.{0,20}s[aá]bado(?!\s*\w{0,5}s[aá]bado)", "dia_util_e_sabado"),
         (r"dias?\s+[uú]teis?", "dia_util"),
+        (r"segunda.{0,20}(?:sexta|sexta-feira)(?!.{0,20}s[aá]bado)", "dia_util"),
         (r"\bs[aá]bados?\b", "sabado"),
         (r"\bdomingos?\b", "domingo"),
         (r"\bferiados?\b", "feriado"),
-        # Future: sobreaviso por modalidade
+        (r"\bdia\s+de\s+repouso\b", "domingo"),
         (r"\bacionado\b", "acionado"),
         (r"\bdispon[ií]vel\b", "disponivel"),
     ],
@@ -411,6 +427,29 @@ def _find_brl_with_positions(text_n: str) -> list[tuple[float, int, int]]:
     return list(seen.values())
 
 
+def _find_pct_with_positions(text_n: str) -> list[tuple[float, int, int]]:
+    """
+    Find all distinct percentage values in normalized text, returning (value, start, end).
+    Keeps only the first occurrence of each rounded value.
+    """
+    seen: dict[float, tuple[float, int, int]] = {}
+    for m in re.finditer(r"(\d+(?:[,.]?\d+)?)\s*%", text_n):
+        raw = m.group(1).replace(",", ".")
+        try:
+            val = float(raw)
+            if 1 <= val <= 300:
+                key = round(val, 2)
+                if key not in seen:
+                    seen[key] = (val, m.start(), m.end())
+        except ValueError:
+            pass
+    return list(seen.values())
+
+
+# Parameters whose values are percentages rather than BRL amounts.
+_PCT_PARAMS: frozenset[str] = frozenset({"hora_extra", "adicional_noturno"})
+
+
 def classify_by_dimension(text: str, values: list[float], param_type: str) -> dict:
     """
     Classify multiple values by dimension (cargo, jornada, modalidade, escala).
@@ -436,7 +475,11 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
 
     text_n = normalize(text)
     values_set = {round(v, 2) for v in values}
-    brl_positions = _find_brl_with_positions(text_n)
+    brl_positions = (
+        _find_pct_with_positions(text_n)
+        if param_type in _PCT_PARAMS
+        else _find_brl_with_positions(text_n)
+    )
 
     result: dict = {}
 
@@ -616,6 +659,7 @@ def extract_adicional_noturno(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="adicional_noturno",
     )
 
 
@@ -662,6 +706,7 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="auxilio_alimentacao",
     )
 
 
@@ -720,6 +765,7 @@ def extract_plr(clauses: list[dict], fonte: str) -> dict:
         fonte_documento=fonte,
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
+        param_type="plr",
     )
 
 
@@ -776,6 +822,7 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
         clausula_heading=clause["heading"],
         trecho_fonte=full_text,
         observacao=obs,
+        param_type="hora_extra",
     )
 
 
@@ -844,6 +891,60 @@ def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:
     }
 
 
+def _classify_jornada_multiple(full_text: str) -> dict:
+    """
+    Build structured por_jornada / por_escala sub-dicts when multiple schedule
+    types are found in the clause.  Replaces "conflito" for jornada items.
+    """
+    text_n = normalize(full_text)
+    result: dict = {}
+
+    # --- por_jornada: named weekly-hours patterns ---
+    jornada_entries = []
+    matched_labels: set[str] = set()
+    for pattern, label in DIMENSION_PATTERNS["jornada"]:
+        for m in re.finditer(pattern, text_n):
+            if label in matched_labels:
+                continue
+            matched_labels.add(label)
+            win_start = max(0, m.start() - 80)
+            win_end = min(len(full_text), m.end() + 120)
+            trecho = " ".join(full_text[win_start:win_end].split())
+            hour_match = re.match(r"(\d+)h_", label)
+            valor = float(hour_match.group(1)) if hour_match else None
+            jornada_entries.append(
+                {
+                    "jornada": label,
+                    "valor": valor,
+                    "trecho_fonte": _truncate(trecho, 300),
+                }
+            )
+    if jornada_entries:
+        result["por_jornada"] = jornada_entries
+
+    # --- por_escala: NxM regime patterns ---
+    escala_entries = []
+    matched_escala: set[str] = set()
+    for pattern, label in DIMENSION_PATTERNS["escala"]:
+        for m in re.finditer(pattern, text_n):
+            if label in matched_escala:
+                continue
+            matched_escala.add(label)
+            win_start = max(0, m.start() - 80)
+            win_end = min(len(full_text), m.end() + 120)
+            trecho = " ".join(full_text[win_start:win_end].split())
+            escala_entries.append(
+                {
+                    "label": label,
+                    "trecho_fonte": _truncate(trecho, 300),
+                }
+            )
+    if escala_entries:
+        result["por_escala"] = escala_entries
+
+    return result
+
+
 def extract_jornada(clauses: list[dict], fonte: str) -> dict:
     """Extract work schedule (hours/week)."""
     matched = find_clauses(
@@ -872,16 +973,18 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         )
 
     hours = hours_semanais(full_text)
+    text_n = normalize(full_text)
 
     # Build jornada value representation
     if not hours:
-        # Look for 12x36 or similar
-        text_n = normalize(full_text)
-        if re.search(r"12\s*[xX×]\s*36", text_n):
-            return {
+        # Look for NxM scale patterns before giving up
+        structured = _classify_jornada_multiple(full_text)
+        if structured.get("por_escala"):
+            first_escala = structured["por_escala"][0]["label"]
+            item = {
                 "valor": None,
                 "percentual": None,
-                "valor_textual": "12x36",
+                "valor_textual": first_escala,
                 "regra_textual": _truncate(full_text, 800),
                 "tipo": "jornada",
                 "unidade": "regime",
@@ -891,6 +994,8 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
                 "observacao": None,
                 "status_parametro": "extraido_para_revisao",
             }
+            item.update(structured)
+            return item
         return {
             "valor": None,
             "percentual": None,
@@ -906,8 +1011,28 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         }
 
     primary = hours[0]
-    status = "conflito" if len(set(hours)) > 1 else "extraido_para_revisao"
-    obs = f"Múltiplas jornadas identificadas: {', '.join(str(h) for h in hours)}h/sem" if status == "conflito" else None
+    unique_hours = list(dict.fromkeys(hours))
+
+    if len(unique_hours) > 1:
+        # Multiple schedules — produce structured sub-items instead of "conflito"
+        structured = _classify_jornada_multiple(full_text)
+        obs = f"Múltiplas jornadas identificadas: {', '.join(str(h) for h in unique_hours)}h/sem"
+        item = {
+            "valor": primary,
+            "percentual": None,
+            "valor_textual": f"{primary:.0f}h/semana",
+            "regra_textual": _truncate(full_text, 800),
+            "tipo": "jornada",
+            "unidade": "h/semana",
+            "fonte_documento": fonte,
+            "clausula": _truncate(clause["heading"], 200),
+            "trecho_fonte": _truncate(full_text, 600),
+            "observacao": obs,
+            "status_parametro": "extraido_para_revisao",
+        }
+        if structured:
+            item.update(structured)
+        return item
 
     return {
         "valor": primary,
@@ -919,8 +1044,8 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         "fonte_documento": fonte,
         "clausula": _truncate(clause["heading"], 200),
         "trecho_fonte": _truncate(full_text, 600),
-        "observacao": obs,
-        "status_parametro": status,
+        "observacao": None,
+        "status_parametro": "extraido_para_revisao",
     }
 
 
@@ -1024,12 +1149,23 @@ def main():
 
     stats = {
         "processados": 0,
+        "com_pdf": 0,
         "sem_pdf": 0,
         "pdf_sem_texto": 0,
         "extraidos": 0,
         "pendentes": 0,
         "conflitos": 0,
         "validos_preservados": 0,
+        # Per-param extraction counters
+        "piso_salarial_extraido": 0,
+        "auxilio_alimentacao_extraido": 0,
+        "hora_extra_extraido": 0,
+        "jornada_extraido": 0,
+        # Sub-structure counters
+        "com_por_cargo": 0,
+        "com_por_jornada": 0,
+        "com_por_modalidade": 0,
+        "com_por_escala": 0,
     }
 
     for record in records:
@@ -1050,36 +1186,78 @@ def main():
             stats["pdf_sem_texto"] += 1
         else:
             print(f"   ✓  PDF processado: {record.get('fonte_documento')}")
+            stats["com_pdf"] += 1
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
 
         # Summarize items
+        has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False
         for key, item in merged.items():
             s = item.get("status_parametro", "?")
             v = item.get("valor") or item.get("percentual") or item.get("valor_textual") or "—"
+            sub = ""
+            if "por_cargo" in item:
+                sub += " [por_cargo]"
+                has_por_cargo = True
+            if "por_jornada" in item:
+                sub += " [por_jornada]"
+                has_por_jornada = True
+            if "por_modalidade" in item:
+                sub += " [por_modalidade]"
+                has_por_modalidade = True
+            if "por_escala" in item:
+                sub += " [por_escala]"
+                has_por_escala = True
             marker = {"valido": "✓ valido", "extraido_para_revisao": "↗ extraído", "conflito": "⚡ conflito", "pendente_revisao": "· pendente"}.get(s, s)
-            print(f"     {key:<25} {marker:<22} {v}")
+            print(f"     {key:<25} {marker:<22} {v}{sub}")
             if s == "valido":
                 stats["validos_preservados"] += 1
             elif s == "extraido_para_revisao":
                 stats["extraidos"] += 1
+                if key == "piso_salarial":
+                    stats["piso_salarial_extraido"] += 1
+                elif key == "auxilio_alimentacao":
+                    stats["auxilio_alimentacao_extraido"] += 1
+                elif key == "hora_extra":
+                    stats["hora_extra_extraido"] += 1
+                elif key == "jornada":
+                    stats["jornada_extraido"] += 1
             elif s == "conflito":
                 stats["conflitos"] += 1
             else:
                 stats["pendentes"] += 1
+        if has_por_cargo:
+            stats["com_por_cargo"] += 1
+        if has_por_jornada:
+            stats["com_por_jornada"] += 1
+        if has_por_modalidade:
+            stats["com_por_modalidade"] += 1
+        if has_por_escala:
+            stats["com_por_escala"] += 1
 
         if not args.dry_run:
             record["itens_cct"] = merged
 
     print("\n" + "=" * 60)
     print(f"Registros processados : {stats['processados']}")
+    print(f"  Com PDF encontrado  : {stats['com_pdf']}")
     print(f"  PDFs ausentes       : {stats['sem_pdf']}")
     print(f"  PDFs sem texto      : {stats['pdf_sem_texto']}")
     print(f"Itens extraídos       : {stats['extraidos']}")
     print(f"Itens pendentes       : {stats['pendentes']}")
     print(f"Itens em conflito     : {stats['conflitos']}")
     print(f"Itens válidos preserv.: {stats['validos_preservados']}")
+    print(f"\n── Por parâmetro (extraídos) ──────────────────────────")
+    print(f"  piso_salarial       : {stats['piso_salarial_extraido']}")
+    print(f"  auxilio_alimentacao : {stats['auxilio_alimentacao_extraido']}")
+    print(f"  hora_extra          : {stats['hora_extra_extraido']}")
+    print(f"  jornada             : {stats['jornada_extraido']}")
+    print(f"\n── Sub-estruturas ─────────────────────────────────────")
+    print(f"  registros c/ por_cargo     : {stats['com_por_cargo']}")
+    print(f"  registros c/ por_jornada   : {stats['com_por_jornada']}")
+    print(f"  registros c/ por_modalidade: {stats['com_por_modalidade']}")
+    print(f"  registros c/ por_escala    : {stats['com_por_escala']}")
 
     if args.dry_run:
         print("\n[dry-run] Nenhuma alteração foi salva.")
