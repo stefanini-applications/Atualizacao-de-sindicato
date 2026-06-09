@@ -305,6 +305,7 @@ const EMBEDDED_DEMO = {
 
 let allRecords = [];
 let filteredRecords = [];
+let dynamicCargos = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
 
@@ -466,6 +467,8 @@ async function loadData() {
   allRecords = records;
   loadLocalOverrides(allRecords);
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
+  migratePisos(allRecords); // PRJ-56: ensure every record has itens_cct.pisos
+  dynamicCargos = collectDynamicCargos(allRecords);
   filteredRecords = [...allRecords];
 
   showApp(dataGeracao, demoMessage);
@@ -744,6 +747,8 @@ function updateScrollHint() {
 function renderTable() {
   if (!elTableBody) return;
 
+  updateRatecardHeaders(dynamicCargos);
+
   elTableBody.innerHTML = '';
 
   if (elTotalRecords) {
@@ -783,15 +788,7 @@ function renderTable() {
     }
 
     row.innerHTML = `
-      <td>${escapeHtml(record.uf ?? '—')}</td>
-      <td>${escapeHtml(record.sindicato ?? '—')}</td>
-      <td>${escapeHtml(record.categoria ?? '—')}</td>
-      <td class="text-end">${escapeHtml(record.ano_referencia ?? '—')}</td>
-      <td class="text-end">${formatPercent(record.percentual_reajuste)}</td>
-      <td>${formatDate(record.data_base)}</td>
-      <td>${formatDate(record.vigencia_inicio)}</td>
-      <td>${formatDate(record.vigencia_fim)}</td>
-      ${buildCctTableCells(record)}
+      ${buildRatecardRow(record, dynamicCargos)}
       <td class="status-group-start">${buildStatusBadge(record)}</td>
       <td class="fonte-cell">${buildFonteLink(record.fonte_documento)}</td>
       <td>
@@ -1299,6 +1296,180 @@ function formatCctValor(item) {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
+
+// ── PRJ-56: Ratecard layout ───────────────────────────────────────────────
+
+/**
+ * Maps piso_salarial.tipo values to human-readable cargo column names.
+ * Used by migratePisos() to derive pisos entries from legacy piso_salarial data.
+ */
+const PISO_TIPO_TO_CARGO = {
+  piso_unico: 'Piso Único',
+  piso_cct: 'Piso CCT',
+  piso_tecnico: 'Piso Técnico',
+  piso_administrativo: 'Piso Administrativo',
+};
+
+/**
+ * Ensures every record that has itens_cct.piso_salarial but no itens_cct.pisos
+ * gets a pisos array derived from piso_salarial (PRJ-56 AC5).
+ * Strictly additive: records that already have pisos are untouched.
+ * Handles both JSON-sourced records and in-memory demo records.
+ */
+function migratePisos(records) {
+  if (!Array.isArray(records)) return;
+  records.forEach((record) => {
+    const itens = record.itens_cct;
+    if (!itens) return;
+    if (itens.pisos) return; // already migrated
+    const piso = itens.piso_salarial;
+    if (!piso) return;
+    const tipo = piso.tipo ?? null;
+    const cargo = PISO_TIPO_TO_CARGO[tipo] ?? 'Piso CCT';
+    const valor = piso.valor ?? null;
+    const status = piso.status_parametro ?? 'pendente_revisao';
+    itens.pisos = [{ cargo, valor, status_parametro: status }];
+  });
+}
+
+/**
+ * Collects all unique cargo names from itens_cct.pisos across all records (PRJ-56 AC1).
+ * Preserves insertion order for stable column ordering.
+ * Called once on allRecords so headers remain stable when filters change.
+ */
+function collectDynamicCargos(records) {
+  const seen = new Map();
+  if (!Array.isArray(records)) return [];
+  records.forEach((record) => {
+    const pisos = record.itens_cct?.pisos;
+    if (Array.isArray(pisos)) {
+      pisos.forEach((p) => {
+        if (p?.cargo) seen.set(p.cargo, true);
+      });
+    }
+  });
+  return [...seen.keys()];
+}
+
+/**
+ * Rewrites the <thead> row to match the Ratecard column layout (PRJ-56 AC4).
+ * Injects dynamic cargo columns between Reajuste Salarial % and VR Remuneração.
+ * Called at the start of renderTable() so headers always match the row cells.
+ */
+function updateRatecardHeaders(cargos) {
+  const theadRow = document.getElementById('params-thead-row');
+  if (!theadRow) return;
+
+  const cargoThs = cargos.map(
+    (c) => `<th scope="col" class="cct-th ratecard-cargo-th">${escapeHtml(c)}</th>`
+  ).join('');
+
+  theadRow.innerHTML = `
+    <th scope="col" class="col-estado-sindicato">Estado / Sindicato</th>
+    <th scope="col" class="col-sindicato">Sindicato</th>
+    <th scope="col" class="col-uf">Estado</th>
+    <th scope="col" class="col-aplicavel">Aplicável à</th>
+    <th scope="col" class="cct-th cct-group-start">HR SegSex</th>
+    <th scope="col" class="cct-th">HR Sábado</th>
+    <th scope="col" class="cct-th">HR Domingo</th>
+    <th scope="col" class="cct-th">Adicional Noturno</th>
+    <th scope="col" class="cct-th">Sobreaviso</th>
+    <th scope="col" class="cct-th">Jornada de Trabalho</th>
+    <th scope="col" class="cct-th">Data Vigência Piso</th>
+    <th scope="col" class="cct-th">Início Vigência CCT</th>
+    <th scope="col" class="cct-th">Fim Vigência CCT</th>
+    <th scope="col" class="cct-th">Reajuste Salarial %</th>
+    ${cargoThs}
+    <th scope="col" class="cct-th cct-group-end">VR Remuneração</th>
+    <th scope="col" class="col-status status-group-start">Status</th>
+    <th scope="col" class="col-fonte">Fonte</th>
+    <th scope="col" class="col-acao"></th>
+  `;
+}
+
+/**
+ * Builds the Ratecard table cells for a single record (PRJ-56 AC2–AC4).
+ * Returns HTML string for all columns from Estado/Sindicato through VR Remuneração.
+ * Dynamic cargo columns (from itens_cct.pisos) are rendered using the cargos array,
+ * which is derived from allRecords so absent cargos show '—' without collapsing columns.
+ */
+function buildRatecardRow(record, cargos) {
+  const heItem = record.itens_cct?.hora_extra ?? null;
+  const jornadaItem = record.itens_cct?.jornada ?? null;
+  const adNoturnoItem = record.itens_cct?.adicional_noturno ?? null;
+  const sobreavisoItem = record.itens_cct?.sobreaviso ?? null;
+  const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
+
+  function fmtPctCell(v) {
+    if (v == null) return '—';
+    const n = Number(v);
+    return isNaN(n)
+      ? escapeHtml(String(v).slice(0, 22))
+      : n.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + '%';
+  }
+
+  function getHe(field) {
+    if (!heItem) return '—';
+    const v = heItem[field];
+    return fmtPctCell(v);
+  }
+
+  function getAdNoturno() {
+    if (!adNoturnoItem) return '—';
+    const v = adNoturnoItem.percentual ?? adNoturnoItem.valor;
+    return fmtPctCell(v);
+  }
+
+  function getSobreaviso() {
+    if (!sobreavisoItem) return '—';
+    const numeric = sobreavisoItem.percentual;
+    const regra = sobreavisoItem.regra_textual;
+    const v = numeric ?? (isShortOperationalSummary(regra) ? regra : null);
+    if (v == null) return '—';
+    if (typeof v === 'number' || (!isNaN(Number(v)) && v !== '')) {
+      return fmtPctCell(Number(v));
+    }
+    return escapeHtml(String(v).slice(0, 22));
+  }
+
+  // Build dynamic cargo cells from pisos array
+  const pisoMap = {};
+  (record.itens_cct?.pisos ?? []).forEach((p) => {
+    if (p?.cargo) pisoMap[p.cargo] = p;
+  });
+  const cargoCells = cargos.map((cargo) => {
+    const p = pisoMap[cargo];
+    if (!p || p.valor == null) {
+      return `<td class="cct-col ratecard-cargo-col text-end">—</td>`;
+    }
+    const n = Number(p.valor);
+    const fmt = isNaN(n)
+      ? escapeHtml(String(p.valor).slice(0, 22))
+      : n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return `<td class="cct-col ratecard-cargo-col text-end">${fmt}</td>`;
+  }).join('');
+
+  const estadoSindicato = [record.uf, record.sindicato].filter(Boolean).join(' — ');
+
+  return `
+    <td class="col-estado-sindicato">${escapeHtml(estadoSindicato || '—')}</td>
+    <td class="col-sindicato">${escapeHtml(record.sindicato ?? '—')}</td>
+    <td class="col-uf">${escapeHtml(record.uf ?? '—')}</td>
+    <td class="col-aplicavel">${escapeHtml(record.categoria ?? '—')}</td>
+    <td class="cct-col cct-group-start text-end">${getHe('percentual_padrao')}</td>
+    <td class="cct-col text-end">${getHe('percentual_sabado')}</td>
+    <td class="cct-col text-end">${getHe('percentual_domingo_feriado')}</td>
+    <td class="cct-col text-end">${getAdNoturno()}</td>
+    <td class="cct-col text-end">${getSobreaviso()}</td>
+    <td class="cct-col">${fmtJornada(jornadaItem)}</td>
+    <td class="cct-col">${formatDate(record.data_base)}</td>
+    <td class="cct-col">${formatDate(record.vigencia_inicio)}</td>
+    <td class="cct-col">${formatDate(record.vigencia_fim)}</td>
+    <td class="cct-col text-end">${formatPercent(record.percentual_reajuste)}</td>
+    ${cargoCells}
+    <td class="cct-col text-end">${fmtVR(vrItem)}</td>
+  `;
+}
 
 // ── itens_cct governance schema (PRJ-51) ─────────────────────────────────
 /**

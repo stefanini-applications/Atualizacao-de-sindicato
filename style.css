@@ -403,12 +403,24 @@ body {
 .col-uf    { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }
 .col-categoria { min-width: 160px; }
+.col-aplicavel { min-width: 160px; }
+.col-estado-sindicato { min-width: 190px; white-space: nowrap; }
 .col-ano   { min-width: 50px;  white-space: nowrap; }
 .col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
 .col-data  { min-width: 90px;  white-space: nowrap; }
 .col-status { min-width: 120px; white-space: nowrap; }
 .col-fonte  { min-width: 100px; }
 .col-acao   { min-width: 100px; white-space: nowrap; }
+
+/* Ratecard dynamic cargo columns */
+.ratecard-cargo-th {
+  background-color: #eef2ff;
+  color: #3730a3;
+}
+
+.ratecard-cargo-col {
+  background-color: #f5f7ff;
+}
 
 /* Monetary and percent cells right-aligned */
 #params-tbody td.cct-col {

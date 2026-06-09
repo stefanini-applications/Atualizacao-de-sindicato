@@ -107,7 +107,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SEGUNDA - JORNADA DE TRABALHO A jornada de trabalho será de no máximo 44 (quarenta e quatro) horas semanais, podendo ter acréscimo de 02 (duas) horas extras diárias ou até 04 (quatro) horas, caso ocorram necessidades imperiosas, por motivo de força maior, para atender a realização de conclusão de serviços inadiáveis ou cuja inexecução possa acarretar prejuízo manifesto, desde que devidamente justificadas. Parágrafo Primeiro – Além da jornada de trabalho prevista no caput da cláusula, poderão ser utilizadas pelas empresas as seguintes modalidades de jornada de trabalho: a) Hor…",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 30.0, 26.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 1540.47,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     },
     {
@@ -216,7 +223,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA SEGUNDA - JORNADA DE TRABALHO A duração da jornada de trabalho dos trabalhadores operadores em Teleatendimento, em regime de escala de revezamento, cuja implementação a critério da empresa fica autorizada, será de 36 (trinta e seis) horas semanais, sendo de seis horas diárias, cumprindo integralmente as determinações contidas no anexo II da NR17. Parágrafo Primeiro: Os trabalhadores operadores terão uma folga semanal, sendo essa folga, pelo menos uma vez por mês, concedida aos domingos. Parágrafo Segundo: As partes dão-se por cientes de que está autorizado o trabalho aos …",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -325,7 +339,14 @@
           "trecho_fonte": "CLÁUSULA DÉCIMA TERCEIRA - FLEXIBILIZAÇÃO E COMPENSAÇÃO DA JORNADA DE TRABALHO (BANCO DE HORAS) Fica acordado flexibilização de jornada (Banco de Horas), em conformidade com as disposições dos artigos 7º, inciso XIII da Constituição Federal, e artigo 59 da CLT, já com alteração prevista na Lei 9.601/98, permitindo-se o horário flexível compreendido entre 7 horas e 19 horas, obedecendo aos critérios nos itens a seguir: A. Para o funcionamento desse Banco de Horas será considerada como horas de crédito a quantidade de horas que o EMPREGADO trabalhou mais do que sua jornada normal de trabalho e n…",
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1479.21,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -434,7 +455,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -543,7 +571,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -652,7 +687,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUARTA - JORNADA DE TRABALHO E INTERVALO INTRAJORNADA Fica fixada a jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Operador Help Desk e Operador de Telemarketing e/ou Atividades de Tele-Suporte e/ou Tele- Serviços. Parágrafo Primeiro: A jornada de trabalho de 36 (trinta e seis) horas semanais, aplicável às funções de Digitador, Conferente, Auxiliar de Processamento, Auxiliar de Caixa Rápido, Digitalização, aplicável exclusivamente ao Analista 01, contrato Helpdesk – BA – CEF. Parágrafo Segundo: Os demais trabalhadores praticarão a jornada de…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1592.43,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -761,7 +803,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA SEGUNDA - JORNADA DE TRABALHO A duração da jornada de trabalho dos trabalhadores operadores em Teleatendimento, em regime de escala de revezamento, cuja implementação a critério da empresa fica autorizada, será de 36 (trinta e seis) horas semanais, sendo de seis horas diárias. Parágrafo Primeiro: Os trabalhadores operadores terão uma folga semanal, sendo essa folga, pelo menos uma vez por mês, concedida aos domingos. Parágrafo Segundo: As partes dão-se por cientes de que está autorizado o trabalho aos domingos, nos termos do parágrafo único do artigo 67 da CLT, observada …",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1518.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -870,7 +919,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -979,7 +1035,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -1088,7 +1151,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA - JORNADA DE TRABALHO A jornada de trabalho para digitadores e conferentes de numerários será de 30 e 36 horas semanais de forma alternada. Parágrafo Único Durante a jornada da digitação, será concedido intervalo de 10 (dez) minutos de - descanso nos termos do art. 72 da CLT.",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1642.48,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -1197,7 +1267,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SEXTA - JORNADA DE TRABALHO A duração da jornada de trabalho dos empregados operadores em tele-atendimento (call-centers) e telemarketing poderão ser de 30h/36h (trinta ou trintas e seis) horas semanais, sendo de 06 (seis) horas diárias. Parágrafo Primeiro – O intervalo de 20 minutos será computado na jornada de trabalho, sendo que as pausas, serão gozadas nos termos da NR-17, Anexo-II, Item 5.4.2. Parágrafo Segundo – As partes dão-se por cientes de que está autorizado o trabalho aos domingos e feriados, nos termos do Parágrafo único do artigo 67 e artigo 386, ambos da CLT, o…",
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1547.59,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -1309,7 +1386,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -1418,7 +1502,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -1527,7 +1618,14 @@
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO A jornada de trabalho de Fitotecário, Digitador e Operador de Main Frame será de 6 (seis) horas diárias de segunda-feira a sábado, perfazendo um total de 36 (trinta e seis) horas semanais. Para os demais cargos serão 8 (oito) horas diárias de segunda-feira a sexta-feira e 4 (quatro) horas no sábado, perfazendo um total de 44 (quarenta e quatro) horas semanais, ou 44 (quarenta e quatro) horas de segunda-feira a sexta-feira com REDUÇÃO do horário de almoço de 2 (duas) horas PARA 1h12m (uma hora e doze minutos) e sem expediente aos sábados, sendo es…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 2994.3,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -1636,7 +1734,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -1745,7 +1850,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -1854,7 +1966,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA - JORNADA DE TRABALHO A jornada de trabalho será estabelecida na legislação em vigor. Parágrafo Único: Para aqueles que trabalharem exclusivamente na função de digitação será respeitada a jornada de 6 (seis) horas diárias e 36 (trinta e seis) semanais, conforme Portaria nº3.751/90 do Ministério do Trabalho e Previdência Social. Compensação de Jornada",
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1518.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -1963,7 +2082,14 @@
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA SEGUNDA - JORNADA DE TRABALHO A duração da jornada de trabalho dos TRABALHADORES operadores em Telemarketing/Teleatendimento, será de 6 (seis) horas diárias e 36 (trinta e seis) horas semanais, nos termos do anexo II da NR 17. Parágrafo Primeiro: Os TRABALHADORES operadores de telemarketing/teleatendimento terão uma folga semanal que, no mínimo, uma vez por mês deverá ser concedida no domingo. Parágrafo Segundo: Com exceção dos empregados que laboram em jornada de 7 (sete) hora e 12 (doze) minutos, as partes dão-se por cientes de que está autorizado o trabalho aos domingos, …",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1518.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -2072,7 +2198,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1689.53,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -2184,7 +2317,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -2293,7 +2433,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -2402,7 +2549,14 @@
           "trecho_fonte": "CLÁUSULA DÉCIMA QUINTA - JORNADA DE TRABALHO A duração da jornada de trabalho do Digitador e do Help Desk, será de 30 (trinta) horas semanais e, dos demais trabalhadores serão de até 44 horas semanais. Parágrafo Primeiro: Fica ressalvada que as jornadas de menor número de horas semanais, que já vierem sendo adotadas pelas empresas, serão preservadas. Parágrafo Segundo: O trabalhador de Help Desk poderá, eventualmente, efetuar o atendimento direto no cliente, dentro de sua carga horária estabelecida, qual seja 30 horas semanais. Caso o labor ultrapasse a carga horária de 6 seis horas diárias ou…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -2511,7 +2665,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA - JORNADA DE TRABALHO/ PAUSAS Parágrafo primeiro - Fica garantida a jornada de trabalho 36h00min (trinta e seis horas) semanal para empregados que exercem as funções de atendente, operador, técnicos e analistas, em conformidade com a NR 17 em seu anexo II, da portaria 3214/78 do Ministério do Trabalho e Emprego e Art. 229 da CLT. Parágrafo segundo – De acordo com a NR 17 em seu anexo II, 5.7, “com o fim de permitir a satisfação das necessidades fisiológicas, as empresas devem permitir que os operadores saiam de seus postos de trabalho a qualquer momento da jornada, sem reperc…",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 40.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 1518.0,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     },
     {
@@ -2620,7 +2781,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA TERCEIRA - JORNADA DE TRABALHO Fica ajustado que as jornadas normais de trabalho dos empregados em processamento de dados serão: a) Digitadores e/ou operador de equipamento de entrada e transmissão de dados, operadores e/ou técnicos de operação e monitoraçã mainframe etc.) e auxiliares e/ou assistentes de informática ou de tecnologia da informação, quando do desempenho de atividades semel e/ou operador de equipamento de entrada e transmissão de dados e operadores e/ou técnicos de operação e monitoração (microcomputado (trinta) horas semanais; b) Demais empregados, inclusi…",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Técnico",
+            "valor": 1602.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -2729,7 +2897,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -2838,7 +3013,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -2947,7 +3129,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO A jornada de trabalho para os trabalhadores será de 40 (quarenta) horas semanais, as quais deverão ser executadas em 8 (oito) horas diárias de segunda a sexta. Parágrafo Único - Para o caso de horas excedentes às 40 horas semanais, poderão as mesmas serem compensadas mediante celebração de Acordo de Banco de Horas. PRORROGAÇÃO/REDUÇÃO DE JORNADA",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1373.44,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -3056,7 +3245,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA PRIMEIRA - JORNADA DE TRABALHO A duração da jornada diária efetiva de trabalho dos trabalhadores de operadores de mesas telefônicas e telefonistas em geral, trabalhadores em postos de serviços de telefonia, televendas, disk serviços, tele recados, tele chamadas, tele cobrança via tele atendimento e call centers, telemarketing receptivos e ativos, oferecem serviços e produtos, realizam pesquisas, fazem serviços de cobranças e cadastramento de clientes, sempre via tele atendimento, seguindo roteiros e scripts planejados e controlados para captar, reter ou recuperar clientes seg…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 20.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1518.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -3165,7 +3361,14 @@
           "trecho_fonte": "CLÁUSULA SÉTIMA - JORNADA DE TRABALHO Jornada de Trabalho, Duração e Horário §1- O regime de trabalho dos empregados offshore observará a jornada de 12 horas de trabalho por 12 horas de descanso, na forma da Lei 5.811/72, sendo 14 dias trabalhados por igual período de folga. I- A jornada de trabalho do empregado em embarque eventual e regime misto de trabalho, quando embarcado, será de 12 horas, conforme previsto no parágrafo primeiro desta Cláusula. Jornada Especial e Compensação (4x4) §2- A empresa poderá praticar a jornada de 11 horas diárias de trabalho efetivo, em turno ininterrupto de re…",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -3274,7 +3477,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA TERCEIRA - JORNADA DE TRABALHO As jornadas de trabalho de empregados integrantes de categorias profissionais diferenciadas e regulamentadas serão fixadas, conforme previsto em legislação específica: a) ANEXO II da NR-17: Operadores de Teleatendimento ou Telemarketing, jornada máxima de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais, com intervalo de 20 (vinte) minutos para alimentação, 2(duas) pausas de 10 (dez) minutos para descanso, sem prejuízo das demais pausas previstas. b) Decreto 5598/2005, art. 18: Aprendizes jornada máxima de 6 (seis) horas diárias ou, a…",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1518.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -3383,7 +3593,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA QUARTA - DA JORNADA DE TRABALHO Para as categorias de digitadores e/ou operadores de equipamento de entrada e transmissão de dados; operadores e/ou técnicos de operação e monitoração de computadores, será cumprida jornada de trabalho de 06 (seis) horas diárias, perfazendo um total de 30 (trinta) horas semanais, para empregadores que trabalhem de segunda a sexta-feira e os demais 36 (trinta e seis) horas semanais. Parágrafo Único - Para as demais categorias será cumprida jornada de trabalho de 08 (oito) horas diárias, perfazendo um total de 44 (quarenta e quatro) horas semanai…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 36.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 2016.69,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -3492,7 +3709,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -3601,7 +3825,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -3710,7 +3941,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA PRIMEIRA - JORNADA DE TRABALHO O horário máximo normal de trabalho será de 44 (quarenta e quatro) horas semanais, sem prejuízo salarial ou de jornadas menores já vigentes. Os digitadores e os operadores, excluídos os investidos em cargo de chefia ou supervisão, terão a duração máxima normal de trabalho de 6 (seis) horas diárias ou 36 (trinta e seis) horas semanais também sem prejuízo salarial ou de jornadas menores já praticadas. COMPENSAÇÃO DE JORNADA",
           "observacao": "Múltiplas jornadas identificadas: 44.0, 36.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -3819,7 +4057,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA - JORNADA DE TRABALHO A jornada de trabalho dos empregados operadores de mesas telefônicas será de 6h diárias e 36h semanais, ressalvadas as jornadas legais inferiores ou expressamente prevista neste instrumento. INTERVALOS PARA DESCANSO",
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 1694.66,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     },
     {
@@ -3928,7 +4173,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 44.97,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4037,7 +4289,14 @@
           "trecho_fonte": "CLÁUSULA DÉCIMA SEXTA - JORNADA DE TRABALHO A jornada de trabalho para os digitadores, auxiliares de processamento de dados e telefonistas será de 36 (trinta e seis) horas semanais e, para as demais funções, de 44 (quarenta e quatro) horas semanais, observadas as determinações estabelecidas na NR 17. COMPENSAÇÃO DE JORNADA",
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 4410.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4146,7 +4405,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA SÉTIMA - JORNADA DE TRABALHO A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais (6 horas diárias) e dos demais empregados será de 44 (quarenta e quatro) horas semanais. § 1º – Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos intervalos de repouso serão computados na duração da jornada de trabalho para todos os fins e efeitos. § 2º – Ficam ressalvadas as jornadas de menor número de horas semanais que venham sendo adotadas pelas empresas e preservadas outras já existentes. § 3º – Será facultad…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1978.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4255,7 +4521,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1792.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4364,7 +4637,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -4473,7 +4753,14 @@
           "trecho_fonte": "CLÁUSULA VIGÉSIMA - JORNADA DE TRABALHO A duração normal do trabalho para os trabalhadores abrangidos por essa convenção é de 44 (quarenta e quatro) horas, salvo aqueles que exercem funções cuja duração máxima da jornada semanal é reduzida por força de lei específica. PARÁGRAFO PRIMEIRO - As empresas deverão observar as disposições estabelecidas na legislação pertinente vigente no tocante ao controle da jornada de trabalho. PARÁGRAFO SEGUNDO - As empresas poderão adotar sistemas alternativos eletrônicos de controle de ponto, conforme disposto na Portaria nº 373 do Ministério do Trabalho, deven…",
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -4582,7 +4869,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -4691,7 +4985,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1852.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4800,7 +5101,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 2035.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -4909,7 +5217,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1980.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -5018,7 +5333,14 @@
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA OITAVA - JORNADA DE TRABALHO. A duração da jornada de trabalho dos digitadores será de 30 (trinta) horas semanais e dos demais empregados será de 40 (quarenta) horas semanais. Parágrafo 1º - Os digitadores terão um descanso de 10 (dez) minutos a cada 50 (cinquenta) minutos trabalhados, cujos intervalos de repouso serão computados na duração da jornada de trabalho para todos os fins e efeitos. Parágrafo 2º - Fica autorizado às empresas abrangidas por esta CONVENÇÃO COLETIVA DE TRABALHO o trabalho aos domingos e feriados, conforme a lei n.º 11.603/2007. A) As horas trabalhadas…",
           "observacao": "Múltiplas jornadas identificadas: 30.0, 40.0h/sem",
           "status_parametro": "conflito"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 2025.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -5127,7 +5449,14 @@
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO JORNADA DE TRABALHO A duração da jornada de trabalho dos TRABALHADORES operadores em Teleatendimento, em regime de escala de revezamento, cuja implementação a critério da EMPRESA fica autorizada, será de 36 (trinta e seis) horas semanais, sendo de seis horas diárias. Parágrafo Primeiro: Observado o artigo 386 da CLT, os TRABALHADORES operadores terão uma folga semanal, sendo essa folga, pelo menos uma vez por mês, concedida aos domingos. Parágrafo Segundo: As partes dão-se por cientes de que está autorizado o trabalho aos domingos, nos termos do …",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 1412.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -5236,7 +5565,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5345,7 +5681,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5454,7 +5797,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5563,7 +5913,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5672,7 +6029,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 2149.06,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     },
     {
@@ -5781,7 +6145,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5890,7 +6261,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -5999,7 +6377,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6108,7 +6493,14 @@
           "trecho_fonte": "CLÁUSULA TRIGÉSIMA QUINTA - JORNADA DE TRABALHO A duração da jornada de trabalho dos trabalhadores operadores em Teleatendimento, em regime de escala de revezamento, cuja implementação a critério da empresa fica autorizada, será de 36 (trinta e seis) horas semanais, sendo de seis horas diárias. Parágrafo Primeiro: Os trabalhadores operadores terão uma folga semanal, sendo essa folga, pelo menos uma vez por mês, concedida aos domingos. Parágrafo Segundo: As partes dão-se por cientes de que está autorizado o trabalho aos domingos, nos termos do parágrafo único do artigo 67 da CLT, observada a es…",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 1412.0,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     },
     {
@@ -6217,7 +6609,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6326,7 +6725,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6435,7 +6841,14 @@
           "trecho_fonte": "CLÁUSULA SÉTIMA - JORNADA DE TRABALHO Jornada de Trabalho, Duração e Horário §1- O regime de trabalho dos empregados offshore observará a jornada de 12 horas de trabalho por 12 horas de descanso, na forma da Lei 5.811/72, sendo 14 dias trabalhados por igual período de folga. I- A jornada de trabalho do empregado em embarque eventual e regime misto de trabalho, quando embarcado, será de 12 horas, conforme previsto no parágrafo primeiro desta Cláusula. Jornada Especial e Compensação (4x4) §2- A empresa poderá praticar a jornada de 11 horas diárias de trabalho efetivo, em turno ininterrupto de re…",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6544,7 +6957,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6653,7 +7073,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 44.97,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -6762,7 +7189,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -6871,7 +7305,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": 2035.0,
+            "status_parametro": "conflito"
+          }
+        ]
       }
     },
     {
@@ -6980,7 +7421,14 @@
           "trecho_fonte": null,
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -7089,7 +7537,14 @@
           "trecho_fonte": null,
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso CCT",
+            "valor": null,
+            "status_parametro": "pendente_revisao"
+          }
+        ]
       }
     },
     {
@@ -7198,7 +7653,14 @@
           "trecho_fonte": "CLÁUSULA QUADRAGÉSIMA QUINTA - JORNADA DE TRABALHO DE ATENDENTE COM AUDIOFONE PERMANENTE Fica assegurada ao atendente com audiofone permanente a jornada de trabalho de 36 (trinta e seis) horas semanais, devendo ser observadas às disposições contidas no anexo II da NR 17, inclusive quanto aos intervalos e as pausas.",
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
-        }
+        },
+        "pisos": [
+          {
+            "cargo": "Piso Único",
+            "valor": 1129.78,
+            "status_parametro": "extraido_para_revisao"
+          }
+        ]
       }
     }
   ]
