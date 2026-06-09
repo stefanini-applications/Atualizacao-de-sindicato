@@ -402,6 +402,7 @@ body {
 /* Fixed column widths for non-CCT columns */
 .col-uf    { min-width: 45px;  white-space: nowrap; }
 .col-sindicato { min-width: 160px; }
+.col-estado-sindicato { min-width: 180px; white-space: nowrap; font-weight: 600; }
 .col-categoria { min-width: 160px; }
 .col-ano   { min-width: 50px;  white-space: nowrap; }
 .col-reajuste { min-width: 75px; white-space: nowrap; text-align: right; }
@@ -409,6 +410,28 @@ body {
 .col-status { min-width: 120px; white-space: nowrap; }
 .col-fonte  { min-width: 100px; }
 .col-acao   { min-width: 100px; white-space: nowrap; }
+
+/* Ratecard layout column separators (PRJ-56) */
+.ratecard-group-start {
+  border-left: 2px solid #dee2e6 !important;
+}
+
+/* Dynamic cargo columns in Ratecard view */
+.ratecard-cargo-th {
+  background-color: #eef2ff;
+  color: #3730a3;
+}
+
+.ratecard-cargo-col {
+  background-color: #f8f9ff;
+}
+
+/* Piso status indicator badge (inline, compact) */
+.piso-status-badge {
+  font-size: 0.6rem;
+  padding: 0.1em 0.3em;
+  vertical-align: middle;
+}
 
 /* Monetary and percent cells right-aligned */
 #params-tbody td.cct-col {

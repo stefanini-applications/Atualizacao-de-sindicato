@@ -108,7 +108,14 @@
           "observacao": "Múltiplas jornadas identificadas: 44.0, 30.0, 26.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1540.47,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-AL-SINTEEL-2023",
@@ -217,7 +224,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-AM-SINDPD-2025",
@@ -326,7 +340,14 @@
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1479.21,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-AP-SINDPD-2025",
@@ -435,7 +456,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-BA-SINDPEC-2025",
@@ -544,7 +572,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-BA-SINDADOS-2025",
@@ -653,7 +688,14 @@
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1592.43,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-BA-SINTTEL-2025",
@@ -762,7 +804,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-CE-SINDPD-2024",
@@ -871,7 +920,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-DF-SESCON-2025",
@@ -980,7 +1036,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-DF-SINDPD-2025",
@@ -1089,7 +1152,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1642.48,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-DF-SINTTEL-2025",
@@ -1198,7 +1268,14 @@
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1547.59,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": null,
@@ -1310,7 +1387,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-GO-SESCON-2024",
@@ -1419,7 +1503,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-GO-SINDPD-2025",
@@ -1528,7 +1619,14 @@
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2994.3,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-GO-SINTTEL-2025",
@@ -1637,7 +1735,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-MA-SINDPD-2023",
@@ -1746,7 +1851,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-MG-SESCON-2025",
@@ -1855,7 +1967,14 @@
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-MG-SINTTEL-2025",
@@ -1964,7 +2083,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-MS-SPPD-2025",
@@ -2073,7 +2199,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1689.53,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": null,
@@ -2185,7 +2318,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PA-SINDPD-2025",
@@ -2294,7 +2434,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PB-SINDPD-2025",
@@ -2403,7 +2550,14 @@
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PB-SINTTEL-2025",
@@ -2512,7 +2666,14 @@
           "observacao": "Múltiplas jornadas identificadas: 44.0, 40.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1518.0,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PE-SINDPD-2025",
@@ -2621,7 +2782,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Técnico",
+          "valor": 1602.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PI-SINDPD-2025",
@@ -2730,7 +2898,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PR-SINDASPP-2025",
@@ -2839,7 +3014,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PR-SINTIPAR-2025",
@@ -2948,7 +3130,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1373.44,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-PR-SINTTEL-2025",
@@ -3057,7 +3246,14 @@
           "observacao": "Múltiplas jornadas identificadas: 36.0, 20.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RJ-SINDITOB-2025",
@@ -3166,7 +3362,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RJ-SINTTEL-2025",
@@ -3275,7 +3478,14 @@
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1518.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RN-SINDPD-2025",
@@ -3384,7 +3594,14 @@
           "observacao": "Múltiplas jornadas identificadas: 30.0, 36.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2016.69,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RR-SINTECO-2024",
@@ -3493,7 +3710,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RS-SESCON-2025",
@@ -3602,7 +3826,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RS-SINDPD-2025",
@@ -3711,7 +3942,14 @@
           "observacao": "Múltiplas jornadas identificadas: 44.0, 36.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RS-SINTTEL-2025",
@@ -3820,7 +4058,14 @@
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1694.66,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-RS-SINPAPTEP-2024",
@@ -3929,7 +4174,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 44.97,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SC-SINDPD-2025",
@@ -4038,7 +4290,14 @@
           "observacao": "Múltiplas jornadas identificadas: 36.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 4410.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SC-SINDPD-JOINVILLE-2025",
@@ -4147,7 +4406,14 @@
           "observacao": "Múltiplas jornadas identificadas: 30.0, 44.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1978.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SC-SINTTEL-2025",
@@ -4256,7 +4522,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1792.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SC-SINDASPI-2024",
@@ -4365,7 +4638,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SE-SINDTIC-2025",
@@ -4474,7 +4754,14 @@
           "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SE-SINTTEL-2024",
@@ -4583,7 +4870,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SP-SENALBA-2025",
@@ -4692,7 +4986,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1852.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SP-SPAPTEP-2025",
@@ -4801,7 +5102,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2035.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SP-SINDICATAO-2025",
@@ -4910,7 +5218,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1980.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SP-SINDPD-2024",
@@ -5019,7 +5334,14 @@
           "observacao": "Múltiplas jornadas identificadas: 30.0, 40.0h/sem",
           "status_parametro": "conflito"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2025.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-SP-SINTETEL-2024",
@@ -5128,7 +5450,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 1412.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "REG-TO-SINTRAESCO-2024",
@@ -5237,7 +5566,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-AL-SINDPD",
@@ -5346,7 +5682,14 @@
           "observacao": "Extração de PDF falhou: arquivo_ausente. Extração de PDF falhou: arquivo_ausente",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-MG-FINATI",
@@ -5455,7 +5798,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-MG-SENALBA",
@@ -5564,7 +5914,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-MT-SINTTEL",
@@ -5673,7 +6030,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 2149.06,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-PB-SESCON",
@@ -5782,7 +6146,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-PE-SINTAPPI",
@@ -5891,7 +6262,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-PE-SINTTEL",
@@ -6000,7 +6378,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-PI-SINTTEL",
@@ -6109,7 +6494,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1412.0,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-RJ-FINATI-SIDIERJ-RJ",
@@ -6218,7 +6610,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-RJ-SINDEAP",
@@ -6327,7 +6726,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-RJ-SINDITOB",
@@ -6436,7 +6842,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-RO-SINTEPES",
@@ -6545,7 +6958,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-RS-SINAPROSUL-SINAPTEP-HAUS",
@@ -6654,7 +7074,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 44.97,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-SC-SISDASPI",
@@ -6763,7 +7190,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-SP-SINAPRO-SPAPTEP-HAUS",
@@ -6872,7 +7306,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso CCT",
+          "valor": 2035.0,
+          "status_parametro": "conflito"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-SP-SINDIESP",
@@ -6981,7 +7422,14 @@
           "observacao": "Extração de PDF falhou: pdf_sem_texto. Extração de PDF falhou: pdf_sem_texto",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-SP-SINTESP-T-CNICOS-ST-PETROBRAS",
@@ -7090,7 +7538,14 @@
           "observacao": "Cláusula de jornada de trabalho não localizada no PDF",
           "status_parametro": "pendente_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Geral",
+          "valor": null,
+          "status_parametro": "pendente"
+        }
+      ]
     },
     {
       "id_registro_reajuste": "PEND-TO-SINTTEL",
@@ -7199,7 +7654,14 @@
           "observacao": null,
           "status_parametro": "extraido_para_revisao"
         }
-      }
+      },
+      "pisos": [
+        {
+          "cargo": "Piso Único",
+          "valor": 1129.78,
+          "status_parametro": "extraido_para_revisao"
+        }
+      ]
     }
   ]
 }
