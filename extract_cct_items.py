@@ -35,6 +35,10 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
 EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
 
+# Official national minimum wage (2026) — used as piso_nacional fallback.
+SALARIO_MINIMO_NACIONAL = 1621.00
+ANO_REFERENCIA_SALARIO_MINIMO = 2026
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
@@ -50,6 +54,47 @@ def normalize(text: str) -> str:
     text = unicodedata.normalize("NFD", text)
     text = "".join(c for c in text if unicodedata.category(c) != "Mn")
     return text.lower()
+
+
+# Synonym table for normalizing raw PDF cargo names to standardized Ratecard labels.
+# Patterns are matched against normalize(cargo) — accent-free, lowercase.
+# Order within each level matters: more specific patterns first.
+TECH_CARGO_SYNONYMS: dict[str, list[str]] = {
+    "Técnico Suporte I": [
+        r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?i\b",
+        r"suporte\s+tecnico\s+i\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+1\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+jr\b",
+        r"tecnico\s+de\s+suporte\s+junior\b",
+    ],
+    "Técnico Suporte II": [
+        r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?ii\b",
+        r"suporte\s+tecnico\s+ii\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+2\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+pleno\b",
+    ],
+    "Técnico Suporte III": [
+        r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?iii\b",
+        r"suporte\s+tecnico\s+iii\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+3\b",
+        r"tecnico\s+(?:de\s+)?suporte\s+senior\b",
+    ],
+}
+
+
+def normalize_cargo_tecnico(cargo: str) -> str | None:
+    """
+    Given a raw cargo name, return the normalized Ratecard label ("Técnico Suporte I/II/III")
+    if any synonym matches, or None when no match is found.
+
+    Matching is performed against the accent-free, lowercased form of the cargo name.
+    """
+    cargo_n = normalize(cargo)
+    for normalized_label, patterns in TECH_CARGO_SYNONYMS.items():
+        for pattern in patterns:
+            if re.search(pattern, cargo_n):
+                return normalized_label
+    return None
 
 
 def extract_pdf_text(pdf_path: str) -> tuple[str, str]:
@@ -1160,6 +1205,10 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
 # Main extraction logic
 # ──────────────────────────────────────────────────────────────────────────────
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Main extraction logic
+# ──────────────────────────────────────────────────────────────────────────────
+
 EXTRACTORS = {
     "piso_salarial": extract_piso_salarial,
     "adicional_noturno": extract_adicional_noturno,
@@ -1171,6 +1220,66 @@ EXTRACTORS = {
 }
 
 
+def _build_piso_nacional_fallback() -> dict:
+    """
+    Build the piso_nacional sub-object using the official national minimum wage
+    (SALARIO_MINIMO_NACIONAL) as a fallback when no specific piso is found in the PDF.
+    """
+    return {
+        "valor": SALARIO_MINIMO_NACIONAL,
+        "ano_referencia": ANO_REFERENCIA_SALARIO_MINIMO,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Gov.br",
+        "fonte_textual": "Referência oficial usada para identificar o valor do salário mínimo nacional",
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": "Informação preenchida por fallback oficial porque não foi encontrado piso específico no PDF.",
+    }
+
+
+def _enrich_piso_salarial(piso_item: dict, existing_piso: dict | None) -> dict:
+    """
+    Enrich a piso_salarial item (already extracted or _item_not_found) with:
+
+    1. ``piso_nacional`` sub-object — preserved if already ``status_parametro: "valido"``
+       in the existing record; otherwise filled with the official fallback (R$ 1.621,00 / 2026).
+
+    2. ``cargo_normalizado`` field on each ``por_cargo[]`` entry — maps raw PDF cargo
+       names to standardized Ratecard labels using TECH_CARGO_SYNONYMS.
+       Entries with ``status_parametro: "valido"`` are never modified.
+    """
+    existing_piso = existing_piso or {}
+
+    # ── piso_nacional ──────────────────────────────────────────────────────────
+    existing_pn = existing_piso.get("piso_nacional")
+    if existing_pn and existing_pn.get("status_parametro") == "valido":
+        piso_item["piso_nacional"] = existing_pn
+    else:
+        piso_item["piso_nacional"] = _build_piso_nacional_fallback()
+
+    # ── por_cargo normalization ────────────────────────────────────────────────
+    # Prefer freshly-extracted por_cargo; fall back to existing when absent.
+    por_cargo = piso_item.get("por_cargo")
+    if not por_cargo and existing_piso.get("por_cargo"):
+        por_cargo = list(existing_piso["por_cargo"])
+        piso_item["por_cargo"] = por_cargo
+
+    if isinstance(por_cargo, list):
+        for entry in por_cargo:
+            if entry.get("status_parametro") == "valido":
+                continue  # governance: never modify validated entries
+            cargo_raw = entry.get("cargo", "")
+            normalized = normalize_cargo_tecnico(cargo_raw)
+            if normalized:
+                entry["cargo_normalizado"] = normalized
+                norm_note = f"Cargo normalizado de '{cargo_raw}' para '{normalized}'."
+                existing_obs = entry.get("observacao")
+                entry["observacao"] = f"{existing_obs}; {norm_note}" if existing_obs else norm_note
+
+    return piso_item
+
+
 def extract_itens_cct(record: dict) -> tuple[dict, str]:
     """
     Extract all CCT items for a record.
@@ -1180,12 +1289,13 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
     """
     fonte = record.get("fonte_documento") or ""
     text, status = extract_pdf_text(fonte)
+    existing_itens = record.get("itens_cct") or {}
 
     if status != "ok":
         obs_prefix = f"Extração de PDF falhou: {status}"
         itens = {}
         for key in EXTRACTORS:
-            existing = (record.get("itens_cct") or {}).get(key, {})
+            existing = existing_itens.get(key, {})
             if existing.get("status_parametro") == "valido":
                 itens[key] = existing
             else:
@@ -1194,13 +1304,19 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
                     observacao=f"{obs_prefix}. {existing.get('observacao') or ''}".strip(". ") or obs_prefix,
                 )
                 itens[key] = item
+        # Enrich piso_salarial even when PDF extraction fails
+        if itens.get("piso_salarial", {}).get("status_parametro") != "valido":
+            itens["piso_salarial"] = _enrich_piso_salarial(
+                itens.get("piso_salarial", {}),
+                existing_itens.get("piso_salarial"),
+            )
         return itens, status
 
     clauses = parse_clauses(text)
     itens = {}
 
     for key, extractor in EXTRACTORS.items():
-        existing = (record.get("itens_cct") or {}).get(key, {})
+        existing = existing_itens.get(key, {})
 
         # Governance: never overwrite a validated item
         if existing.get("status_parametro") == "valido":
@@ -1209,6 +1325,13 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
 
         extracted = extractor(clauses, fonte)
         itens[key] = extracted
+
+    # Enrich piso_salarial with piso_nacional fallback and cargo_normalizado
+    if itens.get("piso_salarial", {}).get("status_parametro") != "valido":
+        itens["piso_salarial"] = _enrich_piso_salarial(
+            itens.get("piso_salarial", {}),
+            existing_itens.get("piso_salarial"),
+        )
 
     return itens, status
 

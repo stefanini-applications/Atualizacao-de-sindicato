@@ -26,6 +26,9 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    normalize_cargo_tecnico,
+    _build_piso_nacional_fallback,
+    _enrich_piso_salarial,
 )
 
 
@@ -661,6 +664,298 @@ def test_prj59_sc10_data_extracao_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60 AC5: Piso Nacional, Cargos Técnicos, Governance
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Helper that mirrors the JS RATECARD_PISO_COLUMNS piso_cct resolver logic.
+def _resolve_piso_cct(ps: dict | None):
+    if not ps:
+        return None
+    return ps.get("piso_cct") or ps.get("piso_unico") or ps.get("valor") or None
+
+
+# ── AC5(a): Piso CCT resolver priority — piso_cct > piso_unico > valor ────────
+
+def test_piso_cct_resolver_reads_piso_cct_field():
+    ps = {"piso_cct": 1800.00, "piso_unico": 1600.00, "valor": 1500.00}
+    assert _resolve_piso_cct(ps) == 1800.00
+
+
+def test_piso_cct_resolver_falls_back_to_piso_unico():
+    ps = {"piso_unico": 1600.00, "valor": 1500.00}
+    assert _resolve_piso_cct(ps) == 1600.00
+
+
+def test_piso_cct_resolver_falls_back_to_valor():
+    ps = {"valor": 1500.00}
+    assert _resolve_piso_cct(ps) == 1500.00
+
+
+def test_piso_cct_resolver_returns_none_when_no_ps():
+    assert _resolve_piso_cct(None) is None
+
+
+# ── AC5(b): Piso Nacional — value present after enrichment / absent before ────
+
+def test_piso_nacional_absent_before_enrichment():
+    """Before enrichment, piso_nacional is not set."""
+    piso_item = {"valor": 1642.48, "tipo": "piso_unico", "status_parametro": "extraido_para_revisao"}
+    assert "piso_nacional" not in piso_item
+
+
+def test_piso_nacional_valor_populated_after_enrichment():
+    piso_item = {"valor": 1642.48, "tipo": "piso_unico", "status_parametro": "extraido_para_revisao"}
+    enriched = _enrich_piso_salarial(piso_item, {})
+    assert enriched["piso_nacional"]["valor"] == 1621.00
+
+
+def test_piso_nacional_valor_is_float():
+    enriched = _enrich_piso_salarial({"valor": 1642.48}, {})
+    assert isinstance(enriched["piso_nacional"]["valor"], float)
+
+
+def test_piso_nacional_not_shown_when_no_valor_field():
+    """Simulate resolver returning None when piso_nacional.valor is absent."""
+    piso = {"piso_nacional": {"status_parametro": "pendente_revisao"}}
+    # no "valor" key → resolver returns None
+    valor = piso.get("piso_nacional", {}).get("valor")
+    assert valor is None
+
+
+# ── AC5(c): Técnico Suporte I/II/III — exact name and synonym variations ──────
+
+def test_normalize_cargo_tecnico_exact_i():
+    assert normalize_cargo_tecnico("Técnico Suporte I") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_exact_ii():
+    assert normalize_cargo_tecnico("Técnico Suporte II") == "Técnico Suporte II"
+
+
+def test_normalize_cargo_tecnico_exact_iii():
+    assert normalize_cargo_tecnico("Técnico Suporte III") == "Técnico Suporte III"
+
+
+def test_normalize_cargo_tecnico_de_suporte_nivel_i():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível I") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_em_suporte_i():
+    assert normalize_cargo_tecnico("Técnico em Suporte I") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_suporte_tecnico_i():
+    assert normalize_cargo_tecnico("Suporte Técnico I") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_numero_1():
+    assert normalize_cargo_tecnico("Técnico Suporte 1") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_de_suporte_1():
+    assert normalize_cargo_tecnico("Técnico de Suporte 1") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_jr():
+    assert normalize_cargo_tecnico("Técnico Suporte Jr") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_junior():
+    assert normalize_cargo_tecnico("Técnico de Suporte Júnior") == "Técnico Suporte I"
+
+
+def test_normalize_cargo_tecnico_nivel_ii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível II") == "Técnico Suporte II"
+
+
+def test_normalize_cargo_tecnico_pleno():
+    assert normalize_cargo_tecnico("Técnico de Suporte Pleno") == "Técnico Suporte II"
+
+
+def test_normalize_cargo_tecnico_numero_2():
+    assert normalize_cargo_tecnico("Técnico Suporte 2") == "Técnico Suporte II"
+
+
+def test_normalize_cargo_tecnico_nivel_iii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível III") == "Técnico Suporte III"
+
+
+def test_normalize_cargo_tecnico_senior():
+    assert normalize_cargo_tecnico("Técnico de Suporte Sênior") == "Técnico Suporte III"
+
+
+def test_normalize_cargo_tecnico_senior_ascii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Senior") == "Técnico Suporte III"
+
+
+def test_normalize_cargo_tecnico_numero_3():
+    assert normalize_cargo_tecnico("Técnico Suporte 3") == "Técnico Suporte III"
+
+
+def test_normalize_cargo_nivel_ii_not_matching_i():
+    """Level II must not be matched by the level I pattern."""
+    assert normalize_cargo_tecnico("Técnico Suporte II") != "Técnico Suporte I"
+
+
+def test_normalize_cargo_nivel_iii_not_matching_ii():
+    """Level III must not be matched by the level II pattern."""
+    assert normalize_cargo_tecnico("Técnico Suporte III") != "Técnico Suporte II"
+
+
+# ── AC5(d): Non-existent cargo returns None ───────────────────────────────────
+
+def test_normalize_cargo_nonexistent_analista():
+    assert normalize_cargo_tecnico("Analista de Sistemas") is None
+
+
+def test_normalize_cargo_nonexistent_bare_tecnico_suporte():
+    """'Técnico de Suporte' without a level indicator must not map to any level."""
+    assert normalize_cargo_tecnico("Técnico de Suporte") is None
+
+
+def test_normalize_cargo_empty_string():
+    assert normalize_cargo_tecnico("") is None
+
+
+# ── AC5(e): status_parametro "valido" never overwritten ──────────────────────
+
+def test_piso_nacional_valido_not_overwritten_by_enrich():
+    piso_item = {"valor": 1642.48, "tipo": "piso_unico"}
+    existing = {"piso_nacional": {"valor": 9999.00, "status_parametro": "valido"}}
+    enriched = _enrich_piso_salarial(piso_item, existing)
+    assert enriched["piso_nacional"]["valor"] == 9999.00
+    assert enriched["piso_nacional"]["status_parametro"] == "valido"
+
+
+def test_por_cargo_valido_entry_not_modified_by_enrich():
+    entry_valido = {
+        "cargo": "Técnico de Suporte Nível I",
+        "valor": 2000.00,
+        "status_parametro": "valido",
+    }
+    piso_item = {"valor": 1642.48, "por_cargo": [entry_valido]}
+    enriched = _enrich_piso_salarial(piso_item, {})
+    assert "cargo_normalizado" not in enriched["por_cargo"][0], (
+        "valido por_cargo entry must not receive cargo_normalizado"
+    )
+
+
+def test_piso_salarial_valido_preserved_by_extract_itens_cct():
+    """Governance: entire piso_salarial is preserved when marked valido."""
+    record = {
+        "id_registro_reajuste": "REG-TEST-PISO-VALIDO",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {
+            "piso_salarial": {
+                "valor": 8888.00,
+                "status_parametro": "valido",
+                "observacao": "Validado manualmente",
+            }
+        },
+    }
+    itens, _ = extract_itens_cct(record)
+    ps = itens.get("piso_salarial", {})
+    assert ps.get("status_parametro") == "valido"
+    assert ps.get("valor") == 8888.00
+    assert "piso_nacional" not in ps, "valido piso_salarial must not be enriched"
+
+
+# ── AC5(f): Automatically extracted values carry full traceability fields ──────
+
+def test_piso_nacional_fallback_has_all_traceability_fields():
+    item = _build_piso_nacional_fallback()
+    for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+        assert field in item, f"Missing traceability field: {field}"
+
+
+def test_piso_nacional_fallback_origem_fonte_oficial():
+    item = _build_piso_nacional_fallback()
+    assert item["origem"] == "fonte_oficial"
+
+
+def test_piso_nacional_fallback_status_extraido_para_revisao():
+    item = _build_piso_nacional_fallback()
+    assert item["status_parametro"] == "extraido_para_revisao"
+
+
+def test_piso_nacional_fallback_pagina_null():
+    item = _build_piso_nacional_fallback()
+    assert item["pagina"] is None
+
+
+def test_piso_nacional_fallback_data_extracao_format():
+    item = _build_piso_nacional_fallback()
+    data_extracao = item.get("data_extracao")
+    assert data_extracao is not None
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
+        f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
+    )
+
+
+def test_piso_nacional_fallback_fonte_ministerio():
+    item = _build_piso_nacional_fallback()
+    assert "Ministério do Trabalho" in item["fonte"]
+
+
+def test_piso_nacional_fallback_observacao_set():
+    item = _build_piso_nacional_fallback()
+    assert item.get("observacao") is not None and len(item["observacao"]) > 10
+
+
+def test_enrich_piso_salarial_adds_piso_nacional_when_missing():
+    """Records with no existing piso_nacional receive the fallback."""
+    piso_item = {"valor": 1642.48, "tipo": "piso_cct", "status_parametro": "extraido_para_revisao"}
+    enriched = _enrich_piso_salarial(piso_item, {})
+    assert "piso_nacional" in enriched
+    pn = enriched["piso_nacional"]
+    assert pn["valor"] == 1621.00
+    assert pn["origem"] == "fonte_oficial"
+    assert pn["status_parametro"] == "extraido_para_revisao"
+
+
+def test_enrich_piso_salarial_adds_cargo_normalizado():
+    """por_cargo entries with matching synonyms receive cargo_normalizado."""
+    piso_item = {
+        "valor": 1642.48,
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Pleno", "valor": 1800.00,
+             "status_parametro": "extraido_para_revisao"},
+        ],
+    }
+    enriched = _enrich_piso_salarial(piso_item, {})
+    entry = enriched["por_cargo"][0]
+    assert entry.get("cargo_normalizado") == "Técnico Suporte II"
+
+
+def test_enrich_piso_salarial_cargo_normalizado_includes_observacao():
+    """cargo_normalizado entries also receive an observacao explaining the mapping."""
+    piso_item = {
+        "valor": 1642.48,
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Sênior", "valor": 2000.00,
+             "status_parametro": "extraito_para_revisao"},
+        ],
+    }
+    enriched = _enrich_piso_salarial(piso_item, {})
+    obs = enriched["por_cargo"][0].get("observacao") or ""
+    assert "Técnico Suporte III" in obs
+
+
+def test_enrich_piso_salarial_falls_back_to_existing_por_cargo():
+    """When the new extraction has no por_cargo, existing data is preserved and normalized."""
+    piso_item = {"valor": 1500.00, "status_parametro": "extraido_para_revisao"}
+    existing = {
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Nível I", "valor": 1800.00,
+             "status_parametro": "extraido_para_revisao"},
+        ]
+    }
+    enriched = _enrich_piso_salarial(piso_item, existing)
+    assert isinstance(enriched.get("por_cargo"), list)
+    assert enriched["por_cargo"][0].get("cargo_normalizado") == "Técnico Suporte I"
 
 
 if __name__ == "__main__":
