@@ -305,8 +305,6 @@ const EMBEDDED_DEMO = {
 
 let allRecords = [];
 let filteredRecords = [];
-/** Sorted list of distinct real cargo names found across all loaded records (PRJ-57 AC2). */
-let allCargoColumns = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
 
@@ -470,12 +468,8 @@ async function loadData() {
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
   filteredRecords = [...allRecords];
 
-  // PRJ-57: collect all distinct real cargo names over the full base (stable across filters)
-  allCargoColumns = collectAllCargoColumns(allRecords);
-
   showApp(dataGeracao, demoMessage);
   populateFilterOptions();
-  updateCargoTableHeader();
   renderTable();
 }
 
@@ -745,63 +739,6 @@ function updateScrollHint() {
   const isScrolledRight =
     elTableContainer.scrollLeft + elTableContainer.clientWidth >= elTableContainer.scrollWidth - 4;
   elScrollHint.classList.toggle('d-none', !isScrollable || isScrolledRight);
-}
-
-/**
- * Collects all distinct real cargo names from `piso_salarial.por_cargo[]` across all records.
- * Returns a sorted array of unique cargo names (PRJ-57 AC2).
- * Calculated over the full base — not filtered — so column headers are stable when filters change.
- */
-function collectAllCargoColumns(records) {
-  if (!Array.isArray(records)) return [];
-  const seen = new Set();
-  records.forEach((rec) => {
-    const pc = rec.itens_cct?.piso_salarial?.por_cargo;
-    if (!Array.isArray(pc)) return;
-    pc.forEach((entry) => {
-      const nome = entry?.cargo;
-      if (nome && typeof nome === 'string' && nome.trim()) {
-        seen.add(nome.trim());
-      }
-    });
-  });
-  return [...seen].sort((a, b) => a.localeCompare(b, 'pt-BR'));
-}
-
-/**
- * Inserts or refreshes dynamic <th> elements for real cargo columns into the table header (PRJ-57 AC2).
- * Columns are inserted after "Piso Único" and before "Ad. Noturno".
- */
-function updateCargoTableHeader() {
-  const thead = document.querySelector('#params-table thead tr');
-  if (!thead) return;
-
-  // Remove any previously injected cargo headers
-  thead.querySelectorAll('.cargo-th').forEach((el) => el.remove());
-
-  if (allCargoColumns.length === 0) return;
-
-  // Find the "Piso Único" header as the insertion anchor
-  const ths = [...thead.querySelectorAll('th')];
-  const pisoUnicoTh = ths.find((th) => th.textContent.trim() === 'Piso Único') ?? null;
-
-  // Insert dynamic cargo columns right after "Piso Único"
-  let prev = pisoUnicoTh;
-  allCargoColumns.forEach((cargo) => {
-    const th = document.createElement('th');
-    th.scope = 'col';
-    th.className = 'cct-th cargo-th';
-    th.title = cargo;
-    // Truncate long cargo names in header to keep columns narrow
-    const label = cargo.length > 24 ? cargo.slice(0, 22) + '…' : cargo;
-    th.textContent = label;
-    if (prev && prev.nextSibling) {
-      thead.insertBefore(th, prev.nextSibling);
-    } else {
-      thead.appendChild(th);
-    }
-    prev = th;
-  });
 }
 
 function renderTable() {
@@ -1524,10 +1461,63 @@ const CCT_ITEM_FIELDS = {
   ],
   jornada: [
     { key: 'horas_semanais', label: 'Horas semanais', type: 'number', unit: null },
+    { key: 'horas_mensais', label: 'Horas mensais', type: 'number', unit: null },
+    { key: 'horas_diarias', label: 'Horas diárias', type: 'number', unit: null },
     { key: 'opcoes_identificadas', label: 'Opções identificadas', type: 'text', unit: null },
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
 };
+
+/**
+ * Looks up a cargo value from piso_salarial.por_cargo[] by exact cargo name.
+ * Returns null if not found.
+ */
+function getCargoValue(record, cargoLabel) {
+  const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
+  if (!Array.isArray(porCargo)) return null;
+  const entry = porCargo.find((e) => e?.cargo === cargoLabel);
+  return entry?.valor ?? null;
+}
+
+/**
+ * Fixed declarative columns for the Ratecard piso/cargo section (PRJ-58 AC4).
+ * Each entry has {id, label, resolver} — add new columns here without refactoring.
+ * Piso Nacional and cargo columns will show "Não identificado" until data is populated.
+ */
+const RATECARD_PISO_COLUMNS = [
+  {
+    id: 'piso_cct',
+    label: 'Piso CCT',
+    resolver: (record) => {
+      const ps = record.itens_cct?.piso_salarial;
+      if (!ps) return null;
+      return ps.valor_piso_cct
+        ?? (ps.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(ps.tipo)
+          ? ps.valor : null)
+        ?? null;
+    },
+  },
+  {
+    id: 'piso_nacional',
+    label: 'Piso Nacional',
+    resolver: (record) => record.itens_cct?.piso_salarial?.piso_nacional ?? null,
+  },
+  {
+    id: 'tecnico_suporte_i',
+    label: 'Técnico Suporte I',
+    resolver: (record) => getCargoValue(record, 'Técnico Suporte I'),
+  },
+  {
+    id: 'tecnico_suporte_ii',
+    label: 'Técnico Suporte II',
+    resolver: (record) => getCargoValue(record, 'Técnico Suporte II'),
+  },
+  {
+    id: 'tecnico_suporte_iii',
+    label: 'Técnico Suporte III',
+    resolver: (record) => getCargoValue(record, 'Técnico Suporte III'),
+  },
+];
 
 /** Minimum fields required (at least one) before allowing item validation */
 const CCT_ITEM_MIN_FIELDS = {
@@ -1641,33 +1631,6 @@ function isCctItemPreenchido(itemKey, item) {
   return false;
 }
 
-/**
- * Generates one <td> per dynamic cargo column for a given record (PRJ-57 AC2).
- * For each cargo in allCargoColumns, looks up the corresponding valor in
- * record.itens_cct.piso_salarial.por_cargo[]; shows '—' when not found.
- * @param {object} record
- * @param {Function} fmtBRL - BRL formatter from the calling context
- * @returns {string[]} array of <td> HTML strings
- */
-function buildCargoTableCells(record, fmtBRL) {
-  if (allCargoColumns.length === 0) return [];
-  const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
-  // Build a lookup map: lowercase cargo name -> first matching valor
-  const cargoMap = new Map();
-  if (Array.isArray(porCargo)) {
-    porCargo.forEach((entry) => {
-      const nome = entry?.cargo?.trim();
-      if (nome && !cargoMap.has(nome.toLowerCase())) {
-        cargoMap.set(nome.toLowerCase(), entry.valor ?? null);
-      }
-    });
-  }
-  return allCargoColumns.map((cargo) => {
-    const valor = cargoMap.get(cargo.toLowerCase()) ?? null;
-    return `<td class="cct-col cargo-col">${fmtBRL(valor)}</td>`;
-  });
-}
-
 /** Generates dynamic CCT item columns for the main table row */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
@@ -1700,18 +1663,6 @@ function buildCctTableCells(record) {
     return escapeHtml(s.length > 22 ? s.slice(0, 20) + '…' : s);
   }
 
-  // Backward compat: derive piso columns from tipo+valor when specific fields absent
-  const pisoItem = record.itens_cct?.piso_salarial;
-  const pisoCct = cellGet('piso_salarial', 'valor_piso_cct')
-    ?? (pisoItem?.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(pisoItem.tipo)
-      ? pisoItem.valor : null);
-  const pisoTec = cellGet('piso_salarial', 'piso_tecnico')
-    ?? (pisoItem?.tipo === 'piso_tecnico' ? pisoItem?.valor ?? null : null);
-  const pisoAdm = cellGet('piso_salarial', 'piso_administrativo')
-    ?? (pisoItem?.tipo === 'piso_administrativo' ? pisoItem?.valor ?? null : null);
-  const pisoUnico = cellGet('piso_salarial', 'piso_unico')
-    ?? (pisoItem?.tipo === 'piso_unico' ? pisoItem?.valor ?? null : null);
-
   const adNoturno = cellGet('adicional_noturno', 'percentual', 'valor');
   const vrItem = record.itens_cct?.auxilio_alimentacao ?? null;
   // PLR: numeric value preferred; regra_textual only if it is a short operational summary (AC6)
@@ -1734,12 +1685,16 @@ function buildCctTableCells(record) {
     ? (typeof sob === 'number' ? fmtPct(sob) : fmtShort(String(sob)))
     : '—';
 
+  // Fixed piso/cargo columns from RATECARD_PISO_COLUMNS (PRJ-58 AC4/AC5)
+  const pisoCells = RATECARD_PISO_COLUMNS.map((col, i) => {
+    const val = col.resolver(record);
+    const cssClass = i === 0 ? 'cct-col cct-group-start' : 'cct-col';
+    const display = val != null ? fmtBRL(val) : 'Não identificado';
+    return `<td class="${cssClass}">${display}</td>`;
+  });
+
   return [
-    `<td class="cct-col cct-group-start">${fmtBRL(pisoCct)}</td>`,
-    `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
-    `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
-    `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
-    ...buildCargoTableCells(record, fmtBRL),
+    ...pisoCells,
     `<td class="cct-col">${adNoturnoFmt}</td>`,
     `<td class="cct-col">${fmtVR(vrItem)}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
@@ -2240,17 +2195,34 @@ function fmtVR(vrItem) {
 }
 
 /**
- * Formats jornada for table display (AC7).
- * Supports real-data schema (valor_textual: '44h/semana', unidade: 'h/semana') and
- * demo-data schema (horas_semanais, tipo: 'horas_semanais').
+ * Formats jornada for table display (PRJ-58 AC3).
+ * Format: "Xh/sem · Yh/mês" when horas_semanais and horas_mensais are present.
+ * Fallback: first por_escala valor_textual (e.g. "12×36") when no weekly hours.
+ * Retrocompat: handles opcoes_identificadas as both array and string.
  */
 function fmtJornada(jornadaItem) {
   if (!jornadaItem) return '—';
-  // Pre-formatted textual value (real-data schema)
-  const vt = jornadaItem.valor_textual;
-  if (vt != null && vt !== '') return escapeHtml(String(vt).slice(0, 22));
-  // Numeric value with unit
-  const v = jornadaItem.valor ?? jornadaItem.horas_semanais;
+
+  // New format: "Xh/sem · Yh/mês" when both are present
+  const hs = jornadaItem.horas_semanais;
+  const hm = jornadaItem.horas_mensais;
+  if (hs != null && hm != null) {
+    return `${hs}h/sem · ${hm}h/mês`;
+  }
+
+  // Fallback: por_escala valor_textual (scale-only items like 12×36)
+  const porEscala = jornadaItem.por_escala;
+  if (Array.isArray(porEscala) && porEscala.length > 0) {
+    const vt = porEscala[0].valor_textual || porEscala[0].label;
+    if (vt) return escapeHtml(String(vt).slice(0, 22));
+  }
+
+  // Pre-formatted textual value (backward compat with real-data schema "44h/semana")
+  const vtRaw = jornadaItem.valor_textual;
+  if (vtRaw != null && vtRaw !== '') return escapeHtml(String(vtRaw).slice(0, 22));
+
+  // Numeric value with unit (backward compat with demo/legacy schema)
+  const v = jornadaItem.valor ?? hs;
   if (v != null) {
     const n = Number(v);
     if (!isNaN(n)) {
@@ -2264,10 +2236,14 @@ function fmtJornada(jornadaItem) {
       return `${n}h`;
     }
   }
-  if (jornadaItem.horas_mensais != null) return `${jornadaItem.horas_mensais}h mensais`;
-  if (jornadaItem.opcoes_identificadas != null) {
-    return escapeHtml(String(jornadaItem.opcoes_identificadas).slice(0, 22));
+
+  // opcoes_identificadas: handle both array and string (retrocompat)
+  const oi = jornadaItem.opcoes_identificadas;
+  if (oi != null) {
+    const display = Array.isArray(oi) ? oi[0] : String(oi);
+    if (display) return escapeHtml(display.slice(0, 22));
   }
+
   return '—';
 }
 
