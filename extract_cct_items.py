@@ -29,7 +29,7 @@ import re
 import subprocess
 import sys
 import unicodedata
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
@@ -38,6 +38,11 @@ EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
+
+
+def today_str() -> str:
+    """Return today's date in YYYY-MM-DD format (used for data_extracao)."""
+    return date.today().isoformat()
 
 
 def normalize(text: str) -> str:
@@ -277,6 +282,12 @@ def build_item(
         "trecho_fonte": _truncate(trecho_fonte, 600),
         "observacao": obs,
         "status_parametro": status,
+        # Traceability fields (PRJ-59)
+        "origem": "pdf_cct",
+        "fonte": "PDF da CCT",
+        "fonte_textual": _truncate(trecho_fonte, 600),
+        "pagina": None,
+        "data_extracao": today_str(),
     }
     item.update(classification)
     return item
@@ -287,6 +298,7 @@ def _item_not_found(
     trecho_fonte: str | None = None,
     observacao: str | None = None,
 ) -> dict:
+    obs = observacao or "Informação não localizada no PDF processado. Elegível para fallback em fonte oficial."
     return {
         "valor": None,
         "percentual": None,
@@ -297,8 +309,14 @@ def _item_not_found(
         "fonte_documento": fonte_documento,
         "clausula": None,
         "trecho_fonte": trecho_fonte,
-        "observacao": observacao,
+        "observacao": obs,
         "status_parametro": "pendente_revisao",
+        # Traceability fields (PRJ-59)
+        "origem": "nao_identificado_pdf",
+        "fonte": None,
+        "fonte_textual": None,
+        "pagina": None,
+        "data_extracao": today_str(),
     }
 
 
@@ -756,6 +774,12 @@ def extract_plr(clauses: list[dict], fonte: str) -> dict:
             "trecho_fonte": _truncate(full_text, 600),
             "observacao": "Cláusula de PLR encontrada; valor/regra específica requer revisão",
             "status_parametro": "extraido_para_revisao",
+            # Traceability fields (PRJ-59)
+            "origem": "pdf_cct",
+            "fonte": "PDF da CCT",
+            "fonte_textual": _truncate(full_text, 600),
+            "pagina": None,
+            "data_extracao": today_str(),
         }
 
     return build_item(
@@ -858,6 +882,12 @@ def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:
             "trecho_fonte": _truncate(full_text, 600),
             "observacao": "Cláusula de sobreaviso encontrada; valor/regra requer revisão",
             "status_parametro": "extraido_para_revisao",
+            # Traceability fields (PRJ-59)
+            "origem": "pdf_cct",
+            "fonte": "PDF da CCT",
+            "fonte_textual": _truncate(full_text, 600),
+            "pagina": None,
+            "data_extracao": today_str(),
         }
 
     # Determine primary value and unit
@@ -889,6 +919,12 @@ def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:
         "trecho_fonte": _truncate(full_text, 600),
         "observacao": obs,
         "status_parametro": status,
+        # Traceability fields (PRJ-59)
+        "origem": "pdf_cct",
+        "fonte": "PDF da CCT",
+        "fonte_textual": _truncate(full_text, 600),
+        "pagina": None,
+        "data_extracao": today_str(),
     }
 
 
@@ -1022,6 +1058,12 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
                 "trecho_fonte": _truncate(full_text, 600),
                 "observacao": None,
                 "status_parametro": "extraido_para_revisao",
+                # Traceability fields (PRJ-59)
+                "origem": "pdf_cct",
+                "fonte": "PDF da CCT",
+                "fonte_textual": _truncate(full_text, 600),
+                "pagina": None,
+                "data_extracao": today_str(),
             }
             item.update(structured)
             return item
@@ -1037,6 +1079,12 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
             "trecho_fonte": _truncate(full_text, 600),
             "observacao": "Cláusula de jornada encontrada; carga horária requer revisão",
             "status_parametro": "extraido_para_revisao",
+            # Traceability fields (PRJ-59)
+            "origem": "pdf_cct",
+            "fonte": "PDF da CCT",
+            "fonte_textual": _truncate(full_text, 600),
+            "pagina": None,
+            "data_extracao": today_str(),
         }
 
     primary = hours[0]
@@ -1066,6 +1114,12 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
             "trecho_fonte": _truncate(full_text, 600),
             "observacao": "; ".join(obs_parts),
             "status_parametro": "extraido_para_revisao",
+            # Traceability fields (PRJ-59)
+            "origem": "pdf_cct",
+            "fonte": "PDF da CCT",
+            "fonte_textual": _truncate(full_text, 600),
+            "pagina": None,
+            "data_extracao": today_str(),
         }
         if structured:
             item.update(structured)
@@ -1090,6 +1144,12 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         "trecho_fonte": _truncate(full_text, 600),
         "observacao": hd_obs,
         "status_parametro": "extraido_para_revisao",
+        # Traceability fields (PRJ-59)
+        "origem": "pdf_cct",
+        "fonte": "PDF da CCT",
+        "fonte_textual": _truncate(full_text, 600),
+        "pagina": None,
+        "data_extracao": today_str(),
     }
     if structured:
         item.update(structured)
