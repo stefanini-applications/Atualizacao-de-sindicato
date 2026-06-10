@@ -297,9 +297,40 @@ def _item_not_found(
         "fonte_documento": fonte_documento,
         "clausula": None,
         "trecho_fonte": trecho_fonte,
-        "observacao": observacao,
+        "observacao": observacao or "Informação não localizada no PDF processado. Elegível para fallback em fonte oficial.",
         "status_parametro": "pendente_revisao",
     }
+
+
+def _add_traceability_fields(item: dict, today: str) -> dict:
+    """
+    Enrich an itens_cct item with standardized traceability fields (PRJ-59).
+
+    Additive only — never overwrites fields already present.
+    Uses ``status_parametro`` to determine ``origem``:
+      - "extraido_para_revisao" / "conflito" → origem "pdf_cct"
+      - anything else (incl. "pendente_revisao") → origem "nao_identificado_pdf"
+    Supports future values "fonte_oficial" and "conflito_fontes" without error.
+    """
+    status = item.get("status_parametro", "pendente_revisao")
+    is_extracted = status in ("extraido_para_revisao", "conflito")
+
+    if "origem" not in item:
+        item["origem"] = "pdf_cct" if is_extracted else "nao_identificado_pdf"
+
+    if "fonte" not in item:
+        item["fonte"] = "PDF da CCT" if item.get("origem") == "pdf_cct" else None
+
+    if "fonte_textual" not in item:
+        item["fonte_textual"] = item.get("trecho_fonte") if item.get("origem") == "pdf_cct" else None
+
+    if "pagina" not in item:
+        item["pagina"] = None
+
+    if "data_extracao" not in item:
+        item["data_extracao"] = today
+
+    return item
 
 
 def _truncate(text: str | None, max_len: int) -> str | None:
@@ -1120,6 +1151,7 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
     """
     fonte = record.get("fonte_documento") or ""
     text, status = extract_pdf_text(fonte)
+    today = datetime.now().strftime("%Y-%m-%d")
 
     if status != "ok":
         obs_prefix = f"Extração de PDF falhou: {status}"
@@ -1133,6 +1165,7 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
                     fonte,
                     observacao=f"{obs_prefix}. {existing.get('observacao') or ''}".strip(". ") or obs_prefix,
                 )
+                _add_traceability_fields(item, today)
                 itens[key] = item
         return itens, status
 
@@ -1148,6 +1181,7 @@ def extract_itens_cct(record: dict) -> tuple[dict, str]:
             continue
 
         extracted = extractor(clauses, fonte)
+        _add_traceability_fields(extracted, today)
         itens[key] = extracted
 
     return itens, status
@@ -1172,6 +1206,28 @@ def merge_itens_cct(existing: dict | None, new_itens: dict) -> dict:
     return merged
 
 
+def migrate_traceability_fields(records: list, today: str) -> int:
+    """
+    Backfill traceability fields on existing itens_cct items that lack them (PRJ-59).
+
+    Additive only — never overwrites existing values or touches 'valido' items.
+    Returns the count of items enriched.
+    """
+    count = 0
+    for record in records:
+        itens = record.get("itens_cct") or {}
+        for item in itens.values():
+            if not isinstance(item, dict):
+                continue
+            if item.get("status_parametro") == "valido":
+                continue
+            before_keys = set(item.keys())
+            _add_traceability_fields(item, today)
+            if set(item.keys()) != before_keys:
+                count += 1
+    return count
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # CLI
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1193,6 +1249,12 @@ def main():
 
     records = data.get("registros", [])
     id_filter = set(args.ids) if args.ids else None
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    # Backfill traceability fields on existing items before processing (PRJ-59)
+    migrated = migrate_traceability_fields(records, today)
+    if migrated:
+        print(f"[migrate] {migrated} itens enriquecidos com campos de rastreabilidade (origem/fonte/data_extracao).")
 
     stats = {
         "processados": 0,

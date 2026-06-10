@@ -1129,6 +1129,8 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
     ? `<div class="cct-item-meta mt-1">${escapeHtml(String(item.clausula))}</div>`
     : '';
 
+  const traceabilityHtml = buildTraceabilityHtml(item);
+
   return `
     <div class="col-12 col-sm-6">
       <div class="cct-item-card cct-item-card-valido">
@@ -1141,6 +1143,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         ${clausulaHtml}
         ${regraHtml}
         ${obsHtml}
+        ${traceabilityHtml}
         <div class="mt-1">${fonteHtml}</div>
       </div>
     </div>`;
@@ -1214,6 +1217,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         ${fonteHtml}
         ${clausulaHtml}
         ${regraHtml}
+        ${buildTraceabilityHtml(item)}
         <div class="cct-item-edit-form">
           ${inputsHtml}
           <div class="mb-2">
@@ -1235,6 +1239,67 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
         </div>
       </div>
     </div>`;
+}
+
+/**
+ * Builds the traceability section HTML for a CCT item (PRJ-59).
+ *
+ * Displays: origem, fonte, fonte_textual, pagina, data_extracao, status_parametro.
+ * Absent or null fields are shown as "Não identificado".
+ * Only rendered when at least one traceability field is present on the item.
+ */
+function buildTraceabilityHtml(item) {
+  const hasAny = ['origem', 'fonte', 'fonte_textual', 'pagina', 'data_extracao'].some((k) => k in item);
+  if (!hasAny) return '';
+
+  const ni = 'Não identificado';
+  const fmt = (v) => (v != null && v !== '') ? escapeHtml(String(v)) : `<span class="text-secondary">${ni}</span>`;
+
+  const origemMap = {
+    pdf_cct: '📄 PDF da CCT',
+    nao_identificado_pdf: '❓ Não identificado no PDF',
+    fonte_oficial: '🏛 Fonte oficial',
+    conflito_fontes: '⚠ Conflito entre fontes',
+  };
+  const origemRaw = item.origem ?? null;
+  const origemDisplay = origemRaw != null
+    ? escapeHtml(origemMap[origemRaw] ?? origemRaw)
+    : `<span class="text-secondary">${ni}</span>`;
+
+  const statusMap = {
+    extraido_para_revisao: '🔎 Extraído para revisão',
+    pendente_revisao: '⏳ Pendente revisão',
+    valido: '✔ Válido',
+    conflito: '⚠ Conflito',
+  };
+  const statusRaw = item.status_parametro ?? null;
+  const statusDisplay = statusRaw != null
+    ? escapeHtml(statusMap[statusRaw] ?? statusRaw)
+    : `<span class="text-secondary">${ni}</span>`;
+
+  const fonteTextualRaw = item.fonte_textual ?? null;
+  const fonteTextualDisplay = fonteTextualRaw != null && fonteTextualRaw !== ''
+    ? `<span class="cct-traceability-excerpt">${escapeHtml(String(fonteTextualRaw).slice(0, 200))}${String(fonteTextualRaw).length > 200 ? '…' : ''}</span>`
+    : `<span class="text-secondary">${ni}</span>`;
+
+  return `
+    <details class="cct-traceability mt-2">
+      <summary class="cct-traceability-toggle">🔍 Rastreabilidade</summary>
+      <dl class="row cct-traceability-fields small mt-1 mb-0">
+        <dt class="col-5">Origem</dt>
+        <dd class="col-7">${origemDisplay}</dd>
+        <dt class="col-5">Fonte</dt>
+        <dd class="col-7">${fmt(item.fonte ?? null)}</dd>
+        <dt class="col-5">Trecho fonte</dt>
+        <dd class="col-7">${fonteTextualDisplay}</dd>
+        <dt class="col-5">Página</dt>
+        <dd class="col-7">${fmt(item.pagina ?? null)}</dd>
+        <dt class="col-5">Data extração</dt>
+        <dd class="col-7">${fmt(item.data_extracao ?? null)}</dd>
+        <dt class="col-5">Status</dt>
+        <dd class="col-7">${statusDisplay}</dd>
+      </dl>
+    </details>`;
 }
 
 /**

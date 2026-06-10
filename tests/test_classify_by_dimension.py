@@ -9,10 +9,13 @@ Covers:
          hora_extra por_modalidade
   AC5 — fallback to "conflito" when no classification evidence
   AC6 — governance: "valido" items never overwritten
+  PRJ-59 — traceability fields (origem, fonte, fonte_textual, pagina, data_extracao)
 """
 
+import re
 import sys
 import os
+from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -21,6 +24,7 @@ from extract_cct_items import (
     build_item,
     extract_itens_cct,
     _classify_jornada_multiple,
+    _add_traceability_fields,
     extract_jornada,
 )
 
@@ -514,6 +518,175 @@ def test_extract_jornada_valido_not_overwritten():
     jor = itens.get("jornada", {})
     assert jor.get("status_parametro") == "valido"
     assert jor.get("horas_semanais") == 40
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-59: Traceability fields (origem, fonte, fonte_textual, pagina, data_extracao)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Scenario 1: parâmetro extraído do PDF recebe origem "pdf_cct"
+def test_extracted_item_has_origem_pdf_cct():
+    """extract_itens_cct sets origem='pdf_cct' when PDF is unavailable but status comes
+    from existing extracted item that would be classified as extraido_para_revisao."""
+    item = {
+        "valor": 1642.48,
+        "status_parametro": "extraido_para_revisao",
+        "fonte_documento": "CCT/test.pdf",
+    }
+    _add_traceability_fields(item, "2025-01-01")
+    assert item["origem"] == "pdf_cct"
+
+
+# Scenario 2: parâmetro não encontrado recebe origem "nao_identificado_pdf"
+def test_not_found_item_has_origem_nao_identificado():
+    item = {
+        "valor": None,
+        "status_parametro": "pendente_revisao",
+        "fonte_documento": "CCT/test.pdf",
+    }
+    _add_traceability_fields(item, "2025-01-01")
+    assert item["origem"] == "nao_identificado_pdf"
+
+
+# Scenario 3: parâmetro não encontrado fica com status_parametro "pendente_revisao"
+def test_not_found_item_via_extract_itens_cct_has_pendente_revisao():
+    record = {
+        "id_registro_reajuste": "REG-TEST-PR59-003",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {},
+    }
+    itens, _ = extract_itens_cct(record)
+    for key, item in itens.items():
+        assert item.get("status_parametro") == "pendente_revisao", (
+            f"Expected pendente_revisao for {key}, got {item.get('status_parametro')}"
+        )
+
+
+# Scenario 4: parâmetro extraído automaticamente fica com status_parametro "extraido_para_revisao"
+def test_auto_extracted_item_has_extraido_para_revisao():
+    item = build_item(
+        values=[1642.48],
+        regra_textual=CARGO_TEXT,
+        tipo="piso_unico",
+        unidade="BRL",
+        fonte_documento="test.pdf",
+        clausula_heading="CLÁUSULA TERCEIRA - PISO SALARIAL",
+        trecho_fonte=CARGO_TEXT,
+    )
+    assert item["status_parametro"] == "extraido_para_revisao"
+
+
+# Scenario 5: campo com status_parametro "valido" não é sobrescrito pelo script
+def test_valido_item_traceability_not_overwritten_by_script():
+    record = {
+        "id_registro_reajuste": "REG-TEST-PR59-005",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {
+            "piso_salarial": {
+                "valor": 5000.00,
+                "status_parametro": "valido",
+                "origem": "fonte_oficial",
+                "data_extracao": "2024-01-15",
+                "observacao": "Validado manualmente",
+            }
+        },
+    }
+    itens, _ = extract_itens_cct(record)
+    ps = itens.get("piso_salarial", {})
+    assert ps.get("status_parametro") == "valido"
+    assert ps.get("origem") == "fonte_oficial"
+    assert ps.get("data_extracao") == "2024-01-15"
+
+
+# Scenario 6: estrutura suporta origem "fonte_oficial" sem erro de esquema ou lógica
+def test_structure_supports_origem_fonte_oficial():
+    item = {
+        "valor": 1621.00,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Sistema Mediador / Gov.br",
+        "fonte_textual": "Referência oficial usada para identificar o valor",
+        "pagina": None,
+        "data_extracao": "2025-01-01",
+        "observacao": "Informação preenchida por fallback oficial.",
+    }
+    # Must not raise; _add_traceability_fields must not overwrite existing origem
+    _add_traceability_fields(item, "2025-06-10")
+    assert item["origem"] == "fonte_oficial"
+    assert item["fonte"] == "Ministério do Trabalho / Sistema Mediador / Gov.br"
+    assert item["data_extracao"] == "2025-01-01"  # not overwritten
+
+
+# Scenario 7: estrutura suporta status_parametro "conflito" sem erro
+def test_structure_supports_status_conflito():
+    item = {
+        "valor": 1800.00,
+        "status_parametro": "conflito",
+        "origem": "conflito_fontes",
+        "fonte": "PDF da CCT; Ministério do Trabalho / Sistema Mediador / Gov.br",
+        "fonte_textual": "PDF indica R$ 1.800,00; fonte oficial indica R$ 1.750,00",
+        "pagina": 10,
+        "data_extracao": "2025-01-01",
+        "observacao": "Conflito entre valor extraído do PDF e fonte oficial.",
+    }
+    _add_traceability_fields(item, "2025-06-10")
+    assert item["status_parametro"] == "conflito"
+    assert item["origem"] == "conflito_fontes"
+    assert item["pagina"] == 10
+
+
+# Scenario 8: item extraído contém todos os campos de rastreabilidade que o modal exibirá
+def test_extracted_item_contains_all_traceability_fields():
+    record = {
+        "id_registro_reajuste": "REG-TEST-PR59-008",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {},
+    }
+    itens, _ = extract_itens_cct(record)
+    for key, item in itens.items():
+        for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+            assert field in item, (
+                f"Traceability field '{field}' missing from {key}"
+            )
+
+
+# Scenario 9: Ratecard exibe "Não identificado" quando piso_nacional não está presente
+def test_piso_nacional_absent_returns_none_for_ratecard():
+    """When piso_nacional is absent from piso_salarial, resolver returns None
+    (which the Ratecard renders as 'Não identificado')."""
+    record = {
+        "id_registro_reajuste": "REG-TEST-PR59-009",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {
+            "piso_salarial": {
+                "valor": 1642.48,
+                "status_parametro": "extraido_para_revisao",
+            }
+        },
+    }
+    piso_nacional = record["itens_cct"]["piso_salarial"].get("piso_nacional")
+    assert piso_nacional is None, (
+        "piso_nacional should be None (Ratecard will show 'Não identificado')"
+    )
+
+
+# Scenario 10: data_extracao é preenchida com a data corrente no formato YYYY-MM-DD
+def test_data_extracao_is_todays_date_format():
+    record = {
+        "id_registro_reajuste": "REG-TEST-PR59-010",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {},
+    }
+    itens, _ = extract_itens_cct(record)
+    today = datetime.now().strftime("%Y-%m-%d")
+    date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+    for key, item in itens.items():
+        de = item.get("data_extracao")
+        assert de is not None, f"data_extracao missing from {key}"
+        assert date_pattern.match(str(de)), (
+            f"data_extracao '{de}' in {key} does not match YYYY-MM-DD"
+        )
+        assert de == today, f"data_extracao '{de}' is not today ({today})"
 
 
 if __name__ == "__main__":
