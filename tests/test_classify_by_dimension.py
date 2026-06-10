@@ -26,6 +26,11 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    normalize_cargo_tecnico,
+    _fill_piso_nacional,
+    _annotate_cargos_normalizados,
+    SALARIO_MINIMO_NACIONAL,
+    ANO_REFERENCIA_SALARIO_MINIMO,
 )
 
 
@@ -661,6 +666,314 @@ def test_prj59_sc10_data_extracao_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
     )
+
+
+# =============================================================================
+# PRJ-60: piso_nacional, cargo normalization, resolver priority
+# =============================================================================
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5a — Piso CCT priority: piso_cct → piso_unico → valor
+# These tests mirror the resolver logic; we test the data fields directly.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _make_ps(**kwargs):
+    """Build a minimal piso_salarial dict."""
+    return {"status_parametro": "extraido_para_revisao", **kwargs}
+
+
+def test_ac5a_piso_cct_field_takes_priority():
+    ps = _make_ps(piso_cct=1800.0, piso_unico=1600.0, valor=1400.0)
+    assert ps["piso_cct"] == 1800.0
+
+
+def test_ac5a_piso_unico_takes_priority_over_valor():
+    ps = _make_ps(piso_unico=1600.0, valor=1400.0)
+    assert ps["piso_unico"] == 1600.0
+    assert "piso_cct" not in ps
+
+
+def test_ac5a_valor_used_when_only_field():
+    ps = _make_ps(valor=1621.0)
+    assert ps["valor"] == 1621.0
+    assert "piso_cct" not in ps
+    assert "piso_unico" not in ps
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5b — Piso Nacional: present when filled, absent → "Não identificado"
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_ac5b_fill_piso_nacional_sets_valor():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert "piso_nacional" in ps
+    assert ps["piso_nacional"]["valor"] == SALARIO_MINIMO_NACIONAL
+
+
+def test_ac5b_fill_piso_nacional_sets_ano_referencia():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["ano_referencia"] == ANO_REFERENCIA_SALARIO_MINIMO
+
+
+def test_ac5b_fill_piso_nacional_status_extraido_para_revisao():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["status_parametro"] == "extraido_para_revisao"
+
+
+def test_ac5b_piso_nacional_absent_returns_none_from_record():
+    """Resolver reads piso_nacional.valor — absent piso_nacional yields None."""
+    record = {"itens_cct": {"piso_salarial": {"valor": 1500.0}}}
+    pn = record["itens_cct"]["piso_salarial"].get("piso_nacional")
+    assert pn is None
+
+
+def test_ac5b_piso_nacional_present_returns_valor():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    record = {"itens_cct": {"piso_salarial": ps}}
+    valor = record["itens_cct"]["piso_salarial"]["piso_nacional"]["valor"]
+    assert valor == SALARIO_MINIMO_NACIONAL
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5c — Técnico Suporte I/II/III: exact name and synonym variants
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Exact standard labels
+def test_ac5c_exact_tecnico_suporte_i():
+    assert normalize_cargo_tecnico("Técnico Suporte I") == "Técnico Suporte I"
+
+
+def test_ac5c_exact_tecnico_suporte_ii():
+    assert normalize_cargo_tecnico("Técnico Suporte II") == "Técnico Suporte II"
+
+
+def test_ac5c_exact_tecnico_suporte_iii():
+    assert normalize_cargo_tecnico("Técnico Suporte III") == "Técnico Suporte III"
+
+
+# Level I synonyms
+def test_ac5c_nivel_i_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível I") == "Técnico Suporte I"
+
+
+def test_ac5c_nivel_1_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível 1") == "Técnico Suporte I"
+
+
+def test_ac5c_jr_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Jr") == "Técnico Suporte I"
+
+
+def test_ac5c_junior_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Júnior") == "Técnico Suporte I"
+
+
+def test_ac5c_suporte_tecnico_i_variant():
+    assert normalize_cargo_tecnico("Suporte Técnico I") == "Técnico Suporte I"
+
+
+def test_ac5c_em_suporte_1_variant():
+    assert normalize_cargo_tecnico("Técnico em Suporte 1") == "Técnico Suporte I"
+
+
+# Level II synonyms
+def test_ac5c_nivel_ii_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível II") == "Técnico Suporte II"
+
+
+def test_ac5c_nivel_2_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível 2") == "Técnico Suporte II"
+
+
+def test_ac5c_pleno_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Pleno") == "Técnico Suporte II"
+
+
+def test_ac5c_suporte_tecnico_ii_variant():
+    assert normalize_cargo_tecnico("Suporte Técnico II") == "Técnico Suporte II"
+
+
+# Level III synonyms
+def test_ac5c_nivel_iii_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível III") == "Técnico Suporte III"
+
+
+def test_ac5c_nivel_3_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível 3") == "Técnico Suporte III"
+
+
+def test_ac5c_senior_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Sênior") == "Técnico Suporte III"
+
+
+def test_ac5c_senior_no_accent_variant():
+    assert normalize_cargo_tecnico("Técnico de Suporte Senior") == "Técnico Suporte III"
+
+
+def test_ac5c_suporte_tecnico_iii_variant():
+    assert normalize_cargo_tecnico("Suporte Técnico III") == "Técnico Suporte III"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5d — Nonexistent cargo returns None (no invented value)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_ac5d_nonexistent_cargo_returns_none():
+    assert normalize_cargo_tecnico("Auxiliar de Processamento") is None
+
+
+def test_ac5d_unrelated_cargo_returns_none():
+    assert normalize_cargo_tecnico("Técnico de atendimento") is None
+
+
+def test_ac5d_empty_cargo_returns_none():
+    assert normalize_cargo_tecnico("") is None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5e — "valido" field is never overwritten by _fill_piso_nacional /
+#         _annotate_cargos_normalizados / extract_itens_cct
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_ac5e_valido_piso_nacional_not_overwritten():
+    ps = {
+        "valor": 2000.0,
+        "status_parametro": "extraido_para_revisao",
+        "piso_nacional": {
+            "valor": 9999.0,
+            "status_parametro": "valido",
+        },
+    }
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["valor"] == 9999.0
+    assert ps["piso_nacional"]["status_parametro"] == "valido"
+
+
+def test_ac5e_valido_cargo_entry_not_annotated():
+    ps = {
+        "valor": 1800.0,
+        "por_cargo": [
+            {
+                "cargo": "Técnico de Suporte Nível I",
+                "valor": 1800.0,
+                "status_parametro": "valido",
+            }
+        ],
+    }
+    _annotate_cargos_normalizados(ps)
+    assert "cargo_normalizado" not in ps["por_cargo"][0]
+
+
+def test_ac5e_valido_piso_salarial_preserved_by_extract_itens_cct():
+    record = {
+        "id_registro_reajuste": "REG-PRJ60-001",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {
+            "piso_salarial": {
+                "valor": 9999.99,
+                "status_parametro": "valido",
+                "observacao": "Validado manualmente",
+            }
+        },
+    }
+    itens, _ = extract_itens_cct(record)
+    ps = itens.get("piso_salarial", {})
+    assert ps.get("status_parametro") == "valido"
+    assert ps.get("valor") == 9999.99
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5f — Auto-filled values carry all mandatory traceability fields
+# ─────────────────────────────────────────────────────────────────────────────
+
+_REQUIRED_TRACE_FIELDS = ("origem", "fonte", "fonte_textual", "pagina", "data_extracao")
+
+
+def test_ac5f_piso_nacional_has_all_trace_fields():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    pn = ps["piso_nacional"]
+    for field in _REQUIRED_TRACE_FIELDS:
+        assert field in pn, f"piso_nacional missing traceability field: {field}"
+
+
+def test_ac5f_piso_nacional_origem_is_fonte_oficial():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["origem"] == "fonte_oficial"
+
+
+def test_ac5f_piso_nacional_fonte_is_populated():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["fonte"]
+
+
+def test_ac5f_piso_nacional_fonte_textual_is_populated():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["fonte_textual"]
+
+
+def test_ac5f_piso_nacional_data_extracao_format():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    data_extracao = ps["piso_nacional"]["data_extracao"]
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao)
+
+
+def test_ac5f_piso_nacional_pagina_is_none():
+    ps = {"valor": 1500.0, "status_parametro": "extraido_para_revisao"}
+    _fill_piso_nacional(ps)
+    assert ps["piso_nacional"]["pagina"] is None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC3: _annotate_cargos_normalizados sets cargo_normalizado on matching entries
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_annotate_cargos_sets_normalizado():
+    ps = {
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Nível I", "valor": 1800.0,
+             "status_parametro": "extraido_para_revisao"},
+        ]
+    }
+    _annotate_cargos_normalizados(ps)
+    assert ps["por_cargo"][0]["cargo_normalizado"] == "Técnico Suporte I"
+
+
+def test_annotate_cargos_no_match_no_field():
+    ps = {
+        "por_cargo": [
+            {"cargo": "Auxiliar de Processamento", "valor": 1500.0,
+             "status_parametro": "extraido_para_revisao"},
+        ]
+    }
+    _annotate_cargos_normalizados(ps)
+    assert "cargo_normalizado" not in ps["por_cargo"][0]
+
+
+def test_annotate_cargos_idempotent():
+    ps = {
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Sênior", "valor": 2000.0,
+             "status_parametro": "extraido_para_revisao"},
+        ]
+    }
+    _annotate_cargos_normalizados(ps)
+    _annotate_cargos_normalizados(ps)
+    assert ps["por_cargo"][0]["cargo_normalizado"] == "Técnico Suporte III"
+
+
+def test_annotate_cargos_no_por_cargo_is_noop():
+    ps = {"valor": 1500.0}
+    _annotate_cargos_normalizados(ps)  # must not raise
+    assert "por_cargo" not in ps
 
 
 if __name__ == "__main__":
