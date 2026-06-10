@@ -153,12 +153,46 @@
         "observacao": null,
         "data_validacao": null,
         "origem_atualizacao": null
+      },
+      "jornada": {
+        "valor": 44,
+        "percentual": null,
+        "horas_semanais": 44,
+        "horas_mensais": 191,
+        "horas_diarias": 7.3,
+        "opcoes_identificadas": ["44h semanais"],
+        "valor_textual": "44h/sem · 191h/mês",
+        "regra_textual": "Jornada de 44 horas semanais.",
+        "tipo": "jornada",
+        "unidade": "h/semana",
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "clausula": "CLÁUSULA — JORNADA DE TRABALHO",
+        "trecho_fonte": "A jornada de trabalho dos empregados é de 44 horas semanais.",
+        "observacao": null,
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "data_validacao": "2025-04-10T09:55:00",
+        "origem_atualizacao": "importacao_pdf"
+      },
+      "jornada_12x36_exemplo": {
+        "_comentario": "Exemplo de jornada 12x36: horas_diarias=null por regime de turno variável",
+        "valor": null,
+        "percentual": null,
+        "horas_semanais": null,
+        "horas_mensais": null,
+        "horas_diarias": null,
+        "opcoes_identificadas": ["12×36"],
+        "valor_textual": "12×36",
+        "tipo": "jornada",
+        "unidade": "regime",
+        "observacao": "Horas diárias não calculáveis: regime 12×36 tem turno variável",
+        "status_parametro": "extraido_para_revisao"
       }
     }
   },
   {
     "id_registro_reajuste": null,
-    "ids_registros_conflitantes": ["REG-003", "REG-004"],
     "sindicato": "SENALBA-SP",
     "uf": "SP",
     "categoria": "Trabalhadores em Empresas de Asseio e Conservação",

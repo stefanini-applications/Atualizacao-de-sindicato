@@ -332,6 +332,159 @@ def test_trecho_fonte_is_truncated():
         assert len(entry["trecho_fonte"]) <= 305  # 300 + possible ellipsis
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-58: _classify_jornada_multiple — por_escala valor_textual and horas_diarias
+# ─────────────────────────────────────────────────────────────────────────────
+
+from extract_cct_items import _classify_jornada_multiple, extract_jornada
+
+
+JORNADA_12X36_TEXT = """
+CLÁUSULA DÉCIMA - JORNADA DE TRABALHO
+Os empregados submetidos ao regime de escala 12×36 trabalham 12 horas
+com descanso subsequente de 36 horas.
+"""
+
+JORNADA_6X1_TEXT = """
+CLÁUSULA DÉCIMA - JORNADA DE TRABALHO
+A jornada de trabalho obedece à escala 6×1, com 44 horas semanais.
+"""
+
+JORNADA_5X2_TEXT = """
+CLÁUSULA DÉCIMA - JORNADA DE TRABALHO
+A jornada obedece ao regime 5×2 com jornada de 40 horas semanais.
+"""
+
+JORNADA_MULTIPLA_TEXT = """
+CLÁUSULA DÉCIMA - JORNADA DE TRABALHO
+Para trabalhadores em regime parcial: 40 horas semanais.
+Para trabalhadores em regime integral: 44 horas semanais.
+"""
+
+
+def _make_clauses(heading, body):
+    from extract_cct_items import normalize
+    return [{"heading": heading, "heading_n": normalize(heading), "body": body}]
+
+
+# --- 12×36: por_escala entry has valor_textual; horas_diarias is None ---
+
+def test_12x36_por_escala_has_valor_textual():
+    result = _classify_jornada_multiple(JORNADA_12X36_TEXT)
+    assert "por_escala" in result
+    entry = next((e for e in result["por_escala"] if e["label"] == "12x36"), None)
+    assert entry is not None
+    assert entry.get("valor_textual") == "12×36"
+
+
+def test_12x36_por_escala_horas_diarias_is_none():
+    result = _classify_jornada_multiple(JORNADA_12X36_TEXT)
+    entry = next((e for e in result["por_escala"] if e["label"] == "12x36"), None)
+    assert entry is not None
+    assert entry.get("horas_diarias") is None
+
+
+def test_12x36_per_escala_has_observacao():
+    result = _classify_jornada_multiple(JORNADA_12X36_TEXT)
+    entry = next((e for e in result["por_escala"] if e["label"] == "12x36"), None)
+    assert entry is not None
+    assert entry.get("observacao") is not None
+    assert "12×36" in entry["observacao"]
+
+
+# --- 6×1: por_escala entry has horas_diarias calculated ---
+
+def test_6x1_por_escala_valor_textual():
+    result = _classify_jornada_multiple(JORNADA_6X1_TEXT)
+    assert "por_escala" in result
+    entry = next((e for e in result["por_escala"] if e["label"] == "6x1"), None)
+    assert entry is not None
+    assert entry.get("valor_textual") == "6×1"
+
+
+def test_6x1_por_escala_horas_diarias_calculated():
+    result = _classify_jornada_multiple(JORNADA_6X1_TEXT)
+    entry = next((e for e in result["por_escala"] if e["label"] == "6x1"), None)
+    assert entry is not None
+    hd = entry.get("horas_diarias")
+    assert hd is not None
+    assert abs(hd - round(44 / 6, 1)) < 0.01
+
+
+# --- 5×2: por_escala entry has horas_diarias calculated ---
+
+def test_5x2_por_escala_valor_textual():
+    result = _classify_jornada_multiple(JORNADA_5X2_TEXT)
+    assert "por_escala" in result
+    entry = next((e for e in result["por_escala"] if e["label"] == "5x2"), None)
+    assert entry is not None
+    assert entry.get("valor_textual") == "5×2"
+
+
+def test_5x2_por_escala_horas_diarias_calculated():
+    result = _classify_jornada_multiple(JORNADA_5X2_TEXT)
+    entry = next((e for e in result["por_escala"] if e["label"] == "5x2"), None)
+    assert entry is not None
+    hd = entry.get("horas_diarias")
+    assert hd is not None
+    assert abs(hd - 8.0) < 0.01
+
+
+# --- Multiple jornadas: status_parametro == "extraido_para_revisao", not "conflito" ---
+
+def test_multiple_jornadas_status_not_conflito():
+    clauses = _make_clauses(
+        "CLÁUSULA DÉCIMA - JORNADA DE TRABALHO",
+        JORNADA_MULTIPLA_TEXT,
+    )
+    item = extract_jornada(clauses, "test.pdf")
+    assert item["status_parametro"] == "extraido_para_revisao"
+    assert item.get("status_parametro") != "conflito"
+
+
+def test_multiple_jornadas_observacao_lists_values():
+    clauses = _make_clauses(
+        "CLÁUSULA DÉCIMA - JORNADA DE TRABALHO",
+        JORNADA_MULTIPLA_TEXT,
+    )
+    item = extract_jornada(clauses, "test.pdf")
+    obs = item.get("observacao") or ""
+    assert "Múltiplas jornadas identificadas" in obs
+    assert "44" in obs
+    assert "40" in obs
+
+
+# --- extract_jornada: horas_mensais and opcoes_identificadas as array ---
+
+def test_extract_jornada_horas_mensais_calculated():
+    clauses = _make_clauses(
+        "CLÁUSULA - JORNADA DE TRABALHO",
+        "A jornada de trabalho é de 44 horas semanais.",
+    )
+    item = extract_jornada(clauses, "test.pdf")
+    assert item.get("horas_mensais") == round(44 * 4.3333)
+
+
+def test_extract_jornada_opcoes_identificadas_is_list():
+    clauses = _make_clauses(
+        "CLÁUSULA - JORNADA DE TRABALHO",
+        "A jornada de trabalho é de 44 horas semanais.",
+    )
+    item = extract_jornada(clauses, "test.pdf")
+    assert isinstance(item.get("opcoes_identificadas"), list)
+
+
+def test_extract_jornada_valor_textual_format():
+    clauses = _make_clauses(
+        "CLÁUSULA - JORNADA DE TRABALHO",
+        "A jornada de trabalho é de 44 horas semanais.",
+    )
+    item = extract_jornada(clauses, "test.pdf")
+    vt = item.get("valor_textual", "")
+    assert "h/sem" in vt
+    assert "h/mês" in vt
+
+
 if __name__ == "__main__":
     import pytest
     pytest.main([__file__, "-v"])
