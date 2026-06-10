@@ -115,7 +115,8 @@ const EMBEDDED_DEMO = {
           data_validacao: '2025-04-10T09:50:00', origem_atualizacao: 'importacao_pdf',
         },
         jornada: {
-          horas_semanais: 44, opcoes_identificadas: '44h',
+          horas_semanais: 44, horas_mensais: 191, horas_diarias: 8.8,
+          opcoes_identificadas: ['44h semanais'],
           regra_textual: 'Jornada de 44 horas semanais.',
           tipo: 'horas_semanais', unidade: 'horas',
           status_parametro: 'valido', conflito: false, ids_registros_conflitantes: null,
@@ -229,7 +230,8 @@ const EMBEDDED_DEMO = {
           status_parametro: 'extraido_para_revisao', conflito: false, ids_registros_conflitantes: null,
         },
         jornada: {
-          horas_semanais: 44, opcoes_identificadas: '44h',
+          horas_semanais: 44, horas_mensais: 191, horas_diarias: 8.8,
+          opcoes_identificadas: ['44h semanais'],
           regra_textual: 'Jornada de trabalho de 44 horas semanais.',
           tipo: 'horas_semanais', unidade: 'horas',
           clausula: null,
@@ -1524,6 +1526,8 @@ const CCT_ITEM_FIELDS = {
   ],
   jornada: [
     { key: 'horas_semanais', label: 'Horas semanais', type: 'number', unit: null },
+    { key: 'horas_mensais', label: 'Horas mensais', type: 'number', unit: null },
+    { key: 'horas_diarias', label: 'Horas diárias', type: 'number', unit: null },
     { key: 'opcoes_identificadas', label: 'Opções identificadas', type: 'text', unit: null },
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
@@ -2243,31 +2247,45 @@ function fmtVR(vrItem) {
  * Formats jornada for table display (AC7).
  * Supports real-data schema (valor_textual: '44h/semana', unidade: 'h/semana') and
  * demo-data schema (horas_semanais, tipo: 'horas_semanais').
+ * Displays "Xh/sem · Yh/mês" when both fields are available.
+ * Falls back to the first por_escala regime label when no weekly hours are present.
  */
 function fmtJornada(jornadaItem) {
   if (!jornadaItem) return '—';
-  // Pre-formatted textual value (real-data schema)
+
+  // Prefer computed weekly + monthly hours: "Xh/sem · Yh/mês"
+  const semanais = jornadaItem.horas_semanais ?? jornadaItem.valor;
+  const mensais = jornadaItem.horas_mensais;
+  if (semanais != null && !isNaN(Number(semanais))) {
+    const s = Number(semanais);
+    if (mensais != null && !isNaN(Number(mensais))) {
+      return `${s}h/sem · ${Number(mensais)}h/mês`;
+    }
+    const unidade = jornadaItem.unidade ?? '';
+    if (unidade === 'h/semana' || unidade === 'horas' || jornadaItem.tipo === 'horas_semanais') {
+      return `${s}h/sem`;
+    }
+    if (unidade === 'h/mes' || jornadaItem.tipo === 'horas_mensais') {
+      return `${s}h/mês`;
+    }
+    return `${s}h/sem`;
+  }
+
+  // Escala-only: use the display label from the first por_escala entry
+  if (Array.isArray(jornadaItem.por_escala) && jornadaItem.por_escala.length > 0) {
+    const first = jornadaItem.por_escala[0];
+    return escapeHtml(String(first.valor_textual || first.label || '').slice(0, 22));
+  }
+
+  // Fallback: pre-formatted valor_textual (excluding regra_textual)
   const vt = jornadaItem.valor_textual;
   if (vt != null && vt !== '') return escapeHtml(String(vt).slice(0, 22));
-  // Numeric value with unit
-  const v = jornadaItem.valor ?? jornadaItem.horas_semanais;
-  if (v != null) {
-    const n = Number(v);
-    if (!isNaN(n)) {
-      const unidade = jornadaItem.unidade ?? '';
-      if (unidade === 'h/semana' || unidade === 'horas' || jornadaItem.tipo === 'horas_semanais') {
-        return `${n}h semanais`;
-      }
-      if (unidade === 'h/mes' || jornadaItem.tipo === 'horas_mensais') {
-        return `${n}h mensais`;
-      }
-      return `${n}h`;
-    }
-  }
-  if (jornadaItem.horas_mensais != null) return `${jornadaItem.horas_mensais}h mensais`;
-  if (jornadaItem.opcoes_identificadas != null) {
-    return escapeHtml(String(jornadaItem.opcoes_identificadas).slice(0, 22));
-  }
+
+  // opcoes_identificadas — support both array and legacy string form
+  const oi = jornadaItem.opcoes_identificadas;
+  if (Array.isArray(oi) && oi.length > 0) return escapeHtml(String(oi[0]).slice(0, 22));
+  if (oi != null && oi !== '') return escapeHtml(String(oi).slice(0, 22));
+
   return '—';
 }
 

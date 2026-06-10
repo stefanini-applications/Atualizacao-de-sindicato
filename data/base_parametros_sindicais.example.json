@@ -75,6 +75,32 @@
         "observacao": null,
         "data_validacao": null,
         "origem_atualizacao": null
+      },
+      "jornada": {
+        "valor": null,
+        "percentual": null,
+        "horas_semanais": null,
+        "horas_mensais": null,
+        "horas_diarias": null,
+        "opcoes_identificadas": [],
+        "valor_textual": "12×36",
+        "regra_textual": "Jornada em regime de escala 12×36.",
+        "tipo": "jornada",
+        "unidade": "regime",
+        "status_parametro": "extraido_para_revisao",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SESCON/2025.pdf",
+        "observacao": null,
+        "data_validacao": null,
+        "origem_atualizacao": null,
+        "por_escala": [
+          {
+            "label": "12x36",
+            "valor_textual": "12×36",
+            "trecho_fonte": "Jornada em regime de escala 12×36."
+          }
+        ]
       }
     }
   },
@@ -153,6 +179,25 @@
         "observacao": null,
         "data_validacao": null,
         "origem_atualizacao": null
+      },
+      "jornada": {
+        "valor": 44.0,
+        "percentual": null,
+        "horas_semanais": 44,
+        "horas_mensais": 191,
+        "horas_diarias": 8.8,
+        "opcoes_identificadas": ["44h semanais"],
+        "valor_textual": "44h/semana",
+        "regra_textual": "Jornada de trabalho de 44 (quarenta e quatro) horas semanais.",
+        "tipo": "jornada",
+        "unidade": "h/semana",
+        "status_parametro": "valido",
+        "conflito": false,
+        "ids_registros_conflitantes": null,
+        "fonte_documento": "CCT/MG/SINTTEL/2025.pdf",
+        "observacao": null,
+        "data_validacao": "2025-04-10T09:52:00",
+        "origem_atualizacao": "importacao_pdf"
       }
     }
   },

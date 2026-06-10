@@ -387,7 +387,29 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"6\s*[xX×]\s*1\b", "6x1"),
         (r"5\s*[xX×]\s*2\b", "5x2"),
         (r"4\s*[xX×]\s*3\b", "4x3"),
+        (r"4\s*[xX×]\s*2\b", "4x2"),
     ],
+}
+
+# Human-readable display form for each escala label (used in valor_textual)
+_ESCALA_DISPLAY: dict[str, str] = {
+    "12x36": "12×36",
+    "5x1": "5×1",
+    "6x1": "6×1",
+    "5x2": "5×2",
+    "4x3": "4×3",
+    "4x2": "4×2",
+}
+
+# Days per week for each escala, used to calculate horas_diarias.
+# None means horas_diarias cannot be calculated for that regime.
+_ESCALA_DIAS_SEMANA: dict[str, int | None] = {
+    "5x2": 5,
+    "6x1": 6,
+    "5x1": 5,
+    "4x3": 4,
+    "4x2": 4,
+    "12x36": None,  # alternating 12-hour shifts, daily hours not derivable from weekly
 }
 
 # Maps each param_type to the dimensions that should be attempted for classification.
@@ -936,6 +958,7 @@ def _classify_jornada_multiple(full_text: str) -> dict:
             escala_entries.append(
                 {
                     "label": label,
+                    "valor_textual": _ESCALA_DISPLAY.get(label, label),
                     "trecho_fonte": _truncate(trecho, 300),
                 }
             )
@@ -945,8 +968,41 @@ def _classify_jornada_multiple(full_text: str) -> dict:
     return result
 
 
+def _detect_regime(full_text: str) -> str | None:
+    """Return the first NxM escala label found in the text, or None."""
+    text_n = normalize(full_text)
+    for pattern, label in DIMENSION_PATTERNS["escala"]:
+        if re.search(pattern, text_n):
+            return label
+    return None
+
+
+def _calc_horas_mensais(horas_semanais: float) -> int:
+    """Calculate monthly hours as horas_semanais × 4.3333, rounded to int."""
+    return round(horas_semanais * 4.3333)
+
+
+def _calc_horas_diarias(horas_semanais: float, regime: str | None) -> tuple[float | None, str | None]:
+    """
+    Calculate daily hours based on weekly hours and detected regime.
+
+    Returns (horas_diarias, observacao_note).
+    horas_diarias is None when the regime makes daily hours non-derivable.
+    """
+    if regime is None:
+        # No regime identified — default to 5-day week (most common office schedule)
+        dias = 5
+        obs = None
+    else:
+        dias = _ESCALA_DIAS_SEMANA.get(regime)
+        if dias is None:
+            return None, f"horas_diarias não calculável para regime {_ESCALA_DISPLAY.get(regime, regime)}"
+        obs = None
+    return round(horas_semanais / dias, 1), obs
+
+
 def extract_jornada(clauses: list[dict], fonte: str) -> dict:
-    """Extract work schedule (hours/week)."""
+    """Extract work schedule (hours/week) with computed horas_mensais and horas_diarias."""
     matched = find_clauses(
         clauses,
         r"jornada\s+de\s+trabalho",
@@ -980,11 +1036,16 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         # Look for NxM scale patterns before giving up
         structured = _classify_jornada_multiple(full_text)
         if structured.get("por_escala"):
-            first_escala = structured["por_escala"][0]["label"]
+            first_entry = structured["por_escala"][0]
+            first_escala_display = first_entry.get("valor_textual") or first_entry["label"]
             item = {
                 "valor": None,
                 "percentual": None,
-                "valor_textual": first_escala,
+                "horas_semanais": None,
+                "horas_mensais": None,
+                "horas_diarias": None,
+                "opcoes_identificadas": [],
+                "valor_textual": first_escala_display,
                 "regra_textual": _truncate(full_text, 800),
                 "tipo": "jornada",
                 "unidade": "regime",
@@ -999,6 +1060,10 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         return {
             "valor": None,
             "percentual": None,
+            "horas_semanais": None,
+            "horas_mensais": None,
+            "horas_diarias": None,
+            "opcoes_identificadas": [],
             "valor_textual": None,
             "regra_textual": _truncate(full_text, 800),
             "tipo": "jornada",
@@ -1012,14 +1077,29 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
 
     primary = hours[0]
     unique_hours = list(dict.fromkeys(hours))
+    regime = _detect_regime(full_text)
+    horas_mensais = _calc_horas_mensais(primary)
+    horas_diarias, diarias_obs = _calc_horas_diarias(primary, regime)
+
+    # Collect opcoes_identificadas from matched jornada labels
+    opcoes: list[str] = []
+    text_n_full = normalize(full_text)
+    for h in unique_hours:
+        opcoes.append(f"{h:.0f}h semanais")
 
     if len(unique_hours) > 1:
         # Multiple schedules — produce structured sub-items instead of "conflito"
         structured = _classify_jornada_multiple(full_text)
-        obs = f"Múltiplas jornadas identificadas: {', '.join(str(h) for h in unique_hours)}h/sem"
+        obs_parts = [f"Múltiplas jornadas identificadas: {', '.join(str(int(h)) for h in unique_hours)}h/sem"]
+        if diarias_obs:
+            obs_parts.append(diarias_obs)
         item = {
             "valor": primary,
             "percentual": None,
+            "horas_semanais": int(primary),
+            "horas_mensais": horas_mensais,
+            "horas_diarias": horas_diarias,
+            "opcoes_identificadas": opcoes,
             "valor_textual": f"{primary:.0f}h/semana",
             "regra_textual": _truncate(full_text, 800),
             "tipo": "jornada",
@@ -1027,16 +1107,21 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
             "fonte_documento": fonte,
             "clausula": _truncate(clause["heading"], 200),
             "trecho_fonte": _truncate(full_text, 600),
-            "observacao": obs,
+            "observacao": "; ".join(obs_parts),
             "status_parametro": "extraido_para_revisao",
         }
         if structured:
             item.update(structured)
         return item
 
+    obs = diarias_obs
     return {
         "valor": primary,
         "percentual": None,
+        "horas_semanais": int(primary),
+        "horas_mensais": horas_mensais,
+        "horas_diarias": horas_diarias,
+        "opcoes_identificadas": opcoes,
         "valor_textual": f"{primary:.0f}h/semana",
         "regra_textual": _truncate(full_text, 800),
         "tipo": "jornada",
@@ -1044,7 +1129,7 @@ def extract_jornada(clauses: list[dict], fonte: str) -> dict:
         "fonte_documento": fonte,
         "clausula": _truncate(clause["heading"], 200),
         "trecho_fonte": _truncate(full_text, 600),
-        "observacao": None,
+        "observacao": obs,
         "status_parametro": "extraido_para_revisao",
     }
 
