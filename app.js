@@ -1093,6 +1093,35 @@ function buildCctItemsContent(record) {
   return html;
 }
 
+/**
+ * Builds the traceability section HTML for a CCT item (PRJ-59).
+ * Shows origem, fonte, fonte_textual, pagina, data_extracao, status_parametro.
+ * Null/absent fields display as "Não identificado".
+ */
+function buildTraceabilityHtml(item) {
+  const na = 'Não identificado';
+  const origem = item.origem != null ? escapeHtml(String(item.origem)) : na;
+  const fonte = item.fonte != null ? escapeHtml(String(item.fonte)) : na;
+  const fonteTextual = item.fonte_textual != null ? escapeHtml(String(item.fonte_textual)) : na;
+  const pagina = item.pagina != null ? escapeHtml(String(item.pagina)) : na;
+  const dataExtracao = item.data_extracao != null ? escapeHtml(String(item.data_extracao)) : na;
+  const statusParam = item.status_parametro != null ? escapeHtml(String(item.status_parametro)) : na;
+
+  return `
+    <details class="cct-trace-details mt-2">
+      <summary class="cct-trace-summary text-secondary small">🔍 Rastreabilidade</summary>
+      <dl class="row cct-trace-fields small mt-1 mb-0">
+        <dt class="col-5">Origem</dt><dd class="col-7">${origem}</dd>
+        <dt class="col-5">Fonte</dt><dd class="col-7">${fonte}</dd>
+        <dt class="col-5">Página</dt><dd class="col-7">${pagina}</dd>
+        <dt class="col-5">Data extração</dt><dd class="col-7">${dataExtracao}</dd>
+        <dt class="col-5">Status</dt><dd class="col-7">${statusParam}</dd>
+        <dt class="col-5">Trecho fonte</dt>
+        <dd class="col-7 cct-trace-trecho">${fonteTextual}</dd>
+      </dl>
+    </details>`;
+}
+
 function buildCctItemCard(itemKey, item) {
   const label = CCT_ITEM_LABELS[itemKey] ?? itemKey;
   const badge = statusBadgeItem(item);
@@ -1142,6 +1171,7 @@ function buildCctItemReadOnlyCard(itemKey, item, label, badge) {
         ${regraHtml}
         ${obsHtml}
         <div class="mt-1">${fonteHtml}</div>
+        ${buildTraceabilityHtml(item)}
       </div>
     </div>`;
 }
@@ -1233,6 +1263,7 @@ function buildCctItemEditCard(itemKey, item, label, badge) {
             </button>
           </div>
         </div>
+        ${buildTraceabilityHtml(item)}
       </div>
     </div>`;
 }

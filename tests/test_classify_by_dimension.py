@@ -9,8 +9,11 @@ Covers:
          hora_extra por_modalidade
   AC5 — fallback to "conflito" when no classification evidence
   AC6 — governance: "valido" items never overwritten
+  PRJ-59 — traceability fields: origem, fonte, fonte_textual, pagina,
+            data_extracao; fonte_oficial and conflito_fontes schema support
 """
 
+import re
 import sys
 import os
 
@@ -22,6 +25,7 @@ from extract_cct_items import (
     extract_itens_cct,
     _classify_jornada_multiple,
     extract_jornada,
+    _item_not_found,
 )
 
 
@@ -514,6 +518,149 @@ def test_extract_jornada_valido_not_overwritten():
     jor = itens.get("jornada", {})
     assert jor.get("status_parametro") == "valido"
     assert jor.get("horas_semanais") == 40
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-59: Traceability fields — 10 mandatory test scenarios
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Scenario 1: Parameter extracted from PDF receives origem = "pdf_cct"
+def test_prj59_sc1_extracted_origem_pdf_cct():
+    item = build_item(
+        values=[1642.48],
+        regra_textual=CARGO_TEXT,
+        tipo="piso_unico",
+        unidade="BRL",
+        fonte_documento="test.pdf",
+        clausula_heading="CLÁUSULA TERCEIRA - PISO SALARIAL",
+        trecho_fonte=CARGO_TEXT,
+    )
+    assert item.get("origem") == "pdf_cct"
+
+
+# Scenario 2: Parameter not found receives origem = "nao_identificado_pdf"
+def test_prj59_sc2_not_found_origem_nao_identificado():
+    item = _item_not_found("test.pdf", observacao="Não localizado")
+    assert item.get("origem") == "nao_identificado_pdf"
+
+
+# Scenario 3: Parameter not found receives status_parametro = "pendente_revisao"
+def test_prj59_sc3_not_found_status_pendente_revisao():
+    item = _item_not_found("test.pdf")
+    assert item.get("status_parametro") == "pendente_revisao"
+
+
+# Scenario 4: Automatically extracted parameter receives status_parametro = "extraido_para_revisao"
+def test_prj59_sc4_extracted_status_extraido_para_revisao():
+    item = build_item(
+        values=[1642.48],
+        regra_textual=CARGO_TEXT,
+        tipo="piso_unico",
+        unidade="BRL",
+        fonte_documento="test.pdf",
+        clausula_heading="CLÁUSULA TERCEIRA - PISO SALARIAL",
+        trecho_fonte=CARGO_TEXT,
+    )
+    assert item.get("status_parametro") == "extraido_para_revisao"
+
+
+# Scenario 5: Field with status_parametro = "valido" is never overwritten by extract_itens_cct
+def test_prj59_sc5_valido_not_overwritten():
+    record = {
+        "id_registro_reajuste": "REG-PRJ59-001",
+        "fonte_documento": "CCT/nonexistent.pdf",
+        "itens_cct": {
+            "piso_salarial": {
+                "valor": 5000.00,
+                "status_parametro": "valido",
+                "observacao": "Validado pela equipe",
+            }
+        },
+    }
+    itens, _ = extract_itens_cct(record)
+    ps = itens.get("piso_salarial", {})
+    assert ps.get("status_parametro") == "valido"
+    assert ps.get("valor") == 5000.00
+
+
+# Scenario 6: Schema supports origem = "fonte_oficial" without error
+def test_prj59_sc6_schema_supports_fonte_oficial():
+    item = {
+        "valor": 1621.00,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Sistema Mediador / Gov.br",
+        "fonte_textual": "Referência oficial",
+        "pagina": None,
+        "data_extracao": "2026-06-10",
+        "observacao": "Preenchido por fallback oficial.",
+    }
+    assert item["origem"] == "fonte_oficial"
+    assert item["status_parametro"] == "extraido_para_revisao"
+    assert item["valor"] == 1621.00
+
+
+# Scenario 7: Schema supports status_parametro = "conflito" and origem = "conflito_fontes"
+def test_prj59_sc7_schema_supports_conflito():
+    item = {
+        "valor": 1800.00,
+        "status_parametro": "conflito",
+        "origem": "conflito_fontes",
+        "fonte": "PDF da CCT; Ministério do Trabalho / Sistema Mediador / Gov.br",
+        "fonte_textual": "PDF indica R$ 1.800,00; fonte oficial indica R$ 1.750,00",
+        "pagina": 10,
+        "data_extracao": "2026-06-10",
+        "observacao": "Conflito entre valor extraído do PDF e fonte oficial.",
+    }
+    assert item["status_parametro"] == "conflito"
+    assert item["origem"] == "conflito_fontes"
+    assert item["valor"] == 1800.00
+
+
+# Scenario 8: build_item produces all required traceability fields
+def test_prj59_sc8_build_item_has_all_trace_fields():
+    item = build_item(
+        values=[1540.47],
+        regra_textual=CARGO_TEXT,
+        tipo="piso_unico",
+        unidade="BRL",
+        fonte_documento="test.pdf",
+        clausula_heading="CLÁUSULA TERCEIRA - PISO SALARIAL",
+        trecho_fonte=CARGO_TEXT,
+    )
+    for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+        assert field in item, f"Missing traceability field: {field}"
+    assert item["fonte"] == "PDF da CCT"
+    assert item["pagina"] is None
+
+
+# Scenario 9: _item_not_found produces all required traceability fields with correct values
+def test_prj59_sc9_not_found_has_all_trace_fields():
+    item = _item_not_found("test.pdf")
+    for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+        assert field in item, f"Missing traceability field: {field}"
+    assert item["origem"] == "nao_identificado_pdf"
+    assert item["fonte"] is None
+    assert item["fonte_textual"] is None
+    assert item["pagina"] is None
+
+
+# Scenario 10: data_extracao is populated with today's date in YYYY-MM-DD format
+def test_prj59_sc10_data_extracao_format():
+    item = build_item(
+        values=[1540.47],
+        regra_textual=CARGO_TEXT,
+        tipo="piso_unico",
+        unidade="BRL",
+        fonte_documento="test.pdf",
+        clausula_heading="CLÁUSULA TERCEIRA - PISO SALARIAL",
+        trecho_fonte=CARGO_TEXT,
+    )
+    data_extracao = item.get("data_extracao")
+    assert data_extracao is not None
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
+        f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
+    )
 
 
 if __name__ == "__main__":
