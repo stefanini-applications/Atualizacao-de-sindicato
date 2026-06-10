@@ -410,8 +410,22 @@ body {
 .col-fonte  { min-width: 100px; }
 .col-acao   { min-width: 100px; white-space: nowrap; }
 
-/* Monetary and percent cells right-aligned */
-#params-tbody td.cct-col {
+/* Cargo-specific dynamic columns (PRJ-57) */
+.cargo-th {
+  background-color: #e8f4fd !important;
+  border-left: 1px solid #b8d4f0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.cargo-col {
+  background-color: #f0f9ff;
+  border-left: 1px solid #d0e8f8 !important;
+}
+
+
   text-align: right;
 }
 

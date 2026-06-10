@@ -305,6 +305,8 @@ const EMBEDDED_DEMO = {
 
 let allRecords = [];
 let filteredRecords = [];
+/** Sorted list of distinct real cargo names found across all loaded records (PRJ-57 AC2). */
+let allCargoColumns = [];
 let detailModal = null;
 let modalFallbackHandlers = [];
 
@@ -468,8 +470,12 @@ async function loadData() {
   normalizeItensGovernance(allRecords); // PRJ-51: idempotent; runs after overrides to cover all items
   filteredRecords = [...allRecords];
 
+  // PRJ-57: collect all distinct real cargo names over the full base (stable across filters)
+  allCargoColumns = collectAllCargoColumns(allRecords);
+
   showApp(dataGeracao, demoMessage);
   populateFilterOptions();
+  updateCargoTableHeader();
   renderTable();
 }
 
@@ -739,6 +745,63 @@ function updateScrollHint() {
   const isScrolledRight =
     elTableContainer.scrollLeft + elTableContainer.clientWidth >= elTableContainer.scrollWidth - 4;
   elScrollHint.classList.toggle('d-none', !isScrollable || isScrolledRight);
+}
+
+/**
+ * Collects all distinct real cargo names from `piso_salarial.por_cargo[]` across all records.
+ * Returns a sorted array of unique cargo names (PRJ-57 AC2).
+ * Calculated over the full base — not filtered — so column headers are stable when filters change.
+ */
+function collectAllCargoColumns(records) {
+  if (!Array.isArray(records)) return [];
+  const seen = new Set();
+  records.forEach((rec) => {
+    const pc = rec.itens_cct?.piso_salarial?.por_cargo;
+    if (!Array.isArray(pc)) return;
+    pc.forEach((entry) => {
+      const nome = entry?.cargo;
+      if (nome && typeof nome === 'string' && nome.trim()) {
+        seen.add(nome.trim());
+      }
+    });
+  });
+  return [...seen].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+/**
+ * Inserts or refreshes dynamic <th> elements for real cargo columns into the table header (PRJ-57 AC2).
+ * Columns are inserted after "Piso Único" and before "Ad. Noturno".
+ */
+function updateCargoTableHeader() {
+  const thead = document.querySelector('#params-table thead tr');
+  if (!thead) return;
+
+  // Remove any previously injected cargo headers
+  thead.querySelectorAll('.cargo-th').forEach((el) => el.remove());
+
+  if (allCargoColumns.length === 0) return;
+
+  // Find the "Piso Único" header as the insertion anchor
+  const ths = [...thead.querySelectorAll('th')];
+  const pisoUnicoTh = ths.find((th) => th.textContent.trim() === 'Piso Único') ?? null;
+
+  // Insert dynamic cargo columns right after "Piso Único"
+  let prev = pisoUnicoTh;
+  allCargoColumns.forEach((cargo) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.className = 'cct-th cargo-th';
+    th.title = cargo;
+    // Truncate long cargo names in header to keep columns narrow
+    const label = cargo.length > 24 ? cargo.slice(0, 22) + '…' : cargo;
+    th.textContent = label;
+    if (prev && prev.nextSibling) {
+      thead.insertBefore(th, prev.nextSibling);
+    } else {
+      thead.appendChild(th);
+    }
+    prev = th;
+  });
 }
 
 function renderTable() {
@@ -1280,6 +1343,33 @@ function buildItemSpecificFieldsDisplay(itemKey, item) {
     }
     rows.push(`<dt class="col-5">${escapeHtml(fd.label)}</dt><dd class="col-7">${display}</dd>`);
   });
+
+  // PRJ-57: display por_cargo[] entries for piso_salarial
+  if (itemKey === 'piso_salarial' && Array.isArray(item.por_cargo) && item.por_cargo.length > 0) {
+    const fmtBRL = (v) => {
+      if (v == null) return '—';
+      const n = Number(v);
+      return isNaN(n) ? String(v) : n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+    const cargoRows = item.por_cargo.map((entry) => {
+      const nome = escapeHtml(String(entry?.cargo ?? '—'));
+      const valor = fmtBRL(entry?.valor ?? null);
+      const status = entry?.status_parametro ?? '';
+      const statusHtml = status === 'extraido_para_revisao'
+        ? ' <span class="badge bg-warning text-dark small">🔎 extraído</span>'
+        : (status === 'valido' ? ' <span class="badge bg-success small">✔</span>' : '');
+      return `<tr><td>${nome}</td><td class="text-end">${escapeHtml(valor)}${statusHtml}</td></tr>`;
+    }).join('');
+    rows.push(`
+      <dt class="col-12 mt-2">Pisos por cargo</dt>
+      <dd class="col-12">
+        <table class="table table-sm table-bordered small mb-0">
+          <thead class="table-light"><tr><th>Cargo</th><th class="text-end">Piso</th></tr></thead>
+          <tbody>${cargoRows}</tbody>
+        </table>
+      </dd>`);
+  }
+
   return rows;
 }
 
@@ -1551,7 +1641,34 @@ function isCctItemPreenchido(itemKey, item) {
   return false;
 }
 
-/** Generates 12 CCT item columns for the main table row */
+/**
+ * Generates one <td> per dynamic cargo column for a given record (PRJ-57 AC2).
+ * For each cargo in allCargoColumns, looks up the corresponding valor in
+ * record.itens_cct.piso_salarial.por_cargo[]; shows '—' when not found.
+ * @param {object} record
+ * @param {Function} fmtBRL - BRL formatter from the calling context
+ * @returns {string[]} array of <td> HTML strings
+ */
+function buildCargoTableCells(record, fmtBRL) {
+  if (allCargoColumns.length === 0) return [];
+  const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
+  // Build a lookup map: lowercase cargo name -> first matching valor
+  const cargoMap = new Map();
+  if (Array.isArray(porCargo)) {
+    porCargo.forEach((entry) => {
+      const nome = entry?.cargo?.trim();
+      if (nome && !cargoMap.has(nome.toLowerCase())) {
+        cargoMap.set(nome.toLowerCase(), entry.valor ?? null);
+      }
+    });
+  }
+  return allCargoColumns.map((cargo) => {
+    const valor = cargoMap.get(cargo.toLowerCase()) ?? null;
+    return `<td class="cct-col cargo-col">${fmtBRL(valor)}</td>`;
+  });
+}
+
+/** Generates dynamic CCT item columns for the main table row */
 function buildCctTableCells(record) {
   function cellGet(itemKey, ...fields) {
     const item = record.itens_cct?.[itemKey];
@@ -1622,6 +1739,7 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${fmtBRL(pisoTec)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoAdm)}</td>`,
     `<td class="cct-col">${fmtBRL(pisoUnico)}</td>`,
+    ...buildCargoTableCells(record, fmtBRL),
     `<td class="cct-col">${adNoturnoFmt}</td>`,
     `<td class="cct-col">${fmtVR(vrItem)}</td>`,
     `<td class="cct-col">${fmtShort(plrVal)}</td>`,
