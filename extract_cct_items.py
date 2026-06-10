@@ -35,6 +35,36 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
 EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
 
+# Official national minimum wage used as piso_nacional fallback (AC1)
+SALARIO_MINIMO_NACIONAL: dict = {
+    "valor": 1621.00,
+    "ano_referencia": 2026,
+    "fonte": "Ministério do Trabalho / Gov.br",
+    "fonte_textual": "Referência oficial usada para identificar o valor do salário mínimo nacional",
+}
+
+# Synonym table for technical support cargo levels (AC2).
+# Patterns operate on normalize()-d text (lowercase, no accents).
+# Order matters: more specific patterns first within each level.
+CARGO_TECNICO_SINONIMOS: list[tuple[str, str]] = [
+    # ── Level I: I / 1 / Jr / Júnior ─────────────────────────────────────────
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?i\b", "Técnico Suporte I"),
+    (r"\bsuporte\s+tecnico\s+i\b", "Técnico Suporte I"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+1\b", "Técnico Suporte I"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+jr\b", "Técnico Suporte I"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+junior\b", "Técnico Suporte I"),
+    # ── Level II: II / 2 / Pleno ──────────────────────────────────────────────
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?ii\b", "Técnico Suporte II"),
+    (r"\bsuporte\s+tecnico\s+ii\b", "Técnico Suporte II"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+2\b", "Técnico Suporte II"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+pleno\b", "Técnico Suporte II"),
+    # ── Level III: III / 3 / Sênior / Senior ─────────────────────────────────
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?iii\b", "Técnico Suporte III"),
+    (r"\bsuporte\s+tecnico\s+iii\b", "Técnico Suporte III"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+3\b", "Técnico Suporte III"),
+    (r"\btecnico\s+(?:de\s+|em\s+)?suporte\s+senior\b", "Técnico Suporte III"),
+]
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
@@ -327,6 +357,83 @@ def _truncate(text: str | None, max_len: int) -> str | None:
     if len(text) > max_len:
         return text[:max_len] + "…"
     return text
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cargo normalization and piso_nacional fallback (PRJ-60 AC1 / AC2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def normalize_cargo_tecnico(cargo: str) -> str | None:
+    """
+    Try to normalize a raw cargo string to a standardized Ratecard label
+    (``'Técnico Suporte I'``, ``'Técnico Suporte II'``, ``'Técnico Suporte III'``).
+
+    Matching is performed on normalized text (lowercase, no accents).
+    Returns ``None`` when no synonym pattern matches.
+    """
+    cargo_n = normalize(cargo)
+    for pattern, label in CARGO_TECNICO_SINONIMOS:
+        if re.search(pattern, cargo_n):
+            return label
+    return None
+
+
+def normalize_por_cargo_entries(por_cargo: list[dict]) -> list[dict]:
+    """
+    Adds ``cargo_normalizado`` to each por_cargo entry whose ``cargo``
+    matches a known technical-support synonym.  Entries with no match are
+    returned unchanged.  Never overwrites an existing ``cargo_normalizado``
+    that already carries ``status_parametro: 'valido'``.
+    """
+    result = []
+    for entry in por_cargo:
+        entry = dict(entry)  # shallow copy — do not mutate original
+        if entry.get("status_parametro") == "valido":
+            result.append(entry)
+            continue
+        raw_cargo = entry.get("cargo") or ""
+        normalized = normalize_cargo_tecnico(raw_cargo)
+        if normalized:
+            entry["cargo_normalizado"] = normalized
+            if not entry.get("observacao"):
+                entry["observacao"] = (
+                    f"Cargo normalizado de '{raw_cargo}' para '{normalized}'."
+                )
+        result.append(entry)
+    return result
+
+
+def fill_piso_nacional_fallback(piso_salarial: dict) -> dict:
+    """
+    Inserts the ``piso_nacional`` sub-object into *piso_salarial* using the
+    official national minimum wage as a traceable fallback value (AC1).
+
+    Governance rules applied:
+    - If ``piso_nacional.status_parametro`` is already ``'valido'``, the
+      existing entry is preserved unchanged.
+    - All required traceability fields are populated.
+    """
+    existing_pn = piso_salarial.get("piso_nacional")
+    if isinstance(existing_pn, dict) and existing_pn.get("status_parametro") == "valido":
+        return piso_salarial  # governance: never overwrite validated data
+
+    piso_salarial = dict(piso_salarial)  # shallow copy
+    piso_salarial["piso_nacional"] = {
+        "valor": SALARIO_MINIMO_NACIONAL["valor"],
+        "ano_referencia": SALARIO_MINIMO_NACIONAL["ano_referencia"],
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": SALARIO_MINIMO_NACIONAL["fonte"],
+        "fonte_textual": SALARIO_MINIMO_NACIONAL["fonte_textual"],
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": (
+            "Informação preenchida por fallback oficial porque não foi encontrado "
+            "piso específico no PDF."
+        ),
+    }
+    return piso_salarial
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1273,6 +1380,9 @@ def main():
         "com_por_jornada": 0,
         "com_por_modalidade": 0,
         "com_por_escala": 0,
+        # PRJ-60 enrichment counters
+        "piso_nacional_preenchido": 0,
+        "cargos_normalizados": 0,
     }
 
     for record in records:
@@ -1297,6 +1407,22 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # ── PRJ-60: enrich piso_salarial ────────────────────────────────────
+        if "piso_salarial" in merged:
+            ps_before = merged["piso_salarial"]
+            ps = fill_piso_nacional_fallback(ps_before)
+            if ps is not ps_before:
+                stats["piso_nacional_preenchido"] += 1
+            if "por_cargo" in ps:
+                original_entries = ps["por_cargo"]
+                ps = dict(ps)
+                ps["por_cargo"] = normalize_por_cargo_entries(original_entries)
+                newly_normalized = sum(
+                    1 for e in ps["por_cargo"] if "cargo_normalizado" in e
+                )
+                stats["cargos_normalizados"] += newly_normalized
+            merged["piso_salarial"] = ps
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False
@@ -1365,6 +1491,9 @@ def main():
     print(f"  registros c/ por_jornada   : {stats['com_por_jornada']}")
     print(f"  registros c/ por_modalidade: {stats['com_por_modalidade']}")
     print(f"  registros c/ por_escala    : {stats['com_por_escala']}")
+    print(f"\n── Enriquecimento PRJ-60 ──────────────────────────────")
+    print(f"  piso_nacional preenchido   : {stats['piso_nacional_preenchido']}")
+    print(f"  cargos normalizados        : {stats['cargos_normalizados']}")
 
     if args.dry_run:
         print("\n[dry-run] Nenhuma alteração foi salva.")
