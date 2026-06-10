@@ -234,6 +234,48 @@
       }
     }
   }
+  ,{
+    "id_registro_reajuste": "REG-005",
+    "ids_registros_conflitantes": null,
+    "sindicato": "SINDPD-SP",
+    "uf": "SP",
+    "categoria": "Tecnologia da Informação",
+    "ano_referencia": 2025,
+    "status_parametro": "extraido_para_revisao",
+    "conflito": false,
+    "percentual_reajuste": 5.5,
+    "data_base": "2025-01-01",
+    "vigencia_inicio": "2025-01-01",
+    "vigencia_fim": "2025-12-31",
+    "fonte_documento": "CCT/SP/SINDPD/2025.pdf",
+    "observacao": null,
+    "itens_cct": {
+      "jornada": {
+        "valor": 44,
+        "percentual": null,
+        "horas_semanais": 44,
+        "horas_mensais": 191,
+        "horas_diarias": 8.8,
+        "opcoes_identificadas": ["44h/semana"],
+        "valor_textual": "44h/sem · 191h/mês",
+        "regra_textual": "A jornada de trabalho é de 44 horas semanais em escala 5×2.",
+        "tipo": "jornada",
+        "unidade": "h/semana",
+        "fonte_documento": "CCT/SP/SINDPD/2025.pdf",
+        "clausula": "CLÁUSULA DÉCIMA - JORNADA DE TRABALHO",
+        "trecho_fonte": "A jornada de trabalho é de 44 horas semanais em escala 5×2.",
+        "observacao": null,
+        "status_parametro": "extraido_para_revisao",
+        "por_escala": [
+          {
+            "label": "5x2",
+            "valor_textual": "5×2",
+            "trecho_fonte": "A jornada de trabalho é de 44 horas semanais em escala 5×2."
+          }
+        ]
+      }
+    }
+  }
 ]
 
 {
