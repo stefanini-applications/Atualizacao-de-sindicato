@@ -35,6 +35,10 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
 EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
 
+# Official national minimum wage (2026) used as fallback when no CCT-specific floor is found.
+PISO_NACIONAL_FALLBACK_VALOR: float = 1621.00
+PISO_NACIONAL_FALLBACK_ANO: int = 2026
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
@@ -50,6 +54,127 @@ def normalize(text: str) -> str:
     text = unicodedata.normalize("NFD", text)
     text = "".join(c for c in text if unicodedata.category(c) != "Mn")
     return text.lower()
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cargo técnico normalization (PRJ-60)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Patterns are matched against normalize()d text (lowercase, no accents).
+# III/II must precede I to prevent partial matches.
+CARGO_TECNICO_SYNONYMS: list[tuple[str, str]] = [
+    # Técnico Suporte III
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?iii\b",       "Técnico Suporte III"),
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?(?:3|senior)\b", "Técnico Suporte III"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?iii\b",                        "Técnico Suporte III"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?(?:3|senior)\b",               "Técnico Suporte III"),
+    # Técnico Suporte II
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?ii\b",        "Técnico Suporte II"),
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?(?:2|pleno)\b", "Técnico Suporte II"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?ii\b",                         "Técnico Suporte II"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?(?:2|pleno)\b",                "Técnico Suporte II"),
+    # Técnico Suporte I
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?i\b",         "Técnico Suporte I"),
+    (r"tecnico\s+(?:de\s+|em\s+)?suporte\s+(?:nivel\s+)?(?:1|jr|junior)\b", "Técnico Suporte I"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?i\b",                          "Técnico Suporte I"),
+    (r"suporte\s+tecnico\s+(?:nivel\s+)?(?:1|jr|junior)\b",            "Técnico Suporte I"),
+]
+
+
+def normalize_cargo_tecnico(text: str) -> str | None:
+    """
+    Detect if *text* contains a reference to a standardized Técnico Suporte level.
+
+    Applies normalization (lowercase, no accents) before matching so that raw
+    PDF names such as "Técnico de Suporte Nível I" are recognized.
+
+    Returns the canonical Ratecard label ("Técnico Suporte I/II/III") or None.
+    """
+    if not text:
+        return None
+    text_n = normalize(text)
+    for pattern, label in CARGO_TECNICO_SYNONYMS:
+        if re.search(pattern, text_n):
+            return label
+    return None
+
+
+def apply_cargo_normalizado(itens_cct: dict) -> dict:
+    """
+    Add ``cargo_normalizado`` to ``piso_salarial.por_cargo[]`` entries that
+    match a Técnico Suporte level synonym and do not already have the field.
+
+    Returns a (shallow) copy of *itens_cct* when changes are made, otherwise
+    returns the original dict unchanged.
+    """
+    ps = itens_cct.get("piso_salarial")
+    if not isinstance(ps, dict):
+        return itens_cct
+    por_cargo = ps.get("por_cargo")
+    if not isinstance(por_cargo, list):
+        return itens_cct
+
+    new_entries = []
+    changed = False
+    for entry in por_cargo:
+        if not isinstance(entry, dict) or "cargo_normalizado" in entry:
+            new_entries.append(entry)
+            continue
+        # Try cargo label first, then trecho_fonte for level-specific context.
+        normalized = normalize_cargo_tecnico(entry.get("cargo", ""))
+        if normalized is None:
+            normalized = normalize_cargo_tecnico(entry.get("trecho_fonte", ""))
+        if normalized is not None:
+            entry = dict(entry)
+            entry["cargo_normalizado"] = normalized
+            changed = True
+        new_entries.append(entry)
+
+    if not changed:
+        return itens_cct
+    itens_cct = dict(itens_cct)
+    ps = dict(ps)
+    ps["por_cargo"] = new_entries
+    itens_cct["piso_salarial"] = ps
+    return itens_cct
+
+
+def apply_piso_nacional_fallback(itens_cct: dict) -> dict:
+    """
+    Insert a ``piso_nacional`` sub-object into ``piso_salarial`` using the
+    official national minimum wage as a traceable fallback value, unless the
+    field already exists with ``status_parametro == "valido"`` (governance rule).
+
+    Returns a (shallow) copy of *itens_cct* when a change is made.
+    """
+    ps = itens_cct.get("piso_salarial")
+    if not isinstance(ps, dict):
+        return itens_cct
+
+    existing_pn = ps.get("piso_nacional")
+    if isinstance(existing_pn, dict) and existing_pn.get("status_parametro") == "valido":
+        return itens_cct  # governance: never overwrite a validated entry
+
+    itens_cct = dict(itens_cct)
+    ps = dict(ps)
+    ps["piso_nacional"] = {
+        "valor": PISO_NACIONAL_FALLBACK_VALOR,
+        "ano_referencia": PISO_NACIONAL_FALLBACK_ANO,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Gov.br",
+        "fonte_textual": (
+            "Referência oficial usada para identificar o valor do salário mínimo nacional"
+        ),
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": (
+            "Informação preenchida por fallback oficial porque não foi encontrado "
+            "piso específico no PDF."
+        ),
+    }
+    itens_cct["piso_salarial"] = ps
+    return itens_cct
 
 
 def extract_pdf_text(pdf_path: str) -> tuple[str, str]:
@@ -543,6 +668,18 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
                         "valor": round(best_val, 2),
                         "trecho_fonte": _truncate(trecho, 300),
                     }
+                    # Annotate with canonical Ratecard label using a narrow
+                    # window around the pattern match (level indicator sits
+                    # right next to the cargo name, not in the wider value
+                    # context), falling back to the label itself.
+                    level_start = max(0, pm.start() - 5)
+                    level_end = min(len(text_n), pm.end() + 50)
+                    cargo_norm = (
+                        normalize_cargo_tecnico(text_n[level_start:level_end])
+                        or normalize_cargo_tecnico(label)
+                    )
+                    if cargo_norm is not None:
+                        entry["cargo_normalizado"] = cargo_norm
                 elif dim_name == "jornada":
                     entry = {
                         "jornada": label,
@@ -1297,6 +1434,10 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # Enrich: normalize cargo labels and inject piso_nacional fallback (PRJ-60)
+        merged = apply_cargo_normalizado(merged)
+        merged = apply_piso_nacional_fallback(merged)
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False
