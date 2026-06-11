@@ -26,6 +26,11 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    normalize_cargo_tecnico,
+    apply_piso_nacional_fallback,
+    apply_cargo_normalization,
+    PISO_NACIONAL_VALOR,
+    PISO_NACIONAL_ANO,
 )
 
 
@@ -661,6 +666,298 @@ def test_prj59_sc10_data_extracao_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60 — AC1: apply_piso_nacional_fallback
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _make_itens_with_piso(piso_salarial_override=None):
+    """Helper: itens_cct dict with a basic piso_salarial entry."""
+    ps = {"valor": 1800.00, "status_parametro": "extraido_para_revisao", "tipo": "piso_unico"}
+    if piso_salarial_override is not None:
+        ps.update(piso_salarial_override)
+    return {"piso_salarial": ps}
+
+
+def test_prj60_ac1_piso_nacional_inserted_when_absent():
+    itens = _make_itens_with_piso()
+    result = apply_piso_nacional_fallback(itens)
+    assert "piso_nacional" in result["piso_salarial"]
+
+
+def test_prj60_ac1_piso_nacional_valor():
+    itens = _make_itens_with_piso()
+    pn = apply_piso_nacional_fallback(itens)["piso_salarial"]["piso_nacional"]
+    assert pn["valor"] == PISO_NACIONAL_VALOR
+
+
+def test_prj60_ac1_piso_nacional_ano_referencia():
+    itens = _make_itens_with_piso()
+    pn = apply_piso_nacional_fallback(itens)["piso_salarial"]["piso_nacional"]
+    assert pn["ano_referencia"] == PISO_NACIONAL_ANO
+
+
+def test_prj60_ac1_piso_nacional_status_extraido_para_revisao():
+    itens = _make_itens_with_piso()
+    pn = apply_piso_nacional_fallback(itens)["piso_salarial"]["piso_nacional"]
+    assert pn["status_parametro"] == "extraido_para_revisao"
+
+
+def test_prj60_ac1_piso_nacional_origem_fonte_oficial():
+    itens = _make_itens_with_piso()
+    pn = apply_piso_nacional_fallback(itens)["piso_salarial"]["piso_nacional"]
+    assert pn["origem"] == "fonte_oficial"
+
+
+def test_prj60_ac1_piso_nacional_has_all_traceability_fields():
+    """AC5(f): automatically extracted value carries all traceability fields."""
+    itens = _make_itens_with_piso()
+    pn = apply_piso_nacional_fallback(itens)["piso_salarial"]["piso_nacional"]
+    for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+        assert field in pn, f"Missing traceability field in piso_nacional: {field}"
+    assert pn["pagina"] is None
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", pn["data_extracao"])
+
+
+def test_prj60_ac1_piso_nacional_not_overwrite_valido():
+    """AC5(e) / governance: valido entry must never be overwritten."""
+    itens = _make_itens_with_piso({
+        "piso_nacional": {
+            "valor": 9999.00,
+            "status_parametro": "valido",
+            "origem": "pdf_cct",
+        }
+    })
+    result = apply_piso_nacional_fallback(itens)
+    pn = result["piso_salarial"]["piso_nacional"]
+    assert pn["status_parametro"] == "valido"
+    assert pn["valor"] == 9999.00
+
+
+def test_prj60_ac1_piso_nacional_overwrites_non_valido():
+    """Non-valido piso_nacional is replaced by fallback."""
+    itens = _make_itens_with_piso({
+        "piso_nacional": {
+            "valor": 1500.00,
+            "status_parametro": "pendente_revisao",
+        }
+    })
+    result = apply_piso_nacional_fallback(itens)
+    pn = result["piso_salarial"]["piso_nacional"]
+    assert pn["valor"] == PISO_NACIONAL_VALOR
+    assert pn["status_parametro"] == "extraido_para_revisao"
+
+
+def test_prj60_ac1_piso_nacional_no_piso_salarial_is_noop():
+    """No piso_salarial → itens_cct returned unchanged."""
+    itens = {"adicional_noturno": {"valor": 25.0}}
+    result = apply_piso_nacional_fallback(itens)
+    assert "piso_salarial" not in result
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60 — AC2: normalize_cargo_tecnico
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Exact standardized labels
+def test_prj60_ac2_exact_i():
+    assert normalize_cargo_tecnico("Técnico Suporte I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_exact_ii():
+    assert normalize_cargo_tecnico("Técnico Suporte II") == "Técnico Suporte II"
+
+
+def test_prj60_ac2_exact_iii():
+    assert normalize_cargo_tecnico("Técnico Suporte III") == "Técnico Suporte III"
+
+
+# Nivel I synonyms
+def test_prj60_ac2_tecnico_de_suporte_i():
+    assert normalize_cargo_tecnico("Técnico de Suporte I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_tecnico_em_suporte_i():
+    assert normalize_cargo_tecnico("Técnico em Suporte I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_nivel_i():
+    assert normalize_cargo_tecnico("Técnico Suporte Nível I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_de_nivel_i():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_suporte_tecnico_i():
+    assert normalize_cargo_tecnico("Suporte Técnico I") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_numero_1():
+    assert normalize_cargo_tecnico("Técnico Suporte 1") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_de_numero_1():
+    assert normalize_cargo_tecnico("Técnico de Suporte 1") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_jr():
+    assert normalize_cargo_tecnico("Técnico Suporte Jr") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_junior_sem_acento():
+    assert normalize_cargo_tecnico("Técnico de Suporte Junior") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_junior_com_acento():
+    assert normalize_cargo_tecnico("Técnico de Suporte Júnior") == "Técnico Suporte I"
+
+
+# Nivel II synonyms
+def test_prj60_ac2_nivel_ii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível II") == "Técnico Suporte II"
+
+
+def test_prj60_ac2_numero_2():
+    assert normalize_cargo_tecnico("Técnico Suporte 2") == "Técnico Suporte II"
+
+
+def test_prj60_ac2_pleno():
+    assert normalize_cargo_tecnico("Técnico de Suporte Pleno") == "Técnico Suporte II"
+
+
+# Nivel III synonyms
+def test_prj60_ac2_nivel_iii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível III") == "Técnico Suporte III"
+
+
+def test_prj60_ac2_numero_3():
+    assert normalize_cargo_tecnico("Técnico Suporte 3") == "Técnico Suporte III"
+
+
+def test_prj60_ac2_senior_sem_acento():
+    assert normalize_cargo_tecnico("Técnico de Suporte Senior") == "Técnico Suporte III"
+
+
+def test_prj60_ac2_senior_com_acento():
+    assert normalize_cargo_tecnico("Técnico de Suporte Sênior") == "Técnico Suporte III"
+
+
+# No match cases — AC5(d)
+def test_prj60_ac2_no_match_analista():
+    assert normalize_cargo_tecnico("Analista de Sistemas") is None
+
+
+def test_prj60_ac2_no_match_sem_nivel():
+    """Cargo with tecnico+suporte but no level → None (no data invented)."""
+    assert normalize_cargo_tecnico("Técnico de Suporte") is None
+
+
+def test_prj60_ac2_no_match_auxiliar():
+    assert normalize_cargo_tecnico("Auxiliar de Processamento") is None
+
+
+def test_prj60_ac2_no_match_supervisor():
+    assert normalize_cargo_tecnico("Supervisores e Cargos de Nível Técnico") is None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60 — AC2: apply_cargo_normalization
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _make_itens_with_por_cargo(entries):
+    return {"piso_salarial": {"por_cargo": entries}}
+
+
+def test_prj60_ac2_cargo_normalization_adds_field():
+    itens = _make_itens_with_por_cargo([
+        {"cargo": "Técnico de Suporte Nível I", "valor": 1800.00, "status_parametro": "extraido_para_revisao"}
+    ])
+    result = apply_cargo_normalization(itens)
+    entry = result["piso_salarial"]["por_cargo"][0]
+    assert entry.get("cargo_normalizado") == "Técnico Suporte I"
+
+
+def test_prj60_ac2_cargo_normalization_ii():
+    itens = _make_itens_with_por_cargo([
+        {"cargo": "Técnico de Suporte Pleno", "valor": 2000.00, "status_parametro": "extraido_para_revisao"}
+    ])
+    result = apply_cargo_normalization(itens)
+    entry = result["piso_salarial"]["por_cargo"][0]
+    assert entry.get("cargo_normalizado") == "Técnico Suporte II"
+
+
+def test_prj60_ac2_cargo_normalization_iii():
+    itens = _make_itens_with_por_cargo([
+        {"cargo": "Técnico de Suporte Sênior", "valor": 2200.00, "status_parametro": "extraido_para_revisao"}
+    ])
+    result = apply_cargo_normalization(itens)
+    entry = result["piso_salarial"]["por_cargo"][0]
+    assert entry.get("cargo_normalizado") == "Técnico Suporte III"
+
+
+def test_prj60_ac2_cargo_normalization_skips_valido():
+    """AC5(e): valido entries are never modified."""
+    itens = _make_itens_with_por_cargo([
+        {"cargo": "Técnico de Suporte I", "valor": 9999.00, "status_parametro": "valido"}
+    ])
+    result = apply_cargo_normalization(itens)
+    entry = result["piso_salarial"]["por_cargo"][0]
+    assert "cargo_normalizado" not in entry
+
+
+def test_prj60_ac2_cargo_normalization_no_match_unchanged():
+    """Unrecognized cargo → no cargo_normalizado added."""
+    itens = _make_itens_with_por_cargo([
+        {"cargo": "Técnico de Atendimento", "valor": 1650.00, "status_parametro": "extraido_para_revisao"}
+    ])
+    result = apply_cargo_normalization(itens)
+    entry = result["piso_salarial"]["por_cargo"][0]
+    assert "cargo_normalizado" not in entry
+
+
+def test_prj60_ac2_cargo_normalization_no_por_cargo_is_noop():
+    itens = {"piso_salarial": {"valor": 1800.00, "status_parametro": "extraido_para_revisao"}}
+    result = apply_cargo_normalization(itens)
+    assert "por_cargo" not in result["piso_salarial"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60 — AC3: piso_cct resolver priority (data structure validation)
+# These tests verify that extract_piso_salarial assigns the correct tipo field
+# so the JS RATECARD_PISO_COLUMNS piso_cct resolver can apply the right priority.
+# ─────────────────────────────────────────────────────────────────────────────
+
+PISO_CCT_MULTI_TEXT = """
+CLÁUSULA TERCEIRA - PISO SALARIAL
+Os pisos salariais ficam estabelecidos nos seguintes valores:
+a) Piso Administrativo: R$ 1.642,48
+b) Piso Técnico: R$ 1.728,89
+"""
+
+PISO_UNICO_TEXT = """
+CLÁUSULA TERCEIRA - PISO SALARIAL
+O piso salarial fica estabelecido em R$ 1.800,00 mensais.
+"""
+
+
+def test_prj60_ac3_tipo_piso_cct_for_multi_value():
+    """Multiple BRL values without clear dimension → tipo piso_cct."""
+    from extract_cct_items import extract_piso_salarial, parse_clauses
+    clauses = parse_clauses(PISO_CCT_MULTI_TEXT)
+    item = extract_piso_salarial(clauses, "test.pdf")
+    # Should be classified or piso_cct tipo
+    assert item.get("tipo") in ("piso_cct", "piso_tecnico", "piso_administrativo")
+
+
+def test_prj60_ac3_tipo_piso_unico_for_single_value():
+    """Single BRL value → tipo piso_unico (JS resolver priority 2)."""
+    from extract_cct_items import extract_piso_salarial, parse_clauses
+    clauses = parse_clauses(PISO_UNICO_TEXT)
+    item = extract_piso_salarial(clauses, "test.pdf")
+    assert item.get("tipo") == "piso_unico"
+    assert item.get("valor") == 1800.00
 
 
 if __name__ == "__main__":

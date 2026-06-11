@@ -1506,7 +1506,9 @@ const CCT_ITEM_FIELDS = {
 function getCargoValue(record, cargoLabel) {
   const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
   if (!Array.isArray(porCargo)) return null;
-  const entry = porCargo.find((e) => e?.cargo === cargoLabel);
+  const entry =
+    porCargo.find((e) => e?.cargo === cargoLabel) ??
+    porCargo.find((e) => e?.cargo_normalizado === cargoLabel);
   return entry?.valor ?? null;
 }
 
@@ -1522,8 +1524,10 @@ const RATECARD_PISO_COLUMNS = [
     resolver: (record) => {
       const ps = record.itens_cct?.piso_salarial;
       if (!ps) return null;
+      // Priority: piso_cct → piso_unico → valor (AC3 / PRJ-60)
       return ps.valor_piso_cct
-        ?? (ps.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(ps.tipo)
+        ?? (ps.tipo === 'piso_unico' ? (ps.valor ?? null) : null)
+        ?? (ps.valor != null && !['piso_tecnico', 'piso_administrativo'].includes(ps.tipo)
           ? ps.valor : null)
         ?? null;
     },
