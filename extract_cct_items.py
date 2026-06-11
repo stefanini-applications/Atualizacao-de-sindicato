@@ -580,6 +580,114 @@ def has_negative_clause(text: str) -> bool:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Cargo técnico normalization (PRJ-60 AC2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Base pattern: identifies roles that could be a "Técnico Suporte" level.
+_CARGO_TECNICO_BASE_RE = re.compile(
+    r"t[eé]cnico(?:\s+de|\s+em)?\s+suporte"
+    r"|suporte\s+t[eé]cnico"
+    r"|tec\s+dados"
+    r"|t[eé]cnico\s+em\s+inform[aá]tica"
+    r"|\boperador\b",
+    re.IGNORECASE,
+)
+
+# Level markers — checked against the raw cargo name (not normalized).
+# Order: III before II before I to avoid partial matches (e.g. "III" matching "II").
+_NIVEL_III_RE = re.compile(
+    r"\bIII\b|\b3\b|\bs[eê]nior\b|\bsenior\b|\bn[ií]vel\s+III\b",
+    re.IGNORECASE,
+)
+_NIVEL_II_RE = re.compile(
+    r"\bII\b|\b2\b|\bpleno\b|\bn[ií]vel\s+II\b",
+    re.IGNORECASE,
+)
+_NIVEL_I_RE = re.compile(
+    r"\bI\b|\b1\b|\bjr\.?\b|\bj[uú]nior\b|\bn[ií]vel\s+I\b",
+    re.IGNORECASE,
+)
+
+PISO_NACIONAL_VALOR = 1621.00
+PISO_NACIONAL_ANO = 2026
+
+
+def normalize_cargo_tecnico(cargo: str) -> str | None:
+    """
+    Map a raw cargo name to a canonical Ratecard label (Técnico Suporte I/II/III).
+
+    Returns the canonical label when BOTH a technical-support base term AND a
+    level indicator are detected; returns None otherwise to avoid false positives.
+    """
+    if not cargo:
+        return None
+    if not _CARGO_TECNICO_BASE_RE.search(cargo):
+        return None
+    # Check levels in decreasing order to avoid "I" matching inside "II"/"III".
+    if _NIVEL_III_RE.search(cargo):
+        return "Técnico Suporte III"
+    if _NIVEL_II_RE.search(cargo):
+        return "Técnico Suporte II"
+    if _NIVEL_I_RE.search(cargo):
+        return "Técnico Suporte I"
+    return None
+
+
+def apply_cargo_normalizations(piso_salarial_item: dict) -> int:
+    """
+    Iterate over por_cargo[] entries and add cargo_normalizado where applicable.
+
+    Governance: entries with status_parametro == "valido" are not modified.
+    Returns the count of entries that received a new cargo_normalizado.
+    """
+    por_cargo = piso_salarial_item.get("por_cargo")
+    if not isinstance(por_cargo, list):
+        return 0
+    count = 0
+    for entry in por_cargo:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("status_parametro") == "valido":
+            continue
+        raw = entry.get("cargo") or ""
+        canonical = normalize_cargo_tecnico(raw)
+        if canonical is not None and entry.get("cargo_normalizado") != canonical:
+            entry["cargo_normalizado"] = canonical
+            count += 1
+    return count
+
+
+def apply_piso_nacional_fallback(piso_salarial_item: dict) -> bool:
+    """
+    Insert piso_nacional sub-object with the official minimum wage as fallback
+    when no validated piso_nacional exists.
+
+    Governance: records with piso_nacional.status_parametro == "valido" are
+    never modified.  Returns True when the fallback was applied.
+    """
+    existing_pn = piso_salarial_item.get("piso_nacional")
+    if isinstance(existing_pn, dict) and existing_pn.get("status_parametro") == "valido":
+        return False
+    piso_salarial_item["piso_nacional"] = {
+        "valor": PISO_NACIONAL_VALOR,
+        "ano_referencia": PISO_NACIONAL_ANO,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Gov.br",
+        "fonte_textual": (
+            "Referência oficial usada para identificar o valor do salário mínimo nacional"
+        ),
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": (
+            "Informação preenchida por fallback oficial porque não foi encontrado "
+            "piso específico no PDF."
+        ),
+    }
+    return True
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Per-item extractors
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -1273,6 +1381,9 @@ def main():
         "com_por_jornada": 0,
         "com_por_modalidade": 0,
         "com_por_escala": 0,
+        # PRJ-60 counters
+        "piso_nacional_aplicado": 0,
+        "cargo_normalizado_aplicado": 0,
     }
 
     for record in records:
@@ -1297,6 +1408,13 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # Apply PRJ-60 enrichments to piso_salarial
+        ps_merged = merged.get("piso_salarial", {})
+        if isinstance(ps_merged, dict):
+            if apply_piso_nacional_fallback(ps_merged):
+                stats["piso_nacional_aplicado"] += 1
+            stats["cargo_normalizado_aplicado"] += apply_cargo_normalizations(ps_merged)
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False
@@ -1365,6 +1483,9 @@ def main():
     print(f"  registros c/ por_jornada   : {stats['com_por_jornada']}")
     print(f"  registros c/ por_modalidade: {stats['com_por_modalidade']}")
     print(f"  registros c/ por_escala    : {stats['com_por_escala']}")
+    print(f"\n── PRJ-60 enriquecimentos ─────────────────────────────")
+    print(f"  piso_nacional aplicado     : {stats['piso_nacional_aplicado']}")
+    print(f"  cargo_normalizado aplicado : {stats['cargo_normalizado_aplicado']}")
 
     if args.dry_run:
         print("\n[dry-run] Nenhuma alteração foi salva.")
