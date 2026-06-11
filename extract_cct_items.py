@@ -330,6 +330,103 @@ def _truncate(text: str | None, max_len: int) -> str | None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Piso Nacional fallback (AC1 — PRJ-60)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Official national minimum wage for 2026 (Ministério do Trabalho / Gov.br)
+_PISO_NACIONAL_VALOR = 1621.00
+_PISO_NACIONAL_ANO = 2026
+
+
+def build_piso_nacional_fallback() -> dict:
+    """
+    Build the piso_nacional sub-object populated from the official national
+    minimum wage when the PDF does not contain a specific value.
+
+    The returned object carries full traceability and is always marked
+    "extraido_para_revisao" — never "valido" (human approval required).
+    """
+    return {
+        "valor": _PISO_NACIONAL_VALOR,
+        "ano_referencia": _PISO_NACIONAL_ANO,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Gov.br",
+        "fonte_textual": (
+            "Salário mínimo nacional vigente em 2026 conforme decreto federal "
+            "(Ministério do Trabalho / Gov.br). Valor: R$ 1.621,00."
+        ),
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": (
+            "Informação preenchida por fallback oficial porque não foi encontrado "
+            "piso específico no PDF."
+        ),
+    }
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cargo técnico normalisation (AC2 — PRJ-60)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Synonym table mapping raw cargo names to Ratecard-standard labels.
+# Each entry is (regex_pattern, normalised_label).
+# Patterns are matched against normalised (accent-stripped, lowercase) cargo text.
+_CARGO_TECNICO_SYNONYMS: list[tuple[str, str]] = [
+    # ── Técnico Suporte I ── I, 1, Jr, Júnior/Junior ──────────────────────
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?i\b", "Técnico Suporte I"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?1\b", "Técnico Suporte I"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+jr\b", "Técnico Suporte I"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+j[uú]nior\b", "Técnico Suporte I"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?i\b", "Técnico Suporte I"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?1\b", "Técnico Suporte I"),
+    # ── Técnico Suporte II ── II, 2, Pleno ────────────────────────────────
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?ii\b", "Técnico Suporte II"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?2\b", "Técnico Suporte II"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+pleno\b", "Técnico Suporte II"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?ii\b", "Técnico Suporte II"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?2\b", "Técnico Suporte II"),
+    # ── Técnico Suporte III ── III, 3, Sênior/Senior ──────────────────────
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?iii\b", "Técnico Suporte III"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+(?:n[ií]vel\s+)?3\b", "Técnico Suporte III"),
+    (r"t[eé]cnico\s+(?:de\s+|em\s+)?suporte\s+s[eê]nior\b", "Técnico Suporte III"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?iii\b", "Técnico Suporte III"),
+    (r"suporte\s+t[eé]cnico\s+(?:n[ií]vel\s+)?3\b", "Técnico Suporte III"),
+]
+
+
+def normalize_cargo_tecnico(cargo: str) -> str | None:
+    """
+    Map a raw cargo string to its Ratecard-standard label.
+
+    Returns one of 'Técnico Suporte I', 'Técnico Suporte II',
+    'Técnico Suporte III', or None when no synonym matches.
+    """
+    cargo_n = normalize(cargo)
+    for pattern, label in _CARGO_TECNICO_SYNONYMS:
+        if re.search(pattern, cargo_n):
+            return label
+    return None
+
+
+def apply_cargo_normalizado(por_cargo: list) -> None:
+    """
+    Annotate each por_cargo entry with cargo_normalizado when a synonym
+    match is found.  Entries with status_parametro 'valido' are never
+    modified (governance rule).
+    """
+    for entry in por_cargo:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("status_parametro") == "valido":
+            continue
+        raw = entry.get("cargo") or ""
+        normalised = normalize_cargo_tecnico(raw)
+        if normalised:
+            entry["cargo_normalizado"] = normalised
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Dimension classification
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -1297,6 +1394,20 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # AC1 (PRJ-60): inject piso_nacional fallback when not already valid
+        piso_sal = merged.get("piso_salarial")
+        if isinstance(piso_sal, dict):
+            existing_pn = piso_sal.get("piso_nacional", {})
+            if not isinstance(existing_pn, dict) or existing_pn.get("status_parametro") != "valido":
+                piso_sal["piso_nacional"] = build_piso_nacional_fallback()
+                print(f"   ↗  piso_nacional fallback inserido (R$ {_PISO_NACIONAL_VALOR:,.2f} / {_PISO_NACIONAL_ANO})")
+
+        # AC2 (PRJ-60): annotate por_cargo entries with cargo_normalizado
+        if isinstance(piso_sal, dict):
+            por_cargo = piso_sal.get("por_cargo")
+            if isinstance(por_cargo, list):
+                apply_cargo_normalizado(por_cargo)
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False

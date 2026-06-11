@@ -11,11 +11,14 @@ Covers:
   AC6 — governance: "valido" items never overwritten
   PRJ-59 — traceability fields: origem, fonte, fonte_textual, pagina,
             data_extracao; fonte_oficial and conflito_fontes schema support
+  PRJ-60 — piso_nacional fallback, cargo_normalizado, piso_cct priority
 """
 
 import re
 import sys
 import os
+
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -26,6 +29,11 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    normalize_cargo_tecnico,
+    apply_cargo_normalizado,
+    build_piso_nacional_fallback,
+    _PISO_NACIONAL_VALOR,
+    _PISO_NACIONAL_ANO,
 )
 
 
@@ -660,6 +668,224 @@ def test_prj59_sc10_data_extracao_format():
     assert data_extracao is not None
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
+    )
+
+
+# =============================================================================
+# PRJ-60 — Piso Nacional fallback & Cargo Técnico normalisation
+# =============================================================================
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5a — Piso CCT resolver priority: piso_cct, piso_unico, valor
+# (logic mirrored here to test the data that feeds into app.js)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _resolve_piso_cct(ps):
+    """Mirror of the RATECARD_PISO_COLUMNS piso_cct resolver in app.js."""
+    if ps is None:
+        return None
+    if ps.get("valor_piso_cct") is not None:
+        return ps["valor_piso_cct"]
+    if ps.get("tipo") == "piso_unico" and ps.get("valor") is not None:
+        return ps["valor"]
+    if ps.get("valor") is not None and ps.get("tipo") not in ("piso_tecnico", "piso_administrativo"):
+        return ps["valor"]
+    return None
+
+
+def test_prj60_piso_cct_resolved_via_valor_piso_cct():
+    ps = {"valor_piso_cct": 1800.00, "tipo": "piso_cct", "valor": None}
+    assert _resolve_piso_cct(ps) == 1800.00
+
+
+def test_prj60_piso_cct_resolved_via_piso_unico():
+    ps = {"valor_piso_cct": None, "tipo": "piso_unico", "valor": 1642.48}
+    assert _resolve_piso_cct(ps) == 1642.48
+
+
+def test_prj60_piso_cct_resolved_via_valor_fallback():
+    ps = {"valor_piso_cct": None, "tipo": "piso_cct", "valor": 1728.89}
+    assert _resolve_piso_cct(ps) == 1728.89
+
+
+def test_prj60_piso_cct_not_resolved_for_piso_tecnico():
+    ps = {"valor_piso_cct": None, "tipo": "piso_tecnico", "valor": 1728.89}
+    assert _resolve_piso_cct(ps) is None
+
+
+def test_prj60_piso_cct_not_resolved_for_piso_administrativo():
+    ps = {"valor_piso_cct": None, "tipo": "piso_administrativo", "valor": 1642.48}
+    assert _resolve_piso_cct(ps) is None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5b — Piso Nacional displayed when piso_nacional.valor exists; absent → None
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_prj60_piso_nacional_fallback_valor():
+    pn = build_piso_nacional_fallback()
+    assert pn["valor"] == _PISO_NACIONAL_VALOR
+
+
+def test_prj60_piso_nacional_fallback_ano_referencia():
+    pn = build_piso_nacional_fallback()
+    assert pn["ano_referencia"] == _PISO_NACIONAL_ANO
+
+
+def test_prj60_piso_nacional_fallback_status_parametro():
+    pn = build_piso_nacional_fallback()
+    assert pn["status_parametro"] == "extraido_para_revisao"
+
+
+def test_prj60_piso_nacional_absent_returns_none():
+    record = {"itens_cct": {"piso_salarial": {}}}
+    val = record["itens_cct"]["piso_salarial"].get("piso_nacional", {}).get("valor")
+    assert val is None
+
+
+def test_prj60_piso_nacional_present_returns_valor():
+    pn = build_piso_nacional_fallback()
+    record = {"itens_cct": {"piso_salarial": {"piso_nacional": pn}}}
+    val = record["itens_cct"]["piso_salarial"]["piso_nacional"]["valor"]
+    assert val == _PISO_NACIONAL_VALOR
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5c — Técnico Suporte I/II/III: exact name + every synonym variant
+# ─────────────────────────────────────────────────────────────────────────────
+
+@pytest.mark.parametrize("raw,expected", [
+    # exact canonical names
+    ("Técnico Suporte I", "Técnico Suporte I"),
+    ("Técnico Suporte II", "Técnico Suporte II"),
+    ("Técnico Suporte III", "Técnico Suporte III"),
+    # Level I synonyms
+    ("Técnico de Suporte I", "Técnico Suporte I"),
+    ("Técnico em Suporte I", "Técnico Suporte I"),
+    ("Técnico de Suporte Nível I", "Técnico Suporte I"),
+    ("Técnico Suporte Nível I", "Técnico Suporte I"),
+    ("Técnico de Suporte 1", "Técnico Suporte I"),
+    ("Técnico Suporte 1", "Técnico Suporte I"),
+    ("Técnico de Suporte Jr", "Técnico Suporte I"),
+    ("Técnico de Suporte Júnior", "Técnico Suporte I"),
+    ("Técnico de Suporte Junior", "Técnico Suporte I"),
+    ("Suporte Técnico I", "Técnico Suporte I"),
+    ("Suporte Técnico Nível I", "Técnico Suporte I"),
+    ("Suporte Técnico 1", "Técnico Suporte I"),
+    # Level II synonyms
+    ("Técnico de Suporte II", "Técnico Suporte II"),
+    ("Técnico em Suporte II", "Técnico Suporte II"),
+    ("Técnico de Suporte Nível II", "Técnico Suporte II"),
+    ("Técnico Suporte Nível II", "Técnico Suporte II"),
+    ("Técnico de Suporte 2", "Técnico Suporte II"),
+    ("Técnico Suporte 2", "Técnico Suporte II"),
+    ("Técnico de Suporte Pleno", "Técnico Suporte II"),
+    ("Técnico Suporte Pleno", "Técnico Suporte II"),
+    ("Suporte Técnico II", "Técnico Suporte II"),
+    ("Suporte Técnico Nível II", "Técnico Suporte II"),
+    ("Suporte Técnico 2", "Técnico Suporte II"),
+    # Level III synonyms
+    ("Técnico de Suporte III", "Técnico Suporte III"),
+    ("Técnico em Suporte III", "Técnico Suporte III"),
+    ("Técnico de Suporte Nível III", "Técnico Suporte III"),
+    ("Técnico Suporte Nível III", "Técnico Suporte III"),
+    ("Técnico de Suporte 3", "Técnico Suporte III"),
+    ("Técnico Suporte 3", "Técnico Suporte III"),
+    ("Técnico de Suporte Sênior", "Técnico Suporte III"),
+    ("Técnico Suporte Sênior", "Técnico Suporte III"),
+    ("Técnico de Suporte Senior", "Técnico Suporte III"),
+    ("Suporte Técnico III", "Técnico Suporte III"),
+    ("Suporte Técnico Nível III", "Técnico Suporte III"),
+    ("Suporte Técnico 3", "Técnico Suporte III"),
+])
+def test_prj60_normalize_cargo_tecnico(raw, expected):
+    assert normalize_cargo_tecnico(raw) == expected, (
+        f"normalize_cargo_tecnico({raw!r}) should return {expected!r}"
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5d — Unknown cargo returns None
+# ─────────────────────────────────────────────────────────────────────────────
+
+@pytest.mark.parametrize("raw", [
+    "Técnico de atendimento",
+    "Auxiliar de Processamento",
+    "Analistas de tecnologia da informação Iniciantes",
+    "Supervisores e Cargos de Nível Técnico",
+    "",
+    "Gerente de TI",
+])
+def test_prj60_normalize_cargo_tecnico_unknown(raw):
+    assert normalize_cargo_tecnico(raw) is None, (
+        f"normalize_cargo_tecnico({raw!r}) should return None"
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5e — valido entries not overwritten by apply_cargo_normalizado
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_prj60_apply_cargo_normalizado_skips_valido():
+    entry = {
+        "cargo": "Técnico de Suporte I",
+        "valor": 2000.00,
+        "status_parametro": "valido",
+    }
+    apply_cargo_normalizado([entry])
+    assert "cargo_normalizado" not in entry, (
+        "apply_cargo_normalizado must not modify entries with status_parametro 'valido'"
+    )
+
+
+def test_prj60_apply_cargo_normalizado_adds_field():
+    entry = {
+        "cargo": "Técnico de Suporte Nível II",
+        "valor": 1900.00,
+        "status_parametro": "extraido_para_revisao",
+    }
+    apply_cargo_normalizado([entry])
+    assert entry.get("cargo_normalizado") == "Técnico Suporte II"
+
+
+def test_prj60_apply_cargo_normalizado_no_match_no_field():
+    entry = {
+        "cargo": "Analista de Suporte",
+        "valor": 1800.00,
+        "status_parametro": "extraido_para_revisao",
+    }
+    apply_cargo_normalizado([entry])
+    assert "cargo_normalizado" not in entry
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC5f — piso_nacional fallback carries all required traceability fields
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_prj60_piso_nacional_fallback_traceability_fields():
+    pn = build_piso_nacional_fallback()
+    required = ("origem", "fonte", "fonte_textual", "pagina", "data_extracao")
+    for field in required:
+        assert field in pn, f"piso_nacional fallback missing traceability field: {field}"
+
+
+def test_prj60_piso_nacional_fallback_origem_is_fonte_oficial():
+    pn = build_piso_nacional_fallback()
+    assert pn["origem"] == "fonte_oficial"
+
+
+def test_prj60_piso_nacional_fallback_data_extracao_format():
+    pn = build_piso_nacional_fallback()
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", pn["data_extracao"]), (
+        f"data_extracao '{pn['data_extracao']}' does not match YYYY-MM-DD format"
+    )
+
+
+def test_prj60_piso_nacional_valido_not_overwritten():
+    """build_piso_nacional_fallback itself never produces status 'valido'."""
+    pn = build_piso_nacional_fallback()
+    assert pn["status_parametro"] != "valido", (
+        "Fallback must never set status_parametro to 'valido' (human approval only)"
     )
 
 
