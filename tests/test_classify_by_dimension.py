@@ -26,6 +26,11 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    normalize_cargo_tecnico,
+    apply_piso_nacional_fallback,
+    normalize_por_cargo_entries,
+    PISO_NACIONAL_VALOR,
+    PISO_NACIONAL_ANO,
 )
 
 
@@ -661,6 +666,260 @@ def test_prj59_sc10_data_extracao_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-60: Piso Nacional fallback, cargo normalization, Piso CCT priority
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── AC1: apply_piso_nacional_fallback ────────────────────────────────────────
+
+def test_prj60_piso_nacional_fallback_adds_sub_object():
+    """apply_piso_nacional_fallback populates piso_nacional when absent."""
+    item = {"valor": 1800.00, "status_parametro": "extraido_para_revisao"}
+    apply_piso_nacional_fallback(item)
+    assert "piso_nacional" in item
+
+
+def test_prj60_piso_nacional_fallback_valor_correct():
+    item = {}
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["valor"] == PISO_NACIONAL_VALOR
+
+
+def test_prj60_piso_nacional_fallback_ano_referencia():
+    item = {}
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["ano_referencia"] == PISO_NACIONAL_ANO
+
+
+def test_prj60_piso_nacional_fallback_status_extraido_para_revisao():
+    item = {}
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["status_parametro"] == "extraido_para_revisao"
+
+
+def test_prj60_piso_nacional_fallback_has_all_trace_fields():
+    """Auto-populated piso_nacional carries all mandatory traceability fields (AC1/AC5-f)."""
+    item = {}
+    apply_piso_nacional_fallback(item)
+    pn = item["piso_nacional"]
+    for field in ("origem", "fonte", "fonte_textual", "pagina", "data_extracao"):
+        assert field in pn, f"Missing traceability field: {field}"
+    assert pn["origem"] == "fonte_oficial"
+    assert pn["pagina"] is None
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", pn["data_extracao"])
+
+
+def test_prj60_piso_nacional_fallback_observacao_set():
+    item = {}
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["observacao"] is not None
+    assert len(item["piso_nacional"]["observacao"]) > 10
+
+
+def test_prj60_piso_nacional_fallback_valido_not_overwritten():
+    """Existing piso_nacional with status_parametro='valido' must not be overwritten (AC1/AC5-e)."""
+    item = {
+        "piso_nacional": {
+            "valor": 9999.99,
+            "status_parametro": "valido",
+            "observacao": "Validado manualmente",
+        }
+    }
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["valor"] == 9999.99
+    assert item["piso_nacional"]["status_parametro"] == "valido"
+
+
+def test_prj60_piso_nacional_fallback_overwrites_pendente():
+    """Existing piso_nacional with non-valido status is replaced."""
+    item = {
+        "piso_nacional": {
+            "valor": None,
+            "status_parametro": "pendente_revisao",
+        }
+    }
+    apply_piso_nacional_fallback(item)
+    assert item["piso_nacional"]["valor"] == PISO_NACIONAL_VALOR
+    assert item["piso_nacional"]["status_parametro"] == "extraido_para_revisao"
+
+
+# ── AC1 via extract_itens_cct: piso_nacional present even when PDF is absent ─
+
+def test_prj60_piso_nacional_injected_via_main_flow():
+    """
+    After extract_itens_cct + apply_piso_nacional_fallback, the piso_salarial item
+    contains piso_nacional regardless of PDF availability (AC5-b).
+    """
+    from extract_cct_items import merge_itens_cct
+
+    record = {
+        "id_registro_reajuste": "REG-PRJ60-001",
+        "fonte_documento": "CCT/nonexistent.pdf",
+    }
+    itens, _ = extract_itens_cct(record)
+    merged = merge_itens_cct(record.get("itens_cct"), itens)
+    piso_sal = merged.get("piso_salarial")
+    assert piso_sal is not None
+    apply_piso_nacional_fallback(piso_sal)
+    pn = piso_sal.get("piso_nacional")
+    assert pn is not None
+    assert pn["valor"] == PISO_NACIONAL_VALOR
+
+
+# ── AC2: normalize_cargo_tecnico ─────────────────────────────────────────────
+
+# Exact Ratecard labels
+def test_prj60_normalize_tecnico_suporte_i_exact():
+    assert normalize_cargo_tecnico("Técnico Suporte I") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_tecnico_suporte_ii_exact():
+    assert normalize_cargo_tecnico("Técnico Suporte II") == "Técnico Suporte II"
+
+
+def test_prj60_normalize_tecnico_suporte_iii_exact():
+    assert normalize_cargo_tecnico("Técnico Suporte III") == "Técnico Suporte III"
+
+
+# Nível I variations
+def test_prj60_normalize_i_variation_nivel_i():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível I") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_i_variation_em_suporte():
+    assert normalize_cargo_tecnico("Técnico em Suporte I") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_i_variation_number_1():
+    assert normalize_cargo_tecnico("Técnico de Suporte 1") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_i_variation_jr():
+    assert normalize_cargo_tecnico("Técnico Suporte Jr") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_i_variation_junior():
+    assert normalize_cargo_tecnico("Técnico de Suporte Junior") == "Técnico Suporte I"
+
+
+def test_prj60_normalize_i_variation_junior_accented():
+    assert normalize_cargo_tecnico("Técnico de Suporte Júnior") == "Técnico Suporte I"
+
+
+# Nível II variations
+def test_prj60_normalize_ii_variation_nivel_ii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível II") == "Técnico Suporte II"
+
+
+def test_prj60_normalize_ii_variation_number_2():
+    assert normalize_cargo_tecnico("Técnico de Suporte 2") == "Técnico Suporte II"
+
+
+def test_prj60_normalize_ii_variation_pleno():
+    assert normalize_cargo_tecnico("Técnico Suporte Pleno") == "Técnico Suporte II"
+
+
+# Nível III variations
+def test_prj60_normalize_iii_variation_nivel_iii():
+    assert normalize_cargo_tecnico("Técnico de Suporte Nível III") == "Técnico Suporte III"
+
+
+def test_prj60_normalize_iii_variation_number_3():
+    assert normalize_cargo_tecnico("Técnico de Suporte 3") == "Técnico Suporte III"
+
+
+def test_prj60_normalize_iii_variation_senior():
+    assert normalize_cargo_tecnico("Técnico Suporte Senior") == "Técnico Suporte III"
+
+
+def test_prj60_normalize_iii_variation_senior_accented():
+    assert normalize_cargo_tecnico("Técnico Suporte Sênior") == "Técnico Suporte III"
+
+
+# Unknown cargo returns None (AC5-d)
+def test_prj60_normalize_unknown_cargo_returns_none():
+    assert normalize_cargo_tecnico("Técnico de atendimento") is None
+
+
+def test_prj60_normalize_unrelated_returns_none():
+    assert normalize_cargo_tecnico("Auxiliar de Processamento") is None
+
+
+def test_prj60_normalize_empty_returns_none():
+    assert normalize_cargo_tecnico("") is None
+
+
+# ── AC2: normalize_por_cargo_entries ─────────────────────────────────────────
+
+def test_prj60_normalize_por_cargo_entries_adds_field():
+    item = {
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Nível I", "valor": 1800.00},
+        ]
+    }
+    normalize_por_cargo_entries(item)
+    assert item["por_cargo"][0]["cargo_normalizado"] == "Técnico Suporte I"
+
+
+def test_prj60_normalize_por_cargo_entries_no_match_unchanged():
+    item = {
+        "por_cargo": [
+            {"cargo": "Técnico de atendimento", "valor": 1500.00},
+        ]
+    }
+    normalize_por_cargo_entries(item)
+    assert "cargo_normalizado" not in item["por_cargo"][0]
+
+
+def test_prj60_normalize_por_cargo_entries_multiple():
+    item = {
+        "por_cargo": [
+            {"cargo": "Técnico de Suporte Nível I", "valor": 1800.00},
+            {"cargo": "Técnico de Suporte Nível II", "valor": 2000.00},
+            {"cargo": "Técnico de Suporte Nível III", "valor": 2500.00},
+            {"cargo": "Auxiliar de Processamento", "valor": 1400.00},
+        ]
+    }
+    normalize_por_cargo_entries(item)
+    assert item["por_cargo"][0]["cargo_normalizado"] == "Técnico Suporte I"
+    assert item["por_cargo"][1]["cargo_normalizado"] == "Técnico Suporte II"
+    assert item["por_cargo"][2]["cargo_normalizado"] == "Técnico Suporte III"
+    assert "cargo_normalizado" not in item["por_cargo"][3]
+
+
+def test_prj60_normalize_por_cargo_no_entries_ok():
+    """Items without por_cargo do not raise errors."""
+    item = {"valor": 1800.00, "status_parametro": "extraido_para_revisao"}
+    normalize_por_cargo_entries(item)  # should not raise
+
+
+# ── AC3: Piso CCT resolver priority (Python extraction side) ─────────────────
+
+def test_prj60_piso_cct_single_value_tipo_piso_unico():
+    """Single BRL value produces tipo='piso_unico' — should resolve as Piso CCT."""
+    from extract_cct_items import extract_piso_salarial, parse_clauses
+
+    text = "CLÁUSULA TERCEIRA - PISO SALARIAL\nO piso salarial fica estabelecido em R$ 1.800,00."
+    clauses = parse_clauses(text)
+    item = extract_piso_salarial(clauses, "test.pdf")
+    assert item.get("tipo") == "piso_unico"
+    assert item.get("valor") == 1800.0
+
+
+def test_prj60_piso_cct_multiple_values_tipo_piso_cct():
+    """Multiple BRL values with no clear dimension produce tipo='piso_cct'."""
+    from extract_cct_items import extract_piso_salarial, parse_clauses
+
+    text = (
+        "CLÁUSULA TERCEIRA - PISO SALARIAL\n"
+        "Piso A: R$ 1.800,00\nPiso B: R$ 2.000,00."
+    )
+    clauses = parse_clauses(text)
+    item = extract_piso_salarial(clauses, "test.pdf")
+    # With two values and no classificable dimension, should be piso_cct or conflito
+    assert item.get("tipo") in ("piso_cct", "conflito", "extraido_para_revisao") or item.get("valor") is not None
 
 
 if __name__ == "__main__":

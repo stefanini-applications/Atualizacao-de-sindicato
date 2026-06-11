@@ -1500,13 +1500,16 @@ const CCT_ITEM_FIELDS = {
 };
 
 /**
- * Looks up a cargo value from piso_salarial.por_cargo[] by exact cargo name.
+ * Looks up a cargo value from piso_salarial.por_cargo[] by exact cargo name
+ * or by cargo_normalizado (PRJ-60 AC2).
  * Returns null if not found.
  */
 function getCargoValue(record, cargoLabel) {
   const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
   if (!Array.isArray(porCargo)) return null;
-  const entry = porCargo.find((e) => e?.cargo === cargoLabel);
+  const entry = porCargo.find(
+    (e) => e?.cargo === cargoLabel || e?.cargo_normalizado === cargoLabel
+  );
   return entry?.valor ?? null;
 }
 
@@ -1522,8 +1525,10 @@ const RATECARD_PISO_COLUMNS = [
     resolver: (record) => {
       const ps = record.itens_cct?.piso_salarial;
       if (!ps) return null;
+      // Priority: piso_cct (explicit field) → piso_unico → valor (non-cargo types)
       return ps.valor_piso_cct
-        ?? (ps.valor != null && !['piso_unico', 'piso_tecnico', 'piso_administrativo'].includes(ps.tipo)
+        ?? (ps.tipo === 'piso_unico' ? ps.valor : null)
+        ?? (ps.valor != null && !['piso_tecnico', 'piso_administrativo'].includes(ps.tipo)
           ? ps.valor : null)
         ?? null;
     },
@@ -1531,7 +1536,7 @@ const RATECARD_PISO_COLUMNS = [
   {
     id: 'piso_nacional',
     label: 'Piso Nacional',
-    resolver: (record) => record.itens_cct?.piso_salarial?.piso_nacional ?? null,
+    resolver: (record) => record.itens_cct?.piso_salarial?.piso_nacional?.valor ?? null,
   },
   {
     id: 'tecnico_suporte_i',

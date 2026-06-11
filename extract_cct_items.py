@@ -409,6 +409,27 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
     ],
 }
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Cargo técnico synonym table (PRJ-60 AC2)
+# Maps raw cargo names (normalized) to Ratecard standardized labels.
+# ──────────────────────────────────────────────────────────────────────────────
+
+CARGO_TECNICO_SYNONYMS: list[tuple[str, str]] = [
+    # Técnico Suporte I — variations with I, 1, Jr, Júnior/Junior
+    (r"t[eé]cnicos?\s+(?:de\s+|em\s+)?suportes?\s+(?:n[ií]vel\s+)?(?:i\b|1\b|jr\.?|j[uú]niors?)", "Técnico Suporte I"),
+    (r"suportes?\s+t[eé]cnicos?\s+(?:n[ií]vel\s+)?(?:i\b|1\b|jr\.?|j[uú]niors?)", "Técnico Suporte I"),
+    # Técnico Suporte II — variations with II, 2, Pleno
+    (r"t[eé]cnicos?\s+(?:de\s+|em\s+)?suportes?\s+(?:n[ií]vel\s+)?(?:ii\b|2\b|plenos?)", "Técnico Suporte II"),
+    (r"suportes?\s+t[eé]cnicos?\s+(?:n[ií]vel\s+)?(?:ii\b|2\b|plenos?)", "Técnico Suporte II"),
+    # Técnico Suporte III — variations with III, 3, Sênior/Senior
+    (r"t[eé]cnicos?\s+(?:de\s+|em\s+)?suportes?\s+(?:n[ií]vel\s+)?(?:iii\b|3\b|s[eê]niors?)", "Técnico Suporte III"),
+    (r"suportes?\s+t[eé]cnicos?\s+(?:n[ií]vel\s+)?(?:iii\b|3\b|s[eê]niors?)", "Técnico Suporte III"),
+]
+
+# Fallback piso nacional values (Ministério do Trabalho / Gov.br, 2026)
+PISO_NACIONAL_VALOR: float = 1621.00
+PISO_NACIONAL_ANO: int = 2026
+
 # Maps each param_type to the dimensions that should be attempted for classification.
 # Extend to enable classification for new parameters in future stories.
 PARAM_DIMENSIONS: dict[str, list[str]] = {
@@ -561,6 +582,70 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
             result[f"por_{dim_name}"] = classified
 
     return result
+
+
+def normalize_cargo_tecnico(cargo: str) -> str | None:
+    """
+    Normalize a raw cargo name to a Ratecard standardized label using the synonym table.
+
+    Returns one of "Técnico Suporte I", "Técnico Suporte II", "Técnico Suporte III",
+    or None when no match is found.
+    """
+    cargo_n = normalize(cargo)
+    for pattern, label in CARGO_TECNICO_SYNONYMS:
+        if re.search(pattern, cargo_n, re.IGNORECASE):
+            return label
+    return None
+
+
+def normalize_por_cargo_entries(piso_salarial_item: dict) -> None:
+    """
+    Adds ``cargo_normalizado`` to each ``por_cargo[]`` entry that matches the synonym
+    table.  Entries without a match are left unchanged.  Modifies in-place.
+    """
+    entries = piso_salarial_item.get("por_cargo")
+    if not isinstance(entries, list):
+        return
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        cargo = entry.get("cargo") or ""
+        if not cargo:
+            continue
+        normalized = normalize_cargo_tecnico(cargo)
+        if normalized is not None:
+            entry["cargo_normalizado"] = normalized
+
+
+def apply_piso_nacional_fallback(piso_salarial_item: dict) -> None:
+    """
+    Inserts the ``piso_nacional`` sub-object into a ``piso_salarial`` item using the
+    official minimum wage as a traceable fallback (PRJ-60 AC1).
+
+    Governance:
+    - Existing ``piso_nacional`` with ``status_parametro == "valido"`` is never modified.
+    - All automatically filled values carry full traceability fields.
+
+    Modifies piso_salarial_item in-place.
+    """
+    existing = piso_salarial_item.get("piso_nacional")
+    if existing and existing.get("status_parametro") == "valido":
+        return  # never overwrite a manually validated entry
+
+    piso_salarial_item["piso_nacional"] = {
+        "valor": PISO_NACIONAL_VALOR,
+        "ano_referencia": PISO_NACIONAL_ANO,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "fonte_oficial",
+        "fonte": "Ministério do Trabalho / Gov.br",
+        "fonte_textual": "Referência oficial usada para identificar o valor do salário mínimo nacional",
+        "pagina": None,
+        "data_extracao": today_str(),
+        "observacao": (
+            "Informação preenchida por fallback oficial porque não foi encontrado "
+            "piso específico no PDF."
+        ),
+    }
 
 
 def has_negative_clause(text: str) -> bool:
@@ -1273,6 +1358,9 @@ def main():
         "com_por_jornada": 0,
         "com_por_modalidade": 0,
         "com_por_escala": 0,
+        # PRJ-60 enrichment counters
+        "piso_nacional_adicionados": 0,
+        "cargo_normalizado_adicionados": 0,
     }
 
     for record in records:
@@ -1297,6 +1385,12 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # Apply piso_nacional fallback and cargo normalization (PRJ-60 AC1/AC2)
+        piso_sal = merged.get("piso_salarial")
+        if piso_sal:
+            apply_piso_nacional_fallback(piso_sal)
+            normalize_por_cargo_entries(piso_sal)
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False
@@ -1343,6 +1437,16 @@ def main():
         if has_por_escala:
             stats["com_por_escala"] += 1
 
+        # Track PRJ-60 enrichment stats
+        if piso_sal and piso_sal.get("piso_nacional"):
+            stats["piso_nacional_adicionados"] += 1
+        if piso_sal:
+            cnt = sum(
+                1 for e in (piso_sal.get("por_cargo") or [])
+                if isinstance(e, dict) and e.get("cargo_normalizado")
+            )
+            stats["cargo_normalizado_adicionados"] += cnt
+
         if not args.dry_run:
             record["itens_cct"] = merged
 
@@ -1365,6 +1469,9 @@ def main():
     print(f"  registros c/ por_jornada   : {stats['com_por_jornada']}")
     print(f"  registros c/ por_modalidade: {stats['com_por_modalidade']}")
     print(f"  registros c/ por_escala    : {stats['com_por_escala']}")
+    print(f"\n── Enriquecimento PRJ-60 ──────────────────────────────")
+    print(f"  piso_nacional adicionados  : {stats['piso_nacional_adicionados']}")
+    print(f"  cargo_normalizado gerados  : {stats['cargo_normalizado_adicionados']}")
 
     if args.dry_run:
         print("\n[dry-run] Nenhuma alteração foi salva.")
