@@ -343,7 +343,7 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"auxiliar\s+administrativo", "auxiliar_administrativo"),
         (r"t[eé]cnico\s+de\s+suporte", "tecnico_suporte"),
         (r"t[eé]cnico\s+em\s+inform[aá]tica", "tecnico_informatica"),
-        (r"operador(?:es)?", "operador"),
+        (r"\boperador(?:es)?\s+de\s+(?:sistema|equipamento|m[aá]quina|produ[cç][aã]o|telemarketing|computador|caixa|retifica|torno|solda|empilhadeira)", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
         (r"analista[s]?", "analista"),
@@ -1232,6 +1232,62 @@ def merge_itens_cct(existing: dict | None, new_itens: dict) -> dict:
     return merged
 
 
+# Salário mínimo nacional por ano de referência (Lei / Decreto anual).
+# Estender ao adicionar novos anos conforme publicação oficial.
+_PISO_NACIONAL_POR_ANO: dict[int, float] = {
+    2023: 1320.0,
+    2024: 1412.0,
+    2025: 1518.0,
+}
+
+
+def apply_piso_nacional_fallback(itens: dict, record: dict) -> None:
+    """
+    Aplica o salário mínimo nacional como valor de referência em
+    ``itens["piso_nacional"]`` quando o CCT não especificou um piso próprio.
+
+    Governança:
+    - Só aplica quando ``piso_nacional`` está ausente ou com
+      ``status_parametro`` nulo / ``"pendente_revisao"``.
+    - Nunca sobrescreve um valor já preenchido com status relevante
+      (qualquer status não-nulo diferente de ``"pendente_revisao"``).
+    - Só preenche quando ``piso_salarial`` do CCT também está pendente ou
+      ausente — se o CCT já forneceu um piso próprio, o fallback nacional
+      é registrado como referência mas não interfere no piso negociado.
+    """
+    existing = itens.get("piso_nacional", {})
+    existing_status = existing.get("status_parametro")
+
+    # Guard: preserve if already has a usable (non-pending) value
+    if existing_status and existing_status != "pendente_revisao":
+        return
+
+    ano = record.get("ano_referencia")
+    valor = _PISO_NACIONAL_POR_ANO.get(ano) if ano else None
+    if valor is None:
+        return
+
+    fonte = record.get("fonte_documento") or ""
+    itens["piso_nacional"] = {
+        "valor": valor,
+        "percentual": None,
+        "valor_textual": f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "regra_textual": f"Salário mínimo nacional vigente em {ano} (Lei/Decreto federal).",
+        "tipo": "piso_nacional",
+        "unidade": "BRL",
+        "fonte_documento": fonte,
+        "clausula": None,
+        "trecho_fonte": None,
+        "observacao": "Valor do salário mínimo nacional aplicado como referência de fallback.",
+        "status_parametro": "extraido_para_revisao",
+        "origem": "referencia_legal",
+        "fonte": "Decreto federal — salário mínimo nacional",
+        "fonte_textual": None,
+        "pagina": None,
+        "data_extracao": today_str(),
+    }
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # CLI
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1297,6 +1353,9 @@ def main():
 
         # Merge with existing
         merged = merge_itens_cct(record.get("itens_cct"), new_itens)
+
+        # Apply national minimum wage as fallback for piso_nacional
+        apply_piso_nacional_fallback(merged, record)
 
         # Summarize items
         has_por_cargo = has_por_jornada = has_por_modalidade = has_por_escala = False

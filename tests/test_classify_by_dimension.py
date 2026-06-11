@@ -11,6 +11,7 @@ Covers:
   AC6 — governance: "valido" items never overwritten
   PRJ-59 — traceability fields: origem, fonte, fonte_textual, pagina,
             data_extracao; fonte_oficial and conflito_fontes schema support
+  PRJ-61 — apply_piso_nacional_fallback guards; operador regex restriction
 """
 
 import re
@@ -26,6 +27,8 @@ from extract_cct_items import (
     _classify_jornada_multiple,
     extract_jornada,
     _item_not_found,
+    apply_piso_nacional_fallback,
+    DIMENSION_PATTERNS,
 )
 
 
@@ -666,3 +669,101 @@ def test_prj59_sc10_data_extracao_format():
 if __name__ == "__main__":
     import pytest
     pytest.main([__file__, "-v"])
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-61: apply_piso_nacional_fallback governance tests
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _make_record(ano=2025):
+    return {"ano_referencia": ano, "fonte_documento": "CCT/test.pdf"}
+
+
+def test_piso_nacional_fallback_applied_when_absent():
+    """AC2 base case: piso_nacional absent → fallback is applied."""
+    itens = {}
+    apply_piso_nacional_fallback(itens, _make_record(2025))
+    assert "piso_nacional" in itens
+    assert itens["piso_nacional"]["valor"] == 1518.0
+    assert itens["piso_nacional"]["status_parametro"] == "extraido_para_revisao"
+
+
+def test_piso_nacional_fallback_applied_when_pendente():
+    """AC2: piso_nacional with status pendente_revisao → fallback overwrites."""
+    itens = {"piso_nacional": {"valor": None, "status_parametro": "pendente_revisao"}}
+    apply_piso_nacional_fallback(itens, _make_record(2024))
+    assert itens["piso_nacional"]["valor"] == 1412.0
+
+
+def test_piso_nacional_fallback_not_applied_when_valido():
+    """AC2: piso_nacional already valido → fallback does NOT overwrite."""
+    original = {"valor": 1800.0, "status_parametro": "valido"}
+    itens = {"piso_nacional": dict(original)}
+    apply_piso_nacional_fallback(itens, _make_record(2025))
+    assert itens["piso_nacional"]["valor"] == 1800.0
+    assert itens["piso_nacional"]["status_parametro"] == "valido"
+
+
+def test_piso_nacional_fallback_not_applied_when_extraido():
+    """AC2: piso_nacional with extraido_para_revisao → fallback does NOT overwrite."""
+    original = {"valor": 1700.0, "status_parametro": "extraido_para_revisao"}
+    itens = {"piso_nacional": dict(original)}
+    apply_piso_nacional_fallback(itens, _make_record(2025))
+    assert itens["piso_nacional"]["valor"] == 1700.0
+
+
+def test_piso_nacional_fallback_not_applied_when_status_none_but_valor_set():
+    """AC2: piso_nacional with None status but existing value → status=None means absent, apply."""
+    itens = {"piso_nacional": {"valor": None, "status_parametro": None}}
+    apply_piso_nacional_fallback(itens, _make_record(2025))
+    assert itens["piso_nacional"]["valor"] == 1518.0
+
+
+def test_piso_nacional_fallback_no_known_year():
+    """Fallback skips silently when ano_referencia has no known minimum wage."""
+    itens = {}
+    apply_piso_nacional_fallback(itens, _make_record(2010))
+    assert "piso_nacional" not in itens
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-61: operador regex restriction tests (AC4)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _cargo_pattern_matches(text):
+    """Return labels matched by cargo dimension patterns in normalized text."""
+    import unicodedata
+    text_n = unicodedata.normalize("NFD", text)
+    text_n = "".join(c for c in text_n if unicodedata.category(c) != "Mn").lower()
+    matched = []
+    for pattern, label in DIMENSION_PATTERNS["cargo"]:
+        if re.search(pattern, text_n, re.IGNORECASE):
+            matched.append(label)
+    return matched
+
+
+def test_operador_matches_with_technical_context():
+    """AC4: 'operador de sistema' should match the operador cargo pattern."""
+    assert "operador" in _cargo_pattern_matches("operador de sistema de TI")
+
+
+def test_operador_matches_equipamento():
+    """AC4: 'operador de equipamento' should match."""
+    assert "operador" in _cargo_pattern_matches("operador de equipamento pesado")
+
+
+def test_operador_no_match_for_logical_operator():
+    """AC4: 'operador logico' must NOT match (non-cargo usage)."""
+    assert "operador" not in _cargo_pattern_matches("o operador lógico AND é utilizado")
+
+
+def test_operador_no_match_for_mathematical_operator():
+    """AC4: 'operador matematico' must NOT match."""
+    assert "operador" not in _cargo_pattern_matches("operador matemático de adição")
+
+
+def test_operador_no_match_bare_word():
+    """AC4: bare 'operador' without technical context must NOT match."""
+    assert "operador" not in _cargo_pattern_matches(
+        "conforme estabelecido o operador poderá solicitar revisão"
+    )
