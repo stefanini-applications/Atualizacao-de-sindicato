@@ -1531,7 +1531,13 @@ const RATECARD_PISO_COLUMNS = [
   {
     id: 'piso_nacional',
     label: 'Piso Nacional',
-    resolver: (record) => record.itens_cct?.piso_salarial?.piso_nacional ?? null,
+    resolver: (record) => {
+      const pn =
+        record.itens_cct?.piso_nacional?.valor ??
+        record.itens_cct?.piso_salarial?.piso_nacional?.valor ??
+        null;
+      return pn;
+    },
   },
   {
     id: 'tecnico_suporte_i',
