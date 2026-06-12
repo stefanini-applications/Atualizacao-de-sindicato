@@ -343,7 +343,7 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"auxiliar\s+administrativo", "auxiliar_administrativo"),
         (r"t[eé]cnico\s+de\s+suporte", "tecnico_suporte"),
         (r"t[eé]cnico\s+em\s+inform[aá]tica", "tecnico_informatica"),
-        (r"operador(?:es)?", "operador"),
+        (r"operador(?:es)?\s+de\s+(?:sistema|equipamento|m[aá]quina|terminal|rede|ti\b|inform[aá]tica|telemarketing|call\s*center|produ[cç][aã]o|servi[cç]os?)", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
         (r"analista[s]?", "analista"),
@@ -1230,6 +1230,44 @@ def merge_itens_cct(existing: dict | None, new_itens: dict) -> dict:
         merged[key] = new_item
 
     return merged
+
+
+def apply_piso_nacional_fallback(record: dict, piso_nacional_value: float | None) -> None:
+    """
+    Apply national wage floor as fallback for records whose piso_nacional is
+    absent or has no usable value.
+
+    Governance (AC2): the fallback is ONLY applied when piso_nacional is absent,
+    None, or has status_parametro of None or "pendente_revisao".  Records that
+    already carry a filled piso_nacional with any other status (e.g. "valido",
+    "extraido_para_revisao") are left completely untouched, so a previously
+    validated or extracted national floor is never silently overwritten.
+    """
+    if piso_nacional_value is None:
+        return
+
+    current = record.get("piso_nacional")
+
+    if isinstance(current, dict):
+        current_status = current.get("status_parametro")
+        current_valor = current.get("valor")
+        # Preserve if there is already a usable value with a non-trivial status
+        if current_valor is not None and current_status not in (None, "pendente_revisao"):
+            return
+    elif current is not None:
+        # Non-dict non-None value: treat as usable and preserve it
+        return
+
+    record["piso_nacional"] = {
+        "valor": piso_nacional_value,
+        "status_parametro": "pendente_revisao",
+        "origem": "fallback_piso_nacional",
+        "observacao": (
+            "Valor de fallback do piso nacional aplicado automaticamente; "
+            "requer validação."
+        ),
+        "data_extracao": today_str(),
+    }
 
 
 # ──────────────────────────────────────────────────────────────────────────────
