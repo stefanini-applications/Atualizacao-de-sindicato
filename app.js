@@ -1531,7 +1531,18 @@ const RATECARD_PISO_COLUMNS = [
   {
     id: 'piso_nacional',
     label: 'Piso Nacional',
-    resolver: (record) => record.itens_cct?.piso_salarial?.piso_nacional ?? null,
+    resolver: (record) => {
+      // Primary: piso_nacional promoted as own key (PRJ-61)
+      const pnValor = record.itens_cct?.piso_nacional?.valor;
+      if (pnValor != null) return Number(pnValor);
+      // Fallback 1: legacy path pre-PRJ-61
+      const legacyValor = record.itens_cct?.piso_salarial?.piso_nacional?.valor;
+      if (legacyValor != null) return Number(legacyValor);
+      // Fallback 2: piso_salarial with tipo === 'piso_nacional'
+      const ps = record.itens_cct?.piso_salarial;
+      if (ps?.tipo === 'piso_nacional' && ps.valor != null) return Number(ps.valor);
+      return null;
+    },
   },
   {
     id: 'tecnico_suporte_i',
