@@ -637,5 +637,480 @@ class TestGovernanceHelpers(unittest.TestCase):
         self.assertEqual(piso_nacional_true, ["piso_salarial"])
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# PRJ-66 — 12 novos cenários de teste (AC1–AC7)
+# ──────────────────────────────────────────────────────────────────────────────
+
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from parse_mte_instrumento import build_fonte_oficial_mte, parse_mte_instrumento
+
+
+# ── Scenario 1: registro sem fonte_oficial_mte não quebra (AC1) ──────────────
+
+
+class TestPRJ66_AC1_NoFonteOficialMTE(unittest.TestCase):
+    """AC1: Record without fonte_oficial_mte section must not raise errors."""
+
+    def test_record_without_fonte_oficial_mte_does_not_break(self):
+        record = _make_record()
+        self.assertNotIn("fonte_oficial_mte", record)
+
+        # enrich_from_mte_fallback must not raise even without fonte_oficial_mte
+        metrics = enrich_from_mte_fallback(record, None)
+        self.assertEqual(metrics["preenchidos_mte"], 0)
+
+    def test_run_enrichment_with_missing_fonte_oficial_mte_field(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            with patch("enrich_mte_fallback.lookup_mte_instrumento_coletivo", return_value=None), \
+                 patch("enrich_mte_fallback._export_js"):
+                metrics = run_enrichment(json_path=tmp.name, dry_run=True)
+            self.assertEqual(metrics["registros_processados"], 1)
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 2: URL oficial registra referência sem alterar itens_cct (AC4) ──
+
+
+class TestPRJ66_AC4_UrlReferenceNoItensChange(unittest.TestCase):
+    """AC4: URL reference saves fonte_oficial_mte without modifying itens_cct."""
+
+    def test_url_reference_registered_no_itens_cct_change(self):
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="url",
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        self.assertIsNotNone(instrumento)
+        self.assertEqual(instrumento["campos"], {})
+        self.assertEqual(instrumento["tipo_referencia"], "url")
+
+    def test_url_fonte_oficial_mte_status_localizado(self):
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="url",
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        fonte = build_fonte_oficial_mte(
+            tipo_referencia="url",
+            instrumento=instrumento,
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        self.assertEqual(fonte["status_consulta"], "localizado")
+        self.assertEqual(fonte["tipo_referencia"], "url")
+
+    def test_url_reference_does_not_enrich_itens_cct_via_run_enrichment(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                metrics = run_enrichment(
+                    json_path=tmp.name,
+                    dry_run=True,
+                    mte_source="https://mediador.mte.gov.br/instrumento/12345",
+                    mte_tipo="url",
+                )
+            self.assertEqual(metrics["preenchidos_mte"], 0)
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 3: arquivo processável preenche campo pendente (AC2 / AC7) ──────
+
+
+class TestPRJ66_AC2_ArquivoProcessavel(unittest.TestCase):
+    """AC2/AC7: processable MTE file fills pending field with traceability."""
+
+    def test_mte_file_with_campos_fills_pending_field(self):
+        record = _make_record()
+        instrumento_fake = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+
+        with patch("enrich_mte_fallback.parse_mte_instrumento", return_value=instrumento_fake), \
+             patch("enrich_mte_fallback._export_js"):
+            tmp = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".json", delete=False, encoding="utf-8"
+            )
+            json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+            tmp.flush()
+            tmp.close()
+
+            try:
+                metrics = run_enrichment(
+                    json_path=tmp.name,
+                    dry_run=True,
+                    mte_file="/tmp/fake_instrumento.pdf",
+                    mte_tipo="arquivo",
+                )
+                self.assertGreater(metrics["preenchidos_mte"], 0)
+            finally:
+                os.unlink(tmp.name)
+
+
+# ── Scenario 4: campo pdf_cct com valor não é sobrescrito (AC3) ──────────────
+
+
+class TestPRJ66_AC3_PdfCctProtection(unittest.TestCase):
+    """AC3: pdf_cct field with non-null value must not be overwritten."""
+
+    def test_pdf_cct_field_not_overwritten(self):
+        record = _make_record({"itens_cct": {"piso_salarial": copy.deepcopy(FIELD_PDF_EXTRAIDO)}})
+        instrumento = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+
+        enrich_from_mte_fallback(record, instrumento)
+
+        field = record["itens_cct"]["piso_salarial"]
+        # Different values → conflict, not overwrite
+        self.assertNotEqual(field.get("status_parametro"), "extraido_para_revisao")
+        # Original value preserved in opcoes_identificadas
+        if field.get("status_parametro") == "conflito":
+            vals = {o["valor"] for o in field["opcoes_identificadas"]}
+            self.assertIn(1540.47, vals)
+
+
+# ── Scenario 5: campo valido não é sobrescrito (AC3) ─────────────────────────
+
+
+class TestPRJ66_AC3_ValidoProtection(unittest.TestCase):
+    """AC3: field with status_parametro 'valido' must never be overwritten."""
+
+    def test_valido_not_overwritten_by_mte(self):
+        record = _make_record({"itens_cct": {"piso_salarial": copy.deepcopy(FIELD_VALIDO)}})
+        instrumento = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+
+        enrich_from_mte_fallback(record, instrumento)
+
+        field = record["itens_cct"]["piso_salarial"]
+        self.assertEqual(field["status_parametro"], "valido")
+        self.assertEqual(field["valor"], 1500.00)
+
+
+# ── Scenario 6: divergência PDF × MTE vira conflito (AC3) ────────────────────
+
+
+class TestPRJ66_AC3_ConflictDetection(unittest.TestCase):
+    """AC3: PDF vs MTE divergence must produce status 'conflito'."""
+
+    def test_divergence_produces_conflito(self):
+        record = _make_record({"itens_cct": {"piso_salarial": copy.deepcopy(FIELD_PDF_EXTRAIDO)}})
+        instrumento = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})  # 1620 != 1540.47
+
+        metrics = enrich_from_mte_fallback(record, instrumento)
+
+        field = record["itens_cct"]["piso_salarial"]
+        self.assertEqual(field["status_parametro"], "conflito")
+        self.assertEqual(metrics["conflitos"], 1)
+        opcoes_fontes = {o["fonte"] for o in field["opcoes_identificadas"]}
+        self.assertIn("pdf_cct", opcoes_fontes)
+        self.assertIn("fonte_oficial_mte", opcoes_fontes)
+
+
+# ── Scenario 7: Piso Nacional só entra para piso geral (AC5 rule) ────────────
+
+
+class TestPRJ66_PisoNacionalOnlyForPisoGeral(unittest.TestCase):
+    """Piso Nacional must only be applied to general piso_salarial."""
+
+    def test_piso_nacional_applied_only_to_piso_geral(self):
+        record = _make_record()
+        metrics = enrich_from_mte_fallback(record, None, piso_nacional_valor=1412.00)
+
+        piso = record["itens_cct"]["piso_salarial"]
+        self.assertEqual(piso["origem"], "fonte_oficial_nacional")
+        self.assertEqual(metrics["preenchidos_piso_nacional"], 1)
+
+        for campo in ("adicional_noturno", "auxilio_alimentacao", "plr",
+                      "hora_extra", "sobreaviso", "jornada"):
+            f = record["itens_cct"][campo]
+            self.assertNotEqual(f.get("origem"), "fonte_oficial_nacional",
+                                f"Piso Nacional indevidamente aplicado a '{campo}'")
+
+    def test_piso_nacional_blocked_for_por_cargo(self):
+        field = copy.deepcopy(FIELD_PENDENTE)
+        field["por_cargo"] = [{"cargo": "analista_suporte_i", "valor": None}]
+        record = _make_record({"itens_cct": {"piso_salarial": field}})
+
+        metrics = enrich_from_mte_fallback(record, None, piso_nacional_valor=1412.00)
+        self.assertEqual(metrics["preenchidos_piso_nacional"], 0)
+
+
+# ── Scenario 8: métricas emitidas corretamente (AC5) ─────────────────────────
+
+
+class TestPRJ66_AC5_MetricsReport(unittest.TestCase):
+    """AC5: metrics report must include all required fields."""
+
+    def test_metrics_contain_all_required_keys(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            with patch("enrich_mte_fallback.lookup_mte_instrumento_coletivo", return_value=None), \
+                 patch("enrich_mte_fallback._export_js"):
+                metrics = run_enrichment(json_path=tmp.name, dry_run=True)
+
+            required_keys = {
+                "registros_processados",
+                "instrumentos_mte_localizados",
+                "instrumentos_mte_nao_localizados",
+                "preenchidos_mte",
+                "pendentes",
+                "conflitos",
+                "preenchidos_piso_nacional",
+                "json_js_atualizado",
+            }
+            for key in required_keys:
+                self.assertIn(key, metrics, f"Chave obrigatória ausente nas métricas: {key}")
+        finally:
+            os.unlink(tmp.name)
+
+    def test_json_js_atualizado_false_when_no_real_data(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            with patch("enrich_mte_fallback.lookup_mte_instrumento_coletivo", return_value=None), \
+                 patch("enrich_mte_fallback._export_js"):
+                metrics = run_enrichment(json_path=tmp.name, dry_run=False, piso_nacional_valor=None)
+            self.assertFalse(metrics["json_js_atualizado"])
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 9: dry-run não altera JSON/JS (AC2) ─────────────────────────────
+
+
+class TestPRJ66_AC2_DryRunNoWrite(unittest.TestCase):
+    """AC2: --dry-run must not modify any file."""
+
+    def test_dry_run_does_not_write_files(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+        original_mtime = os.path.getmtime(tmp.name)
+
+        try:
+            instrumento_fake = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+            with patch("enrich_mte_fallback.lookup_mte_instrumento_coletivo",
+                       return_value=instrumento_fake), \
+                 patch("enrich_mte_fallback._export_js") as mock_export:
+                metrics = run_enrichment(json_path=tmp.name, dry_run=True)
+
+            self.assertFalse(metrics["json_js_atualizado"])
+            self.assertEqual(os.path.getmtime(tmp.name), original_mtime)
+            mock_export.assert_not_called()
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 10: execução real atualiza JSON/JS quando há dado real (AC2) ────
+
+
+class TestPRJ66_AC2_RealRunUpdatesFiles(unittest.TestCase):
+    """AC2: real run must update JSON and JS when real data is found."""
+
+    def test_real_run_updates_json_and_js(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            instrumento_fake = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+            with patch("enrich_mte_fallback.lookup_mte_instrumento_coletivo",
+                       return_value=instrumento_fake), \
+                 patch("enrich_mte_fallback._export_js") as mock_export:
+                metrics = run_enrichment(json_path=tmp.name, dry_run=False)
+
+            self.assertTrue(metrics["json_js_atualizado"])
+            mock_export.assert_called_once()
+
+            with open(tmp.name, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+            piso = saved["registros"][0]["itens_cct"]["piso_salarial"]
+            self.assertEqual(piso["origem"], "fonte_oficial_mte")
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 11: referência manual sem fonte_textual não preenche itens_cct (AC6) ──
+
+
+class TestPRJ66_AC6_ManualNoFonteTextual(unittest.TestCase):
+    """AC6: 'manual' reference must NOT fill itens_cct without fonte_textual."""
+
+    def test_manual_reference_produces_empty_campos(self):
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="manual",
+            codigo_instrumento="MTE-CCT-2025-SP-001",
+            observacao="Referência registrada pelo operador",
+        )
+        self.assertIsNotNone(instrumento)
+        self.assertEqual(instrumento["campos"], {})
+        self.assertEqual(instrumento["tipo_referencia"], "manual")
+
+    def test_manual_reference_does_not_enrich_itens_cct(self):
+        record = _make_record()
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="manual",
+            codigo_instrumento="MTE-CCT-2025-SP-001",
+        )
+
+        # enrich_from_mte_fallback with empty campos → no fields filled
+        metrics = enrich_from_mte_fallback(record, instrumento)
+        self.assertEqual(metrics["preenchidos_mte"], 0)
+
+        for campo in record["itens_cct"].values():
+            self.assertNotEqual(
+                campo.get("origem"), "fonte_oficial_mte",
+                "Campo preenchido via referência manual sem fonte_textual — violação AC6"
+            )
+
+    def test_manual_reference_via_run_enrichment_no_itens_change(self):
+        record = _make_record()
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(_make_base_json([record]), tmp, ensure_ascii=False, indent=2)
+        tmp.flush()
+        tmp.close()
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                metrics = run_enrichment(
+                    json_path=tmp.name,
+                    dry_run=True,
+                    mte_source="MTE-CCT-2025-SP-001",
+                    mte_tipo="manual",
+                )
+            self.assertEqual(metrics["preenchidos_mte"], 0)
+        finally:
+            os.unlink(tmp.name)
+
+
+# ── Scenario 12: parser MTE isolado, retorna dict compatível (AC7) ───────────
+
+
+class TestPRJ66_AC7_ParserIsolation(unittest.TestCase):
+    """AC7: MTE parser operates independently and returns compatible dict."""
+
+    def test_parser_returns_compatible_dict_structure(self):
+        """parse_mte_instrumento must return dict compatible with enrich_from_mte_fallback."""
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="url",
+            url="https://mediador.mte.gov.br/instrumento/99999",
+        )
+        self.assertIsNotNone(instrumento)
+        # Required top-level keys
+        for key in ("numero_registro", "tipo", "vigencia_inicio", "vigencia_fim",
+                    "url_documento", "campos"):
+            self.assertIn(key, instrumento, f"Chave obrigatória ausente: {key}")
+        self.assertIsInstance(instrumento["campos"], dict)
+
+    def test_parser_with_arquivo_nonexistent_returns_none(self):
+        instrumento = parse_mte_instrumento(
+            file_path="/tmp/arquivo_que_nao_existe.pdf",
+            tipo_referencia="arquivo",
+        )
+        self.assertIsNone(instrumento)
+
+    def test_parser_does_not_import_extract_cct_items(self):
+        """Parser must NOT use any module from the CCT PDF extraction pipeline."""
+        import parse_mte_instrumento as pmi_module
+
+        source_path = pmi_module.__file__
+        with open(source_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        # Check that no non-comment, non-docstring line contains a Python import
+        # of extract_cct_items. We match only actual import statements (start of line).
+        import re as _re
+        import_pattern = _re.compile(
+            r"^\s*(?:import\s+extract_cct_items|from\s+extract_cct_items\s+import)",
+        )
+        violations = [
+            line.rstrip() for line in lines if import_pattern.match(line)
+        ]
+        self.assertEqual(
+            violations, [],
+            f"parse_mte_instrumento.py contém importação proibida do pipeline CCT:\n"
+            + "\n".join(violations),
+        )
+
+    def test_enrich_from_mte_fallback_accepts_parser_output(self):
+        """enrich_from_mte_fallback must work with parse_mte_instrumento output."""
+        instrumento_url = parse_mte_instrumento(
+            tipo_referencia="url",
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        # URL type → empty campos → no fields changed, but function must not raise
+        record = _make_record()
+        metrics = enrich_from_mte_fallback(record, instrumento_url)
+        self.assertEqual(metrics["preenchidos_mte"], 0)
+
+    def test_build_fonte_oficial_mte_structure(self):
+        """build_fonte_oficial_mte must produce the required fonte_oficial_mte schema."""
+        instrumento = parse_mte_instrumento(
+            tipo_referencia="url",
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        fonte = build_fonte_oficial_mte(
+            tipo_referencia="url",
+            instrumento=instrumento,
+            url="https://mediador.mte.gov.br/instrumento/12345",
+        )
+        required_keys = {
+            "disponivel", "tipo_referencia", "url", "codigo_instrumento",
+            "arquivo_origem", "data_consulta", "status_consulta", "observacao",
+        }
+        for key in required_keys:
+            self.assertIn(key, fonte, f"Chave obrigatória ausente em fonte_oficial_mte: {key}")
+
+    def test_parser_invalid_tipo_referencia_returns_none(self):
+        result = parse_mte_instrumento(
+            tipo_referencia="invalido",
+        )
+        self.assertIsNone(result)
+
+    def test_parser_arquivo_without_file_path_returns_none(self):
+        result = parse_mte_instrumento(
+            file_path=None,
+            tipo_referencia="arquivo",
+        )
+        self.assertIsNone(result)
+
+
 if __name__ == "__main__":
     unittest.main()
