@@ -346,6 +346,10 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"operador(?:es)?\s+de\s+(?:sistema|equipamento|m[aá]quina|terminal|rede|ti\b|inform[aá]tica|telemarketing|call\s*center|produ[cç][aã]o|servi[cç]os?)", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
+        # Analista de Suporte levels — most specific first to avoid false matches
+        (r"analista\s+(?:de\s+)?suporte\s+(?:iii|senior|s[eê]nior|sr\.?)\b", "analista_suporte_iii"),
+        (r"analista\s+(?:de\s+)?suporte\s+(?:ii|pleno)\b", "analista_suporte_ii"),
+        (r"analista\s+(?:de\s+)?suporte\s+(?:i|junior|j[uú]nior|jr\.?)\b", "analista_suporte_i"),
         (r"analista[s]?", "analista"),
         (r"supervisor(?:es)?", "supervisor"),
         (r"cargo\s+t[eé]cnico", "cargo_tecnico"),
@@ -419,6 +423,17 @@ PARAM_DIMENSIONS: dict[str, list[str]] = {
     "sobreaviso": ["modalidade"],
     "plr": ["cargo"],
     "jornada": ["jornada", "escala"],
+}
+
+# Maps cargo dimension labels to their normalized human-readable cargo names (AC2).
+# Used to populate `cargo_normalizado` in por_cargo[] entries.
+CARGO_NORMALIZED_NAMES: dict[str, str] = {
+    "analista_suporte_i": "Analista Suporte I",
+    "analista_suporte_ii": "Analista Suporte II",
+    "analista_suporte_iii": "Analista Suporte III",
+    "tecnico_suporte": "Técnico Suporte",
+    "piso_tecnico": "Piso Técnico",
+    "piso_administrativo": "Piso Administrativo",
 }
 
 # Proximity window (characters): max distance between a dimension label and a BRL value
@@ -542,7 +557,16 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
                         "cargo": label,
                         "valor": round(best_val, 2),
                         "trecho_fonte": _truncate(trecho, 300),
+                        "status_parametro": "extraido_para_revisao",
+                        "origem": "pdf_cct",
+                        "fonte": "PDF da CCT",
+                        "fonte_textual": _truncate(trecho, 300),
+                        "data_extracao": today_str(),
                     }
+                    normalized = CARGO_NORMALIZED_NAMES.get(label)
+                    if normalized:
+                        entry["cargo_normalizado"] = normalized
+                        entry["observacao"] = f"Cargo normalizado para {normalized}."
                 elif dim_name == "jornada":
                     entry = {
                         "jornada": label,
@@ -713,11 +737,13 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
     if re.search(r"por\s+dia|diario|dia\s+util", text_n):
         unidade = "BRL/dia"
         tipo = "vale_refeicao"
+        periodicidade = "dia"
     else:
         unidade = "BRL/mes"
         tipo = "auxilio_alimentacao"
+        periodicidade = "mes"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo=tipo,
@@ -727,6 +753,8 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
         trecho_fonte=full_text,
         param_type="auxilio_alimentacao",
     )
+    item["periodicidade"] = periodicidade
+    return item
 
 
 def extract_plr(clauses: list[dict], fonte: str) -> dict:
@@ -794,6 +822,86 @@ def extract_plr(clauses: list[dict], fonte: str) -> dict:
     )
 
 
+def _extract_hora_extra_por_contexto(text_n: str, values: list[float]) -> dict:
+    """
+    Derive individual overtime percentuals for each context from normalized text.
+
+    Returns a dict with any of:
+        percentual_padrao   — weekday / standard rate
+        percentual_sabado   — Saturday rate
+        percentual_domingo  — Sunday rate
+        percentual_feriado  — Holiday rate
+    """
+    result: dict = {}
+    if not values:
+        return result
+
+    # Map from context label to result key
+    label_to_key = {
+        "dia_util": "percentual_padrao",
+        "dia_util_e_sabado": "percentual_padrao",  # treat as padrao baseline
+        "sabado": "percentual_sabado",
+        "domingo": "percentual_domingo",
+        "feriado": "percentual_feriado",
+    }
+
+    # Use classify_by_dimension internally for modalidade
+    classification = classify_by_dimension(text_n, values, "hora_extra")
+    por_modalidade = classification.get("por_modalidade", [])
+
+    assigned: set[float] = set()
+    for entry in por_modalidade:
+        label = entry.get("label", "")
+        val = entry.get("valor")
+        if val is None:
+            continue
+        key = label_to_key.get(label)
+        if key and key not in result:
+            result[key] = round(val, 2)
+            assigned.add(round(val, 2))
+
+    # Fallback: try direct regex patterns to fill gaps
+    pct_positions = _find_pct_with_positions(text_n)
+    values_set = {round(v, 2) for v in values}
+
+    _direct_patterns: list[tuple[str, str]] = [
+        (r"dias?\s+[uú]teis?", "percentual_padrao"),
+        (r"segunda.{0,20}(?:sexta|sexta-feira)(?!.{0,20}s[aá]bado)", "percentual_padrao"),
+        (r"\bs[aá]bados?\b", "percentual_sabado"),
+        (r"\bdomingos?\b", "percentual_domingo"),
+        (r"\bdia\s+de\s+repouso\b", "percentual_domingo"),
+        (r"\bferiados?\b", "percentual_feriado"),
+    ]
+    for pattern, key in _direct_patterns:
+        if key in result:
+            continue
+        for pm in re.finditer(pattern, text_n, re.IGNORECASE):
+            best_val: float | None = None
+            best_dist = _PROXIMITY_WINDOW + 1
+            for val, vstart, vend in pct_positions:
+                if round(val, 2) not in values_set:
+                    continue
+                dist = min(abs(pm.start() - vend), abs(pm.end() - vstart))
+                if dist < best_dist:
+                    best_dist = dist
+                    best_val = val
+            if best_val is not None:
+                result[key] = round(best_val, 2)
+                break
+
+    # Also derive backward-compat combined field
+    dom = result.get("percentual_domingo")
+    fer = result.get("percentual_feriado")
+    if dom is not None and fer is not None and dom == fer:
+        result["percentual_domingo_feriado"] = dom
+    elif dom is not None:
+        result.setdefault("percentual_domingo_feriado", dom)
+    elif fer is not None:
+        result.setdefault("percentual_domingo_feriado", fer)
+
+    return result
+
+
 def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
     """Extract overtime rates (%)."""
     matched = find_clauses(
@@ -838,7 +946,7 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
     if len(values) > 1:
         obs = "Percentuais diferentes para dias úteis, sábados, domingos e feriados"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo="hora_extra",
@@ -849,6 +957,17 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
         observacao=obs,
         param_type="hora_extra",
     )
+
+    # Derive and attach individual context percentuals (AC3)
+    if values:
+        context_pcts = _extract_hora_extra_por_contexto(text_n, values)
+        if context_pcts:
+            item.update(context_pcts)
+        # Ensure percentual_padrao is set from primary value if not already classified
+        if "percentual_padrao" not in item and values:
+            item["percentual_padrao"] = round(values[0], 2)
+
+    return item
 
 
 def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:
