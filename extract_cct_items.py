@@ -346,6 +346,26 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"operador(?:es)?\s+de\s+(?:sistema|equipamento|m[aá]quina|terminal|rede|ti\b|inform[aá]tica|telemarketing|call\s*center|produ[cç][aã]o|servi[cç]os?)", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
+        # Analista de Suporte I/II/III — more specific patterns before generic "analista"
+        # Order matters: III/Sênior first, then II/Pleno, then I/Jr/Júnior
+        (
+            r"analista\s+(?:de\s+)?suporte\s+iii"
+            r"|analista\s+(?:de\s+)?suporte\s+s[eê]nior"
+            r"|analista\s+suporte\s+s[eê]nior",
+            "analista_suporte_iii",
+        ),
+        (
+            r"analista\s+(?:de\s+)?suporte\s+ii"
+            r"|analista\s+(?:de\s+)?suporte\s+pleno",
+            "analista_suporte_ii",
+        ),
+        (
+            r"analista\s+(?:de\s+)?suporte\s+i\b"
+            r"|analista\s+(?:de\s+)?suporte\s+j[uú]nior"
+            r"|analista\s+suporte\s+j[uú]nior"
+            r"|analista\s+(?:de\s+)?suporte\s+jr\b",
+            "analista_suporte_i",
+        ),
         (r"analista[s]?", "analista"),
         (r"supervisor(?:es)?", "supervisor"),
         (r"cargo\s+t[eé]cnico", "cargo_tecnico"),
@@ -419,6 +439,16 @@ PARAM_DIMENSIONS: dict[str, list[str]] = {
     "sobreaviso": ["modalidade"],
     "plr": ["cargo"],
     "jornada": ["jornada", "escala"],
+}
+
+# Maps cargo label → human-readable cargo_normalizado value (AC2 — PRJ-64).
+# Cargo labels here correspond to entries in DIMENSION_PATTERNS["cargo"].
+# Only labels with a known normalisation mapping are listed; others are left without
+# cargo_normalizado so the original label is preserved as-is.
+CARGO_NORMALIZADO_MAP: dict[str, str] = {
+    "analista_suporte_i": "Analista Suporte I",
+    "analista_suporte_ii": "Analista Suporte II",
+    "analista_suporte_iii": "Analista Suporte III",
 }
 
 # Proximity window (characters): max distance between a dimension label and a BRL value
@@ -543,6 +573,11 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
                         "valor": round(best_val, 2),
                         "trecho_fonte": _truncate(trecho, 300),
                     }
+                    # AC2 (PRJ-64): attach normalised cargo name when a mapping exists
+                    cargo_norm = CARGO_NORMALIZADO_MAP.get(label)
+                    if cargo_norm:
+                        entry["cargo_normalizado"] = cargo_norm
+                        entry["observacao"] = f"Cargo normalizado para {cargo_norm}."
                 elif dim_name == "jornada":
                     entry = {
                         "jornada": label,
@@ -582,6 +617,48 @@ def has_negative_clause(text: str) -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 # Per-item extractors
 # ──────────────────────────────────────────────────────────────────────────────
+
+# Maps por_modalidade labels → named percentual_* fields for hora_extra (AC3 — PRJ-64).
+_HORA_EXTRA_MODALIDADE_TO_FIELD: dict[str, list[str]] = {
+    "dia_util": ["percentual_padrao"],
+    "dia_util_e_sabado": ["percentual_padrao", "percentual_sabado"],
+    "sabado": ["percentual_sabado"],
+    "domingo": ["percentual_domingo"],
+    "feriado": ["percentual_feriado"],
+}
+
+
+def _populate_hora_extra_fields(item: dict) -> None:
+    """
+    Promote named percentual_* fields from por_modalidade into the hora_extra item.
+
+    Called after build_item() for hora_extra items to produce flat, named fields
+    (percentual_padrao, percentual_sabado, percentual_domingo, percentual_feriado)
+    that are easier to display and validate than iterating por_modalidade.
+
+    Also maintains backward-compatible percentual_domingo_feriado by combining
+    percentual_domingo and percentual_feriado when both (or one) exist.
+    """
+    por_modalidade = item.get("por_modalidade")
+    if not isinstance(por_modalidade, list):
+        return
+
+    for entry in por_modalidade:
+        label = entry.get("label")
+        val = entry.get("valor")
+        if val is None or label not in _HORA_EXTRA_MODALIDADE_TO_FIELD:
+            continue
+        for field in _HORA_EXTRA_MODALIDADE_TO_FIELD[label]:
+            if item.get(field) is None:
+                item[field] = val
+
+    # Backward compat: populate percentual_domingo_feriado when absent
+    if item.get("percentual_domingo_feriado") is None:
+        dom = item.get("percentual_domingo")
+        fer = item.get("percentual_feriado")
+        combined = fer if fer is not None else dom
+        if combined is not None:
+            item["percentual_domingo_feriado"] = combined
 
 
 def extract_piso_salarial(clauses: list[dict], fonte: str) -> dict:
@@ -717,7 +794,7 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
         unidade = "BRL/mes"
         tipo = "auxilio_alimentacao"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo=tipo,
@@ -727,6 +804,9 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
         trecho_fonte=full_text,
         param_type="auxilio_alimentacao",
     )
+    # AC3 (PRJ-64): record whether value is per-day or per-month
+    item["periodicidade"] = "dia" if unidade == "BRL/dia" else "mes"
+    return item
 
 
 def extract_plr(clauses: list[dict], fonte: str) -> dict:
@@ -838,7 +918,7 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
     if len(values) > 1:
         obs = "Percentuais diferentes para dias úteis, sábados, domingos e feriados"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo="hora_extra",
@@ -849,6 +929,9 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
         observacao=obs,
         param_type="hora_extra",
     )
+    # AC3 (PRJ-64): promote per-modalidade percentuals to named top-level fields
+    _populate_hora_extra_fields(item)
+    return item
 
 
 def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:

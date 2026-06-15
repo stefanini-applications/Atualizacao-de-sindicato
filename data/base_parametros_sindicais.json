@@ -1,5 +1,5 @@
 {
-  "data_geracao": "2026-06-11T20:42:12.063822+00:00",
+  "data_geracao": "2026-06-15T14:32:49.824292+00:00",
   "registros": [
     {
       "id_registro_reajuste": "REG-AC-SEAC-2025",
@@ -69,7 +69,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -105,7 +106,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -213,7 +218,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -249,7 +255,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -357,7 +367,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -393,7 +404,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -501,7 +516,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -537,7 +553,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -645,7 +665,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -681,7 +702,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -789,7 +814,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -825,7 +851,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -933,7 +963,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -969,7 +1000,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1077,7 +1112,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1113,7 +1149,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1221,7 +1261,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1257,7 +1298,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1365,7 +1410,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1401,7 +1447,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1509,7 +1559,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1545,7 +1596,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1656,7 +1711,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1692,7 +1748,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1800,7 +1860,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1836,7 +1897,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -1944,7 +2009,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -1980,7 +2046,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2088,7 +2158,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2124,7 +2195,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2232,7 +2307,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2268,7 +2344,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2376,7 +2456,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2412,7 +2493,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2520,7 +2605,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2556,7 +2642,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2664,7 +2754,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2700,7 +2791,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2811,7 +2906,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2847,7 +2943,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -2955,7 +3055,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -2991,7 +3092,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3099,7 +3204,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3135,7 +3241,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3243,7 +3353,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3279,7 +3390,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3387,7 +3502,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3423,7 +3539,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3531,7 +3651,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3567,7 +3688,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3675,7 +3800,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3711,7 +3837,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3819,7 +3949,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3855,7 +3986,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -3963,7 +4098,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -3999,7 +4135,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4107,7 +4247,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4143,7 +4284,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4251,7 +4396,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4287,7 +4433,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4395,7 +4545,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4431,7 +4582,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4539,7 +4694,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4575,7 +4731,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4683,7 +4843,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4719,7 +4880,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4827,7 +4992,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -4863,7 +5029,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -4971,7 +5141,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5007,7 +5178,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5115,7 +5290,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5151,7 +5327,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5259,7 +5439,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5295,7 +5476,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5403,7 +5588,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5439,7 +5625,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5547,7 +5737,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5583,7 +5774,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5691,7 +5886,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5727,7 +5923,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5835,7 +6035,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -5871,7 +6072,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -5979,7 +6184,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6015,7 +6221,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6123,7 +6333,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6159,7 +6370,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6267,7 +6482,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6303,7 +6519,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6411,7 +6631,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6447,7 +6668,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6555,7 +6780,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6591,7 +6817,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6699,7 +6929,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6735,7 +6966,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6843,7 +7078,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -6879,7 +7115,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -6987,7 +7227,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7023,7 +7264,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7131,7 +7376,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7167,7 +7413,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7275,7 +7525,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7311,7 +7562,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7419,7 +7674,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7455,7 +7711,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7563,7 +7823,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7599,7 +7860,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7707,7 +7972,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7743,7 +8009,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7851,7 +8121,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -7887,7 +8158,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -7995,7 +8270,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8031,7 +8307,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8139,7 +8419,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8175,7 +8456,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8283,7 +8568,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8319,7 +8605,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8427,7 +8717,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8463,7 +8754,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8571,7 +8866,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8607,7 +8903,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8715,7 +9015,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8751,7 +9052,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -8859,7 +9164,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -8895,7 +9201,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -9003,7 +9313,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -9039,7 +9350,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -9147,7 +9462,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -9183,7 +9499,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -9291,7 +9611,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -9327,7 +9648,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,
@@ -9435,7 +9760,8 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "periodicidade": null
         },
         "plr": {
           "valor": null,
@@ -9471,7 +9797,11 @@
           "fonte": null,
           "fonte_textual": null,
           "pagina": null,
-          "data_extracao": "2026-06-11"
+          "data_extracao": "2026-06-11",
+          "percentual_padrao": null,
+          "percentual_sabado": null,
+          "percentual_domingo": null,
+          "percentual_feriado": null
         },
         "sobreaviso": {
           "valor": null,

@@ -25,7 +25,10 @@ from extract_cct_items import (
     extract_itens_cct,
     _classify_jornada_multiple,
     extract_jornada,
+    extract_hora_extra,
+    extract_auxilio_alimentacao,
     _item_not_found,
+    CARGO_NORMALIZADO_MAP,
 )
 
 
@@ -661,6 +664,183 @@ def test_prj59_sc10_data_extracao_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", data_extracao), (
         f"data_extracao '{data_extracao}' does not match YYYY-MM-DD format"
     )
+
+
+if __name__ == "__main__":
+    import pytest
+    pytest.main([__file__, "-v"])
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-64 AC2: Analista de Suporte I/II/III normalisation
+# ─────────────────────────────────────────────────────────────────────────────
+
+ANALISTA_SUPORTE_TEXT = """
+CLÁUSULA QUARTA - PISO SALARIAL
+Os pisos salariais ficam estabelecidos:
+a) Analista de Suporte Júnior: R$ 2.000,00
+b) Analista de Suporte Pleno: R$ 2.500,00
+c) Analista de Suporte Sênior: R$ 3.200,00
+"""
+
+ANALISTA_SUPORTE_I_ONLY_TEXT = """
+CLÁUSULA QUARTA - PISO SALARIAL
+Analista de Suporte I: R$ 2.000,00
+"""
+
+ANALISTA_SUPORTE_II_ONLY_TEXT = """
+CLÁUSULA QUARTA - PISO SALARIAL
+Analista Suporte Pleno: R$ 2.500,00
+"""
+
+ANALISTA_SUPORTE_III_ONLY_TEXT = """
+CLÁUSULA QUARTA - PISO SALARIAL
+Analista de Suporte Sênior: R$ 3.200,00
+"""
+
+
+def test_cargo_normalizado_map_has_analista_levels():
+    """CARGO_NORMALIZADO_MAP must define all three Analista Suporte levels."""
+    assert CARGO_NORMALIZADO_MAP.get("analista_suporte_i") == "Analista Suporte I"
+    assert CARGO_NORMALIZADO_MAP.get("analista_suporte_ii") == "Analista Suporte II"
+    assert CARGO_NORMALIZADO_MAP.get("analista_suporte_iii") == "Analista Suporte III"
+
+
+def test_analista_suporte_junior_maps_to_i():
+    """'Analista de Suporte Júnior' must map to cargo_normalizado 'Analista Suporte I'."""
+    result = classify_by_dimension(ANALISTA_SUPORTE_I_ONLY_TEXT, [2000.0], "piso_salarial")
+    por_cargo = result.get("por_cargo", [])
+    norms = [e.get("cargo_normalizado") for e in por_cargo]
+    assert "Analista Suporte I" in norms, f"Expected Analista Suporte I, got: {norms}"
+
+
+def test_analista_suporte_pleno_maps_to_ii():
+    """'Analista Suporte Pleno' must map to cargo_normalizado 'Analista Suporte II'."""
+    result = classify_by_dimension(ANALISTA_SUPORTE_II_ONLY_TEXT, [2500.0], "piso_salarial")
+    por_cargo = result.get("por_cargo", [])
+    norms = [e.get("cargo_normalizado") for e in por_cargo]
+    assert "Analista Suporte II" in norms, f"Expected Analista Suporte II, got: {norms}"
+
+
+def test_analista_suporte_senior_maps_to_iii():
+    """'Analista de Suporte Sênior' must map to cargo_normalizado 'Analista Suporte III'."""
+    result = classify_by_dimension(ANALISTA_SUPORTE_III_ONLY_TEXT, [3200.0], "piso_salarial")
+    por_cargo = result.get("por_cargo", [])
+    norms = [e.get("cargo_normalizado") for e in por_cargo]
+    assert "Analista Suporte III" in norms, f"Expected Analista Suporte III, got: {norms}"
+
+
+def test_analista_suporte_all_three_normalized():
+    """When a clause has all three variants, all three cargo_normalizado values appear."""
+    result = classify_by_dimension(
+        ANALISTA_SUPORTE_TEXT, [2000.0, 2500.0, 3200.0], "piso_salarial"
+    )
+    por_cargo = result.get("por_cargo", [])
+    norms = {e.get("cargo_normalizado") for e in por_cargo}
+    assert "Analista Suporte I" in norms
+    assert "Analista Suporte II" in norms
+    assert "Analista Suporte III" in norms
+
+
+def test_analista_suporte_cargo_normalizado_has_observacao():
+    """Each normalized cargo entry must include a non-empty observacao."""
+    result = classify_by_dimension(ANALISTA_SUPORTE_III_ONLY_TEXT, [3200.0], "piso_salarial")
+    for entry in result.get("por_cargo", []):
+        if entry.get("cargo_normalizado"):
+            assert entry.get("observacao"), "Missing observacao for normalized cargo"
+
+
+def test_cargo_without_normalisation_has_no_cargo_normalizado():
+    """Cargo labels with no mapping must NOT add a cargo_normalizado field."""
+    result = classify_by_dimension(CARGO_TEXT, [1642.48, 1728.89], "piso_salarial")
+    for entry in result.get("por_cargo", []):
+        # piso_administrativo and piso_tecnico have no CARGO_NORMALIZADO_MAP entry
+        if entry.get("cargo") in ("piso_administrativo", "piso_tecnico"):
+            assert "cargo_normalizado" not in entry, (
+                f"Unexpected cargo_normalizado on {entry['cargo']}"
+            )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-64 AC3: hora_extra separated percentual_domingo / percentual_feriado
+# ─────────────────────────────────────────────────────────────────────────────
+
+def make_hora_extra_clauses(body: str):
+    return [{"heading": "CLÁUSULA NONA - HORAS EXTRAS",
+             "heading_n": "clausula nona - horas extras", "body": body}]
+
+
+def test_hora_extra_separate_percentuais_extracted():
+    """extract_hora_extra must populate percentual_padrao, percentual_sabado,
+    percentual_domingo and percentual_feriado when all are present in the clause."""
+    clauses = make_hora_extra_clauses(HORA_EXTRA_MODALIDADE_TEXT.strip())
+    item = extract_hora_extra(clauses, "test.pdf")
+    assert item.get("percentual_padrao") == 50.0
+    assert item.get("percentual_sabado") == 75.0
+    # domingo and/or feriado — both from "domingos e feriados: 100%"
+    dom_or_fer = item.get("percentual_domingo") or item.get("percentual_feriado")
+    assert dom_or_fer == 100.0
+
+
+def test_hora_extra_backward_compat_domingo_feriado():
+    """percentual_domingo_feriado must be populated for backward compatibility."""
+    clauses = make_hora_extra_clauses(HORA_EXTRA_MODALIDADE_TEXT.strip())
+    item = extract_hora_extra(clauses, "test.pdf")
+    assert item.get("percentual_domingo_feriado") == 100.0
+
+
+def test_hora_extra_status_extraido():
+    """extract_hora_extra must produce status_parametro = extraido_para_revisao."""
+    clauses = make_hora_extra_clauses(HORA_EXTRA_MODALIDADE_TEXT.strip())
+    item = extract_hora_extra(clauses, "test.pdf")
+    assert item.get("status_parametro") == "extraido_para_revisao"
+
+
+def test_hora_extra_not_found_returns_pendente():
+    """When no hora_extra clause exists, status must be pendente_revisao."""
+    item = extract_hora_extra([], "test.pdf")
+    assert item.get("status_parametro") == "pendente_revisao"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRJ-64 AC3: auxilio_alimentacao periodicidade
+# ─────────────────────────────────────────────────────────────────────────────
+
+def make_alimentacao_clauses(body: str):
+    return [{"heading": "CLÁUSULA OITAVA - AUXÍLIO ALIMENTAÇÃO",
+             "heading_n": "clausula oitava - auxilio alimentacao", "body": body}]
+
+
+VR_DIA_TEXT = "R$ 33,00 por dia útil trabalhado."
+VR_MES_TEXT = "R$ 330,00 mensais para todos os empregados."
+
+
+def test_auxilio_alimentacao_periodicidade_dia():
+    """When clause says 'por dia', periodicidade must be 'dia'."""
+    clauses = make_alimentacao_clauses(VR_DIA_TEXT)
+    item = extract_auxilio_alimentacao(clauses, "test.pdf")
+    assert item.get("periodicidade") == "dia", f"Expected 'dia', got {item.get('periodicidade')}"
+
+
+def test_auxilio_alimentacao_periodicidade_mes():
+    """When clause says 'mensais', periodicidade must be 'mes'."""
+    clauses = make_alimentacao_clauses(VR_MES_TEXT)
+    item = extract_auxilio_alimentacao(clauses, "test.pdf")
+    assert item.get("periodicidade") == "mes", f"Expected 'mes', got {item.get('periodicidade')}"
+
+
+def test_auxilio_alimentacao_periodicidade_dia_valor():
+    """Value extracted for per-day VR must equal 33.0."""
+    clauses = make_alimentacao_clauses(VR_DIA_TEXT)
+    item = extract_auxilio_alimentacao(clauses, "test.pdf")
+    assert item.get("valor") == 33.0
+
+
+def test_auxilio_alimentacao_periodicidade_mes_valor():
+    """Value extracted for monthly VA must equal 330.0."""
+    clauses = make_alimentacao_clauses(VR_MES_TEXT)
+    item = extract_auxilio_alimentacao(clauses, "test.pdf")
+    assert item.get("valor") == 330.0
 
 
 if __name__ == "__main__":
