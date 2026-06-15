@@ -99,7 +99,7 @@ const EMBEDDED_DEMO = {
           data_validacao: '2025-04-10T09:40:00', origem_atualizacao: 'importacao_pdf',
         },
         hora_extra: {
-          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo_feriado: 100,
+          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo: 100, percentual_feriado: 100, percentual_domingo_feriado: 100,
           valor: null, tipo: 'percentual', unidade: '%',
           regra_textual: 'Hora extra: 50% dias úteis, 75% sábados, 100% domingos/feriados.',
           status_parametro: 'valido', conflito: false, ids_registros_conflitantes: null,
@@ -211,7 +211,7 @@ const EMBEDDED_DEMO = {
           status_parametro: 'pendente_revisao', conflito: false, ids_registros_conflitantes: null,
         },
         hora_extra: {
-          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo_feriado: 100,
+          percentual_padrao: 50, percentual_sabado: 75, percentual_domingo: 100, percentual_feriado: 100, percentual_domingo_feriado: 100,
           valor: null, tipo: 'percentual', unidade: '%',
           regra_textual: 'Hora extra: 50% dias úteis, 75% sábados, 100% domingos/feriados.',
           clausula: 'CLÁUSULA VIGÉSIMA - HORAS EXTRAS',
@@ -1380,7 +1380,8 @@ function formatCctValor(item) {
  *   regra_textual, valor_textual             — short operational summaries (table OK) or
  *                                              full-text descriptions (modal only)
  *   piso_unico, piso_tecnico, piso_administrativo, valor_piso_cct  — piso_salarial
- *   percentual_padrao, percentual_sabado, percentual_domingo_feriado — hora_extra
+ *   percentual_padrao, percentual_sabado, percentual_domingo, percentual_feriado,
+ *   percentual_domingo_feriado — hora_extra (domingo/feriado may be combined or separate)
  *   horas_semanais, opcoes_identificadas     — jornada
  *   por_cargo, por_jornada, por_modalidade   — list-valued items
  *   trecho_fonte                             — raw source excerpt, traceability only
@@ -1483,6 +1484,8 @@ const CCT_ITEM_FIELDS = {
   hora_extra: [
     { key: 'percentual_padrao', label: 'H.E. padrão (%)', type: 'number', unit: '%' },
     { key: 'percentual_sabado', label: 'H.E. sábado (%)', type: 'number', unit: '%' },
+    { key: 'percentual_domingo', label: 'H.E. domingo (%)', type: 'number', unit: '%' },
+    { key: 'percentual_feriado', label: 'H.E. feriado (%)', type: 'number', unit: '%' },
     { key: 'percentual_domingo_feriado', label: 'H.E. dom./feriado (%)', type: 'number', unit: '%' },
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
@@ -1506,7 +1509,9 @@ const CCT_ITEM_FIELDS = {
 function getCargoValue(record, cargoLabel) {
   const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
   if (!Array.isArray(porCargo)) return null;
-  const entry = porCargo.find((e) => e?.cargo === cargoLabel);
+  const entry = porCargo.find(
+    (e) => e?.cargo === cargoLabel || e?.cargo_normalizado === cargoLabel,
+  );
   return entry?.valor ?? null;
 }
 
@@ -1559,6 +1564,21 @@ const RATECARD_PISO_COLUMNS = [
     label: 'Técnico Suporte III',
     resolver: (record) => getCargoValue(record, 'Técnico Suporte III'),
   },
+  {
+    id: 'analista_suporte_i',
+    label: 'Analista Suporte I',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte I'),
+  },
+  {
+    id: 'analista_suporte_ii',
+    label: 'Analista Suporte II',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte II'),
+  },
+  {
+    id: 'analista_suporte_iii',
+    label: 'Analista Suporte III',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte III'),
+  },
 ];
 
 /** Minimum fields required (at least one) before allowing item validation */
@@ -1568,7 +1588,7 @@ const CCT_ITEM_MIN_FIELDS = {
   adicional_noturno: ['percentual', 'valor', 'regra_textual'],
   auxilio_alimentacao: ['valor', 'regra_textual'],
   plr: ['valor', 'percentual', 'regra_textual'],
-  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'regra_textual'],
+  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo', 'percentual_feriado', 'percentual_domingo_feriado', 'regra_textual'],
   sobreaviso: ['percentual', 'regra_textual'],
   jornada: ['horas_semanais', 'opcoes_identificadas', 'regra_textual'],
 };
@@ -1713,7 +1733,9 @@ function buildCctTableCells(record) {
   const plrVal = plrNumeric ?? (isShortOperationalSummary(plrRegra) ? plrRegra : null);
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
-  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+  // Prefer separate fields; fall back to combined for backward-compat
+  const heDom = cellGet('hora_extra', 'percentual_domingo') ?? cellGet('hora_extra', 'percentual_domingo_feriado');
+  const heFer = cellGet('hora_extra', 'percentual_feriado') ?? cellGet('hora_extra', 'percentual_domingo_feriado');
   // Sobreaviso: percentual preferred; regra_textual only if short operational summary (AC6)
   const sobNumeric = cellGet('sobreaviso', 'percentual');
   const sobRegra = cellGet('sobreaviso', 'regra_textual');
@@ -1743,6 +1765,7 @@ function buildCctTableCells(record) {
     `<td class="cct-col">${heP != null ? fmtPct(heP) : '—'}</td>`,
     `<td class="cct-col">${heSab != null ? fmtPct(heSab) : '—'}</td>`,
     `<td class="cct-col">${heDom != null ? fmtPct(heDom) : '—'}</td>`,
+    `<td class="cct-col">${heFer != null ? fmtPct(heFer) : '—'}</td>`,
     `<td class="cct-col">${sobFmt}</td>`,
     `<td class="cct-col">${fmtJornada(jornadaItem)}</td>`,
   ].join('');
