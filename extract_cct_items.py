@@ -346,6 +346,10 @@ DIMENSION_PATTERNS: dict[str, list[tuple[str, str]]] = {
         (r"operador(?:es)?\s+de\s+(?:sistema|equipamento|m[aá]quina|terminal|rede|ti\b|inform[aá]tica|telemarketing|call\s*center|produ[cç][aã]o|servi[cç]os?)", "operador"),
         (r"atendente[s]?", "atendente"),
         (r"recepcionista[s]?", "recepcionista"),
+        # Analista de Suporte I/II/III — specific patterns must come before the generic "analista" pattern
+        (r"analista[s]?\s+(?:de\s+)?suporte\s+(?:iii|s[eê]nior|sr)\b", "Analista Suporte III"),
+        (r"analista[s]?\s+(?:de\s+)?suporte\s+(?:ii|pleno)\b", "Analista Suporte II"),
+        (r"analista[s]?\s+(?:de\s+)?suporte\s+(?:i\b|j[uú]nior|jr)\b", "Analista Suporte I"),
         (r"analista[s]?", "analista"),
         (r"supervisor(?:es)?", "supervisor"),
         (r"cargo\s+t[eé]cnico", "cargo_tecnico"),
@@ -424,6 +428,15 @@ PARAM_DIMENSIONS: dict[str, list[str]] = {
 # Proximity window (characters): max distance between a dimension label and a BRL value
 # for the association to be considered valid.
 _PROXIMITY_WINDOW = 350
+
+# Cargo labels that represent canonical normalized names for Analista de Suporte.
+# When a por_cargo entry is created with one of these labels the entry receives a
+# cargo_normalizado field set to the canonical name (AC2).
+_ANALISTA_SUPORTE_CANONICAL: frozenset[str] = frozenset({
+    "Analista Suporte I",
+    "Analista Suporte II",
+    "Analista Suporte III",
+})
 
 
 def _find_brl_with_positions(text_n: str) -> list[tuple[float, int, int]]:
@@ -542,7 +555,16 @@ def classify_by_dimension(text: str, values: list[float], param_type: str) -> di
                         "cargo": label,
                         "valor": round(best_val, 2),
                         "trecho_fonte": _truncate(trecho, 300),
+                        "status_parametro": "extraido_para_revisao",
+                        "origem": "pdf_cct",
+                        "fonte": "PDF da CCT",
+                        "fonte_textual": _truncate(trecho, 300),
+                        "data_extracao": today_str(),
                     }
+                    # AC2: add cargo_normalizado for canonical Analista Suporte names
+                    if label in _ANALISTA_SUPORTE_CANONICAL:
+                        entry["cargo_normalizado"] = label
+                        entry["observacao"] = f"Cargo normalizado para {label}."
                 elif dim_name == "jornada":
                     entry = {
                         "jornada": label,
@@ -708,16 +730,18 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
 
     values = first_brl_values(full_text)
 
-    # Detect per-day vs monthly
+    # Detect per-day vs monthly — AC3: expose as periodicidade field
     text_n = normalize(full_text)
     if re.search(r"por\s+dia|diario|dia\s+util", text_n):
         unidade = "BRL/dia"
         tipo = "vale_refeicao"
+        periodicidade = "dia"
     else:
         unidade = "BRL/mes"
         tipo = "auxilio_alimentacao"
+        periodicidade = "mes"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo=tipo,
@@ -727,6 +751,8 @@ def extract_auxilio_alimentacao(clauses: list[dict], fonte: str) -> dict:
         trecho_fonte=full_text,
         param_type="auxilio_alimentacao",
     )
+    item["periodicidade"] = periodicidade
+    return item
 
 
 def extract_plr(clauses: list[dict], fonte: str) -> dict:
@@ -794,6 +820,81 @@ def extract_plr(clauses: list[dict], fonte: str) -> dict:
     )
 
 
+def _extract_hora_extra_percentuals(text: str) -> dict:
+    """
+    Extract individual overtime percentuals from clause text.
+
+    Returns a dict with any of:
+        percentual_padrao   — dias úteis
+        percentual_sabado   — sábados
+        percentual_domingo  — domingos (separately from feriados when possible)
+        percentual_feriado  — feriados (separately from domingos when possible)
+        percentual_domingo_feriado — backward-compat combined field
+
+    All fields are floats. Only fields that can be identified are included.
+    """
+    text_n = normalize(text)
+    result: dict = {}
+
+    def _match_pct(pattern: str) -> float | None:
+        m = re.search(pattern, text_n)
+        if not m:
+            return None
+        val = m.group(1) or (m.group(2) if m.lastindex and m.lastindex >= 2 else None)
+        if val is None:
+            return None
+        try:
+            return float(val.replace(",", "."))
+        except ValueError:
+            return None
+
+    # dias úteis / standard rate
+    val = _match_pct(r"(\d+(?:[,.]?\d+)?)\s*%[^%]*?dias?\s+[uú]teis?|dias?\s+[uú]teis?[^%]*?(\d+(?:[,.]?\d+)?)\s*%")
+    if val is not None:
+        result["percentual_padrao"] = val
+
+    # sábados
+    val = _match_pct(r"(\d+(?:[,.]?\d+)?)\s*%[^%]*?s[aá]bados?|s[aá]bados?[^%]*?(\d+(?:[,.]?\d+)?)\s*%")
+    if val is not None:
+        result["percentual_sabado"] = val
+
+    # domingos only (not combined "domingos e feriados")
+    val = _match_pct(
+        r"(\d+(?:[,.]?\d+)?)\s*%[^%]*?domingos?(?!\s*e\s*feriados?)"
+        r"|domingos?(?!\s*e\s*feriados?)[^%]*?(\d+(?:[,.]?\d+)?)\s*%"
+    )
+    if val is not None:
+        result["percentual_domingo"] = val
+
+    # feriados only (not combined "domingos e feriados")
+    val = _match_pct(
+        r"(\d+(?:[,.]?\d+)?)\s*%[^%]*?feriados?(?!\s*e\s*domingos?)"
+        r"|feriados?(?!\s*e\s*domingos?)[^%]*?(\d+(?:[,.]?\d+)?)\s*%"
+    )
+    if val is not None:
+        result["percentual_feriado"] = val
+
+    # combined "domingos e feriados" — fills both when not already individually set
+    val = _match_pct(
+        r"(\d+(?:[,.]?\d+)?)\s*%[^%]*?domingos?\s*e\s*feriados?"
+        r"|domingos?\s*e\s*feriados?[^%]*?(\d+(?:[,.]?\d+)?)\s*%"
+    )
+    if val is not None:
+        result["percentual_domingo_feriado"] = val
+        if "percentual_domingo" not in result:
+            result["percentual_domingo"] = val
+        if "percentual_feriado" not in result:
+            result["percentual_feriado"] = val
+
+    # Ensure backward-compat combined field is set when either individual field exists
+    if "percentual_domingo_feriado" not in result:
+        combined = result.get("percentual_domingo") or result.get("percentual_feriado")
+        if combined is not None:
+            result["percentual_domingo_feriado"] = combined
+
+    return result
+
+
 def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
     """Extract overtime rates (%)."""
     matched = find_clauses(
@@ -838,7 +939,7 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
     if len(values) > 1:
         obs = "Percentuais diferentes para dias úteis, sábados, domingos e feriados"
 
-    return build_item(
+    item = build_item(
         values=values,
         regra_textual=full_text,
         tipo="hora_extra",
@@ -849,6 +950,16 @@ def extract_hora_extra(clauses: list[dict], fonte: str) -> dict:
         observacao=obs,
         param_type="hora_extra",
     )
+
+    # AC3: attach individual percentual fields extracted directly from clause text
+    pcts = _extract_hora_extra_percentuals(full_text)
+    if pcts:
+        item.update(pcts)
+        # Set percentual_padrao as the top-level percentual if not already set
+        if item.get("percentual") is None and "percentual_padrao" in pcts:
+            item["percentual"] = pcts["percentual_padrao"]
+
+    return item
 
 
 def extract_sobreaviso(clauses: list[dict], fonte: str) -> dict:

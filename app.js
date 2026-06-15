@@ -1312,7 +1312,7 @@ function buildItemSpecificFieldsDisplay(itemKey, item) {
     rows.push(`<dt class="col-5">${escapeHtml(fd.label)}</dt><dd class="col-7">${display}</dd>`);
   });
 
-  // PRJ-57: display por_cargo[] entries for piso_salarial
+  // PRJ-57 / PRJ-64: display por_cargo[] entries for piso_salarial with cargo_normalizado (AC2)
   if (itemKey === 'piso_salarial' && Array.isArray(item.por_cargo) && item.por_cargo.length > 0) {
     const fmtBRL = (v) => {
       if (v == null) return '—';
@@ -1320,13 +1320,15 @@ function buildItemSpecificFieldsDisplay(itemKey, item) {
       return isNaN(n) ? String(v) : n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
     const cargoRows = item.por_cargo.map((entry) => {
-      const nome = escapeHtml(String(entry?.cargo ?? '—'));
+      const nome = escapeHtml(String(entry?.cargo_normalizado ?? entry?.cargo ?? '—'));
       const valor = fmtBRL(entry?.valor ?? null);
       const status = entry?.status_parametro ?? '';
       const statusHtml = status === 'extraido_para_revisao'
         ? ' <span class="badge bg-warning text-dark small">🔎 extraído</span>'
         : (status === 'valido' ? ' <span class="badge bg-success small">✔</span>' : '');
-      return `<tr><td>${nome}</td><td class="text-end">${escapeHtml(valor)}${statusHtml}</td></tr>`;
+      const normalizedNote = entry?.cargo_normalizado && entry.cargo_normalizado !== entry?.cargo
+        ? ` <small class="text-muted">(orig: ${escapeHtml(String(entry.cargo))})</small>` : '';
+      return `<tr><td>${nome}${normalizedNote}</td><td class="text-end">${escapeHtml(valor)}${statusHtml}</td></tr>`;
     }).join('');
     rows.push(`
       <dt class="col-12 mt-2">Pisos por cargo</dt>
@@ -1380,7 +1382,8 @@ function formatCctValor(item) {
  *   regra_textual, valor_textual             — short operational summaries (table OK) or
  *                                              full-text descriptions (modal only)
  *   piso_unico, piso_tecnico, piso_administrativo, valor_piso_cct  — piso_salarial
- *   percentual_padrao, percentual_sabado, percentual_domingo_feriado — hora_extra
+ *   percentual_padrao, percentual_sabado, percentual_domingo, percentual_feriado,
+ *   percentual_domingo_feriado — hora_extra
  *   horas_semanais, opcoes_identificadas     — jornada
  *   por_cargo, por_jornada, por_modalidade   — list-valued items
  *   trecho_fonte                             — raw source excerpt, traceability only
@@ -1473,6 +1476,7 @@ const CCT_ITEM_FIELDS = {
   ],
   auxilio_alimentacao: [
     { key: 'valor', label: 'Valor (R$)', type: 'number', unit: 'BRL' },
+    { key: 'periodicidade', label: 'Periodicidade (dia/mes)', type: 'text', unit: null },
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
   plr: [
@@ -1481,9 +1485,11 @@ const CCT_ITEM_FIELDS = {
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
   hora_extra: [
-    { key: 'percentual_padrao', label: 'H.E. padrão (%)', type: 'number', unit: '%' },
+    { key: 'percentual_padrao', label: 'H.E. padrão / dias úteis (%)', type: 'number', unit: '%' },
     { key: 'percentual_sabado', label: 'H.E. sábado (%)', type: 'number', unit: '%' },
-    { key: 'percentual_domingo_feriado', label: 'H.E. dom./feriado (%)', type: 'number', unit: '%' },
+    { key: 'percentual_domingo', label: 'H.E. domingo (%)', type: 'number', unit: '%' },
+    { key: 'percentual_feriado', label: 'H.E. feriado (%)', type: 'number', unit: '%' },
+    { key: 'percentual_domingo_feriado', label: 'H.E. dom./feriado — combinado (%)', type: 'number', unit: '%' },
     { key: 'regra_textual', label: 'Regra textual', type: 'text', unit: null },
   ],
   sobreaviso: [
@@ -1501,12 +1507,15 @@ const CCT_ITEM_FIELDS = {
 
 /**
  * Looks up a cargo value from piso_salarial.por_cargo[] by exact cargo name.
+ * Also checks cargo_normalizado for entries normalised from PDF variations (AC2).
  * Returns null if not found.
  */
 function getCargoValue(record, cargoLabel) {
   const porCargo = record.itens_cct?.piso_salarial?.por_cargo;
   if (!Array.isArray(porCargo)) return null;
-  const entry = porCargo.find((e) => e?.cargo === cargoLabel);
+  const entry = porCargo.find(
+    (e) => e?.cargo === cargoLabel || e?.cargo_normalizado === cargoLabel
+  );
   return entry?.valor ?? null;
 }
 
@@ -1545,19 +1554,19 @@ const RATECARD_PISO_COLUMNS = [
     },
   },
   {
-    id: 'tecnico_suporte_i',
-    label: 'Técnico Suporte I',
-    resolver: (record) => getCargoValue(record, 'Técnico Suporte I'),
+    id: 'analista_suporte_i',
+    label: 'Analista Suporte I',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte I'),
   },
   {
-    id: 'tecnico_suporte_ii',
-    label: 'Técnico Suporte II',
-    resolver: (record) => getCargoValue(record, 'Técnico Suporte II'),
+    id: 'analista_suporte_ii',
+    label: 'Analista Suporte II',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte II'),
   },
   {
-    id: 'tecnico_suporte_iii',
-    label: 'Técnico Suporte III',
-    resolver: (record) => getCargoValue(record, 'Técnico Suporte III'),
+    id: 'analista_suporte_iii',
+    label: 'Analista Suporte III',
+    resolver: (record) => getCargoValue(record, 'Analista Suporte III'),
   },
 ];
 
@@ -1568,7 +1577,7 @@ const CCT_ITEM_MIN_FIELDS = {
   adicional_noturno: ['percentual', 'valor', 'regra_textual'],
   auxilio_alimentacao: ['valor', 'regra_textual'],
   plr: ['valor', 'percentual', 'regra_textual'],
-  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'regra_textual'],
+  hora_extra: ['percentual_padrao', 'percentual_sabado', 'percentual_domingo_feriado', 'percentual_domingo', 'percentual_feriado', 'regra_textual'],
   sobreaviso: ['percentual', 'regra_textual'],
   jornada: ['horas_semanais', 'opcoes_identificadas', 'regra_textual'],
 };
@@ -1713,7 +1722,8 @@ function buildCctTableCells(record) {
   const plrVal = plrNumeric ?? (isShortOperationalSummary(plrRegra) ? plrRegra : null);
   const heP = cellGet('hora_extra', 'percentual_padrao');
   const heSab = cellGet('hora_extra', 'percentual_sabado');
-  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado');
+  // prefer the combined field; fall back to individual domingo or feriado
+  const heDom = cellGet('hora_extra', 'percentual_domingo_feriado', 'percentual_domingo', 'percentual_feriado');
   // Sobreaviso: percentual preferred; regra_textual only if short operational summary (AC6)
   const sobNumeric = cellGet('sobreaviso', 'percentual');
   const sobRegra = cellGet('sobreaviso', 'regra_textual');
@@ -2225,13 +2235,15 @@ function fmtVR(vrItem) {
   const n = Number(v);
   if (isNaN(n)) return escapeHtml(String(v).slice(0, 22));
   const brl = n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  // Prefer the explicit periodicidade field (AC3)
+  const periodicidade = vrItem.periodicidade ?? '';
   const unidade = (vrItem.unidade ?? '').toLowerCase();
   const tipo = vrItem.tipo ?? '';
-  if (unidade.includes('/mes') || unidade.includes('/mês') || tipo === 'valor_mensal') {
-    return `${brl}/mês`;
-  }
-  if (unidade.includes('/dia') || tipo === 'valor_diario' || tipo === 'vale_refeicao') {
+  if (periodicidade === 'dia' || unidade.includes('/dia') || tipo === 'valor_diario' || tipo === 'vale_refeicao') {
     return `${brl}/dia`;
+  }
+  if (periodicidade === 'mes' || unidade.includes('/mes') || unidade.includes('/mês') || tipo === 'valor_mensal') {
+    return `${brl}/mês`;
   }
   return brl;
 }
