@@ -9,29 +9,50 @@ são elegíveis. Campos com status_parametro "valido" ou com origem "pdf_cct" e
 valor não nulo nunca são sobrescritos.
 
 ═══════════════════════════════════════════════════════════════════════════════
-LIMITAÇÃO TÉCNICA EXPLÍCITA (AC3 / AC7 — PRJ-65)
+PRJ-66 — Associar instrumento oficial MTE a registros CCT
 ═══════════════════════════════════════════════════════════════════════════════
-Não existe, na data de implementação desta história (PRJ-65), API pública
-estável e documentada para consulta automatizada ao Sistema Mediador do MTE.
+Cada registro CCT/ACT pode receber uma referência oficial MTE armazenada na
+nova seção `fonte_oficial_mte`. Tipos de referência suportados:
 
-Comportamento atual:
-  - lookup_mte_instrumento_coletivo() registra a limitação no log e retorna None.
-  - enrich_from_mte_fallback() mantém todos os campos elegíveis como pendente_revisao.
-  - data/base_parametros_sindicais.json e .js NÃO são modificados.
-  - Nenhum valor é simulado, inventado ou estimado.
-
-Métricas por execução (enquanto API MTE estiver indisponível):
-  - Campos preenchidos via MTE:          0
-  - Campos mantidos como pendente_revisao: <N conforme base>
-  - Campos marcados como conflito:       0
-  - Campos preenchidos com Piso Nacional: 0
+  arquivo          — PDF/texto local; o parser independente extrai campos com
+                     evidência textual rastreável (fonte_textual obrigatória).
+  url              — URL do instrumento; apenas a referência é registrada.
+  codigo_instrumento — Código do instrumento; apenas a referência é registrada.
+  manual           — Metadados informados pelo operador (número, URL, sindicato,
+                     vigência, observação). NÃO preenche itens_cct sem evidência
+                     textual extraída de arquivo processável.
 
 Uso:
     python3 enrich_mte_fallback.py [--dry-run] [--ids ID1 ID2 ...]
+        [--mte-file CAMINHO] [--mte-source SOURCE]
+        [--mte-tipo {arquivo,url,codigo_instrumento,manual}]
+        [--mte-codigo CODIGO] [--mte-url URL]
+        [--mte-sindicato SINDICATO]
+        [--mte-vigencia-inicio AAAA-MM-DD]
+        [--mte-vigencia-fim AAAA-MM-DD]
+        [--mte-observacao TEXTO]
 
-Opções:
-    --dry-run   Exibe o que seria alterado sem salvar (sempre seguro).
-    --ids       Processa apenas os registros com os IDs informados.
+Exemplos:
+    python3 enrich_mte_fallback.py --ids REG-SP-SINDPD-2025 \\
+        --mte-file caminho/instrumento.pdf --dry-run
+
+    python3 enrich_mte_fallback.py --ids REG-SP-SINDPD-2025 \\
+        --mte-source https://mediador.mte.gov.br/instrumento/123 \\
+        --mte-tipo url
+
+    python3 enrich_mte_fallback.py --ids REG-SP-SINDPD-2025 \\
+        --mte-tipo manual --mte-codigo MTE-CCT-2025-SP \\
+        --mte-sindicato "Sindicato dos Trabalhadores" \\
+        --mte-vigencia-inicio 2025-01-01 --mte-vigencia-fim 2025-12-31
+
+═══════════════════════════════════════════════════════════════════════════════
+LIMITAÇÃO TÉCNICA EXPLÍCITA (AC3 / AC7 — PRJ-65)
+═══════════════════════════════════════════════════════════════════════════════
+Não existe API pública estável do Sistema Mediador para consulta automatizada.
+Quando nenhum --mte-file ou --mte-source for informado, o comportamento é:
+  - lookup_mte_instrumento_coletivo() registra a limitação no log e retorna None.
+  - data/base_parametros_sindicais.json e .js NÃO são modificados.
+  - Nenhum valor é simulado, inventado ou estimado.
 ═══════════════════════════════════════════════════════════════════════════════
 """
 
@@ -164,6 +185,97 @@ def _piso_nacional_eligible(field: dict) -> bool:
     if field.get("por_cargo"):
         return False
     return True
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# fonte_oficial_mte — estrutura de referência oficial MTE (PRJ-66)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Tipos de referência suportados em fonte_oficial_mte
+TIPOS_REFERENCIA_MTE: frozenset[str] = frozenset({
+    "arquivo",
+    "url",
+    "codigo_instrumento",
+    "manual",
+})
+
+# Tipos que permitem enriquecimento de itens_cct (requerem arquivo processável)
+TIPOS_COM_PROCESSAMENTO: frozenset[str] = frozenset({"arquivo"})
+
+
+def _build_fonte_oficial_mte(
+    tipo_referencia: str,
+    status_consulta: str,
+    arquivo_origem: str | None = None,
+    url: str | None = None,
+    codigo_instrumento: str | None = None,
+    sindicato: str | None = None,
+    vigencia_inicio: str | None = None,
+    vigencia_fim: str | None = None,
+    observacao: str | None = None,
+) -> dict:
+    """
+    Build the fonte_oficial_mte structure for a record.
+
+    Args:
+        tipo_referencia: One of "arquivo", "url", "codigo_instrumento", "manual".
+        status_consulta: "localizado" when the reference is registered/found,
+                         "nao_localizado" when not found or not processable.
+        arquivo_origem:  File path (for tipo "arquivo").
+        url:             URL of the official instrument (for tipo "url" or "manual").
+        codigo_instrumento: Instrument registration code.
+        sindicato:       Union name (for tipo "manual").
+        vigencia_inicio: Validity start date YYYY-MM-DD (for tipo "manual").
+        vigencia_fim:    Validity end date YYYY-MM-DD (for tipo "manual").
+        observacao:      Operator notes.
+
+    Returns:
+        A dict representing the fonte_oficial_mte section.
+    """
+    return {
+        "disponivel": status_consulta == "localizado",
+        "tipo_referencia": tipo_referencia,
+        "url": url,
+        "codigo_instrumento": codigo_instrumento,
+        "arquivo_origem": arquivo_origem,
+        "data_consulta": _today(),
+        "status_consulta": status_consulta,
+        "sindicato": sindicato,
+        "vigencia_inicio": vigencia_inicio,
+        "vigencia_fim": vigencia_fim,
+        "observacao": observacao,
+    }
+
+
+def _store_fonte_oficial_mte(record: dict, fonte: dict) -> None:
+    """Store the fonte_oficial_mte structure in a record (non-destructive)."""
+    record["fonte_oficial_mte"] = fonte
+
+
+def _load_mte_from_file(mte_file: str) -> tuple[dict | None, str]:
+    """
+    Parse an MTE instrument file using the independent parse_mte_instrumento module.
+
+    Returns:
+        (instrumento_dict | None, status_extracao)
+        instrumento_dict is None when the file produced no usable campos.
+    """
+    try:
+        from parse_mte_instrumento import parse_mte_instrumento  # noqa: PLC0415
+    except ImportError:
+        logger.error(
+            "Módulo parse_mte_instrumento não encontrado. "
+            "Verifique se parse_mte_instrumento.py está presente no diretório raiz."
+        )
+        return None, "nao_processavel"
+
+    parsed = parse_mte_instrumento(mte_file)
+    status = parsed.get("status_extracao", "nao_processavel")
+    campos = parsed.get("campos", {})
+
+    if campos:
+        return {"campos": campos}, status
+    return None, status
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -451,31 +563,56 @@ def run_enrichment(
     dry_run: bool = False,
     ids: list[str] | None = None,
     piso_nacional_valor: float | None = None,
+    mte_file: str | None = None,
+    mte_source: str | None = None,
+    mte_tipo: str | None = None,
+    mte_metadata: dict | None = None,
 ) -> dict:
     """
     Main enrichment routine.
 
-    Loads base_parametros_sindicais.json, attempts MTE lookup for each record
-    with pending fields, applies enrichment rules, and saves the result only
-    when real data is found.
+    Loads base_parametros_sindicais.json, attempts MTE lookup (or processes a
+    provided MTE file/source) for each record, applies enrichment rules, and
+    saves the result only when real data is found.
+
+    PRJ-66 — fonte_oficial_mte support:
+      When mte_file is provided, the independent MTE parser extracts campos and
+      the result is stored in fonte_oficial_mte. If the file yields usable text,
+      itens_cct fields may be enriched. Types url/codigo_instrumento/manual only
+      store a reference in fonte_oficial_mte; they do NOT alter itens_cct.
+      Manual references NEVER populate itens_cct — only arquivo type can enrich.
 
     AC3: If the MTE API is unavailable (lookup returns None) AND Piso Nacional
-    is not provided, the JSON/JS files are NOT modified.
+    is not provided AND no mte_file was processed, the JSON/JS files are NOT
+    modified.
 
-    AC7: Returns a comprehensive metrics dict for reporting.
+    AC5: Returns a comprehensive metrics dict for reporting including
+    instrumentos_localizados, instrumentos_nao_localizados, json_js_atualizados.
 
     Args:
         json_path:           Path to base_parametros_sindicais.json.
         dry_run:             If True, do not write any files.
         ids:                 If provided, process only records with these IDs.
         piso_nacional_valor: Piso Nacional value for last-resort fallback.
+        mte_file:            Path to local MTE instrument file (PDF or .txt).
+                             Implies tipo_referencia="arquivo". Enables enrichment
+                             when the file yields processable text with evidence.
+        mte_source:          URL or instrument code reference (no file parsing).
+                             Stores the reference in fonte_oficial_mte only.
+        mte_tipo:            Explicit tipo_referencia override. When combined with
+                             mte_file, defaults to "arquivo". With mte_source,
+                             defaults to "url". With neither, defaults to "manual".
+        mte_metadata:        Extra metadata dict for fonte_oficial_mte
+                             (keys: url, codigo_instrumento, sindicato,
+                             vigencia_inicio, vigencia_fim, observacao).
 
     Returns:
         Metrics dict with per-run totals and per-record breakdown.
     """
     logger.info("═══════════════════════════════════════════════════════")
-    logger.info("Iniciando rotina de enriquecimento MTE (PRJ-65)")
-    logger.info("dry_run=%s  ids=%s", dry_run, ids)
+    logger.info("Iniciando rotina de enriquecimento MTE (PRJ-66)")
+    logger.info("dry_run=%s  ids=%s  mte_file=%s  mte_source=%s  mte_tipo=%s",
+                dry_run, ids, mte_file, mte_source, mte_tipo)
     logger.info("═══════════════════════════════════════════════════════")
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -492,9 +629,33 @@ def run_enrichment(
         "registros_processados": 0,
         "registros_com_dados_reais": 0,
         "api_mte_disponivel": False,
+        "instrumentos_localizados": 0,
+        "instrumentos_nao_localizados": 0,
+        "json_js_atualizados": False,
     }
     per_record: list[dict] = []
     any_real_data = False
+    any_fonte_mte_stored = False  # True when fonte_oficial_mte reference was added to any record
+
+    # ── Pre-process mte_file once outside the record loop ─────────────────────
+    # The parsed instrumento is shared across all filtered records (one file
+    # typically corresponds to one instrument, applied to the specified --ids).
+    _mte_instrumento_from_file: dict | None = None
+    _mte_file_status: str = ""
+    if mte_file:
+        _mte_instrumento_from_file, _mte_file_status = _load_mte_from_file(mte_file)
+        if _mte_instrumento_from_file:
+            logger.info(
+                "Parser MTE: arquivo '%s' processado com sucesso (%d campos).",
+                mte_file,
+                len(_mte_instrumento_from_file.get("campos", {})),
+            )
+        else:
+            logger.info(
+                "Parser MTE: arquivo '%s' não produziu campos utilizáveis (status=%s).",
+                mte_file,
+                _mte_file_status,
+            )
 
     for record in records:
         rid = record.get("id_registro_reajuste", "?")
@@ -504,18 +665,98 @@ def run_enrichment(
         total_metrics["registros_processados"] += 1
         logger.info("── %s (%s / %s)", rid, record.get("uf"), record.get("sindicato"))
 
-        # Attempt MTE lookup (currently returns None — API unavailable)
-        instrumento = lookup_mte_instrumento_coletivo(
-            uf=record.get("uf", ""),
-            sindicato=record.get("sindicato", ""),
-            categoria=record.get("categoria", ""),
-            ano=record.get("ano_referencia", 0),
-            tipo_instrumento="CCT",
-        )
+        # ── Determine instrumento and fonte_oficial_mte for this record ────────
+        instrumento: dict | None = None
+        fonte_mte: dict | None = None
+        meta = mte_metadata or {}
 
-        if instrumento is not None:
-            total_metrics["api_mte_disponivel"] = True
+        if mte_file:
+            # tipo = "arquivo" — independent parser result
+            tipo_ref = mte_tipo or "arquivo"
+            if _mte_instrumento_from_file:
+                instrumento = _mte_instrumento_from_file
+                fonte_mte = _build_fonte_oficial_mte(
+                    tipo_referencia=tipo_ref,
+                    status_consulta="localizado",
+                    arquivo_origem=mte_file,
+                    url=meta.get("url"),
+                    codigo_instrumento=meta.get("codigo_instrumento"),
+                    sindicato=meta.get("sindicato"),
+                    vigencia_inicio=meta.get("vigencia_inicio"),
+                    vigencia_fim=meta.get("vigencia_fim"),
+                    observacao=meta.get("observacao"),
+                )
+                total_metrics["instrumentos_localizados"] += 1
+                total_metrics["api_mte_disponivel"] = True
+            else:
+                # File found but not processable — register reference, no enrichment
+                fonte_mte = _build_fonte_oficial_mte(
+                    tipo_referencia=tipo_ref,
+                    status_consulta="nao_localizado",
+                    arquivo_origem=mte_file,
+                    observacao=(
+                        meta.get("observacao")
+                        or f"Arquivo não processável: {_mte_file_status}"
+                    ),
+                )
+                total_metrics["instrumentos_nao_localizados"] += 1
 
+        elif mte_source:
+            # URL or instrument code reference — no file to parse, no enrichment
+            tipo_ref = mte_tipo or "url"
+            fonte_mte = _build_fonte_oficial_mte(
+                tipo_referencia=tipo_ref,
+                status_consulta="localizado",
+                url=mte_source if tipo_ref == "url" else meta.get("url"),
+                codigo_instrumento=(
+                    mte_source if tipo_ref == "codigo_instrumento"
+                    else meta.get("codigo_instrumento")
+                ),
+                sindicato=meta.get("sindicato"),
+                vigencia_inicio=meta.get("vigencia_inicio"),
+                vigencia_fim=meta.get("vigencia_fim"),
+                observacao=meta.get("observacao"),
+            )
+            total_metrics["instrumentos_localizados"] += 1
+            # instrumento remains None — no content to enrich itens_cct
+
+        elif mte_tipo == "manual":
+            # Manual metadata — never enriches itens_cct (AC6)
+            fonte_mte = _build_fonte_oficial_mte(
+                tipo_referencia="manual",
+                status_consulta="localizado",
+                url=meta.get("url"),
+                codigo_instrumento=meta.get("codigo_instrumento"),
+                sindicato=meta.get("sindicato"),
+                vigencia_inicio=meta.get("vigencia_inicio"),
+                vigencia_fim=meta.get("vigencia_fim"),
+                observacao=meta.get("observacao"),
+            )
+            total_metrics["instrumentos_localizados"] += 1
+            # instrumento remains None — manual type never fills itens_cct without
+            # fonte_textual extracted from a processable file (AC6)
+
+        else:
+            # Fallback: attempt API lookup (currently returns None — PRJ-65 stub)
+            instrumento = lookup_mte_instrumento_coletivo(
+                uf=record.get("uf", ""),
+                sindicato=record.get("sindicato", ""),
+                categoria=record.get("categoria", ""),
+                ano=record.get("ano_referencia", 0),
+                tipo_instrumento="CCT",
+            )
+            if instrumento is not None:
+                total_metrics["api_mte_disponivel"] = True
+                total_metrics["instrumentos_localizados"] += 1
+            else:
+                total_metrics["instrumentos_nao_localizados"] += 1
+
+        # ── Store fonte_oficial_mte in record if we have reference data ────────
+        if fonte_mte is not None:
+            _store_fonte_oficial_mte(record, fonte_mte)
+            any_fonte_mte_stored = True
+
+        # ── Enrich itens_cct ───────────────────────────────────────────────────
         rec_metrics = enrich_from_mte_fallback(
             record=record,
             instrumento_mte=instrumento,
@@ -535,13 +776,21 @@ def run_enrichment(
     # ── Report ────────────────────────────────────────────────────────────────
     _print_metrics_report(total_metrics)
 
-    # ── Persistence: only when real data was found (AC3 / AC7) ────────────────
-    if any_real_data and not dry_run:
-        logger.info("Dados reais encontrados — gravando base.")
+    # ── Persistence: save when real enrichment occurred OR fonte_oficial_mte was stored ──
+    # AC2/AC3: JSON/JS updated only when meaningful updates were made (enrichment or
+    # fonte_oficial_mte reference stored). Never writes when nothing was changed.
+    should_save = any_real_data or any_fonte_mte_stored
+    if should_save and not dry_run:
+        logger.info(
+            "Atualizações detectadas (dados_reais=%s, fonte_mte=%s) — gravando base.",
+            any_real_data,
+            any_fonte_mte_stored,
+        )
         _save_json(data, json_path)
         _export_js(EXPORT_SCRIPT)
-    elif any_real_data and dry_run:
-        logger.info("[dry-run] Dados reais encontrados — nenhum arquivo gravado.")
+        total_metrics["json_js_atualizados"] = True
+    elif should_save and dry_run:
+        logger.info("[dry-run] Atualizações detectadas — nenhum arquivo gravado.")
     else:
         logger.info(
             "Nenhum dado real encontrado via MTE ou Piso Nacional. "
@@ -553,22 +802,34 @@ def run_enrichment(
 
 
 def _print_metrics_report(metrics: dict) -> None:
-    """Print AC7 mandatory execution metrics report."""
+    """Print AC5 mandatory execution metrics report."""
     sep = "═" * 60
     logger.info(sep)
-    logger.info("RELATÓRIO DE ENRIQUECIMENTO MTE — PRJ-65")
+    logger.info("RELATÓRIO DE ENRIQUECIMENTO MTE — PRJ-66")
     logger.info(sep)
     logger.info("  Registros processados:             %d", metrics["registros_processados"])
-    logger.info("  API MTE disponível:                %s", metrics["api_mte_disponivel"])
+    logger.info(
+        "  Instrumentos MTE localizados:      %d",
+        metrics.get("instrumentos_localizados", 0),
+    )
+    logger.info(
+        "  Instrumentos MTE não localizados:  %d",
+        metrics.get("instrumentos_nao_localizados", 0),
+    )
     logger.info(sep)
     logger.info("  Campos preenchidos via MTE:        %d", metrics["preenchidos_mte"])
     logger.info("  Campos mantidos como pendente:     %d", metrics["pendentes"])
     logger.info("  Campos marcados como conflito:     %d", metrics["conflitos"])
     logger.info("  Campos preenchidos (Piso Nacional):%d", metrics["preenchidos_piso_nacional"])
     logger.info(sep)
-    if not metrics["api_mte_disponivel"] and metrics["preenchidos_piso_nacional"] == 0:
+    json_js_ok = metrics.get("json_js_atualizados", False)
+    logger.info("  JSON/JS atualizados:               %s", "Sim" if json_js_ok else "Não")
+    logger.info(sep)
+    if not metrics.get("api_mte_disponivel") and metrics["preenchidos_piso_nacional"] == 0 \
+            and metrics["preenchidos_mte"] == 0:
         logger.info(
-            "  DECLARAÇÃO: API MTE indisponível. Nenhum valor simulado. "
+            "  DECLARAÇÃO: Nenhum instrumento MTE processável disponível. "
+            "Nenhum valor simulado. "
             "base_parametros_sindicais.json e .js NÃO modificados."
         )
     logger.info(sep)
@@ -592,12 +853,71 @@ def main() -> None:
         metavar="ID",
         help="Processa apenas os registros com os IDs informados.",
     )
+    # PRJ-66 — MTE source arguments
+    parser.add_argument(
+        "--mte-file",
+        metavar="CAMINHO",
+        default=None,
+        help=(
+            "Caminho para arquivo oficial MTE (PDF ou .txt) a ser parseado. "
+            "Quando processável, enriquece campos pendentes dos registros informados em --ids."
+        ),
+    )
+    parser.add_argument(
+        "--mte-source",
+        metavar="SOURCE",
+        default=None,
+        help=(
+            "URL ou código do instrumento oficial MTE. Apenas registra a referência em "
+            "fonte_oficial_mte sem alterar itens_cct (conteúdo não processável localmente)."
+        ),
+    )
+    parser.add_argument(
+        "--mte-tipo",
+        choices=list(TIPOS_REFERENCIA_MTE),
+        default=None,
+        help=(
+            "Tipo de referência MTE: arquivo, url, codigo_instrumento ou manual. "
+            "Inferido automaticamente quando --mte-file ou --mte-source são informados."
+        ),
+    )
+    # Manual metadata arguments (for --mte-tipo manual or extra metadata)
+    parser.add_argument("--mte-codigo", metavar="CODIGO", default=None,
+                        help="Número/código do instrumento MTE.")
+    parser.add_argument("--mte-url", metavar="URL", default=None,
+                        help="URL do instrumento MTE (para referência manual).")
+    parser.add_argument("--mte-sindicato", metavar="SINDICATO", default=None,
+                        help="Nome do sindicato (metadado manual).")
+    parser.add_argument("--mte-vigencia-inicio", metavar="AAAA-MM-DD", default=None,
+                        help="Data de início de vigência (metadado manual).")
+    parser.add_argument("--mte-vigencia-fim", metavar="AAAA-MM-DD", default=None,
+                        help="Data de fim de vigência (metadado manual).")
+    parser.add_argument("--mte-observacao", metavar="TEXTO", default=None,
+                        help="Observação para a referência MTE (metadado manual).")
+
     args = parser.parse_args()
+
+    # Build mte_metadata from optional manual args
+    mte_metadata: dict | None = None
+    manual_fields = {
+        "url": args.mte_url,
+        "codigo_instrumento": args.mte_codigo,
+        "sindicato": args.mte_sindicato,
+        "vigencia_inicio": args.mte_vigencia_inicio,
+        "vigencia_fim": args.mte_vigencia_fim,
+        "observacao": args.mte_observacao,
+    }
+    if any(v is not None for v in manual_fields.values()):
+        mte_metadata = {k: v for k, v in manual_fields.items() if v is not None}
 
     metrics = run_enrichment(
         json_path=JSON_PATH,
         dry_run=args.dry_run,
         ids=args.ids,
+        mte_file=args.mte_file,
+        mte_source=args.mte_source,
+        mte_tipo=args.mte_tipo,
+        mte_metadata=mte_metadata,
     )
 
     # Exit code: 0 if all went well (even with zero enrichments)
