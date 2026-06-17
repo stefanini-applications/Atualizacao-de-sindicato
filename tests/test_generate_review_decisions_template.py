@@ -26,17 +26,24 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+import openpyxl
+
 from generate_review_decisions_template import (
     CSV_COLUMNS,
     DECISAO_MAP,
+    XLSX_BUSINESS_COLUMNS,
+    XLSX_COLUMNS,
+    XLSX_REVIEW_COLUMNS,
     _calc_valor_revisado,
     _count_decisoes,
     _map_decisao_sugerida,
     _serialize_opcoes,
     build_template_rows,
+    build_xlsx_row,
     load_queue,
     main,
     save_template,
+    save_xlsx_template,
 )
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -525,6 +532,219 @@ class TestCenario10BaseNaoAlterada(unittest.TestCase):
                 code_only,
                 f"O script referencia o arquivo protegido '{protected}' em código executável",
             )
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 11 — Excel gerado com colunas corretas (PRJ-71 AC1/AC2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario11XlsxGerado(unittest.TestCase):
+    def setUp(self):
+        self.tmp_dir = tempfile.mkdtemp()
+        self.xlsx_path = os.path.join(self.tmp_dir, "review_decisions_template.xlsx")
+
+    def tearDown(self):
+        if os.path.exists(self.xlsx_path):
+            os.unlink(self.xlsx_path)
+        os.rmdir(self.tmp_dir)
+
+    def _save_and_open(self, itens):
+        save_xlsx_template(itens, self.xlsx_path)
+        return openpyxl.load_workbook(self.xlsx_path)
+
+    def test_arquivo_xlsx_e_criado(self):
+        save_xlsx_template(copy.deepcopy(ALL_ITEMS), self.xlsx_path)
+        self.assertTrue(os.path.exists(self.xlsx_path))
+
+    def test_xlsx_tem_aba_revisao_sindicatos(self):
+        wb = self._save_and_open(copy.deepcopy(ALL_ITEMS))
+        self.assertIn("Revisão Sindicatos", wb.sheetnames)
+
+    def test_xlsx_cabecalho_contem_colunas_negocio(self):
+        wb = self._save_and_open(copy.deepcopy(ALL_ITEMS))
+        ws = wb.active
+        headers = [ws.cell(row=1, column=c).value for c in range(1, len(XLSX_COLUMNS) + 1)]
+        for col in XLSX_BUSINESS_COLUMNS:
+            self.assertIn(col, headers, f"Coluna de negócio ausente: {col}")
+
+    def test_xlsx_cabecalho_contem_colunas_revisao(self):
+        wb = self._save_and_open(copy.deepcopy(ALL_ITEMS))
+        ws = wb.active
+        headers = [ws.cell(row=1, column=c).value for c in range(1, len(XLSX_COLUMNS) + 1)]
+        for col in XLSX_REVIEW_COLUMNS:
+            self.assertIn(col, headers, f"Coluna de revisão ausente: {col}")
+
+    def test_xlsx_numero_de_linhas_de_dados(self):
+        wb = self._save_and_open(copy.deepcopy(ALL_ITEMS))
+        ws = wb.active
+        # row 1 = header; rows 2..N = dados
+        self.assertEqual(ws.max_row, len(ALL_ITEMS) + 1)
+
+    def test_xlsx_numero_total_de_colunas(self):
+        expected = len(XLSX_BUSINESS_COLUMNS) + len(XLSX_REVIEW_COLUMNS)
+        self.assertEqual(len(XLSX_COLUMNS), expected)
+
+    def test_xlsx_ordem_colunas_negocio_antes_de_revisao(self):
+        for i, col in enumerate(XLSX_BUSINESS_COLUMNS):
+            self.assertEqual(XLSX_COLUMNS[i], col)
+        offset = len(XLSX_BUSINESS_COLUMNS)
+        for i, col in enumerate(XLSX_REVIEW_COLUMNS):
+            self.assertEqual(XLSX_COLUMNS[offset + i], col)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 12 — Preenchimento de decisões no Excel (PRJ-71 AC3)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario12XlsxDecisoes(unittest.TestCase):
+    def _row(self, item):
+        return build_xlsx_row(copy.deepcopy(item))
+
+    def test_decisao_final_igual_sugerida_validar(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["decisao_final"], row["decisao_sugerida"])
+        self.assertEqual(row["decisao_sugerida"], "validar")
+
+    def test_decisao_final_igual_sugerida_conflito(self):
+        row = self._row(ITEM_REVISAR_CONFLITO)
+        self.assertEqual(row["decisao_final"], row["decisao_sugerida"])
+        self.assertEqual(row["decisao_sugerida"], "marcar_conflito")
+
+    def test_decisao_final_igual_sugerida_buscar_fonte(self):
+        row = self._row(ITEM_BUSCAR_FONTE)
+        self.assertEqual(row["decisao_final"], row["decisao_sugerida"])
+        self.assertEqual(row["decisao_sugerida"], "buscar_fonte")
+
+    def test_decisao_final_igual_sugerida_manter_pendente(self):
+        row = self._row(ITEM_MANTER_PENDENTE)
+        self.assertEqual(row["decisao_final"], row["decisao_sugerida"])
+        self.assertEqual(row["decisao_sugerida"], "manter_pendente")
+
+    def test_valor_revisado_preenchido_com_valor_real(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["valor_revisado"], "1540.47")
+
+    def test_valor_revisado_vazio_quando_nulo(self):
+        row = self._row(ITEM_BUSCAR_FONTE)
+        self.assertEqual(row["valor_revisado"], "")
+
+    def test_campos_editaveis_iniciam_vazios(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["observacao_revisor"], "")
+        self.assertEqual(row["revisor"], "")
+        self.assertEqual(row["data_revisao"], "")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 13 — Preservação de evidências no Excel (PRJ-71 AC4)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario13XlsxEvidencias(unittest.TestCase):
+    def _row(self, item):
+        return build_xlsx_row(copy.deepcopy(item))
+
+    def test_fonte_textual_preservada(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["fonte_textual"], ITEM_VALIDAR["fonte_textual"])
+
+    def test_origem_preservada(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["origem"], ITEM_VALIDAR["origem"])
+
+    def test_opcoes_identificadas_lista_serializada(self):
+        row = self._row(ITEM_REVISAR_CONFLITO)
+        parsed = json.loads(row["opcoes_identificadas"])
+        self.assertEqual(parsed, ITEM_REVISAR_CONFLITO["opcoes_identificadas"])
+
+    def test_sindicato_mapeado(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["SINDICATO"], ITEM_VALIDAR["sindicato"])
+
+    def test_estado_mapeado(self):
+        row = self._row(ITEM_VALIDAR)
+        self.assertEqual(row["ESTADO"], ITEM_VALIDAR["uf"])
+
+    def test_estado_sindicato_concatenado(self):
+        row = self._row(ITEM_VALIDAR)
+        expected = f"{ITEM_VALIDAR['uf']} - {ITEM_VALIDAR['sindicato']}"
+        self.assertEqual(row["ESTADO/ SINDICATO"], expected)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 14 — --dry-run não cria .xlsx (PRJ-71 AC7)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario14DryRunNaoCriaXlsx(unittest.TestCase):
+    def test_dry_run_nao_cria_xlsx(self):
+        queue_json = _make_queue_json(copy.deepcopy(ALL_ITEMS))
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            json.dump(queue_json, fh, ensure_ascii=False)
+            queue_path = fh.name
+
+        tmp_dir = tempfile.mkdtemp()
+        xlsx_path = os.path.join(tmp_dir, "review_decisions_template.xlsx")
+        csv_path = os.path.join(tmp_dir, "review_decisions_template.csv")
+
+        try:
+            with (
+                patch("generate_review_decisions_template.QUEUE_PATH", queue_path),
+                patch("generate_review_decisions_template.OUTPUT_PATH", csv_path),
+                patch("generate_review_decisions_template.OUTPUT_XLSX_PATH", xlsx_path),
+                patch("sys.stdout", StringIO()),
+            ):
+                result = main(["--dry-run"])
+
+            self.assertFalse(os.path.exists(xlsx_path), "dry-run não deve criar .xlsx")
+            self.assertFalse(os.path.exists(csv_path), "dry-run não deve criar .csv")
+            self.assertEqual(result, 0)
+        finally:
+            os.unlink(queue_path)
+            os.rmdir(tmp_dir)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 15 — main normal gera .xlsx como entrega principal (PRJ-71 AC1)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario15MainGeraXlsx(unittest.TestCase):
+    def test_main_gera_xlsx_e_csv(self):
+        queue_json = _make_queue_json(copy.deepcopy(ALL_ITEMS))
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            json.dump(queue_json, fh, ensure_ascii=False)
+            queue_path = fh.name
+
+        tmp_dir = tempfile.mkdtemp()
+        xlsx_path = os.path.join(tmp_dir, "review_decisions_template.xlsx")
+        csv_path = os.path.join(tmp_dir, "review_decisions_template.csv")
+
+        try:
+            with (
+                patch("generate_review_decisions_template.QUEUE_PATH", queue_path),
+                patch("generate_review_decisions_template.OUTPUT_PATH", csv_path),
+                patch("generate_review_decisions_template.OUTPUT_XLSX_PATH", xlsx_path),
+                patch("sys.stdout", StringIO()),
+            ):
+                result = main([])
+
+            self.assertEqual(result, 0)
+            self.assertTrue(os.path.exists(xlsx_path), ".xlsx deve ser criado")
+            self.assertTrue(os.path.exists(csv_path), ".csv deve ser criado como apoio")
+
+            wb = openpyxl.load_workbook(xlsx_path)
+            ws = wb.active
+            self.assertEqual(ws.max_row, len(ALL_ITEMS) + 1)  # header + data rows
+        finally:
+            os.unlink(queue_path)
+            for f in [xlsx_path, csv_path]:
+                if os.path.exists(f):
+                    os.unlink(f)
+            os.rmdir(tmp_dir)
 
 
 if __name__ == "__main__":
