@@ -194,8 +194,10 @@ def _piso_nacional_eligible(field: dict) -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 
 # Tipos de referência válidos para fonte_oficial_mte
+# "crawler" é adicionado pelo mte_crawler.py (PRJ-68) para buscas automáticas
 FONTE_OFICIAL_MTE_TIPOS: frozenset[str] = frozenset({
     "arquivo",
+    "crawler",
     "url",
     "codigo_instrumento",
     "manual",
@@ -218,19 +220,19 @@ def _build_fonte_oficial_mte(
 
     AC4 / AC6 (PRJ-66): this structure records the official MTE reference
     without altering itens_cct directly. Field enrichment is only allowed
-    when tipo_referencia == "arquivo" and the parser returns real extracted
-    fields with fonte_textual evidence.
+    when tipo_referencia == "arquivo" or "crawler" and the parser returns real
+    extracted fields with fonte_textual evidence.
 
     Args:
-        tipo_referencia:  One of "arquivo", "url", "codigo_instrumento", "manual".
-        url:              URL of the official instrument (for tipo url/manual).
-        codigo_instrumento: Instrument code in Sistema Mediador (for tipo codigo_instrumento/manual).
+        tipo_referencia:  One of "arquivo", "crawler", "url", "codigo_instrumento", "manual".
+        url:              URL of the official instrument (for tipo url/manual/crawler).
+        codigo_instrumento: Instrument code in Sistema Mediador (for tipo codigo_instrumento/manual/crawler).
         arquivo_origem:   File name/path of the processed PDF (for tipo arquivo).
         sindicato_mte:    Sindicato name as recorded in the MTE (for manual).
         vigencia_inicio:  Validity start date YYYY-MM-DD (for manual).
         vigencia_fim:     Validity end date YYYY-MM-DD (for manual).
         observacao:       Operator note about this reference.
-        status_consulta:  "localizado" | "nao_localizado".
+        status_consulta:  "localizado" | "nao_localizado" | "bloqueado" | "erro".
 
     Returns:
         A fonte_oficial_mte dict.

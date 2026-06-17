@@ -1,0 +1,41 @@
+{
+  "data_execucao": "2026-06-17",
+  "dry_run": false,
+  "pending_only": false,
+  "totais": {
+    "registros_avaliados": 1,
+    "instrumentos_localizados": 0,
+    "instrumentos_nao_localizados": 1,
+    "instrumentos_com_erro": 0,
+    "instrumentos_bloqueados": 0,
+    "campos_preenchidos": 0,
+    "campos_pendentes": 0,
+    "campos_conflito": 0,
+    "campos_piso_nacional": 0,
+    "arquivos_atualizados": false
+  },
+  "detalhes": [
+    {
+      "registro_id": "REG-TEST-2025",
+      "uf": "SP",
+      "sindicato": "Sindicato Teste",
+      "categoria": "Tecnologia",
+      "ano": 2025,
+      "status_busca": "nao_localizado",
+      "url_localizada": null,
+      "codigo_instrumento": null,
+      "campos_preenchidos": [],
+      "campos_pendentes": [
+        "adicional_noturno",
+        "auxilio_alimentacao",
+        "hora_extra",
+        "jornada",
+        "piso_salarial",
+        "plr",
+        "sobreaviso"
+      ],
+      "campos_conflito": [],
+      "observacao": null
+    }
+  ]
+}
