@@ -1067,10 +1067,16 @@ class TestReferenciaManualeGoveranca(unittest.TestCase):
         self.assertTrue(fonte["disponivel"])
 
     def test_fonte_oficial_mte_tipos_validos(self):
-        """FONTE_OFICIAL_MTE_TIPOS must contain exactly the 4 supported types."""
-        self.assertEqual(
+        """FONTE_OFICIAL_MTE_TIPOS must contain at least the 4 original types plus "crawler" (PRJ-68)."""
+        expected_original = {"arquivo", "url", "codigo_instrumento", "manual"}
+        self.assertTrue(
+            expected_original.issubset(FONTE_OFICIAL_MTE_TIPOS),
+            f"FONTE_OFICIAL_MTE_TIPOS deve conter os tipos originais {expected_original}",
+        )
+        self.assertIn(
+            "crawler",
             FONTE_OFICIAL_MTE_TIPOS,
-            frozenset({"arquivo", "url", "codigo_instrumento", "manual"})
+            "FONTE_OFICIAL_MTE_TIPOS deve conter 'crawler' (PRJ-68)",
         )
 
     def test_build_fonte_oficial_mte_tipo_invalido_lanca_erro(self):
