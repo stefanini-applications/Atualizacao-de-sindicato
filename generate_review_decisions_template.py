@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Gera o template CSV pré-preenchido de decisões a partir da fila de revisão
-de parâmetros sindicais (PRJ-70).
+Gera o template Excel (.xlsx) pré-preenchido de decisões a partir da fila de
+revisão de parâmetros sindicais (PRJ-70/PRJ-71).
 
-Lê `reports/parametros_revisao.json` (gerado pelo PRJ-69) e grava
-`reports/review_decisions_template.csv` com todos os 22 campos definidos,
-incluindo `decisao_sugerida` por regra, `decisao_final` como ponto de partida
-editável e `valor_revisado` pré-populado com o valor atual quando disponível.
+Lê `reports/parametros_revisao.json` (gerado pelo PRJ-69) e grava:
+  - `reports/review_decisions_template.xlsx`  ← entrega operacional principal
+  - `reports/review_decisions_template.csv`   ← apoio técnico (mantido)
+
+O Excel inclui as colunas do modelo de negócio (Pricing/RH) seguidas das
+colunas operacionais de revisão, com cabeçalho destacado e filtros habilitados.
 
 ⚠️  Este script é estritamente operacional — geração de template:
     - Não aplica decisões à base de dados.
@@ -26,12 +28,17 @@ import json
 import os
 import sys
 
+import openpyxl
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 QUEUE_PATH = os.path.join(REPO_ROOT, "reports", "parametros_revisao.json")
 REPORTS_DIR = os.path.join(REPO_ROOT, "reports")
 OUTPUT_PATH = os.path.join(REPORTS_DIR, "review_decisions_template.csv")
+OUTPUT_XLSX_PATH = os.path.join(REPORTS_DIR, "review_decisions_template.xlsx")
 
-# Ordem exata das 22 colunas (AC1)
+# Ordem exata das 22 colunas do CSV (mantido para apoio técnico)
 CSV_COLUMNS = [
     "registro_id",
     "uf",
@@ -56,6 +63,76 @@ CSV_COLUMNS = [
     "revisor",
     "data_revisao",
 ]
+
+# Colunas do modelo de negócio (Pricing/RH) — conforme modelo Excel enviado
+XLSX_BUSINESS_COLUMNS = [
+    "CODIGO DO SINDICATO",
+    "ESTADO/ SINDICATO",
+    "SINDICATO",
+    "ESTADO",
+    "APLICÁVEL Á:",
+    "HR SegSex",
+    "HR Sabado",
+    "HR Domingo",
+    "ADICIONAL NOTURNO",
+    "SOBREAVISO",
+    "JORNADA DE TRABALHO",
+    "DATA VIGENCIA PISO",
+    "INÍCIO VIGÊNCIA CCT",
+    "FIM VIGÊNCIA CCT",
+    "REAJUSTE SALARIAL (%)",
+    "TECNICO SUPORTE I",
+    "TECNICO SUPORTE II",
+    "TECNICO SUPORTE III",
+    "VR Remuneração",
+    "Salário <= 2999,99",
+    "Salário >= 3000,00",
+    "VR Custo",
+    "VT",
+    "OUTROS CUSTOS",
+    "PLR",
+    "ATUALIZAÇÃO",
+    "Data piso",
+    "Piso administrativo",
+]
+
+# Colunas operacionais de revisão — adicionadas ao final
+XLSX_REVIEW_COLUMNS = [
+    "status_parametro",
+    "origem",
+    "fonte",
+    "fonte_textual",
+    "opcoes_identificadas",
+    "prioridade_revisao",
+    "acao_sugerida",
+    "decisao_sugerida",
+    "decisao_final",
+    "valor_revisado",
+    "observacao_revisor",
+    "revisor",
+    "data_revisao",
+]
+
+# Todas as colunas do Excel (negócio + revisão)
+XLSX_COLUMNS = XLSX_BUSINESS_COLUMNS + XLSX_REVIEW_COLUMNS
+
+# Mapeamento de campo JSON → coluna de negócio no Excel
+_CAMPO_TO_XLSX_COL: dict[str, str] = {
+    "piso_salarial": "Piso administrativo",
+    "adicional_noturno": "ADICIONAL NOTURNO",
+    "auxilio_alimentacao": "VR Remuneração",
+    "plr": "PLR",
+    "hora_extra": "HR SegSex",
+    "sobreaviso": "SOBREAVISO",
+    "jornada": "JORNADA DE TRABALHO",
+}
+
+# Estilos Excel
+_HEADER_FILL_BUSINESS = PatternFill("solid", fgColor="1F4E79")   # azul escuro
+_HEADER_FILL_REVIEW = PatternFill("solid", fgColor="375623")    # verde escuro
+_HEADER_FONT = Font(bold=True, color="FFFFFF", size=10)
+_DATA_FONT = Font(size=10)
+_WRAP = Alignment(wrap_text=True, vertical="top")
 
 # Mapeamento acao_sugerida → decisao_sugerida (AC2)
 DECISAO_MAP: dict[str, str] = {
@@ -180,6 +257,93 @@ def save_template(rows: list[dict], path: str) -> None:
         writer.writerows(rows)
 
 
+def build_xlsx_row(item: dict) -> dict:
+    """
+    Constrói um dict com todas as colunas do Excel (negócio + revisão) para
+    um item da fila de revisão.
+    """
+    decisao_sugerida = _map_decisao_sugerida(item.get("acao_sugerida"))
+    valor_revisado = _calc_valor_revisado(item.get("valor"))
+    campo = item.get("campo", "")
+
+    # Linha base com colunas de negócio — a maioria começa vazia
+    row: dict = {col: "" for col in XLSX_COLUMNS}
+
+    # Colunas de identificação do sindicato
+    row["CODIGO DO SINDICATO"] = item.get("registro_id", "")
+    row["ESTADO/ SINDICATO"] = (
+        f"{item.get('uf', '')} - {item.get('sindicato', '')}".strip(" -")
+    )
+    row["SINDICATO"] = item.get("sindicato", "")
+    row["ESTADO"] = item.get("uf", "")
+    row["APLICÁVEL Á:"] = item.get("categoria", "")
+
+    # Preenche a coluna de negócio correspondente ao campo extraído
+    xlsx_col = _CAMPO_TO_XLSX_COL.get(campo)
+    if xlsx_col:
+        valor = item.get("valor")
+        row[xlsx_col] = "" if valor is None else valor
+
+    # Colunas operacionais de revisão
+    row["status_parametro"] = item.get("status_parametro", "")
+    row["origem"] = item.get("origem") or ""
+    row["fonte"] = item.get("fonte") or ""
+    row["fonte_textual"] = item.get("fonte_textual") or ""
+    row["opcoes_identificadas"] = _serialize_opcoes(item.get("opcoes_identificadas"))
+    row["prioridade_revisao"] = item.get("prioridade_revisao", "")
+    row["acao_sugerida"] = item.get("acao_sugerida", "")
+    row["decisao_sugerida"] = decisao_sugerida
+    row["decisao_final"] = decisao_sugerida   # ponto de partida editável
+    row["valor_revisado"] = valor_revisado
+    row["observacao_revisor"] = ""
+    row["revisor"] = ""
+    row["data_revisao"] = ""
+
+    return row
+
+
+def save_xlsx_template(itens: list[dict], path: str) -> None:
+    """Grava o template Excel (.xlsx) pré-preenchido em disco."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Revisão Sindicatos"
+
+    # ── Cabeçalho ──────────────────────────────────────────────────────────────
+    for col_idx, col_name in enumerate(XLSX_COLUMNS, start=1):
+        cell = ws.cell(row=1, column=col_idx, value=col_name)
+        cell.font = _HEADER_FONT
+        cell.alignment = Alignment(wrap_text=True, vertical="center", horizontal="center")
+        if col_idx <= len(XLSX_BUSINESS_COLUMNS):
+            cell.fill = _HEADER_FILL_BUSINESS
+        else:
+            cell.fill = _HEADER_FILL_REVIEW
+
+    # ── Dados ──────────────────────────────────────────────────────────────────
+    for row_idx, item in enumerate(itens, start=2):
+        xlsx_row = build_xlsx_row(item)
+        for col_idx, col_name in enumerate(XLSX_COLUMNS, start=1):
+            cell = ws.cell(row=row_idx, column=col_idx, value=xlsx_row.get(col_name, ""))
+            cell.font = _DATA_FONT
+            cell.alignment = _WRAP
+
+    # ── Filtros automáticos e larguras de coluna ────────────────────────────────
+    ws.auto_filter.ref = ws.dimensions
+    for col_idx, col_name in enumerate(XLSX_COLUMNS, start=1):
+        # Largura mínima adaptada ao conteúdo do cabeçalho
+        width = max(12, min(len(col_name) + 4, 40))
+        ws.column_dimensions[get_column_letter(col_idx)].width = width
+
+    # Altura da linha de cabeçalho
+    ws.row_dimensions[1].height = 36
+
+    # Congela a linha de cabeçalho para facilitar a navegação
+    ws.freeze_panes = "A2"
+
+    wb.save(path)
+
+
 def _print_dry_run_summary(total: int, counts: dict[str, int]) -> None:
     """Exibe o sumário obrigatório do dry-run (AC5)."""
     print(f"Total de itens lidos da fila: {total}")
@@ -195,7 +359,10 @@ def _print_dry_run_summary(total: int, counts: dict[str, int]) -> None:
 
 def _parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Gera template CSV pré-preenchido de decisões para revisão de parâmetros sindicais (PRJ-70)."
+        description=(
+            "Gera template Excel (.xlsx) pré-preenchido de decisões para revisão de "
+            "parâmetros sindicais (PRJ-70/PRJ-71)."
+        )
     )
     parser.add_argument(
         "--dry-run",
@@ -220,8 +387,12 @@ def main(argv=None) -> int:
         print("⚠️  Modo dry-run: nenhum arquivo será criado ou modificado.\n")
         _print_dry_run_summary(len(rows), counts)
     else:
+        # Entrega operacional principal: Excel
+        save_xlsx_template(itens, OUTPUT_XLSX_PATH)
+        print(f"✅  Template Excel gravado em: {OUTPUT_XLSX_PATH}")
+        # Apoio técnico: CSV (mantido da PRJ-70)
         save_template(rows, OUTPUT_PATH)
-        print(f"✅  Template gravado em: {OUTPUT_PATH}")
+        print(f"✅  Template CSV gravado em: {OUTPUT_PATH}")
         print(f"    Total de linhas: {len(rows)}")
         _print_dry_run_summary(len(rows), counts)
 
