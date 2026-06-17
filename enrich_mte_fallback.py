@@ -56,6 +56,8 @@ Opções:
 """
 
 import argparse
+import copy
+import csv
 import json
 import logging
 import os
@@ -67,6 +69,7 @@ from typing import Any
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 JSON_PATH = os.path.join(REPO_ROOT, "data", "base_parametros_sindicais.json")
 EXPORT_SCRIPT = os.path.join(REPO_ROOT, "export_inline_data.py")
+REPORTS_DIR = os.path.join(REPO_ROOT, "reports")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -810,6 +813,454 @@ def _print_metrics_report(metrics: dict) -> None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Processamento em lote via arquivo de mapeamento (PRJ-67)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Colunas obrigatórias e opcionais do arquivo de mapeamento CSV/JSON
+_MAP_REQUIRED_COLS: frozenset[str] = frozenset({"registro_id", "tipo_referencia"})
+_MAP_OPTIONAL_COLS: tuple[str, ...] = (
+    "arquivo_origem", "url", "codigo_instrumento", "observacao"
+)
+
+
+def parse_mte_map(filepath: str) -> list[dict]:
+    """Parse a CSV or JSON mapping file and return a list of mapping entries.
+
+    Each entry is a dict with keys:
+        registro_id, tipo_referencia, arquivo_origem, url,
+        codigo_instrumento, observacao.
+
+    Supported formats:
+        - CSV: columns registro_id, tipo_referencia, arquivo_origem,
+               url, codigo_instrumento, observacao (header row required).
+        - JSON: a list of objects with the same keys.
+
+    Missing optional fields are normalised to None.
+    Rows with empty tipo_referencia are skipped with a warning.
+
+    Raises:
+        ValueError: if the file format is not recognized or required columns
+                    are missing.
+        FileNotFoundError: if the file does not exist.
+    """
+    if not os.path.isfile(filepath):
+        raise FileNotFoundError(f"Arquivo de mapeamento não encontrado: {filepath!r}")
+
+    ext = os.path.splitext(filepath)[1].lower()
+
+    entries: list[dict] = []
+
+    if ext == ".json":
+        with open(filepath, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        if not isinstance(raw, list):
+            raise ValueError(
+                f"Arquivo JSON de mapeamento deve conter uma lista de objetos, "
+                f"mas recebeu {type(raw).__name__!r}."
+            )
+        for i, item in enumerate(raw):
+            if not isinstance(item, dict):
+                logger.warning("Entrada JSON #%d não é um objeto — ignorada.", i)
+                continue
+            entry = _normalise_map_entry(item, f"JSON #{i}")
+            if entry is not None:
+                entries.append(entry)
+
+    elif ext == ".csv":
+        with open(filepath, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if reader.fieldnames is None:
+                raise ValueError("Arquivo CSV vazio ou sem cabeçalho.")
+            col_set = {c.strip() for c in reader.fieldnames}
+            missing = _MAP_REQUIRED_COLS - col_set
+            if missing:
+                raise ValueError(
+                    f"CSV de mapeamento está faltando as colunas obrigatórias: "
+                    f"{sorted(missing)}. Colunas encontradas: {sorted(col_set)}."
+                )
+            for i, row in enumerate(reader):
+                entry = _normalise_map_entry(
+                    {k.strip(): (v.strip() if v else None) for k, v in row.items()},
+                    f"CSV linha {i + 2}",
+                )
+                if entry is not None:
+                    entries.append(entry)
+
+    else:
+        raise ValueError(
+            f"Formato de arquivo de mapeamento não suportado: {ext!r}. "
+            "Use .csv ou .json."
+        )
+
+    logger.info("Arquivo de mapeamento carregado: %d entradas — %s", len(entries), filepath)
+    return entries
+
+
+def _normalise_map_entry(raw: dict, label: str) -> dict | None:
+    """Normalise a raw mapping row to a canonical entry dict.
+
+    Returns None and logs a warning for entries that should be skipped.
+    """
+    registro_id = (raw.get("registro_id") or "").strip()
+    tipo_referencia = (raw.get("tipo_referencia") or "").strip()
+
+    if not registro_id:
+        logger.warning("%s: registro_id vazio — linha ignorada.", label)
+        return None
+    if not tipo_referencia:
+        logger.warning("%s (id=%r): tipo_referencia vazio — linha ignorada.", label, registro_id)
+        return None
+    if tipo_referencia not in FONTE_OFICIAL_MTE_TIPOS:
+        logger.warning(
+            "%s (id=%r): tipo_referencia inválido %r — linha ignorada. "
+            "Valores aceitos: %s.",
+            label, registro_id, tipo_referencia, sorted(FONTE_OFICIAL_MTE_TIPOS),
+        )
+        return None
+
+    def _opt(key: str) -> str | None:
+        val = (raw.get(key) or "").strip()
+        return val if val else None
+
+    return {
+        "registro_id": registro_id,
+        "tipo_referencia": tipo_referencia,
+        "arquivo_origem": _opt("arquivo_origem"),
+        "url": _opt("url"),
+        "codigo_instrumento": _opt("codigo_instrumento"),
+        "observacao": _opt("observacao"),
+    }
+
+
+def _collect_field_changes(
+    itens_before: dict,
+    itens_after: dict,
+) -> tuple[list[str], list[str], list[str]]:
+    """Compare itens_cct snapshots and return (filled, pending, conflict) field lists."""
+    filled: list[str] = []
+    pending: list[str] = []
+    conflict: list[str] = []
+
+    all_campos = set(itens_before) | set(itens_after)
+    for campo in sorted(all_campos):
+        field = itens_after.get(campo)
+        if not isinstance(field, dict):
+            continue
+        status = field.get("status_parametro")
+        origem = field.get("origem")
+        if status == "conflito" or origem == "conflito_pdf_mte":
+            conflict.append(campo)
+        elif origem in ("fonte_oficial_mte", "fonte_oficial_nacional"):
+            filled.append(campo)
+        elif status == "pendente_revisao" or origem == "nao_identificado_pdf":
+            pending.append(campo)
+
+    return filled, pending, conflict
+
+
+def run_batch_enrichment(
+    mte_map_path: str,
+    json_path: str = JSON_PATH,
+    dry_run: bool = False,
+    piso_nacional_valor: float | None = None,
+    report_dir: str = REPORTS_DIR,
+) -> dict:
+    """Process multiple records in batch from a CSV or JSON mapping file.
+
+    For each entry in the mapping:
+      - tipo_referencia=arquivo: parses the PDF and enriches pending eligible fields.
+      - tipo_referencia=url | codigo_instrumento | manual: registers fonte_oficial_mte
+        without altering itens_cct.
+
+    Records not present in the mapping file are left completely untouched and
+    reported as sem_fonte_oficial_associada.
+
+    AC3 (PRJ-67): With --dry-run, NO files are written under any circumstances.
+    AC10 (PRJ-67): base JSON/JS are only updated when at least one record has a
+    real enrichment, conflict, official reference, or Piso Nacional applied.
+    AC4 (PRJ-67): A coverage report is generated in terminal AND saved to
+    reports/mte_enrichment_report.json (unless --dry-run).
+
+    Args:
+        mte_map_path:        Path to the mapping file (.csv or .json).
+        json_path:           Path to base_parametros_sindicais.json.
+        dry_run:             If True, no files are written.
+        piso_nacional_valor: Piso Nacional value for last-resort fallback.
+        report_dir:          Directory where the coverage report is saved.
+
+    Returns:
+        A report dict with global totals and per-registro breakdown.
+    """
+    logger.info("═══════════════════════════════════════════════════════")
+    logger.info("Iniciando enriquecimento em LOTE via mapeamento (PRJ-67)")
+    logger.info("mte_map=%s  dry_run=%s", mte_map_path, dry_run)
+    logger.info("═══════════════════════════════════════════════════════")
+
+    map_entries = parse_mte_map(mte_map_path)
+    map_index: dict[str, dict] = {e["registro_id"]: e for e in map_entries}
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    records = data.get("registros", [])
+
+    # Build index of records by ID for fast lookup
+    record_index: dict[str, dict] = {
+        r.get("id_registro_reajuste", ""): r for r in records
+    }
+
+    # Pre-parse PDF files so each unique arquivo_origem is only parsed once
+    _pdf_cache: dict[str, dict | None] = {}
+
+    def _get_instrumento_from_file(arquivo_origem: str | None) -> dict | None:
+        if not arquivo_origem:
+            return None
+        if arquivo_origem in _pdf_cache:
+            return _pdf_cache[arquivo_origem]
+        result = None
+        try:
+            from parse_mte_instrumento import parse_mte_pdf  # type: ignore[import]
+            result = parse_mte_pdf(arquivo_origem)
+        except ImportError:
+            logger.error(
+                "parse_mte_instrumento não encontrado — arquivo %r não processado.",
+                arquivo_origem,
+            )
+        if result is None:
+            logger.warning(
+                "Parser MTE não retornou dados para %r.", arquivo_origem
+            )
+        _pdf_cache[arquivo_origem] = result
+        return result
+
+    totais = {
+        "registros_no_mapeamento": len(map_entries),
+        "registros_processados": 0,
+        "registros_sem_fonte_associada": 0,
+        "registros_nao_encontrados": 0,
+        "campos_preenchidos_mte": 0,
+        "campos_pendentes": 0,
+        "campos_conflito": 0,
+        "campos_piso_nacional": 0,
+        "arquivos_atualizados": False,
+    }
+
+    por_registro: dict[str, dict] = {}
+    any_real_change = False
+
+    # Process records listed in the mapping
+    for rid, entry in map_index.items():
+        if rid not in record_index:
+            logger.warning("Registro %r do mapeamento não encontrado na base — ignorado.", rid)
+            por_registro[rid] = {
+                "status_processamento": "registro_nao_encontrado",
+                "tipo_referencia": entry["tipo_referencia"],
+                "arquivo_origem": entry.get("arquivo_origem"),
+                "url": entry.get("url"),
+                "codigo_instrumento": entry.get("codigo_instrumento"),
+                "campos_preenchidos": [],
+                "campos_pendentes": [],
+                "campos_conflito": [],
+                "observacao": f"Registro {rid!r} não encontrado em base_parametros_sindicais.json.",
+            }
+            totais["registros_nao_encontrados"] += 1
+            continue
+
+        record = record_index[rid]
+        tipo = entry["tipo_referencia"]
+        totais["registros_processados"] += 1
+
+        logger.info("── %s  tipo=%s", rid, tipo)
+
+        # Snapshot itens_cct before enrichment for field-change tracking
+        itens_before = copy.deepcopy(record.get("itens_cct", {}))
+
+        instrumento: dict | None = None
+        obs: str | None = None
+
+        if tipo == "arquivo":
+            instrumento = _get_instrumento_from_file(entry.get("arquivo_origem"))
+            fonte_status = "localizado" if instrumento is not None else "nao_localizado"
+            if instrumento is None:
+                obs = (
+                    f"Arquivo {entry.get('arquivo_origem')!r} não foi processável "
+                    "pelo parser MTE — nenhum campo enriquecido."
+                )
+            fonte_data = _build_fonte_oficial_mte(
+                tipo_referencia="arquivo",
+                arquivo_origem=(
+                    os.path.basename(entry["arquivo_origem"])
+                    if entry.get("arquivo_origem") else None
+                ),
+                vigencia_inicio=(
+                    instrumento.get("vigencia_inicio") if instrumento else None
+                ),
+                vigencia_fim=(
+                    instrumento.get("vigencia_fim") if instrumento else None
+                ),
+                observacao=entry.get("observacao"),
+                status_consulta=fonte_status,
+            )
+            _set_fonte_oficial_mte(record, fonte_data)
+
+        elif tipo in ("url", "codigo_instrumento"):
+            has_ref = bool(entry.get("url") or entry.get("codigo_instrumento"))
+            fonte_data = _build_fonte_oficial_mte(
+                tipo_referencia=tipo,
+                url=entry.get("url"),
+                codigo_instrumento=entry.get("codigo_instrumento"),
+                observacao=entry.get("observacao"),
+                status_consulta="localizado" if has_ref else "nao_localizado",
+            )
+            _set_fonte_oficial_mte(record, fonte_data)
+            any_real_change = True  # reference metadata is a valid change
+            logger.info(
+                "  tipo=%s: referência registrada em fonte_oficial_mte; itens_cct não alterados.",
+                tipo,
+            )
+
+        elif tipo == "manual":
+            fonte_data = _build_fonte_oficial_mte(
+                tipo_referencia="manual",
+                url=entry.get("url"),
+                codigo_instrumento=entry.get("codigo_instrumento"),
+                observacao=entry.get("observacao"),
+                status_consulta="localizado",
+            )
+            _set_fonte_oficial_mte(record, fonte_data)
+            any_real_change = True
+            logger.info(
+                "  tipo=manual: metadados registrados em fonte_oficial_mte; "
+                "itens_cct NÃO alterados."
+            )
+
+        rec_metrics = enrich_from_mte_fallback(
+            record=record,
+            instrumento_mte=instrumento,
+            piso_nacional_valor=piso_nacional_valor,
+        )
+
+        itens_after = record.get("itens_cct", {})
+        filled, pending, conflict = _collect_field_changes(itens_before, itens_after)
+
+        totais["campos_preenchidos_mte"] += rec_metrics["preenchidos_mte"]
+        totais["campos_pendentes"] += rec_metrics["pendentes"]
+        totais["campos_conflito"] += rec_metrics["conflitos"]
+        totais["campos_piso_nacional"] += rec_metrics["preenchidos_piso_nacional"]
+
+        if rec_metrics["preenchidos_mte"] > 0 or rec_metrics["preenchidos_piso_nacional"] > 0 or rec_metrics["conflitos"] > 0:
+            any_real_change = True
+
+        por_registro[rid] = {
+            "status_processamento": "processado",
+            "tipo_referencia": tipo,
+            "arquivo_origem": entry.get("arquivo_origem"),
+            "url": entry.get("url"),
+            "codigo_instrumento": entry.get("codigo_instrumento"),
+            "campos_preenchidos": filled,
+            "campos_pendentes": pending,
+            "campos_conflito": conflict,
+            "observacao": obs,
+        }
+
+    # Records in base NOT in the mapping → sem_fonte_oficial_associada
+    for rid, record in record_index.items():
+        if rid and rid not in map_index:
+            totais["registros_sem_fonte_associada"] += 1
+            por_registro[rid] = {
+                "status_processamento": "sem_fonte_oficial_associada",
+                "tipo_referencia": None,
+                "arquivo_origem": None,
+                "url": None,
+                "codigo_instrumento": None,
+                "campos_preenchidos": [],
+                "campos_pendentes": list(ELIGIBLE_FIELDS.keys()),
+                "campos_conflito": [],
+                "observacao": "Registro não listado no arquivo de mapeamento.",
+            }
+
+    # Persist JSON/JS only when there is a real change (AC10 / AC3)
+    if any_real_change and not dry_run:
+        logger.info("Dados encontrados em lote — gravando base.")
+        _save_json(data, json_path)
+        _export_js(EXPORT_SCRIPT)
+        totais["arquivos_atualizados"] = True
+    elif any_real_change and dry_run:
+        logger.info("[dry-run] Dados encontrados em lote — nenhum arquivo gravado.")
+    else:
+        logger.info(
+            "Nenhum dado real encontrado no lote. "
+            "base_parametros_sindicais.json e .js NÃO foram modificados."
+        )
+
+    report = {
+        "data_execucao": _today(),
+        "dry_run": dry_run,
+        "arquivo_mapeamento": os.path.basename(mte_map_path),
+        "totais": totais,
+        "por_registro": por_registro,
+    }
+
+    _print_batch_report(report)
+
+    if not dry_run:
+        os.makedirs(report_dir, exist_ok=True)
+        report_path = os.path.join(report_dir, "mte_enrichment_report.json")
+        with open(report_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        logger.info("Relatório gravado em: %s", report_path)
+    else:
+        logger.info("[dry-run] Relatório NÃO gravado em disco.")
+
+    return report
+
+
+def _print_batch_report(report: dict) -> None:
+    """Print the batch enrichment coverage report to the terminal."""
+    sep = "═" * 60
+    t = report["totais"]
+    logger.info(sep)
+    logger.info("RELATÓRIO DE ENRIQUECIMENTO EM LOTE (PRJ-67)")
+    if report.get("dry_run"):
+        logger.info("  *** MODO DRY-RUN — nenhum arquivo foi gravado ***")
+    logger.info(sep)
+    logger.info("  Arquivo de mapeamento:           %s", report.get("arquivo_mapeamento"))
+    logger.info("  Registros no mapeamento:         %d", t["registros_no_mapeamento"])
+    logger.info("  Registros processados:           %d", t["registros_processados"])
+    logger.info("  Registros sem fonte associada:   %d", t["registros_sem_fonte_associada"])
+    logger.info("  Registros não encontrados:       %d", t["registros_nao_encontrados"])
+    logger.info(sep)
+    logger.info("  Campos preenchidos via MTE:      %d", t["campos_preenchidos_mte"])
+    logger.info("  Campos pendentes:                %d", t["campos_pendentes"])
+    logger.info("  Campos em conflito:              %d", t["campos_conflito"])
+    logger.info("  Campos (Piso Nacional):          %d", t["campos_piso_nacional"])
+    logger.info(sep)
+    logger.info("  Arquivos JSON/JS atualizados:    %s", "sim" if t["arquivos_atualizados"] else "não")
+    logger.info(sep)
+
+    for rid, rec_report in report.get("por_registro", {}).items():
+        status = rec_report["status_processamento"]
+        tipo = rec_report.get("tipo_referencia") or "—"
+        filled = rec_report.get("campos_preenchidos") or []
+        pending = rec_report.get("campos_pendentes") or []
+        conflict = rec_report.get("campos_conflito") or []
+        obs = rec_report.get("observacao")
+
+        logger.info("  ┌─ %s", rid)
+        logger.info("  │  status: %s  tipo: %s", status, tipo)
+        if filled:
+            logger.info("  │  preenchidos: %s", ", ".join(filled))
+        if conflict:
+            logger.info("  │  conflitos:   %s", ", ".join(conflict))
+        if pending:
+            logger.info("  │  pendentes:   %s", ", ".join(pending))
+        if obs:
+            logger.info("  │  obs: %s", obs)
+        logger.info("  └─")
+
+    logger.info(sep)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # CLI
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -873,22 +1324,40 @@ def main() -> None:
         metavar="TEXT",
         help="Observação do operador sobre a referência oficial.",
     )
+    parser.add_argument(
+        "--mte-map",
+        metavar="FILE",
+        help=(
+            "Arquivo de mapeamento CSV ou JSON para processamento em lote. "
+            "Colunas CSV: registro_id, tipo_referencia, arquivo_origem, url, "
+            "codigo_instrumento, observacao. "
+            "Quando informado, ignora --ids / --mte-file / --mte-tipo e demais "
+            "opções de registro individual."
+        ),
+    )
     args = parser.parse_args()
 
-    metrics = run_enrichment(
-        json_path=JSON_PATH,
-        dry_run=args.dry_run,
-        ids=args.ids,
-        mte_file=args.mte_file,
-        mte_source=args.mte_source,
-        mte_tipo=args.mte_tipo,
-        mte_url=args.mte_url,
-        mte_codigo=args.mte_codigo,
-        mte_sindicato=args.mte_sindicato,
-        mte_vigencia_inicio=args.mte_vigencia_inicio,
-        mte_vigencia_fim=args.mte_vigencia_fim,
-        mte_observacao=args.mte_observacao,
-    )
+    if args.mte_map:
+        run_batch_enrichment(
+            mte_map_path=args.mte_map,
+            json_path=JSON_PATH,
+            dry_run=args.dry_run,
+        )
+    else:
+        run_enrichment(
+            json_path=JSON_PATH,
+            dry_run=args.dry_run,
+            ids=args.ids,
+            mte_file=args.mte_file,
+            mte_source=args.mte_source,
+            mte_tipo=args.mte_tipo,
+            mte_url=args.mte_url,
+            mte_codigo=args.mte_codigo,
+            mte_sindicato=args.mte_sindicato,
+            mte_vigencia_inicio=args.mte_vigencia_inicio,
+            mte_vigencia_fim=args.mte_vigencia_fim,
+            mte_observacao=args.mte_observacao,
+        )
 
     # Exit code: 0 if all went well (even with zero enrichments)
     sys.exit(0)
