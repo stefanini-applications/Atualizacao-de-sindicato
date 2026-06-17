@@ -39,6 +39,8 @@ from enrich_mte_fallback import (
     _set_fonte_oficial_mte,
     enrich_from_mte_fallback,
     lookup_mte_instrumento_coletivo,
+    parse_mte_map,
+    run_batch_enrichment,
     run_enrichment,
 )
 
@@ -1149,6 +1151,637 @@ class TestParserMteIsolamento(unittest.TestCase):
 
         result = parse_mte_pdf("/tmp/arquivo_que_nao_existe_xyz_123.pdf")
         self.assertIsNone(result)
+
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PRJ-67 — Testes de processamento em lote via --mte-map (AC5)
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def _write_temp_file(content: str, suffix: str) -> str:
+    """Write a temporary text file and return its path."""
+    tmp = tempfile.NamedTemporaryFile(
+        mode="w", suffix=suffix, delete=False, encoding="utf-8"
+    )
+    tmp.write(content)
+    tmp.flush()
+    tmp.close()
+    return tmp.name
+
+
+def _write_temp_base_json(records: list[dict]) -> str:
+    """Write a temporary base_parametros_sindicais.json and return its path."""
+    return _write_temp_file(
+        json.dumps(_make_base_json(records), ensure_ascii=False, indent=2),
+        suffix=".json",
+    )
+
+
+class TestParseMteMap(unittest.TestCase):
+    """PRJ-67 — parse_mte_map: CSV and JSON mapping file parsing."""
+
+    def test_parse_csv_valid_returns_entries(self):
+        """AC1: valid CSV mapping returns correct list of entries."""
+        csv_content = (
+            "registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao\n"
+            "REG-SP-001,arquivo,/pdfs/cct.pdf,,,Instrumento SP 2025\n"
+            "REG-RJ-001,url,,https://mediador.mte.gov.br/12345,,\n"
+        )
+        path = _write_temp_file(csv_content, ".csv")
+        try:
+            entries = parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0]["registro_id"], "REG-SP-001")
+        self.assertEqual(entries[0]["tipo_referencia"], "arquivo")
+        self.assertEqual(entries[0]["arquivo_origem"], "/pdfs/cct.pdf")
+        self.assertEqual(entries[0]["observacao"], "Instrumento SP 2025")
+        self.assertEqual(entries[1]["registro_id"], "REG-RJ-001")
+        self.assertEqual(entries[1]["tipo_referencia"], "url")
+        self.assertEqual(entries[1]["url"], "https://mediador.mte.gov.br/12345")
+        self.assertIsNone(entries[1]["arquivo_origem"])
+
+    def test_parse_csv_empty_optional_fields_normalised_to_none(self):
+        """Empty optional columns are normalised to None."""
+        csv_content = (
+            "registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao\n"
+            "REG-MG-001,manual,,,,\n"
+        )
+        path = _write_temp_file(csv_content, ".csv")
+        try:
+            entries = parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+        self.assertEqual(len(entries), 1)
+        entry = entries[0]
+        self.assertIsNone(entry["arquivo_origem"])
+        self.assertIsNone(entry["url"])
+        self.assertIsNone(entry["codigo_instrumento"])
+        self.assertIsNone(entry["observacao"])
+
+    def test_parse_csv_missing_required_column_raises_value_error(self):
+        """CSV without required columns raises ValueError."""
+        csv_content = "arquivo_origem,url\n/pdfs/a.pdf,\n"
+        path = _write_temp_file(csv_content, ".csv")
+        try:
+            with self.assertRaises(ValueError):
+                parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+    def test_parse_json_valid_returns_entries(self):
+        """AC1: valid JSON mapping returns correct list of entries."""
+        data = [
+            {
+                "registro_id": "REG-SP-002",
+                "tipo_referencia": "codigo_instrumento",
+                "arquivo_origem": None,
+                "url": None,
+                "codigo_instrumento": "MTE-CCT-2025-0042",
+                "observacao": "Código obtido via sistema",
+            }
+        ]
+        path = _write_temp_file(json.dumps(data), ".json")
+        try:
+            entries = parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["registro_id"], "REG-SP-002")
+        self.assertEqual(entries[0]["tipo_referencia"], "codigo_instrumento")
+        self.assertEqual(entries[0]["codigo_instrumento"], "MTE-CCT-2025-0042")
+
+    def test_parse_json_invalid_top_level_raises_value_error(self):
+        """JSON mapping that is not a list raises ValueError."""
+        path = _write_temp_file(json.dumps({"registro_id": "X"}), ".json")
+        try:
+            with self.assertRaises(ValueError):
+                parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+    def test_parse_map_file_not_found_raises(self):
+        """FileNotFoundError when mapping file does not exist."""
+        with self.assertRaises(FileNotFoundError):
+            parse_mte_map("/tmp/nao_existe_mapeamento_xyz.csv")
+
+    def test_parse_map_unknown_extension_raises_value_error(self):
+        """Unsupported file extension raises ValueError."""
+        path = _write_temp_file("data", ".txt")
+        try:
+            with self.assertRaises(ValueError):
+                parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+    def test_parse_csv_skips_invalid_tipo_referencia(self):
+        """Rows with unknown tipo_referencia are skipped with a warning."""
+        csv_content = (
+            "registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao\n"
+            "REG-VALID,url,,,https://mediador.mte.gov.br/1,\n"
+            "REG-INVALID,desconhecido,,,,\n"
+        )
+        path = _write_temp_file(csv_content, ".csv")
+        try:
+            entries = parse_mte_map(path)
+        finally:
+            os.unlink(path)
+
+        ids = [e["registro_id"] for e in entries]
+        self.assertIn("REG-VALID", ids)
+        self.assertNotIn("REG-INVALID", ids)
+
+
+class TestBatchEnrichmentCore(unittest.TestCase):
+    """PRJ-67 — run_batch_enrichment: core batch processing scenarios."""
+
+    def setUp(self):
+        self.record_a = _make_record({"id_registro_reajuste": "REG-A-2025"})
+        self.record_b = _make_record({"id_registro_reajuste": "REG-B-2025"})
+        self.fake_instrumento = _make_instrumento({"piso_salarial": MTE_CAMPO_VALIDO})
+
+    def _csv_map_path(self, rows: list[dict]) -> str:
+        lines = ["registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao"]
+        for r in rows:
+            lines.append(
+                "{registro_id},{tipo_referencia},{arquivo_origem},{url},"
+                "{codigo_instrumento},{observacao}".format(
+                    registro_id=r.get("registro_id", ""),
+                    tipo_referencia=r.get("tipo_referencia", ""),
+                    arquivo_origem=r.get("arquivo_origem", ""),
+                    url=r.get("url", ""),
+                    codigo_instrumento=r.get("codigo_instrumento", ""),
+                    observacao=r.get("observacao", ""),
+                )
+            )
+        return _write_temp_file("\n".join(lines), ".csv")
+
+    def _json_map_path(self, entries: list[dict]) -> str:
+        return _write_temp_file(json.dumps(entries), ".json")
+
+    def test_csv_mapping_processes_listed_records(self):
+        """AC1: CSV mapping processes all listed records."""
+        json_path = _write_temp_base_json([self.record_a, self.record_b])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "url",
+             "url": "https://mediador.mte.gov.br/REG-A"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertIn("REG-A-2025", report["por_registro"])
+        self.assertEqual(
+            report["por_registro"]["REG-A-2025"]["status_processamento"], "processado"
+        )
+        self.assertEqual(report["totais"]["registros_processados"], 1)
+
+    def test_json_mapping_processes_listed_records(self):
+        """AC1: JSON mapping processes all listed records."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._json_map_path([
+            {
+                "registro_id": "REG-A-2025",
+                "tipo_referencia": "manual",
+                "arquivo_origem": None,
+                "url": None,
+                "codigo_instrumento": "MTE-2025-TESTE",
+                "observacao": "Teste JSON",
+            }
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertIn("REG-A-2025", report["por_registro"])
+        self.assertEqual(report["totais"]["registros_no_mapeamento"], 1)
+
+    def test_record_not_in_mapping_is_sem_fonte_associada(self):
+        """AC1: record absent from mapping is sem_fonte_oficial_associada."""
+        json_path = _write_temp_base_json([self.record_a, self.record_b])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "url",
+             "url": "https://mediador.mte.gov.br/A"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertIn("REG-B-2025", report["por_registro"])
+        self.assertEqual(
+            report["por_registro"]["REG-B-2025"]["status_processamento"],
+            "sem_fonte_oficial_associada",
+        )
+        self.assertEqual(report["totais"]["registros_sem_fonte_associada"], 1)
+
+    def test_arquivo_processavel_preenche_campos_pendentes(self):
+        """AC1: arquivo processável enriches pending fields in the record."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=self.fake_instrumento)
+                 )}):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        rec_report = report["por_registro"]["REG-A-2025"]
+        self.assertIn("piso_salarial", rec_report["campos_preenchidos"])
+        self.assertGreater(report["totais"]["campos_preenchidos_mte"], 0)
+
+    def test_url_reference_registers_fonte_sem_alterar_itens_cct(self):
+        """AC1: url reference registers fonte_oficial_mte, itens_cct untouched."""
+        record = _make_record({"id_registro_reajuste": "REG-URL-2025"})
+        json_path = _write_temp_base_json([record])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-URL-2025", "tipo_referencia": "url",
+             "url": "https://mediador.mte.gov.br/99999"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        rec = saved["registros"][0]
+        self.assertIn("fonte_oficial_mte", rec)
+        self.assertEqual(rec["fonte_oficial_mte"]["tipo_referencia"], "url")
+        self.assertEqual(report["totais"]["campos_preenchidos_mte"], 0)
+        for campo in ELIGIBLE_FIELDS:
+            field = rec.get("itens_cct", {}).get(campo, {})
+            self.assertNotEqual(field.get("origem"), "fonte_oficial_mte")
+
+    def test_manual_reference_registers_fonte_sem_alterar_itens_cct(self):
+        """AC1: manual reference registers fonte_oficial_mte, itens_cct untouched."""
+        record = _make_record({"id_registro_reajuste": "REG-MAN-2025"})
+        json_path = _write_temp_base_json([record])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-MAN-2025", "tipo_referencia": "manual",
+             "codigo_instrumento": "MTE-9999"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        rec = saved["registros"][0]
+        self.assertIn("fonte_oficial_mte", rec)
+        self.assertEqual(rec["fonte_oficial_mte"]["tipo_referencia"], "manual")
+        self.assertEqual(report["totais"]["campos_preenchidos_mte"], 0)
+
+    def test_dry_run_nao_altera_json(self):
+        """AC3: --dry-run must not write JSON even when real data would be enriched."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+        original_mtime = os.path.getmtime(json_path)
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=self.fake_instrumento)
+                 )}):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=True,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            new_mtime = os.path.getmtime(json_path)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertEqual(original_mtime, new_mtime, "JSON gravado em modo dry-run")
+        self.assertFalse(report["totais"]["arquivos_atualizados"])
+        self.assertTrue(report["dry_run"])
+
+    def test_execucao_real_atualiza_json_com_dado_real(self):
+        """AC3: real run with arquivo processável updates JSON and JS."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=self.fake_instrumento)
+                 )}):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertTrue(report["totais"]["arquivos_atualizados"])
+        piso = saved["registros"][0]["itens_cct"]["piso_salarial"]
+        self.assertEqual(piso["origem"], "fonte_oficial_mte")
+
+    def test_relatorio_geral_contem_chaves_obrigatorias(self):
+        """AC4: report contains all required top-level and totais keys."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "url",
+             "url": "https://mediador.mte.gov.br/A"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=True,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        for key in ("data_execucao", "dry_run", "arquivo_mapeamento", "totais", "por_registro"):
+            self.assertIn(key, report, f"Chave ausente no relatório: {key!r}")
+
+        for key in (
+            "registros_no_mapeamento", "registros_processados",
+            "registros_sem_fonte_associada", "campos_preenchidos_mte",
+            "campos_pendentes", "campos_conflito", "campos_piso_nacional",
+            "arquivos_atualizados",
+        ):
+            self.assertIn(key, report["totais"], f"Chave de totais ausente: {key!r}")
+
+    def test_relatorio_por_registro_contem_chaves_obrigatorias(self):
+        """AC4: per-registro breakdown has all required fields."""
+        json_path = _write_temp_base_json([self.record_a])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-A-2025", "tipo_referencia": "url",
+             "url": "https://mediador.mte.gov.br/A"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=True,
+                    report_dir=tempfile.mkdtemp(),
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        self.assertIn("REG-A-2025", report["por_registro"])
+        rec_report = report["por_registro"]["REG-A-2025"]
+        for key in (
+            "status_processamento", "tipo_referencia",
+            "campos_preenchidos", "campos_pendentes", "campos_conflito", "observacao",
+        ):
+            self.assertIn(key, rec_report, f"Campo ausente no relatório por registro: {key!r}")
+
+    def test_campo_pdf_cct_nao_sobrescrito_em_lote(self):
+        """AC2: campo valido never overwritten in batch (protection inherited from PRJ-65/66)."""
+        record = _make_record({
+            "id_registro_reajuste": "REG-VAL-2025",
+            "itens_cct": {"piso_salarial": copy.deepcopy(FIELD_VALIDO)},
+        })
+        json_path = _write_temp_base_json([record])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-VAL-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=self.fake_instrumento)
+                 )}):
+                run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        piso = saved["registros"][0]["itens_cct"]["piso_salarial"]
+        self.assertEqual(piso["status_parametro"], "valido")
+        self.assertEqual(piso["valor"], FIELD_VALIDO["valor"])
+        self.assertEqual(piso["origem"], "pdf_cct")
+
+    def test_campo_valido_nao_sobrescrito_em_lote(self):
+        """AC2: campo com status valido nunca é sobrescrito em lote."""
+        record = _make_record({
+            "id_registro_reajuste": "REG-VALIDO-2025",
+            "itens_cct": {"piso_salarial": copy.deepcopy(FIELD_VALIDO)},
+        })
+        json_path = _write_temp_base_json([record])
+        instrumento_diferente = _make_instrumento({
+            "piso_salarial": {"valor": 9999.99, "fonte_textual": "valor alto"}
+        })
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-VALIDO-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=instrumento_diferente)
+                 )}):
+                run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        piso = saved["registros"][0]["itens_cct"]["piso_salarial"]
+        # valido fields are never touched, even by conflicting MTE data
+        self.assertEqual(piso["status_parametro"], "valido")
+        self.assertEqual(piso["valor"], FIELD_VALIDO["valor"])
+
+    def test_divergencia_pdf_mte_gera_conflito_em_lote(self):
+        """AC2: PDF × MTE divergence registers conflito in batch processing."""
+        record = _make_record({
+            "id_registro_reajuste": "REG-CONF-2025",
+            "itens_cct": {"piso_salarial": copy.deepcopy(FIELD_PDF_EXTRAIDO)},
+        })
+        json_path = _write_temp_base_json([record])
+        map_path = self._csv_map_path([
+            {"registro_id": "REG-CONF-2025", "tipo_referencia": "arquivo",
+             "arquivo_origem": "/fake/cct.pdf"},
+        ])
+        instrumento_conflito = _make_instrumento({
+            "piso_salarial": {"valor": 1750.00, "fonte_textual": "Cláusula 3ª MTE divergente"}
+        })
+
+        try:
+            with patch("enrich_mte_fallback._export_js"), \
+                 patch.dict("sys.modules", {"parse_mte_instrumento": MagicMock(
+                     parse_mte_pdf=MagicMock(return_value=instrumento_conflito)
+                 )}):
+                report = run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=tempfile.mkdtemp(),
+                )
+            with open(json_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        piso = saved["registros"][0]["itens_cct"]["piso_salarial"]
+        self.assertEqual(piso["status_parametro"], "conflito")
+        self.assertEqual(piso["origem"], "conflito_pdf_mte")
+        self.assertIn("opcoes_identificadas", piso)
+        self.assertEqual(report["totais"]["campos_conflito"], 1)
+        rec_report = report["por_registro"]["REG-CONF-2025"]
+        self.assertIn("piso_salarial", rec_report["campos_conflito"])
+
+
+class TestBatchReportFile(unittest.TestCase):
+    """PRJ-67 — report file saved to reports/mte_enrichment_report.json."""
+
+    def test_report_file_gravado_apos_execucao_real(self):
+        """AC4: report file is saved after a real (non-dry-run) execution."""
+        record = _make_record({"id_registro_reajuste": "REG-RPT-2025"})
+        json_path = _write_temp_base_json([record])
+        report_dir = tempfile.mkdtemp()
+        map_path = _write_temp_file(
+            "registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao\n"
+            "REG-RPT-2025,url,,https://mediador.mte.gov.br/1,,\n",
+            ".csv",
+        )
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=False,
+                    report_dir=report_dir,
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        report_path = os.path.join(report_dir, "mte_enrichment_report.json")
+        self.assertTrue(os.path.isfile(report_path))
+        with open(report_path, "r", encoding="utf-8") as f:
+            saved_report = json.load(f)
+        self.assertIn("totais", saved_report)
+        self.assertIn("por_registro", saved_report)
+
+    def test_report_file_nao_gravado_em_dry_run(self):
+        """AC3: report file must NOT be saved when --dry-run is active."""
+        record = _make_record({"id_registro_reajuste": "REG-DRYRPT-2025"})
+        json_path = _write_temp_base_json([record])
+        report_dir = tempfile.mkdtemp()
+        map_path = _write_temp_file(
+            "registro_id,tipo_referencia,arquivo_origem,url,codigo_instrumento,observacao\n"
+            "REG-DRYRPT-2025,url,,https://mediador.mte.gov.br/1,,\n",
+            ".csv",
+        )
+
+        try:
+            with patch("enrich_mte_fallback._export_js"):
+                run_batch_enrichment(
+                    mte_map_path=map_path,
+                    json_path=json_path,
+                    dry_run=True,
+                    report_dir=report_dir,
+                )
+        finally:
+            os.unlink(json_path)
+            os.unlink(map_path)
+
+        report_path = os.path.join(report_dir, "mte_enrichment_report.json")
+        self.assertFalse(
+            os.path.isfile(report_path),
+            "Relatório foi gravado em modo dry-run — não deveria ser",
+        )
 
 
 if __name__ == "__main__":
