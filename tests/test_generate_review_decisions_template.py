@@ -27,16 +27,24 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from generate_review_decisions_template import (
+    CAMPO_TO_XLSX_COL,
     CSV_COLUMNS,
     DECISAO_MAP,
+    XLSX_BUSINESS_COLS,
+    XLSX_COLUMNS,
+    XLSX_REVIEW_COLS,
     _calc_valor_revisado,
     _count_decisoes,
+    _item_criticality,
     _map_decisao_sugerida,
     _serialize_opcoes,
     build_template_rows,
+    build_xlsx_rows,
     load_queue,
     main,
+    pivot_to_registros,
     save_template,
+    save_xlsx,
 )
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -525,6 +533,391 @@ class TestCenario10BaseNaoAlterada(unittest.TestCase):
                 code_only,
                 f"O script referencia o arquivo protegido '{protected}' em código executável",
             )
+
+
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 11 — Geração do arquivo .xlsx (PRJ-71 AC1/AC2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario11XlsxGerado(unittest.TestCase):
+    """Verifica que save_xlsx cria um arquivo .xlsx válido e legível."""
+
+    def _write_xlsx(self, itens: list[dict]) -> str:
+        import openpyxl
+
+        rows = build_xlsx_rows(itens)
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as fh:
+            path = fh.name
+        try:
+            save_xlsx(rows, path)
+            wb = openpyxl.load_workbook(path)
+            ws = wb.active
+            return ws, path
+        except Exception:
+            os.unlink(path)
+            raise
+
+    def test_xlsx_criado_em_disco(self):
+        items = copy.deepcopy(ALL_ITEMS)
+        rows = build_xlsx_rows(items)
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as fh:
+            path = fh.name
+        try:
+            save_xlsx(rows, path)
+            self.assertTrue(os.path.exists(path))
+            self.assertGreater(os.path.getsize(path), 0)
+        finally:
+            if os.path.exists(path):
+                os.unlink(path)
+
+    def test_xlsx_tem_cabecalho_na_primeira_linha(self):
+        import openpyxl
+
+        rows = build_xlsx_rows(copy.deepcopy(ALL_ITEMS))
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as fh:
+            path = fh.name
+        try:
+            save_xlsx(rows, path)
+            wb = openpyxl.load_workbook(path)
+            ws = wb.active
+            header = [ws.cell(1, c).value for c in range(1, len(XLSX_COLUMNS) + 1)]
+            self.assertEqual(header, XLSX_COLUMNS)
+        finally:
+            if os.path.exists(path):
+                os.unlink(path)
+
+    def test_xlsx_tem_filtros_habilitados(self):
+        import openpyxl
+
+        rows = build_xlsx_rows(copy.deepcopy(ALL_ITEMS))
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as fh:
+            path = fh.name
+        try:
+            save_xlsx(rows, path)
+            wb = openpyxl.load_workbook(path)
+            ws = wb.active
+            self.assertIsNotNone(ws.auto_filter.ref)
+        finally:
+            if os.path.exists(path):
+                os.unlink(path)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 12 — Colunas obrigatórias do XLSX (PRJ-71 AC2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario12ColunasXlsx(unittest.TestCase):
+    def test_xlsx_columns_contem_colunas_negocio(self):
+        for col in XLSX_BUSINESS_COLS:
+            self.assertIn(col, XLSX_COLUMNS, f"Coluna de negócio ausente: {col}")
+
+    def test_xlsx_columns_contem_colunas_revisao(self):
+        for col in XLSX_REVIEW_COLS:
+            self.assertIn(col, XLSX_COLUMNS, f"Coluna de revisão ausente: {col}")
+
+    def test_colunas_revisao_vem_apos_colunas_negocio(self):
+        idx_ultimo_negocio = XLSX_COLUMNS.index(XLSX_BUSINESS_COLS[-1])
+        idx_primeiro_revisao = XLSX_COLUMNS.index(XLSX_REVIEW_COLS[0])
+        self.assertLess(idx_ultimo_negocio, idx_primeiro_revisao)
+
+    def test_colunas_obrigatorias_de_revisao_presentes(self):
+        required = [
+            "status_parametro", "origem", "fonte", "fonte_textual",
+            "opcoes_identificadas", "prioridade_revisao", "acao_sugerida",
+            "decisao_sugerida", "decisao_final", "valor_revisado",
+            "observacao_revisor", "revisor", "data_revisao",
+        ]
+        for col in required:
+            self.assertIn(col, XLSX_COLUMNS)
+
+    def test_colunas_negocio_obrigatorias_presentes(self):
+        required = [
+            "CODIGO DO SINDICATO", "SINDICATO", "ESTADO",
+            "ADICIONAL NOTURNO", "Sobreaviso", "JORNADA DE TRABALHO",
+            "Piso administrativo", "VR Remuneração", "PLR",
+        ]
+        for col in required:
+            self.assertIn(col, XLSX_COLUMNS)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 13 — Pivot: uma linha por registro no XLSX (PRJ-71 AC3)
+# ──────────────────────────────────────────────────────────────────────────────
+
+ITEMS_MESMO_REGISTRO = [
+    {
+        "registro_id": "REG-SP-PIVOT-2025",
+        "uf": "SP",
+        "sindicato": "Sindicato Pivot SP",
+        "categoria": "Tecnologia",
+        "ano": 2025,
+        "campo": "piso_salarial",
+        "valor": 2000.0,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "pdf_cct",
+        "fonte": "PDF da CCT",
+        "fonte_textual": "Piso R$ 2000",
+        "data_extracao": "2026-06-15",
+        "observacao": None,
+        "opcoes_identificadas": None,
+        "prioridade_revisao": "média",
+        "acao_sugerida": "validar",
+    },
+    {
+        "registro_id": "REG-SP-PIVOT-2025",
+        "uf": "SP",
+        "sindicato": "Sindicato Pivot SP",
+        "categoria": "Tecnologia",
+        "ano": 2025,
+        "campo": "adicional_noturno",
+        "valor": None,
+        "status_parametro": "pendente_revisao",
+        "origem": "nao_identificado_pdf",
+        "fonte": None,
+        "fonte_textual": None,
+        "data_extracao": "2026-06-15",
+        "observacao": "Não localizado",
+        "opcoes_identificadas": None,
+        "prioridade_revisao": "alta",
+        "acao_sugerida": "buscar_fonte",
+    },
+    {
+        "registro_id": "REG-SP-PIVOT-2025",
+        "uf": "SP",
+        "sindicato": "Sindicato Pivot SP",
+        "categoria": "Tecnologia",
+        "ano": 2025,
+        "campo": "plr",
+        "valor": 1000.0,
+        "status_parametro": "extraido_para_revisao",
+        "origem": "pdf_cct",
+        "fonte": "PDF da CCT",
+        "fonte_textual": "PLR R$ 1000",
+        "data_extracao": "2026-06-15",
+        "observacao": None,
+        "opcoes_identificadas": None,
+        "prioridade_revisao": "baixa",
+        "acao_sugerida": "validar",
+    },
+]
+
+ITEM_OUTRO_REGISTRO = {
+    **ITEMS_MESMO_REGISTRO[0],
+    "registro_id": "REG-RJ-OTHER-2025",
+    "uf": "RJ",
+    "sindicato": "Sindicato RJ",
+}
+
+
+class TestCenario13PivotRegistros(unittest.TestCase):
+    def test_pivot_agrupa_por_registro_id(self):
+        registros = pivot_to_registros(ITEMS_MESMO_REGISTRO)
+        self.assertEqual(len(registros), 1)
+        self.assertIn("REG-SP-PIVOT-2025", registros)
+
+    def test_pivot_dois_registros_distintos(self):
+        itens = ITEMS_MESMO_REGISTRO + [ITEM_OUTRO_REGISTRO]
+        registros = pivot_to_registros(itens)
+        self.assertEqual(len(registros), 2)
+
+    def test_build_xlsx_rows_uma_linha_por_registro(self):
+        itens = ITEMS_MESMO_REGISTRO + [ITEM_OUTRO_REGISTRO]
+        rows = build_xlsx_rows(itens)
+        self.assertEqual(len(rows), 2)
+
+    def test_build_xlsx_rows_colunas_parametros_preenchidas(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        row = rows[0]
+        self.assertEqual(row["Piso administrativo"], 2000.0)
+        self.assertEqual(row["PLR"], 1000.0)
+        # adicional_noturno é None → coluna fica vazia
+        self.assertEqual(row["ADICIONAL NOTURNO"], "")
+
+    def test_build_xlsx_rows_coluna_estado_sindicato(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        self.assertEqual(rows[0]["ESTADO/ SINDICATO"], "SP - Sindicato Pivot SP")
+        self.assertEqual(rows[0]["SINDICATO"], "Sindicato Pivot SP")
+        self.assertEqual(rows[0]["ESTADO"], "SP")
+
+    def test_build_xlsx_rows_codigo_sindicato(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        self.assertEqual(rows[0]["CODIGO DO SINDICATO"], "REG-SP-PIVOT-2025")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 14 — Preenchimento de decisões no XLSX (PRJ-71 AC4)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario14DecisaoXlsx(unittest.TestCase):
+    def test_decisao_final_igual_decisao_sugerida(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        row = rows[0]
+        self.assertEqual(row["decisao_final"], row["decisao_sugerida"])
+
+    def test_item_critico_escolhido_por_prioridade(self):
+        """Item com acao buscar_fonte (prioridade alta) deve dominar sobre validar."""
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        row = rows[0]
+        # O item mais crítico é adicional_noturno (pendente, alta, buscar_fonte)
+        self.assertEqual(row["acao_sugerida"], "buscar_fonte")
+        self.assertEqual(row["decisao_sugerida"], "buscar_fonte")
+        self.assertEqual(row["decisao_final"], "buscar_fonte")
+
+    def test_valor_revisado_vazio_quando_item_critico_sem_valor(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        self.assertEqual(rows[0]["valor_revisado"], "")
+
+    def test_valor_revisado_preenchido_para_item_critico_com_valor(self):
+        """Registro onde item mais crítico tem valor real."""
+        itens = [
+            {**ITEMS_MESMO_REGISTRO[0], "acao_sugerida": "revisar_conflito",
+             "status_parametro": "conflito", "prioridade_revisao": "alta",
+             "valor": 1800.0},
+        ]
+        rows = build_xlsx_rows(itens)
+        self.assertEqual(rows[0]["valor_revisado"], "1800.0")
+
+    def test_item_criticality_ordem(self):
+        item_baixa = {**ITEMS_MESMO_REGISTRO[0], "acao_sugerida": "validar",
+                      "prioridade_revisao": "baixa", "status_parametro": "extraido_para_revisao"}
+        item_alta = {**ITEMS_MESMO_REGISTRO[0], "acao_sugerida": "buscar_fonte",
+                     "prioridade_revisao": "alta", "status_parametro": "pendente_revisao"}
+        self.assertGreater(_item_criticality(item_alta), _item_criticality(item_baixa))
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 15 — Preservação de evidências no XLSX (PRJ-71 AC5)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario15EvidenciasXlsx(unittest.TestCase):
+    def test_fonte_textual_preservada_do_item_critico(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        # Item crítico é adicional_noturno (fonte_textual = None → "")
+        self.assertEqual(rows[0]["fonte_textual"], "")
+
+    def test_fonte_textual_preservada_quando_presente(self):
+        itens = [{**ITEMS_MESMO_REGISTRO[0],
+                  "acao_sugerida": "revisar_conflito",
+                  "status_parametro": "conflito",
+                  "prioridade_revisao": "alta",
+                  "fonte_textual": "CLÁUSULA EXEMPLO texto evidência"}]
+        rows = build_xlsx_rows(itens)
+        self.assertEqual(rows[0]["fonte_textual"], "CLÁUSULA EXEMPLO texto evidência")
+
+    def test_opcoes_identificadas_serializada(self):
+        itens = [{**ITEMS_MESMO_REGISTRO[0],
+                  "acao_sugerida": "revisar_conflito",
+                  "status_parametro": "conflito",
+                  "prioridade_revisao": "alta",
+                  "opcoes_identificadas": [1540.47, 1620.0]}]
+        rows = build_xlsx_rows(itens)
+        parsed = json.loads(rows[0]["opcoes_identificadas"])
+        self.assertEqual(parsed, [1540.47, 1620.0])
+
+    def test_origem_preservada(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        # Item crítico é adicional_noturno → origem = nao_identificado_pdf
+        self.assertEqual(rows[0]["origem"], "nao_identificado_pdf")
+
+    def test_campos_editaveis_iniciam_vazios(self):
+        rows = build_xlsx_rows(ITEMS_MESMO_REGISTRO)
+        row = rows[0]
+        self.assertEqual(row["observacao_revisor"], "")
+        self.assertEqual(row["revisor"], "")
+        self.assertEqual(row["data_revisao"], "")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 16 — --dry-run não cria XLSX (PRJ-71 AC7)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario16DryRunNaoCriaXlsx(unittest.TestCase):
+    def test_dry_run_nao_cria_xlsx(self):
+        queue_json = _make_queue_json(copy.deepcopy(ALL_ITEMS))
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            json.dump(queue_json, fh, ensure_ascii=False)
+            queue_path = fh.name
+
+        output_dir = tempfile.mkdtemp()
+        xlsx_path = os.path.join(output_dir, "review_decisions_template.xlsx")
+        csv_path = os.path.join(output_dir, "review_decisions_template.csv")
+
+        try:
+            with (
+                patch("generate_review_decisions_template.QUEUE_PATH", queue_path),
+                patch("generate_review_decisions_template.OUTPUT_PATH", csv_path),
+                patch("generate_review_decisions_template.XLSX_OUTPUT_PATH", xlsx_path),
+                patch("sys.stdout", StringIO()),
+            ):
+                result = main(["--dry-run"])
+
+            self.assertFalse(os.path.exists(xlsx_path), "dry-run não deve criar o XLSX")
+            self.assertFalse(os.path.exists(csv_path), "dry-run não deve criar o CSV")
+            self.assertEqual(result, 0)
+        finally:
+            os.unlink(queue_path)
+
+    def test_main_normal_cria_xlsx(self):
+        import openpyxl
+
+        queue_json = _make_queue_json(copy.deepcopy(ALL_ITEMS))
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            json.dump(queue_json, fh, ensure_ascii=False)
+            queue_path = fh.name
+
+        output_dir = tempfile.mkdtemp()
+        xlsx_path = os.path.join(output_dir, "review_decisions_template.xlsx")
+        csv_path = os.path.join(output_dir, "review_decisions_template.csv")
+
+        try:
+            with (
+                patch("generate_review_decisions_template.QUEUE_PATH", queue_path),
+                patch("generate_review_decisions_template.OUTPUT_PATH", csv_path),
+                patch("generate_review_decisions_template.XLSX_OUTPUT_PATH", xlsx_path),
+                patch("sys.stdout", StringIO()),
+            ):
+                result = main([])
+
+            self.assertTrue(os.path.exists(xlsx_path), "main deve criar o XLSX")
+            self.assertGreater(os.path.getsize(xlsx_path), 0)
+            wb = openpyxl.load_workbook(xlsx_path)
+            ws = wb.active
+            # Cabeçalho correto
+            header = [ws.cell(1, c).value for c in range(1, len(XLSX_COLUMNS) + 1)]
+            self.assertEqual(header, XLSX_COLUMNS)
+            self.assertEqual(result, 0)
+        finally:
+            os.unlink(queue_path)
+            if os.path.exists(xlsx_path):
+                os.unlink(xlsx_path)
+            if os.path.exists(csv_path):
+                os.unlink(csv_path)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Cenário 17 — CAMPO_TO_XLSX_COL cobre os campos do JSON (PRJ-71)
+# ──────────────────────────────────────────────────────────────────────────────
+
+class TestCenario17MapeamentoCampos(unittest.TestCase):
+    def test_todos_destinos_existem_em_xlsx_columns(self):
+        for campo, xlsx_col in CAMPO_TO_XLSX_COL.items():
+            self.assertIn(
+                xlsx_col, XLSX_COLUMNS,
+                f"CAMPO_TO_XLSX_COL['{campo}'] = '{xlsx_col}' não está em XLSX_COLUMNS",
+            )
+
+    def test_campos_json_conhecidos_mapeados(self):
+        expected_campos = {
+            "piso_salarial", "adicional_noturno", "auxilio_alimentacao",
+            "plr", "hora_extra", "sobreaviso", "jornada",
+        }
+        self.assertEqual(set(CAMPO_TO_XLSX_COL.keys()), expected_campos)
 
 
 if __name__ == "__main__":
