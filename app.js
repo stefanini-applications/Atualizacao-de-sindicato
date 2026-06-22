@@ -2156,21 +2156,63 @@ function rejectRecord(record) {
 }
 
 function exportData() {
-  const exportPayload = {
-    data_geracao: new Date().toISOString(),
-    registros: allRecords,
-  };
+  if (typeof XLSX === 'undefined') {
+    alert('Biblioteca de exportação XLS não carregada. Verifique sua conexão e recarregue a página.');
+    return;
+  }
 
-  const json = JSON.stringify(exportPayload, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `base_parametros_sindicais_local_${new Date().toISOString().slice(0, 10)}.json`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
+  const dateStr = new Date().toISOString().slice(0, 10);
+
+  // ── Sheet 1: registros (one row per record) ──────────────────────────────
+  const registrosRows = allRecords.map((r) => ({
+    'ID Registro': r.id_registro_reajuste ?? '',
+    'UF': r.uf ?? '',
+    'Sindicato': r.sindicato ?? '',
+    'Categoria': r.categoria ?? '',
+    'Ano Referência': r.ano_referencia ?? '',
+    'Data Base': r.data_base ?? '',
+    'Vigência Início': r.vigencia_inicio ?? '',
+    'Vigência Fim': r.vigencia_fim ?? '',
+    'Reajuste (%)': r.percentual_reajuste ?? '',
+    'Status Parâmetro': r.status_parametro ?? '',
+    'Conflito': r.conflito ? 'Sim' : 'Não',
+    'Observação': r.observacao ?? '',
+    'Fonte Documento': r.fonte_documento ?? '',
+  }));
+
+  // ── Sheet 2: itens_cct (one row per item per record) ────────────────────
+  const itensCctRows = [];
+  for (const r of allRecords) {
+    const itens = r.itens_cct || {};
+    for (const [itemKey, item] of Object.entries(itens)) {
+      if (!item || typeof item !== 'object') continue;
+      itensCctRows.push({
+        'ID Registro': r.id_registro_reajuste ?? '',
+        'UF': r.uf ?? '',
+        'Sindicato': r.sindicato ?? '',
+        'Campo CCT': CCT_ITEM_LABELS[itemKey] ?? itemKey,
+        'Campo (chave)': itemKey,
+        'Valor': item.valor ?? '',
+        'Percentual': item.percentual ?? '',
+        'Valor Textual': item.valor_textual ?? item.regra_textual ?? '',
+        'Status Parâmetro': item.status_parametro ?? '',
+        'Fonte': item.fonte ?? '',
+        'Observação': item.observacao ?? item.observacao_validacao ?? '',
+        'Validado Por': item.validado_por ?? '',
+        'Data Validação': item.data_validacao ?? '',
+      });
+    }
+  }
+
+  const wb = XLSX.utils.book_new();
+
+  const wsRegistros = XLSX.utils.json_to_sheet(registrosRows);
+  XLSX.utils.book_append_sheet(wb, wsRegistros, 'Registros');
+
+  const wsItens = XLSX.utils.json_to_sheet(itensCctRows);
+  XLSX.utils.book_append_sheet(wb, wsItens, 'Itens CCT');
+
+  XLSX.writeFile(wb, `base_parametros_sindicais_${dateStr}.xlsx`);
 }
 
 function discardLocalChanges() {
